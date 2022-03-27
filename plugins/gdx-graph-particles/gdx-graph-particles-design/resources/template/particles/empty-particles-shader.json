@@ -1,0 +1,24 @@
+{
+  "version": "0.5.0",
+  "type": "Particle_Effect",
+  "nodes": [
+    {
+      "id": "end",
+      "type": "ParticlesShaderEnd",
+      "x": 50.0,
+      "y": 50.0,
+      "data": {
+        "maxParticles": 100,
+        "culling": "back",
+        "blending": true,
+        "blendingSourceFactor": "source_alpha",
+        "blendingDestinationFactor": "one_minus_source_alpha",
+        "depthTest": "less",
+        "depthWrite": false
+      }
+    }
+  ],
+  "connections": [],
+  "properties": [],
+  "groups": []
+}

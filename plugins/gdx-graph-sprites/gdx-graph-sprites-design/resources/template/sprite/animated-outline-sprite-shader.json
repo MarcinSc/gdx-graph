@@ -1,0 +1,591 @@
+{
+  "version": "0.5.0",
+  "type": "Sprite_Shader",
+  "nodes": [
+    {
+      "id": "cb06a9014aa14f6cbc8aba7c79ba4978",
+      "type": "Subtract",
+      "x": 264.0,
+      "y": 440.0
+    },
+    {
+      "id": "23843a9a66184d8e99bb7c06eb58cc29",
+      "type": "Property",
+      "x": 655.0,
+      "y": 518.0,
+      "data": {
+        "name": "Sprite-Count",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "1140308b879e4cd7a4c96752e0708839",
+      "type": "SpriteUV",
+      "x": 655.0,
+      "y": 576.0
+    },
+    {
+      "id": "88a5769e21de41f9bf992fc5ead3a920",
+      "type": "Divide",
+      "x": 651.0001220703125,
+      "y": 244.0
+    },
+    {
+      "id": "bdd8607456ca4b86b4f83a963824a4ba",
+      "type": "Property",
+      "x": 655.0,
+      "y": 422.0,
+      "data": {
+        "name": "Animation-Looping",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "9c83bacd792d41feb13fae77f4ca362a",
+      "type": "Property",
+      "x": 651.0001220703125,
+      "y": 186.0,
+      "data": {
+        "name": "Sprite-Count",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "f08eb1b714e446e1b91fe2f1aa3c76e6",
+      "type": "Property",
+      "x": 862.0,
+      "y": 112.0,
+      "data": {
+        "name": "Outline-Width",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "0685a9bef5834c6faf1aee6b7623718e",
+      "type": "Add",
+      "x": 1624.0,
+      "y": 560.0
+    },
+    {
+      "id": "d7a6e109818d4db6aba15724a5faf3d1",
+      "type": "Sampler2D",
+      "x": 1213.0,
+      "y": 642.0
+    },
+    {
+      "id": "d522e249790c4c668e2293bb2d6468d2",
+      "type": "Property",
+      "x": 1379.0,
+      "y": 855.0,
+      "data": {
+        "name": "Size",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "133c530e362a4009ae8de3e5ddb253ed",
+      "type": "SpriteUV",
+      "x": 1379.0,
+      "y": 985.0
+    },
+    {
+      "id": "cef9fa7760594023bfcf6cee69c50c09",
+      "type": "Property",
+      "x": 51.0,
+      "y": 368.0,
+      "data": {
+        "name": "Animation-Start",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "1ad435e605c34ef09256193b3abdbb21",
+      "type": "Property",
+      "x": 869.0000610351562,
+      "y": 679.0,
+      "data": {
+        "name": "Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "088ead9ea87040cf87e609c7dae3d8db",
+      "type": "Property",
+      "x": 1213.0,
+      "y": 583.0,
+      "data": {
+        "name": "Outline-Color",
+        "type": "Vector4"
+      }
+    },
+    {
+      "id": "end",
+      "type": "SpriteShaderEnd",
+      "x": 1882.0,
+      "y": 262.0,
+      "data": {
+        "positionType": "World space",
+        "culling": "back",
+        "blending": true,
+        "blendingSourceFactor": "source_alpha",
+        "blendingDestinationFactor": "one_minus_source_alpha",
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    },
+    {
+      "id": "d8738e81a0dc4a4f939ddc3a6c5b6459",
+      "type": "ValueVector2",
+      "x": 444.0001220703125,
+      "y": 266.0,
+      "data": {
+        "v1": 1.0,
+        "v2": 1.0
+      }
+    },
+    {
+      "id": "203ac70727844a1a96f3a648c397a325",
+      "type": "Property",
+      "x": 1378.0,
+      "y": 796.0,
+      "data": {
+        "name": "Rotation",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "c8cc47746d8a4bcb9d8807a219539170",
+      "type": "ValueFloat",
+      "x": 863.0,
+      "y": 50.0,
+      "data": {
+        "v1": 0.009999999776482582
+      }
+    },
+    {
+      "id": "42d0f962f4b949cdb87a24f290e743bb",
+      "type": "SpritePosition",
+      "x": 1381.0,
+      "y": 1054.0
+    },
+    {
+      "id": "982e0c22302e4657848b13f95c6dc3fe",
+      "type": "Property",
+      "x": 265.0,
+      "y": 521.0,
+      "data": {
+        "name": "Animation-Speed",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "e99c9493abfa4c85b6b8d38e3e69dc4d",
+      "type": "Time",
+      "x": 50.0,
+      "y": 427.0,
+      "data": {
+        "multiplier": 1.0
+      }
+    },
+    {
+      "id": "eaae0813ca3241b1b4381f0a632d4e22",
+      "type": "BillboardSprite",
+      "x": 1609.0,
+      "y": 856.0
+    },
+    {
+      "id": "4c7215c09dab4294ab66879cdde5b06a",
+      "type": "Divide",
+      "x": 855.0001220703125,
+      "y": 244.0
+    },
+    {
+      "id": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "type": "BorderDetection",
+      "x": 1193.0,
+      "y": 365.0
+    },
+    {
+      "id": "041a2c4e96cd4fb9b4a8517be31c1acc",
+      "type": "Mix",
+      "x": 1624.0,
+      "y": 659.0
+    },
+    {
+      "id": "e4b5faaee35a46c49159111ff6186f4d",
+      "type": "Add",
+      "x": 1399.0,
+      "y": 426.0
+    },
+    {
+      "id": "180a7715db0d494784b6629bfb054c9b",
+      "type": "Multiply",
+      "x": 451.0,
+      "y": 495.0
+    },
+    {
+      "id": "1fb0335fabf648b384c70863ca30e0a7",
+      "type": "Property",
+      "x": 1379.0,
+      "y": 919.0,
+      "data": {
+        "name": "Anchor",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "954978a18bb84bcc9927d0dde89e030f",
+      "type": "Property",
+      "x": 444.0001220703125,
+      "y": 207.0,
+      "data": {
+        "name": "Size",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "type": "UVFlipbook",
+      "x": 856.0,
+      "y": 426.0,
+      "data": {
+        "invertX": false,
+        "invertY": false
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "1140308b879e4cd7a4c96752e0708839",
+      "fromField": "uv",
+      "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "e99c9493abfa4c85b6b8d38e3e69dc4d",
+      "fromField": "time",
+      "toNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
+      "toField": "a"
+    },
+    {
+      "fromNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
+      "fromField": "output",
+      "toNode": "180a7715db0d494784b6629bfb054c9b",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "180a7715db0d494784b6629bfb054c9b",
+      "fromField": "output",
+      "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "toField": "index"
+    },
+    {
+      "fromNode": "88a5769e21de41f9bf992fc5ead3a920",
+      "fromField": "output",
+      "toNode": "4c7215c09dab4294ab66879cdde5b06a",
+      "toField": "a"
+    },
+    {
+      "fromNode": "d8738e81a0dc4a4f939ddc3a6c5b6459",
+      "fromField": "value",
+      "toNode": "88a5769e21de41f9bf992fc5ead3a920",
+      "toField": "a"
+    },
+    {
+      "fromNode": "1ad435e605c34ef09256193b3abdbb21",
+      "fromField": "value",
+      "toNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "fromField": "output",
+      "toNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "4c7215c09dab4294ab66879cdde5b06a",
+      "fromField": "output",
+      "toNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "toField": "pixelSize"
+    },
+    {
+      "fromNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "fromField": "down",
+      "toNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "fromField": "up",
+      "toNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "fromField": "right",
+      "toNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "fromField": "left",
+      "toNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "c8cc47746d8a4bcb9d8807a219539170",
+      "fromField": "value",
+      "toNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "toField": "alphaEdge"
+    },
+    {
+      "fromNode": "954978a18bb84bcc9927d0dde89e030f",
+      "fromField": "value",
+      "toNode": "88a5769e21de41f9bf992fc5ead3a920",
+      "toField": "b"
+    },
+    {
+      "fromNode": "1fb0335fabf648b384c70863ca30e0a7",
+      "fromField": "value",
+      "toNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "toField": "anchor"
+    },
+    {
+      "fromNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "133c530e362a4009ae8de3e5ddb253ed",
+      "fromField": "uv",
+      "toNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "42d0f962f4b949cdb87a24f290e743bb",
+      "fromField": "position",
+      "toNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "toField": "position"
+    },
+    {
+      "fromNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "fromField": "output",
+      "toNode": "d7a6e109818d4db6aba15724a5faf3d1",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "1ad435e605c34ef09256193b3abdbb21",
+      "fromField": "value",
+      "toNode": "d7a6e109818d4db6aba15724a5faf3d1",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "d7a6e109818d4db6aba15724a5faf3d1",
+      "fromField": "a",
+      "toNode": "0685a9bef5834c6faf1aee6b7623718e",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "fromField": "output",
+      "toNode": "0685a9bef5834c6faf1aee6b7623718e",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "e4b5faaee35a46c49159111ff6186f4d",
+      "fromField": "output",
+      "toNode": "041a2c4e96cd4fb9b4a8517be31c1acc",
+      "toField": "t"
+    },
+    {
+      "fromNode": "041a2c4e96cd4fb9b4a8517be31c1acc",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "d7a6e109818d4db6aba15724a5faf3d1",
+      "fromField": "color",
+      "toNode": "041a2c4e96cd4fb9b4a8517be31c1acc",
+      "toField": "a"
+    },
+    {
+      "fromNode": "088ead9ea87040cf87e609c7dae3d8db",
+      "fromField": "value",
+      "toNode": "041a2c4e96cd4fb9b4a8517be31c1acc",
+      "toField": "b"
+    },
+    {
+      "fromNode": "23843a9a66184d8e99bb7c06eb58cc29",
+      "fromField": "value",
+      "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "toField": "tileCount"
+    },
+    {
+      "fromNode": "bdd8607456ca4b86b4f83a963824a4ba",
+      "fromField": "value",
+      "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+      "toField": "looping"
+    },
+    {
+      "fromNode": "982e0c22302e4657848b13f95c6dc3fe",
+      "fromField": "value",
+      "toNode": "180a7715db0d494784b6629bfb054c9b",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "cef9fa7760594023bfcf6cee69c50c09",
+      "fromField": "value",
+      "toNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
+      "toField": "b"
+    },
+    {
+      "fromNode": "9c83bacd792d41feb13fae77f4ca362a",
+      "fromField": "value",
+      "toNode": "4c7215c09dab4294ab66879cdde5b06a",
+      "toField": "b"
+    },
+    {
+      "fromNode": "f08eb1b714e446e1b91fe2f1aa3c76e6",
+      "fromField": "value",
+      "toNode": "5a20b40603fb4cdbbbaa2a6bebd9d50c",
+      "toField": "outlineWidth"
+    },
+    {
+      "fromNode": "0685a9bef5834c6faf1aee6b7623718e",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "d522e249790c4c668e2293bb2d6468d2",
+      "fromField": "value",
+      "toNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "toField": "size"
+    },
+    {
+      "fromNode": "203ac70727844a1a96f3a648c397a325",
+      "fromField": "value",
+      "toNode": "eaae0813ca3241b1b4381f0a632d4e22",
+      "toField": "rotation"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Texture",
+      "type": "TextureRegion",
+      "location": "Attribute",
+      "data": {
+        "previewPath": "D:/dev/gdx-graph/gdx-graph-test/resources/image/JumpPlant2.png"
+      }
+    },
+    {
+      "name": "Sprite-Count",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    },
+    {
+      "name": "Animation-Start",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Animation-Speed",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 1.0
+      }
+    },
+    {
+      "name": "Animation-Looping",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 1.0
+      }
+    },
+    {
+      "name": "Outline-Width",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Outline-Color",
+      "type": "Vector4",
+      "location": "Attribute",
+      "data": {
+        "color": "ffffffff"
+      }
+    },
+    {
+      "name": "Anchor",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "name": "Size",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 100.0,
+        "y": 100.0
+      }
+    },
+    {
+      "name": "Rotation",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Animation Frame",
+      "nodes": [
+        "180a7715db0d494784b6629bfb054c9b",
+        "cef9fa7760594023bfcf6cee69c50c09",
+        "e99c9493abfa4c85b6b8d38e3e69dc4d",
+        "982e0c22302e4657848b13f95c6dc3fe",
+        "cb06a9014aa14f6cbc8aba7c79ba4978"
+      ]
+    },
+    {
+      "name": "Frame UV",
+      "nodes": [
+        "bdd8607456ca4b86b4f83a963824a4ba",
+        "1140308b879e4cd7a4c96752e0708839",
+        "656d45cb9eed4e4ebf7d010f93f67fb7",
+        "23843a9a66184d8e99bb7c06eb58cc29"
+      ]
+    },
+    {
+      "name": "Pixel Size in UV",
+      "nodes": [
+        "88a5769e21de41f9bf992fc5ead3a920",
+        "4c7215c09dab4294ab66879cdde5b06a",
+        "954978a18bb84bcc9927d0dde89e030f",
+        "9c83bacd792d41feb13fae77f4ca362a",
+        "d8738e81a0dc4a4f939ddc3a6c5b6459"
+      ]
+    }
+  ]
+}

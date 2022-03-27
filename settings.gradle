@@ -1,0 +1,13 @@
+include 'desktop', 'core', 'gdx-graph', 'gdx-graph-util', 'gdx-graph-test'
+
+new File(rootDir, "plugins").listFiles().each {plugin->
+    if (plugin.directory) {
+        plugin.listFiles().each {folder ->
+            if (folder.directory  && new File(folder, 'build.gradle').exists()) {
+                include ":${folder.name}"
+                project(":${folder.name}").projectDir = folder
+                project(":${folder.name}").name = folder.name
+            }
+        }
+    }
+}

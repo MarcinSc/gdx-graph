@@ -1,0 +1,217 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "e2b909a7778646cb8875395ae95c69ba",
+      "type": "PipelineStart",
+      "x": 529.0,
+      "y": 507.0
+    },
+    {
+      "id": "2a635a7da28247a8ab3a4d34d902cca0",
+      "type": "RenderCallback",
+      "x": 470.0,
+      "y": 380.0,
+      "data": {
+        "callbackId": "Callback2"
+      }
+    },
+    {
+      "id": "3e653a35c168439c9b603918cb940d2c",
+      "type": "PipelineRenderer",
+      "x": 913.0,
+      "y": 271.0
+    },
+    {
+      "id": "b2ebce3c61a44676ba80022969f1f778",
+      "type": "Multiply",
+      "x": 283.0,
+      "y": 617.0
+    },
+    {
+      "id": "f224bb6d66bc49ff8afb042af8ebad87",
+      "type": "Multiply",
+      "x": 373.0,
+      "y": 88.0
+    },
+    {
+      "id": "d5b47d66b9bc495bbf9823a06eb9ce33",
+      "type": "PipelineStart",
+      "x": 598.0,
+      "y": 759.0
+    },
+    {
+      "id": "3b30a4b0c6604efd819b86b98aacf97d",
+      "type": "PipelineRenderer",
+      "x": 913.0,
+      "y": 513.0
+    },
+    {
+      "id": "05e57097eac4468e932beaf435cebcc0",
+      "type": "ValueVector2",
+      "x": 746.0,
+      "y": 436.0,
+      "data": {
+        "v1": 0.0,
+        "v2": 0.0
+      }
+    },
+    {
+      "id": "7030f26ca0e448c8b83cfd8d79a8543c",
+      "type": "RenderCallback",
+      "x": 542.0,
+      "y": 635.0,
+      "data": {
+        "callbackId": "Callback1"
+      }
+    },
+    {
+      "id": "60e0e984bdf04eb189480a5b958dee87",
+      "type": "ValueVector2",
+      "x": 67.0,
+      "y": 205.0,
+      "data": {
+        "v1": 0.5,
+        "v2": 0.0
+      }
+    },
+    {
+      "id": "7d2427e384c2498b88779e75f733c0ff",
+      "type": "UIRenderer",
+      "x": 916.0,
+      "y": 136.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "dcb271c305124354aba05f38a3d185d3",
+      "type": "PipelineStart",
+      "x": 913.0,
+      "y": 682.0
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 916.0,
+      "y": 50.0
+    },
+    {
+      "id": "57a65262b7ae4af88c785d0bc3266370",
+      "type": "RenderSize",
+      "x": 64.0,
+      "y": 391.0
+    },
+    {
+      "id": "c7ffaa988eff4769a3062072b7a4985a",
+      "type": "ValueVector2",
+      "x": 50.0,
+      "y": 681.0,
+      "data": {
+        "v1": 0.5,
+        "v2": 1.0
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "7d2427e384c2498b88779e75f733c0ff",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "3b30a4b0c6604efd819b86b98aacf97d",
+      "fromField": "output",
+      "toNode": "3e653a35c168439c9b603918cb940d2c",
+      "toField": "input"
+    },
+    {
+      "fromNode": "3e653a35c168439c9b603918cb940d2c",
+      "fromField": "output",
+      "toNode": "7d2427e384c2498b88779e75f733c0ff",
+      "toField": "input"
+    },
+    {
+      "fromNode": "dcb271c305124354aba05f38a3d185d3",
+      "fromField": "output",
+      "toNode": "3b30a4b0c6604efd819b86b98aacf97d",
+      "toField": "input"
+    },
+    {
+      "fromNode": "b2ebce3c61a44676ba80022969f1f778",
+      "fromField": "output",
+      "toNode": "d5b47d66b9bc495bbf9823a06eb9ce33",
+      "toField": "size"
+    },
+    {
+      "fromNode": "b2ebce3c61a44676ba80022969f1f778",
+      "fromField": "output",
+      "toNode": "e2b909a7778646cb8875395ae95c69ba",
+      "toField": "size"
+    },
+    {
+      "fromNode": "05e57097eac4468e932beaf435cebcc0",
+      "fromField": "value",
+      "toNode": "3b30a4b0c6604efd819b86b98aacf97d",
+      "toField": "position"
+    },
+    {
+      "fromNode": "57a65262b7ae4af88c785d0bc3266370",
+      "fromField": "size",
+      "toNode": "f224bb6d66bc49ff8afb042af8ebad87",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "60e0e984bdf04eb189480a5b958dee87",
+      "fromField": "value",
+      "toNode": "f224bb6d66bc49ff8afb042af8ebad87",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "f224bb6d66bc49ff8afb042af8ebad87",
+      "fromField": "output",
+      "toNode": "3e653a35c168439c9b603918cb940d2c",
+      "toField": "position"
+    },
+    {
+      "fromNode": "c7ffaa988eff4769a3062072b7a4985a",
+      "fromField": "value",
+      "toNode": "b2ebce3c61a44676ba80022969f1f778",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "57a65262b7ae4af88c785d0bc3266370",
+      "fromField": "size",
+      "toNode": "b2ebce3c61a44676ba80022969f1f778",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "d5b47d66b9bc495bbf9823a06eb9ce33",
+      "fromField": "output",
+      "toNode": "7030f26ca0e448c8b83cfd8d79a8543c",
+      "toField": "input"
+    },
+    {
+      "fromNode": "7030f26ca0e448c8b83cfd8d79a8543c",
+      "fromField": "output",
+      "toNode": "3b30a4b0c6604efd819b86b98aacf97d",
+      "toField": "pipeline"
+    },
+    {
+      "fromNode": "e2b909a7778646cb8875395ae95c69ba",
+      "fromField": "output",
+      "toNode": "2a635a7da28247a8ab3a4d34d902cca0",
+      "toField": "input"
+    },
+    {
+      "fromNode": "2a635a7da28247a8ab3a4d34d902cca0",
+      "fromField": "output",
+      "toNode": "3e653a35c168439c9b603918cb940d2c",
+      "toField": "pipeline"
+    }
+  ],
+  "properties": [],
+  "groups": []
+}

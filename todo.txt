@@ -1,0 +1,29 @@
+General:
+- Renaming property should update all the nodes that use that property.
+Priority: 3, Difficulty: 3
+- Add Vector4 class to allow specifying vec4 uniforms/attributes without using Color class.
+Priority: 3, Difficulty: 3
+- Previews for some shader nodes.
+Priority: 3, Difficulty: 8
+- Advanced control of OpenGL settings in shaders.
+Priority: 2, Difficulty: 5
+- Figure out why Gradient node is difficult to close (click on button).
+Priority: 2, Difficulty: 6
+- Allow rendering to named frame buffers.
+Priority: 2, Difficulty: 7
+- Pipeline transitions (i.e. between scenes).
+Priority: 2, Difficulty: 8
+- Disable/enable "Up" and "Dn" buttons for shader lists.
+Priority: 1, Difficulty: 2
+- Shortcut to create and connect a property, when clicking on node circle in graph.
+Priority: 1, Difficulty: 4
+- Stencil support.
+Priority: 1, Difficulty: 7
+
+Sprite shader:
+
+Particle shader:
+- Add support for line particles.
+Priority: 2, Difficulty: 5
+
+Model shader:

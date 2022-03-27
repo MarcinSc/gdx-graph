@@ -1,0 +1,192 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "8211834d0bfd42a3ac6d41ca85d88c0c",
+      "type": "SpriteShaderRenderer",
+      "x": 262.0,
+      "y": 135.0,
+      "data": {
+        "shaders": [
+          {
+            "id": "4016f2bd2b034f798930b39da0b39b04",
+            "tag": "Test",
+            "shader": {
+              "version": "0.5.0",
+              "type": "Sprite_Shader",
+              "nodes": [
+                {
+                  "id": "b0f51c21bbe341de8baa127fda5fdaff",
+                  "type": "Multiply",
+                  "x": 398.0,
+                  "y": 257.0
+                },
+                {
+                  "id": "fc783e74c4454ba5bb987b2f5dc92298",
+                  "type": "BillboardSprite",
+                  "x": 396.0,
+                  "y": 378.0
+                },
+                {
+                  "id": "4467c3cdc92041eeb2f5cbeb3f3a7261",
+                  "type": "Property",
+                  "x": 109.0,
+                  "y": 271.0,
+                  "data": {
+                    "name": "Vertex Color",
+                    "type": "Vector2"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "SpriteShaderEnd",
+                  "x": 700.0,
+                  "y": 50.0,
+                  "data": {
+                    "positionType": "World space",
+                    "depthWrite": true,
+                    "blending": false,
+                    "blendingSourceFactor": "zero",
+                    "blendingDestinationFactor": "one",
+                    "depthTest": "less"
+                  }
+                },
+                {
+                  "id": "17b70add29f642e6a3fbd49efef5e4cd",
+                  "type": "SpriteUV",
+                  "x": 68.0,
+                  "y": 361.0
+                },
+                {
+                  "id": "76782fd18e9944d98214b914c44c4726",
+                  "type": "Property",
+                  "x": 145.0,
+                  "y": 116.0,
+                  "data": {
+                    "name": "Color",
+                    "type": "Vector2"
+                  }
+                },
+                {
+                  "id": "9fbe9366f65d465f9a3ed2c880668f11",
+                  "type": "SpritePosition",
+                  "x": 50.0,
+                  "y": 450.0
+                }
+              ],
+              "connections": [
+                {
+                  "fromNode": "9fbe9366f65d465f9a3ed2c880668f11",
+                  "fromField": "position",
+                  "toNode": "fc783e74c4454ba5bb987b2f5dc92298",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "17b70add29f642e6a3fbd49efef5e4cd",
+                  "fromField": "uv",
+                  "toNode": "fc783e74c4454ba5bb987b2f5dc92298",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "fc783e74c4454ba5bb987b2f5dc92298",
+                  "fromField": "output",
+                  "toNode": "end",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "76782fd18e9944d98214b914c44c4726",
+                  "fromField": "value",
+                  "toNode": "b0f51c21bbe341de8baa127fda5fdaff",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "b0f51c21bbe341de8baa127fda5fdaff",
+                  "fromField": "output",
+                  "toNode": "end",
+                  "toField": "color"
+                },
+                {
+                  "fromNode": "4467c3cdc92041eeb2f5cbeb3f3a7261",
+                  "fromField": "value",
+                  "toNode": "b0f51c21bbe341de8baa127fda5fdaff",
+                  "toField": "inputs"
+                }
+              ],
+              "properties": [
+                {
+                  "name": "Color",
+                  "type": "Vector2",
+                  "location": "Global_Uniform",
+                  "data": {
+                    "x": 1.0,
+                    "y": 1.0
+                  }
+                },
+                {
+                  "name": "Vertex Color",
+                  "type": "Vector2",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 1.0,
+                    "y": 1.0
+                  }
+                }
+              ],
+              "groups": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "0d20cf81bc904788bba724256f24ed31",
+      "type": "PipelineStart",
+      "x": 350.0,
+      "y": 457.0
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 360.0,
+      "y": 50.0
+    },
+    {
+      "id": "373daf59a1384ae787bb665e66935a8f",
+      "type": "Property",
+      "x": 50.0,
+      "y": 209.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "0d20cf81bc904788bba724256f24ed31",
+      "fromField": "output",
+      "toNode": "8211834d0bfd42a3ac6d41ca85d88c0c",
+      "toField": "input"
+    },
+    {
+      "fromNode": "373daf59a1384ae787bb665e66935a8f",
+      "fromField": "value",
+      "toNode": "8211834d0bfd42a3ac6d41ca85d88c0c",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "8211834d0bfd42a3ac6d41ca85d88c0c",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

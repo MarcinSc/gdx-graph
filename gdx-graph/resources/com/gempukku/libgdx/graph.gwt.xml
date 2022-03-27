@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN"
+        "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
+<module>
+    <source path="graph"/>
+
+    <!-- GLSL fragments -->
+    <extend-configuration-property name="gdx.files.classpath"
+                                   value="glsl/fragment/blinn-phong/directionalLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath"
+                                   value="glsl/fragment/blinn-phong/pointLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath"
+                                   value="glsl/fragment/blinn-phong/spotLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/common.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/perlinNoise2d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/perlinNoise3d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/perlinNoise4d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/simplexNoise2d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/simplexNoise3d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/noise/simplexNoise4d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath"
+                                   value="glsl/fragment/phong/directionalLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/phong/pointLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/phong/spotLightContribution.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/shape/starShape.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/applyNormalMap.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/borderDetection.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/packFloatToVec3.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/unpackVec3ToFloat.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/uvFlipbook.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/voronoiBorder2d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/voronoiBorder3d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/voronoiDistance2d.glsl"/>
+    <extend-configuration-property name="gdx.files.classpath" value="glsl/fragment/voronoiDistance3d.glsl"/>
+
+    <!-- Shader code -->
+    <extend-configuration-property name="gdx.files.classpath" value="shader/draw/drawTexture.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/draw/drawTexture.vert"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/bloomSum.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/brightnessFilter.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/depthOfField.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/gamma.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/gaussianBlur.frag"/>
+    <extend-configuration-property name="gdx.files.classpath" value="shader/viewToScreenCoords.vert"/>
+
+    <!-- Enums for reflections -->
+    <extend-configuration-property name="gdx.reflect.include" value="com.gempukku.libgdx.graph.data.FieldType"/>
+    <extend-configuration-property name="gdx.reflect.include"
+                                   value="com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType"/>
+    <extend-configuration-property name="gdx.reflect.include"
+                                   value="com.gempukku.libgdx.graph.shader.field.ShaderFieldType"/>
+    <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.Texture.TextureFilter"/>
+    <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.Texture.TextureWrap"/>
+</module>

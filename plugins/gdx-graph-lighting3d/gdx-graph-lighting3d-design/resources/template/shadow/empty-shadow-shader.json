@@ -1,0 +1,21 @@
+{
+  "version": "0.5.0",
+  "type": "Shadow_Shader",
+  "nodes": [
+    {
+      "id": "end",
+      "type": "ShadowShaderEnd",
+      "x": 50.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    }
+  ],
+  "connections": [],
+  "properties": [],
+  "groups": []
+}

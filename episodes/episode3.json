@@ -1,0 +1,210 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "3dea19b96d8f46ffb34c5076406900de",
+      "type": "RenderCallback",
+      "x": 328.0,
+      "y": 582.0,
+      "data": {
+        "callbackId": "Callback"
+      }
+    },
+    {
+      "id": "a6848bfbc7bf45e987fa28b734058c24",
+      "type": "Property",
+      "x": 51.0,
+      "y": 443.0,
+      "data": {
+        "name": "Bloom Radius",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "be459f8f92c8413a99645213beb9e3ed",
+      "type": "Property",
+      "x": 57.0,
+      "y": 173.0,
+      "data": {
+        "name": "Gamma Correction",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "93949b0e9dd845608f36e1a16d8a2a62",
+      "type": "Property",
+      "x": 50.0,
+      "y": 317.0,
+      "data": {
+        "name": "Bloom Strength",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "3f0b9f3e8ae848a59192eaf7108e4ae5",
+      "type": "Property",
+      "x": 58.0,
+      "y": 237.0,
+      "data": {
+        "name": "Blur Radius",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "cb2af8e892ee494d9b4ac60bbc636c27",
+      "type": "Property",
+      "x": 54.0,
+      "y": 382.0,
+      "data": {
+        "name": "Min Brightness",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "282f3f635fa3474c8c7b4f4e6f01b232",
+      "type": "GammaCorrection",
+      "x": 297.0,
+      "y": 233.0
+    },
+    {
+      "id": "79c4964a2afd4e158e7660c3f5502680",
+      "type": "PipelineStart",
+      "x": 305.0,
+      "y": 694.0
+    },
+    {
+      "id": "c6a15404862e460690d0260704dcc398",
+      "type": "GaussianBlur",
+      "x": 308.0,
+      "y": 331.0
+    },
+    {
+      "id": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "type": "Bloom",
+      "x": 285.0,
+      "y": 417.0
+    },
+    {
+      "id": "7d2427e384c2498b88779e75f733c0ff",
+      "type": "UIRenderer",
+      "x": 305.0,
+      "y": 137.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 305.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "7d2427e384c2498b88779e75f733c0ff",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "282f3f635fa3474c8c7b4f4e6f01b232",
+      "fromField": "output",
+      "toNode": "7d2427e384c2498b88779e75f733c0ff",
+      "toField": "input"
+    },
+    {
+      "fromNode": "be459f8f92c8413a99645213beb9e3ed",
+      "fromField": "value",
+      "toNode": "282f3f635fa3474c8c7b4f4e6f01b232",
+      "toField": "gamma"
+    },
+    {
+      "fromNode": "c6a15404862e460690d0260704dcc398",
+      "fromField": "output",
+      "toNode": "282f3f635fa3474c8c7b4f4e6f01b232",
+      "toField": "input"
+    },
+    {
+      "fromNode": "3f0b9f3e8ae848a59192eaf7108e4ae5",
+      "fromField": "value",
+      "toNode": "c6a15404862e460690d0260704dcc398",
+      "toField": "blurRadius"
+    },
+    {
+      "fromNode": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "fromField": "output",
+      "toNode": "c6a15404862e460690d0260704dcc398",
+      "toField": "input"
+    },
+    {
+      "fromNode": "a6848bfbc7bf45e987fa28b734058c24",
+      "fromField": "value",
+      "toNode": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "toField": "bloomRadius"
+    },
+    {
+      "fromNode": "cb2af8e892ee494d9b4ac60bbc636c27",
+      "fromField": "value",
+      "toNode": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "toField": "minimalBrightness"
+    },
+    {
+      "fromNode": "93949b0e9dd845608f36e1a16d8a2a62",
+      "fromField": "value",
+      "toNode": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "toField": "bloomStrength"
+    },
+    {
+      "fromNode": "79c4964a2afd4e158e7660c3f5502680",
+      "fromField": "output",
+      "toNode": "3dea19b96d8f46ffb34c5076406900de",
+      "toField": "input"
+    },
+    {
+      "fromNode": "3dea19b96d8f46ffb34c5076406900de",
+      "fromField": "output",
+      "toNode": "48e2a6841fe24e98b7ddf225d3e5ac65",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Gamma Correction",
+      "type": "Float",
+      "data": {
+        "x": 1.0
+      }
+    },
+    {
+      "name": "Blur Radius",
+      "type": "Float",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Bloom Radius",
+      "type": "Float",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Min Brightness",
+      "type": "Float",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Bloom Strength",
+      "type": "Float",
+      "data": {
+        "x": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

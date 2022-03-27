@@ -1,0 +1,40 @@
+{
+  "pluginName": "UI rendering",
+  "pluginVersion": "latest",
+  "boxProducers": {
+    "UIRenderer": {
+      "name": "UI renderer",
+      "menuLocation": "Pipeline",
+      "fields": [
+        {
+          "type": "String",
+          "label": "Stage Id:",
+          "property": "id",
+          "defaultValue": ""
+        }
+      ],
+      "inputs": [
+        {
+          "id": "enabled",
+          "name": "Enabled",
+          "type": "Boolean"
+        },
+        {
+          "id": "input",
+          "name": "Input",
+          "required": true,
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Output",
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ]
+    }
+  }
+}

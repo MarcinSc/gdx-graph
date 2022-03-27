@@ -1,0 +1,158 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        google()
+    }
+    dependencies {
+
+    }
+}
+
+allprojects {
+    apply plugin: "maven"
+    apply plugin: "eclipse"
+    apply plugin: "maven-publish"
+
+    group = "com.gempukku.libgdx.graph"
+    version = '0.6.2-SNAPSHOT'
+    ext {
+        appName = "Gdx Graph"
+        gdxVersion = '1.9.13'
+        roboVMVersion = '2.3.8'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+        visUiVersion = '1.4.8'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+configure(subprojects) {
+    apply plugin: 'java-library'
+    sourceCompatibility = 1.7
+    compileJava {
+        options.incremental = true
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+        // Plugins
+        implementation project(":gdx-graph-callback-design")
+        implementation project(":gdx-graph-particles-design")
+        implementation project(":gdx-graph-sprites-design")
+        implementation project(":gdx-graph-screen-design")
+        implementation project(":gdx-graph-models-design")
+        implementation project(":gdx-graph-lighting3d-design")
+
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    }
+}
+
+project(":core") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api project(":gdx-graph")
+        api project(":gdx-graph-util")
+        // https://mvnrepository.com/artifact/com.kotcrab.vis/vis-ui
+        //api "com.kotcrab.vis:vis-ui:$visUiVersion"
+        api 'com.github.kotcrab:vis-ui:aa0184c'
+    }
+}
+
+project(":gdx-graph-test") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":gdx-graph-util")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.ashley:ashley:1.7.3"
+    }
+}
+
+project(":gdx-graph-util") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api project(":gdx-graph")
+    }
+}
+
+project(":gdx-graph") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    }
+}
+
+project(":gdx-graph-particles-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+    }
+}
+
+project(":gdx-graph-sprites-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+    }
+}
+
+project(":gdx-graph-screen-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+    }
+}
+
+project(":gdx-graph-models-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+    }
+}
+
+project(":gdx-graph-lighting3d-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":gdx-graph-models-design")
+    }
+}
+
+project(":gdx-graph-callback-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+    }
+}

@@ -1,0 +1,148 @@
+{
+  "pluginName": "Maps renderer (Tiled, etc)",
+  "pluginVersion": "latest",
+  "boxProducers": {
+    "MapRendererAll": {
+      "name": "Map renderer",
+      "menuLocation": "Maps",
+      "fields": [
+        {
+          "type": "String",
+          "label": "Map Id:",
+          "property": "id",
+          "defaultValue": ""
+        }
+      ],
+      "inputs": [
+        {
+          "id": "enabled",
+          "name": "Enabled",
+          "type": "Boolean"
+        },
+        {
+          "id": "camera",
+          "name": "Camera",
+          "required": true,
+          "type": "Camera"
+        },
+        {
+          "id": "input",
+          "name": "Input",
+          "required": true,
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Output",
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ]
+    },
+    "MapRendererLayer": {
+      "name": "Map layer renderer",
+      "menuLocation": "Maps",
+      "fields": [
+        {
+          "type": "String",
+          "label": "Map Id:",
+          "property": "id",
+          "defaultValue": ""
+        },
+        {
+          "type": "String",
+          "label": "Layers:",
+          "property": "layers",
+          "defaultValue": ""
+        },
+        {
+          "type": "Comment",
+          "text": "Comma separated list of layer names",
+          "color": "7f7f7fff"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "enabled",
+          "name": "Enabled",
+          "type": "Boolean"
+        },
+        {
+          "id": "camera",
+          "name": "Camera",
+          "required": true,
+          "type": "Camera"
+        },
+        {
+          "id": "input",
+          "name": "Input",
+          "required": true,
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Output",
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ]
+    },
+    "MapRendererLayerId": {
+      "name": "Map layer id renderer",
+      "menuLocation": "Maps",
+      "fields": [
+        {
+          "type": "String",
+          "label": "Map Id:",
+          "property": "id",
+          "defaultValue": ""
+        },
+        {
+          "type": "String",
+          "label": "Layers ids:",
+          "property": "layers",
+          "defaultValue": ""
+        },
+        {
+          "type": "Comment",
+          "text": "Comma separated list of layer ids",
+          "color": "7f7f7fff"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "enabled",
+          "name": "Enabled",
+          "type": "Boolean"
+        },
+        {
+          "id": "camera",
+          "name": "Camera",
+          "required": true,
+          "type": "Camera"
+        },
+        {
+          "id": "input",
+          "name": "Input",
+          "required": true,
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Output",
+          "mainConnection": true,
+          "type": "RenderPipeline"
+        }
+      ]
+    }
+  }
+}

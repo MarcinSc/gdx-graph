@@ -1,0 +1,34 @@
+{
+  "components": [
+    {
+      "class": "com.gempukku.libgdx.graph.component.PositionComponent",
+      "x": -250,
+      "y": -550,
+      "z": -65
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.SizeComponent",
+      "x": 1330,
+      "y": 457
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.AnchorComponent",
+      "x": 0.5,
+      "y": 1
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.SpriteComponent",
+      "tags": [
+        "Background"
+      ],
+      "spriteType": "simple",
+      "simpleSprite": {
+        "texture": "image/MossyHill2.png",
+        "u": 0,
+        "v": 0,
+        "u2": 1,
+        "v2": 1
+      }
+    }
+  ]
+}

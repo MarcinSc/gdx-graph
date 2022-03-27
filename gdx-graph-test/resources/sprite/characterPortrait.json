@@ -1,0 +1,47 @@
+{
+  "components": [
+    {
+      "class": "com.gempukku.libgdx.graph.component.PositionComponent",
+      "x": 96,
+      "y": 120,
+      "z": 0
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.SizeComponent",
+      "x": 384,
+      "y": 384
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.AnchorComponent",
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.FacingComponent",
+      "faceDirection": "Right"
+    },
+    {
+      "class": "com.gempukku.libgdx.graph.component.SpriteComponent",
+      "tags": [
+        "Screen Masked"
+      ],
+      "spriteType": "stateBased",
+      "stateBasedSprite": {
+        "state": "Idle",
+        "stateData": {
+          "Idle": {
+            "texture": "image/BlueWizardIdle.png",
+            "u": 0,
+            "v": 0,
+            "u2": 1,
+            "v2": 1,
+            "width": 20,
+            "height": 1,
+            "speed": 20,
+            "looping": true
+          }
+        }
+      }
+    }
+  ]
+}

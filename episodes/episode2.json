@@ -1,0 +1,58 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "7bd6a2015adf4fdd9a1f75ed60398ced",
+      "type": "UIRenderer",
+      "x": 272.0,
+      "y": 148.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "29c6afc57c094a63b96f052ac1df8942",
+      "type": "RenderCallback",
+      "x": 242.0,
+      "y": 301.0,
+      "data": {
+        "callbackId": "Callback"
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 272.0,
+      "y": 50.0
+    },
+    {
+      "id": "78f632288a564ce6a0bcde6f9dc1940f",
+      "type": "PipelineStart",
+      "x": 272.0,
+      "y": 436.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "7bd6a2015adf4fdd9a1f75ed60398ced",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "78f632288a564ce6a0bcde6f9dc1940f",
+      "fromField": "output",
+      "toNode": "29c6afc57c094a63b96f052ac1df8942",
+      "toField": "input"
+    },
+    {
+      "fromNode": "29c6afc57c094a63b96f052ac1df8942",
+      "fromField": "output",
+      "toNode": "7bd6a2015adf4fdd9a1f75ed60398ced",
+      "toField": "input"
+    }
+  ],
+  "properties": [],
+  "groups": []
+}

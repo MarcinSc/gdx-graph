@@ -1,0 +1,15 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 50.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [],
+  "properties": [],
+  "groups": []
+}

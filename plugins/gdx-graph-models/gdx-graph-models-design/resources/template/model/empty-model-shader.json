@@ -1,0 +1,22 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 50.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "blending": false,
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    }
+  ],
+  "connections": [],
+  "properties": [],
+  "groups": []
+}

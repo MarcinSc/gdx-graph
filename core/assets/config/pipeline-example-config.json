@@ -1,0 +1,244 @@
+{
+  "boxProducers": {
+    "Time": {
+      "name": "Time",
+      "menuLocation": "Provided",
+      "outputs": [
+        {
+          "id": "Time",
+          "name": "Time",
+          "type": "Float"
+        },
+        {
+          "id": "sinTime",
+          "name": "sin(Time)",
+          "type": "Float"
+        },
+        {
+          "id": "cosTime",
+          "name": "cos(Time)",
+          "type": "Float"
+        },
+        {
+          "id": "deltaTime",
+          "name": "deltaTime",
+          "type": "Float"
+        }
+      ]
+    },
+    "RenderSize": {
+      "name": "Render size",
+      "menuLocation": "Provided",
+      "outputs": [
+        {
+          "id": "size",
+          "name": "Size",
+          "type": "Vector2"
+        },
+        {
+          "id": "width",
+          "name": "Width",
+          "type": "Float"
+        },
+        {
+          "id": "height",
+          "name": "Height",
+          "type": "Float"
+        }
+      ]
+    },
+    "Add": {
+      "name": "Add",
+      "menuLocation": "Math/Arithmetic",
+      "inputs": [
+        {
+          "id": "inputs",
+          "name": "Inputs",
+          "required": true,
+          "acceptMultiple": true,
+          "type": [
+            "Color",
+            "Vector3",
+            "Vector2",
+            "Float"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Result",
+          "type": [
+            "Float",
+            "Vector2",
+            "Vector3",
+            "Color"
+          ],
+          "validation": {
+            "type": "multiParamVectorArithmetic",
+            "floatType": "Float",
+            "inputId": "inputs"
+          }
+        }
+      ]
+    },
+    "Divide": {
+      "name": "Divide",
+      "menuLocation": "Math/Arithmetic",
+      "inputs": [
+        {
+          "id": "a",
+          "name": "A",
+          "required": true,
+          "type": [
+            "Color",
+            "Vector3",
+            "Vector2",
+            "Float"
+          ]
+        },
+        {
+          "id": "b",
+          "name": "B",
+          "required": true,
+          "type": [
+            "Color",
+            "Vector3",
+            "Vector2",
+            "Float"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Result",
+          "type": [
+            "Float",
+            "Vector2",
+            "Vector3",
+            "Color"
+          ],
+          "validation": {
+            "type": "vectorArithmetic",
+            "floatType": "Float",
+            "input1": "a",
+            "input2": "b"
+          }
+        }
+      ]
+    },
+    "Multiply": {
+      "name": "Multiply",
+      "menuLocation": "Math/Arithmetic",
+      "inputs": [
+        {
+          "id": "inputs",
+          "name": "Inputs",
+          "required": true,
+          "acceptMultiple": true,
+          "type": [
+            "Color",
+            "Vector3",
+            "Vector2",
+            "Float"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "id": "output",
+          "name": "Result",
+          "type": [
+            "Float",
+            "Vector2",
+            "Vector3",
+            "Color"
+          ],
+          "validation": {
+            "type": "multiParamVectorArithmetic",
+            "floatType": "Float",
+            "inputId": "inputs"
+          }
+        }
+      ]
+    }
+  },
+  "propertyTypes": {
+    "Float": {
+      "defaultName": "New Float",
+      "fields": [
+        {
+          "type": "Float",
+          "label": "Value",
+          "property": "x",
+          "defaultValue": 0
+        }
+      ]
+    },
+    "Vector2": {
+      "defaultName": "New Vector2",
+      "fields": [
+        {
+          "type": "Vector2",
+          "label": "Value",
+          "properties": [
+            "x",
+            "y"
+          ],
+          "defaultValues": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "Vector3": {
+      "defaultName": "New Vector3",
+      "fields": [
+        {
+          "type": "Vector3",
+          "label": "Value",
+          "properties": [
+            "x",
+            "y",
+            "z"
+          ],
+          "defaultValues": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "Color": {
+      "defaultName": "New Color",
+      "fields": [
+        {
+          "type": "Color",
+          "label": "Value",
+          "property": "color",
+          "defaultValue": "FFFFFFFF"
+        }
+      ]
+    },
+    "Boolean": {
+      "defaultName": "New Boolean",
+      "fields": [
+        {
+          "type": "Boolean",
+          "label": "Value",
+          "property": "value",
+          "defaultValue": false
+        }
+      ]
+    },
+    "Camera": {
+      "defaultName": "New Camera"
+    },
+    "Callback": {
+      "defaultName": "New Callback"
+    }
+  }
+}
