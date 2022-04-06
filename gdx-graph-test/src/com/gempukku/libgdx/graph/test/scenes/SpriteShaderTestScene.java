@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.plugin.sprites.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.plugin.sprites.GraphSprites;
-import com.gempukku.libgdx.graph.plugin.sprites.ValuePerVertex;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
@@ -28,7 +28,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         GraphSprites graphSprites = pipelineRenderer.getPluginData(GraphSprites.class);
 
         CommonPropertiesSpriteAdapter renderableSprite1 = new CommonPropertiesSpriteAdapter(graphSprites, new Vector3(0, 0, -10));
-        ValuePerVertex colorPerVertex = new ValuePerVertex(
+        ArrayValuePerVertex colorPerVertex = new ArrayValuePerVertex(
                 new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(1, 1));
         renderableSprite1.getPropertyContainer().setValue("Vertex Color", colorPerVertex);
 

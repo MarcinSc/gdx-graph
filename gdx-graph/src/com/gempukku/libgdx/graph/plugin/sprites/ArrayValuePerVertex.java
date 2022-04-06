@@ -1,13 +1,15 @@
 package com.gempukku.libgdx.graph.plugin.sprites;
 
-public final class ValuePerVertex {
+import com.gempukku.libgdx.graph.util.ValuePerVertex;
+
+public final class ArrayValuePerVertex implements ValuePerVertex {
     private final Object[] vertexValues;
 
-    public ValuePerVertex(Object... values) {
+    public ArrayValuePerVertex(Object... values) {
         vertexValues = values;
     }
 
-    public ValuePerVertex(Object v00, Object v10, Object v01, Object v11) {
+    public ArrayValuePerVertex(Object v00, Object v10, Object v01, Object v11) {
         vertexValues = new Object[4];
         vertexValues[0] = v00;
         vertexValues[1] = v10;
@@ -15,6 +17,7 @@ public final class ValuePerVertex {
         vertexValues[3] = v11;
     }
 
+    @Override
     public Object getValue(int index) {
         return vertexValues[index];
     }

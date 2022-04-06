@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.particles.model;
 
-import com.gempukku.libgdx.graph.plugin.sprites.ValuePerVertex;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.ValuePerVertex;
 
 public class ParticlesUtil {
     public static void setParticleAttribute(float[] particlesData, int particleOffset,
