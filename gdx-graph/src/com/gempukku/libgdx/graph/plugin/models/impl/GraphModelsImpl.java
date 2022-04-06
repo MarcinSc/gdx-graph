@@ -38,6 +38,11 @@ public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
     }
 
     @Override
+    public ObjectMap<String, PropertySource> getShaderProperties(String tag) {
+        return propertiesByTag.get(tag);
+    }
+
+    @Override
     public GraphModel addModel(String tag, RenderableModel model) {
         GraphModelImpl graphModel = new GraphModelImpl(tag, model);
         modelsByTag.get(tag).add(graphModel);

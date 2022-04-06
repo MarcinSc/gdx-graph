@@ -28,6 +28,11 @@ public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 3;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }

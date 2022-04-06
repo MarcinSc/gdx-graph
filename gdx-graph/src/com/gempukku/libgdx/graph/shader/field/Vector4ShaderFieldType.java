@@ -25,6 +25,11 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 4;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }

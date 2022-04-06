@@ -1,5 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.models;
 
+import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.shader.property.PropertySource;
+
 /**
  * Main interface that is used to operate on models rendered by GraphShaders.
  */
@@ -19,6 +22,14 @@ public interface GraphModels {
      * @param model
      */
     void removeModel(GraphModel model);
+
+    /**
+     * Returns a definition of shader properties for a given 'tag' (shader).
+     *
+     * @param tag
+     * @return
+     */
+    ObjectMap<String, PropertySource> getShaderProperties(String tag);
 
     /**
      * Sets global property for a given 'tag' (shader).

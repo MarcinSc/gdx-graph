@@ -18,6 +18,8 @@ import com.gempukku.libgdx.graph.time.TimeProvider;
 public class GraphSpritesImpl implements GraphSprites, RuntimePipelinePlugin, Disposable {
     private final int spriteBatchSize;
 
+    private final ObjectMap<String, ObjectMap<String, PropertySource>> propertiesByTag = new ObjectMap<>();
+
     private final ObjectMap<String, BatchedTagSpriteData> batchedTagSpriteData = new ObjectMap<>();
     private final ObjectMap<String, NonBatchedTagSpriteData> nonBatchedTagSpriteData = new ObjectMap<>();
 
@@ -56,6 +58,11 @@ public class GraphSpritesImpl implements GraphSprites, RuntimePipelinePlugin, Di
             batchedTagSpriteData.removeSprite(sprite);
         else
             nonBatchedSpritesByTag.get(tag).remove(sprite);
+    }
+
+    @Override
+    public ObjectMap<String, PropertySource> getShaderProperties(String tag) {
+        return propertiesByTag.get(tag);
     }
 
     @Override
@@ -106,6 +113,7 @@ public class GraphSpritesImpl implements GraphSprites, RuntimePipelinePlugin, Di
 
         VertexAttributes vertexAttributes = shader.getVertexAttributes();
         ObjectMap<String, PropertySource> shaderProperties = shader.getProperties();
+        propertiesByTag.put(tag, shaderProperties);
         Array<String> textureUniformNames = shader.getTextureUniformNames();
 
         if (batched)

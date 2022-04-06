@@ -27,6 +27,11 @@ public class FloatFieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 1;
+    }
+
+    @Override
     public Object convert(Object value) {
         if (value instanceof Number)
             return ((Number) value).floatValue();

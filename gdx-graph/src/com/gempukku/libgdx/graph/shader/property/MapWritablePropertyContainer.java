@@ -21,7 +21,6 @@ public class MapWritablePropertyContainer implements WritablePropertyContainer {
         return properties.get(name);
     }
 
-    @Override
     public void clear() {
         properties.clear();
     }

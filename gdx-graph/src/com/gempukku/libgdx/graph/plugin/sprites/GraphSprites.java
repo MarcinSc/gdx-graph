@@ -1,5 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.sprites;
 
+import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.shader.property.PropertySource;
+
 /**
  * Main interface for operating on sprites.
  */
@@ -28,6 +31,14 @@ public interface GraphSprites {
      * @param sprite
      */
     void removeSprite(GraphSprite sprite);
+
+    /**
+     * Returns properties defined for shader for a given 'tag' (shader).
+     *
+     * @param tag
+     * @return
+     */
+    ObjectMap<String, PropertySource> getShaderProperties(String tag);
 
     /**
      * Sets global property for a given 'tag' (shader).

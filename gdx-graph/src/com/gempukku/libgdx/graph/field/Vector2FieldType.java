@@ -28,6 +28,11 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 2;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }
