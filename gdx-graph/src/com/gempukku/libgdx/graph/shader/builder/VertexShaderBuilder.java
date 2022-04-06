@@ -16,10 +16,6 @@ public class VertexShaderBuilder extends CommonShaderBuilder {
         super(uniformRegistry);
     }
 
-    public void addAttributeVariable(VertexAttribute vertexAttribute, String type) {
-        addAttributeVariable(vertexAttribute, type, null);
-    }
-
     public void addAttributeVariable(VertexAttribute vertexAttribute, String type, String comment) {
         String name = vertexAttribute.alias;
         String existingType = attributeVariables.get(name);

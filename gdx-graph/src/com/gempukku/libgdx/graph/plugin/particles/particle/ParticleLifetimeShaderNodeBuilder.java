@@ -22,7 +22,7 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 1, "a_birthTime"), "float");
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 1, "a_birthTime"), "float", "Particle birth-time");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
 
@@ -38,7 +38,7 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
         VertexAttribute attribute = new VertexAttribute(1024, 1, "a_birthTime");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
-        copyAttributeToFragmentShader(attribute, "v_lifetime", "u_time - a_birthTime",
+        copyAttributeToFragmentShader(attribute, "v_lifetime", "u_time - a_birthTime", "Particle lifetime",
                 vertexShaderBuilder, fragmentShaderBuilder);
 
         return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, "v_lifetime"));

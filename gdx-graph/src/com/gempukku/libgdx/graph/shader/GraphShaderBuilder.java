@@ -285,7 +285,7 @@ public class GraphShaderBuilder {
     private static void buildParticlesFragmentShader(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph, boolean designTime, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
         // Fragment part
         if (!vertexShaderBuilder.hasVaryingVariable("v_deathTime")) {
-            vertexShaderBuilder.addAttributeVariable(new VertexAttribute(2048, 1, "a_deathTime"), "float");
+            vertexShaderBuilder.addAttributeVariable(new VertexAttribute(2048, 1, "a_deathTime"), "float", "Particle death-time");
             vertexShaderBuilder.addVaryingVariable("v_deathTime", "float");
             vertexShaderBuilder.addMainLine("v_deathTime = a_deathTime;");
 
@@ -449,7 +449,7 @@ public class GraphShaderBuilder {
 
     private static void buildScreenVertexShader(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph, boolean designTime, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
         // Vertex part
-        vertexShaderBuilder.addAttributeVariable(VertexAttribute.Position(), "vec3");
+        vertexShaderBuilder.addAttributeVariable(VertexAttribute.Position(), "vec3", "Particle position");
         vertexShaderBuilder.addMainLine("// End Graph Node");
         vertexShaderBuilder.addMainLine("gl_Position = vec4((a_position.xy * 2.0 - 1.0), 1.0, 1.0);");
     }

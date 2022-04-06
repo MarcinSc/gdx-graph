@@ -21,7 +21,7 @@ public class ParticlePositionShaderNodeBuilder extends ConfigurationShaderNodeBu
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(VertexAttribute.Position(), "vec3");
+        vertexShaderBuilder.addAttributeVariable(VertexAttribute.Position(), "vec3", "Particle position");
 
         return LibGDXCollections.singletonMap("position", new DefaultFieldOutput(ShaderFieldType.Vector3, "a_position"));
     }
@@ -29,7 +29,7 @@ public class ParticlePositionShaderNodeBuilder extends ConfigurationShaderNodeBu
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
         VertexAttribute attribute = VertexAttribute.Position();
-        copyAttributeToFragmentShader(attribute, "v_position", vertexShaderBuilder, fragmentShaderBuilder);
+        copyAttributeToFragmentShader(attribute, "v_position", "Particle position", vertexShaderBuilder, fragmentShaderBuilder);
         return LibGDXCollections.singletonMap("position", new DefaultFieldOutput(ShaderFieldType.Vector3, "v_position"));
     }
 }

@@ -60,12 +60,12 @@ public abstract class ConfigurationShaderNodeBuilder implements GraphShaderNodeB
             shaderBuilder.addFunction(fragmentName, GLSLFragmentReader.getFragment(fragmentName));
     }
 
-    protected void copyAttributeToFragmentShader(VertexAttribute attribute, String varyingName,
+    protected void copyAttributeToFragmentShader(VertexAttribute attribute, String varyingName, String comment,
                                                  VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
-        copyAttributeToFragmentShader(attribute, varyingName, attribute.alias, vertexShaderBuilder, fragmentShaderBuilder);
+        copyAttributeToFragmentShader(attribute, varyingName, attribute.alias, comment, vertexShaderBuilder, fragmentShaderBuilder);
     }
 
-    protected void copyAttributeToFragmentShader(VertexAttribute attribute, String varyingName, String attributeValue,
+    protected void copyAttributeToFragmentShader(VertexAttribute attribute, String varyingName, String attributeValue, String comment,
                                                  VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
         String type;
         if (attribute.numComponents == 1)
@@ -79,7 +79,7 @@ public abstract class ConfigurationShaderNodeBuilder implements GraphShaderNodeB
         else
             throw new IllegalArgumentException("Unable to figure out variable type from attribute with numComponents: " + attribute.numComponents);
 
-        vertexShaderBuilder.addAttributeVariable(attribute, type);
+        vertexShaderBuilder.addAttributeVariable(attribute, type, comment);
         if (!vertexShaderBuilder.hasVaryingVariable(varyingName)) {
             vertexShaderBuilder.addVaryingVariable(varyingName, type);
             vertexShaderBuilder.addMainLine(varyingName + " = " + attributeValue + ";");

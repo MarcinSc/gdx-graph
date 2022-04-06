@@ -27,7 +27,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
         if (!vertexShaderBuilder.hasUniformVariable("u_bones")) {
             vertexShaderBuilder.addArrayUniformVariable("u_bones", boneCount, "mat4", false, new ModelsUniformSetters.Bones(boneCount), "Skeletal bones");
             for (int i = 0; i < boneWeightCount; i++) {
-                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2");
+                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2", "Bone-weight property - " + i);
             }
         }
 
@@ -89,7 +89,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
         if (!vertexShaderBuilder.hasUniformVariable("u_bones")) {
             vertexShaderBuilder.addArrayUniformVariable("u_bones", boneCount, "mat4", false, new ModelsUniformSetters.Bones(boneCount), "Skeletal bones");
             for (int i = 0; i < boneWeightCount; i++) {
-                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2");
+                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2", "Bone-weight property - " + i);
             }
         }
 

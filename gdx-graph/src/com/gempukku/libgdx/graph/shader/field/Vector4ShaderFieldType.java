@@ -55,7 +55,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
                         value = propertySource.getValueToUse(value);
                         shader.setUniform(location, (Color) value);
                     }
-                }, "Property - " + propertySource.getPropertyName());
+                }, "Vector4 property - " + propertySource.getPropertyName());
         return new DefaultFieldOutput(getName(), variableName);
     }
 
@@ -70,7 +70,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
                         value = propertySource.getValueToUse(value);
                         shader.setUniform(location, (Color) value);
                     }
-                }, "Property - " + propertySource.getPropertyName());
+                }, "Vector4 property - " + propertySource.getPropertyName());
         return new DefaultFieldOutput(getName(), variableName);
     }
 
@@ -78,7 +78,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
     public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
         String attributeName = "a_property_" + propertySource.getPropertyIndex();
 
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType());
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType(), "Vector4 property - " + propertySource.getPropertyName());
 
         return new DefaultFieldOutput(getName(), attributeName);
     }
@@ -88,7 +88,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
         String attributeName = "a_property_" + propertySource.getPropertyIndex();
         String variableName = "v_property_" + propertySource.getPropertyIndex();
 
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType());
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType(), "Vector4 property - " + propertySource.getPropertyName());
         if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {
             vertexShaderBuilder.addVaryingVariable(variableName, getShaderType());
             vertexShaderBuilder.addMainLine(variableName + " = " + attributeName + ";");

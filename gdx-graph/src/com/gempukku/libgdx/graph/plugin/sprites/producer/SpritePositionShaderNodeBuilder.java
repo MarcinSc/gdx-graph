@@ -22,7 +22,7 @@ public class SpritePositionShaderNodeBuilder extends ConfigurationShaderNodeBuil
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(512, 3, ShaderProgram.POSITION_ATTRIBUTE), "vec3");
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(512, 3, ShaderProgram.POSITION_ATTRIBUTE), "vec3", "Sprite position");
 
         return LibGDXCollections.singletonMap("position", new DefaultFieldOutput(ShaderFieldType.Vector3, ShaderProgram.POSITION_ATTRIBUTE));
     }
@@ -30,7 +30,7 @@ public class SpritePositionShaderNodeBuilder extends ConfigurationShaderNodeBuil
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
         VertexAttribute attribute = new VertexAttribute(512, 3, ShaderProgram.POSITION_ATTRIBUTE);
-        copyAttributeToFragmentShader(attribute, "v_position", vertexShaderBuilder, fragmentShaderBuilder);
+        copyAttributeToFragmentShader(attribute, "v_position", "Sprite position", vertexShaderBuilder, fragmentShaderBuilder);
         return LibGDXCollections.singletonMap("position", new DefaultFieldOutput(ShaderFieldType.Vector3, "v_position"));
     }
 }

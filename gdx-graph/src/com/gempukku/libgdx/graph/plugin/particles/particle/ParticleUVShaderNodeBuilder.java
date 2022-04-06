@@ -21,7 +21,7 @@ public class ParticleUVShaderNodeBuilder extends ConfigurationShaderNodeBuilder 
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(VertexAttribute.TexCoords(0), "vec2");
+        vertexShaderBuilder.addAttributeVariable(VertexAttribute.TexCoords(0), "vec2", "Particle UV");
 
         return LibGDXCollections.singletonMap("uv", new DefaultFieldOutput(ShaderFieldType.Vector2, "a_texCoord0"));
     }
@@ -29,7 +29,7 @@ public class ParticleUVShaderNodeBuilder extends ConfigurationShaderNodeBuilder 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
         VertexAttribute attribute = VertexAttribute.TexCoords(0);
-        copyAttributeToFragmentShader(attribute, "v_uv", vertexShaderBuilder, fragmentShaderBuilder);
+        copyAttributeToFragmentShader(attribute, "v_uv", "Particle UV", vertexShaderBuilder, fragmentShaderBuilder);
         return LibGDXCollections.singletonMap("uv", new DefaultFieldOutput(ShaderFieldType.Vector2, "v_uv"));
     }
 }
