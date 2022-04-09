@@ -8,6 +8,10 @@ public class LightColor {
     private float green;
     private float blue;
 
+    public LightColor() {
+        this(0, 0, 0);
+    }
+
     public LightColor(Color color) {
         this(color.r, color.g, color.b);
     }
