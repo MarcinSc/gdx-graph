@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.ui;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -34,6 +36,7 @@ public class UIRendererPipelineNodeProducer extends SingleInputsPipelineNodeProd
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
                 final PipelineNode.FieldOutput<Boolean> processorEnabled = (PipelineNode.FieldOutput<Boolean>) inputs.get("enabled");
                 final PipelineNode.FieldOutput<RenderPipeline> renderPipelineInput = (PipelineNode.FieldOutput<RenderPipeline>) inputs.get("input");
+                final FieldOutput<Vector2> screenSizeInput = (FieldOutput<Vector2>) inputs.get("size");
 
                 RenderPipeline renderPipeline = renderPipelineInput.getValue();
                 boolean enabled = processorEnabled == null || processorEnabled.getValue();
@@ -43,8 +46,8 @@ public class UIRendererPipelineNodeProducer extends SingleInputsPipelineNodeProd
                     pipelineRenderingContext.getRenderContext().end();
 
                     RenderPipelineBuffer currentBuffer = renderPipeline.getDefaultBuffer();
-                    int width = currentBuffer.getWidth();
-                    int height = currentBuffer.getHeight();
+                    int width = screenSizeInput != null ? MathUtils.round(screenSizeInput.getValue().x) : currentBuffer.getWidth();
+                    int height = screenSizeInput != null ? MathUtils.round(screenSizeInput.getValue().y) : currentBuffer.getHeight();
                     int screenWidth = stage.getViewport().getScreenWidth();
                     int screenHeight = stage.getViewport().getScreenHeight();
                     if (screenWidth != width || screenHeight != height)
