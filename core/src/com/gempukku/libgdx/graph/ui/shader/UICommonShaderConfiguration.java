@@ -84,6 +84,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GraphBoxProducerImpl(new ArcsinShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ArccosShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ArctanShaderNodeConfiguration()));
+        register(new GraphBoxProducerImpl(new Arctan2ShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new RadiansShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new DegreesShaderNodeConfiguration()));
 

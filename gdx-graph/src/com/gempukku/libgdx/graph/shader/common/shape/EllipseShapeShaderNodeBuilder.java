@@ -34,7 +34,7 @@ public class EllipseShapeShaderNodeBuilder extends ConfigurationCommonShaderNode
         String name = "result_" + nodeId;
 
         commonShaderBuilder.addMainLine("vec2 " + temp1 + " = " + uv + " * 2.0 - 1.0;");
-        commonShaderBuilder.addMainLine("float " + name + " = 1.0 - smoothstep(0.0 - " + border + ", 0.0,  length(" + temp1 + " / " + size + ") - 1.0);");
+        commonShaderBuilder.addMainLine("float " + name + " = 1.0 - smoothstep(0.0 - " + border + ", 0.0, length(" + temp1 + " / " + size + ") - 1.0);");
 
         return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }

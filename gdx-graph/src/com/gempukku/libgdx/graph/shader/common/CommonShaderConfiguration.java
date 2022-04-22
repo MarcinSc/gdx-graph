@@ -95,6 +95,7 @@ public class CommonShaderConfiguration implements GraphConfiguration {
         register(new ArcsinShaderNodeBuilder());
         register(new ArccosShaderNodeBuilder());
         register(new ArctanShaderNodeBuilder());
+        register(new Arctan2ShaderNodeBuilder());
         register(new RadiansShaderNodeBuilder());
         register(new DegreesShaderNodeBuilder());
 

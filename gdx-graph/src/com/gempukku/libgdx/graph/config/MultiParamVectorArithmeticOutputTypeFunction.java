@@ -22,7 +22,7 @@ public class MultiParamVectorArithmeticOutputTypeFunction implements Function<Ob
 
         String resultType = floatType;
         for (String type : types) {
-            if (!type.equals(resultType) && (!resultType.equals(floatType) && !type.equals(floatType)))
+            if (type == null || !type.equals(resultType) && (!resultType.equals(floatType) && !type.equals(floatType)))
                 return null;
             if (!type.equals(floatType))
                 resultType = type;
