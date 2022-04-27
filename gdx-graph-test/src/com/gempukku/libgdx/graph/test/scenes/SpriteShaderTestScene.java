@@ -28,7 +28,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         GraphSprites graphSprites = pipelineRenderer.getPluginData(GraphSprites.class);
 
         CommonPropertiesSpriteAdapter renderableSprite1 = new CommonPropertiesSpriteAdapter(graphSprites, new Vector3(0, 0, -10));
-        ArrayValuePerVertex colorPerVertex = new ArrayValuePerVertex(
+        ArrayValuePerVertex<Vector2> colorPerVertex = new ArrayValuePerVertex<>(
                 new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(1, 1));
         renderableSprite1.getPropertyContainer().setValue("Vertex Color", colorPerVertex);
 

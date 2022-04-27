@@ -20,6 +20,11 @@
           "type": "Boolean"
         },
         {
+          "id": "size",
+          "name": "Size",
+          "type": "Vector2"
+        },
+        {
           "id": "input",
           "name": "Input",
           "required": true,
