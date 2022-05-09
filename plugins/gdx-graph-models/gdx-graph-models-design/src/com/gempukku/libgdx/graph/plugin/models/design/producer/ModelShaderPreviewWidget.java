@@ -24,15 +24,15 @@ import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
 import com.gempukku.libgdx.graph.plugin.models.ModelGraphShader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
-import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelImpl;
-import com.gempukku.libgdx.graph.plugin.models.producer.ModelShaderContextImpl;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
+import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
@@ -56,14 +56,14 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     private OpenGLContext renderContext;
 
     private Model rectangleModel;
-    private GraphModelImpl rectangleShaderModel;
+    private RenderableModel rectangleShaderModel;
     private Model sphereModel;
-    private GraphModelImpl sphereShaderModel;
+    private RenderableModel sphereShaderModel;
 
     private Camera camera;
     private DefaultTimeKeeper timeKeeper;
     private Lighting3DEnvironment graphShaderEnvironment;
-    private ModelShaderContextImpl shaderContext;
+    private ShaderContextImpl shaderContext;
     private ShaderPreviewModel model = ShaderPreviewModel.Sphere;
 
     private MapWritablePropertyContainer localPropertyContainer;
@@ -98,7 +98,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
             }
         };
 
-        shaderContext = new ModelShaderContextImpl(dataSource);
+        shaderContext = new ShaderContextImpl(dataSource);
         shaderContext.setCamera(camera);
         shaderContext.setRenderWidth(width);
         shaderContext.setRenderHeight(height);
@@ -186,12 +186,12 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
                 1, 0, 0,
                 material,
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-        rectangleShaderModel = new GraphModelImpl("Test", new SimpleRenderableModel(rectangleModel));
+        rectangleShaderModel = new SimpleRenderableModel(rectangleModel);
         float sphereDiameter = 0.8f;
         sphereModel = modelBuilder.createSphere(sphereDiameter, sphereDiameter, sphereDiameter, 50, 50,
                 material,
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-        sphereShaderModel = new GraphModelImpl("Test", new SimpleRenderableModel(sphereModel));
+        sphereShaderModel = new SimpleRenderableModel(sphereModel);
     }
 
     private void destroyShader() {
@@ -287,6 +287,11 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         @Override
         public boolean isRendered(Camera camera) {
             return true;
+        }
+
+        @Override
+        public void prepareToRender(ShaderContext shaderContext) {
+
         }
 
         @Override

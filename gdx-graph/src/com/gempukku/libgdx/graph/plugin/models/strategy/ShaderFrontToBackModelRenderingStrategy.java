@@ -19,7 +19,7 @@ public class ShaderFrontToBackModelRenderingStrategy implements ModelRenderingSt
                     orderingArray.add(model);
             modelSorter.sort(camera.position, orderingArray);
             for (GraphModel graphModel : orderingArray) {
-                callback.process(graphModel, tag);
+                callback.process(graphModel.getRenderableModel(), tag);
             }
         }
         callback.end();

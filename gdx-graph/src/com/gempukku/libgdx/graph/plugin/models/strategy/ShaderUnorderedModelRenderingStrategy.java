@@ -12,7 +12,7 @@ public class ShaderUnorderedModelRenderingStrategy implements ModelRenderingStra
         for (String tag : tags) {
             for (GraphModel model : models.getModels(tag)) {
                 if (model.getRenderableModel().isRendered(camera)) {
-                    callback.process(model, tag);
+                    callback.process(model.getRenderableModel(), tag);
                 }
             }
         }

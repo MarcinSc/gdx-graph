@@ -15,16 +15,16 @@ import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
-import com.gempukku.libgdx.graph.plugin.models.GraphModel;
 import com.gempukku.libgdx.graph.plugin.models.ModelGraphShader;
 import com.gempukku.libgdx.graph.plugin.models.ModelShaderConfiguration;
 import com.gempukku.libgdx.graph.plugin.models.ModelShaderLoaderCallback;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
-import com.gempukku.libgdx.graph.plugin.models.producer.ModelShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.models.strategy.*;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
@@ -46,7 +46,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final ModelShaderContextImpl shaderContext = new ModelShaderContextImpl(pluginPrivateDataSource);
+        final ShaderContextImpl shaderContext = new ShaderContextImpl(pluginPrivateDataSource);
 
         final ObjectMap<String, ModelGraphShader> shaders = new ObjectMap<>();
         final Array<String> allShaderTags = new Array<>();
@@ -229,14 +229,14 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {
-        private final ModelShaderContextImpl shaderContext;
+        private final ShaderContextImpl shaderContext;
         private final Function<String, ModelGraphShader> shaderResolver;
 
         private GraphModelsImpl graphModels;
         private PipelineRenderingContext context;
         private GraphShader runningShader = null;
 
-        public RenderingStrategyCallback(ModelShaderContextImpl shaderContext, Function<String, ModelGraphShader> shaderResolver) {
+        public RenderingStrategyCallback(ShaderContextImpl shaderContext, Function<String, ModelGraphShader> shaderResolver) {
             this.shaderContext = shaderContext;
             this.shaderResolver = shaderResolver;
         }
@@ -252,13 +252,13 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         }
 
         @Override
-        public void process(GraphModel graphModel, String tag) {
+        public void process(RenderableModel model, String tag) {
             ModelGraphShader shader = shaderResolver.apply(tag);
             if (runningShader != shader) {
                 endCurrentShader();
                 beginShader(tag, shader);
             }
-            shader.render(shaderContext, graphModel);
+            shader.render(shaderContext, model);
         }
 
         private void beginShader(String tag, ModelGraphShader shader) {

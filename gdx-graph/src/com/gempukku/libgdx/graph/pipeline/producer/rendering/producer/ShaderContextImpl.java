@@ -3,12 +3,14 @@ package com.gempukku.libgdx.graph.pipeline.producer.rendering.producer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class ShaderContextImpl implements ShaderContext {
     private int renderWidth;
     private int renderHeight;
+    private RenderableModel renderableModel;
 
     private Camera camera;
     private Texture depthTexture;
@@ -21,6 +23,15 @@ public class ShaderContextImpl implements ShaderContext {
 
     public ShaderContextImpl(PluginPrivateDataSource pluginPrivateDataSource) {
         this.pluginPrivateDataSource = pluginPrivateDataSource;
+    }
+
+    @Override
+    public RenderableModel getRenderableModel() {
+        return renderableModel;
+    }
+
+    public void setRenderableModel(RenderableModel renderableModel) {
+        this.renderableModel = renderableModel;
     }
 
     @Override

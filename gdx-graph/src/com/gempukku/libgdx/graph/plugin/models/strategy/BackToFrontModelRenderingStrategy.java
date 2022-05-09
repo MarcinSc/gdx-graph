@@ -20,7 +20,7 @@ public class BackToFrontModelRenderingStrategy implements ModelRenderingStrategy
         }
         modelSorter.sort(camera.position, orderingArray);
         for (GraphModel graphModel : orderingArray) {
-            callback.process(graphModel, graphModel.getTag());
+            callback.process(graphModel.getRenderableModel(), graphModel.getTag());
         }
         callback.end();
     }

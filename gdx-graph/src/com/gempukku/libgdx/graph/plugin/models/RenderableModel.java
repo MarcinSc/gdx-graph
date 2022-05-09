@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.IntMapping;
 
 public interface RenderableModel {
@@ -41,12 +42,15 @@ public interface RenderableModel {
      */
     PropertyContainer getPropertyContainer(String tag);
 
+    void prepareToRender(ShaderContext shaderContext);
+
     /**
      * Renders the model with the shader. Check for implementations provided to get an
      * idea of what should be done.
      *
      * @param camera
-     * @param shader
+     * @param shaderProgram
+     * @param propertyToLocationMapping
      */
     void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping);
 }

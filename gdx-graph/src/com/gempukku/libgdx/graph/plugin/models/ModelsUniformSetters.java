@@ -11,7 +11,7 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().combined));
+            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().combined));
         }
     };
 
@@ -20,7 +20,7 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().combined).toNormalMatrix());
+            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().combined).toNormalMatrix());
         }
     };
 
@@ -29,7 +29,7 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().view));
+            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().view));
         }
     };
 
@@ -38,14 +38,14 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().view).toNormalMatrix());
+            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform(shader.getTag())).mul(shaderContext.getCamera().view).toNormalMatrix());
         }
     };
 
     public final static UniformRegistry.UniformSetter worldTrans = new UniformRegistry.UniformSetter() {
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, ((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag()));
+            shader.setUniform(location, shaderContext.getRenderableModel().getWorldTransform(shader.getTag()));
         }
     };
 
@@ -54,7 +54,7 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmpM.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).toNormalMatrix());
+            shader.setUniform(location, tmpM.set(shaderContext.getRenderableModel().getWorldTransform(shader.getTag())).toNormalMatrix());
         }
     };
 }

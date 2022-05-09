@@ -120,7 +120,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
 
                         for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                             int location = startingLocation + i * structSize;

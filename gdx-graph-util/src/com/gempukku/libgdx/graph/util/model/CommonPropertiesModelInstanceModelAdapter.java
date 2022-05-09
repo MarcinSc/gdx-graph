@@ -18,6 +18,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.plugin.models.GraphModel;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
@@ -127,6 +128,11 @@ public class CommonPropertiesModelInstanceModelAdapter {
         @Override
         public boolean isRendered(Camera camera) {
             return nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
+        }
+
+        @Override
+        public void prepareToRender(ShaderContext shaderContext) {
+
         }
 
         @Override
