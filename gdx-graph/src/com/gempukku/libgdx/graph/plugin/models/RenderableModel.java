@@ -1,9 +1,11 @@
 package com.gempukku.libgdx.graph.plugin.models;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.util.IntMapping;
 
 public interface RenderableModel {
     /**
@@ -54,5 +56,5 @@ public interface RenderableModel {
      * @param camera
      * @param shader
      */
-    void render(Camera camera, ModelGraphShader shader);
+    void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping);
 }

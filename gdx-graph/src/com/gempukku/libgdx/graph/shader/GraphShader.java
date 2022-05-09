@@ -8,8 +8,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.IntMapping;
 
 public abstract class GraphShader extends UniformCachingShader implements GraphShaderContext {
+    private final PropertyToLocationMapping propertyToLocationMapping = new PropertyToLocationMapping();
     private final Array<Disposable> disposableList = new Array<>();
     protected ObjectMap<String, PropertySource> propertySourceMap = new ObjectMap<>();
     private ShaderProgram shaderProgram;
@@ -26,6 +28,10 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
 
     public ShaderProgram getShaderProgram() {
         return shaderProgram;
+    }
+
+    public ObjectMap<String, Attribute> getAttributes() {
+        return attributes;
     }
 
     public void setVertexAttributes(VertexAttributes vertexAttributes) {
@@ -50,6 +56,10 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
             attributeLocations = tempArray.items;
         }
         return attributeLocations;
+    }
+
+    public IntMapping<String> getPropertyToLocationMapping() {
+        return propertyToLocationMapping;
     }
 
     public void init() {
@@ -84,5 +94,16 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
         if (shaderProgram != null)
             shaderProgram.dispose();
         super.dispose();
+    }
+
+    private class PropertyToLocationMapping implements IntMapping<String> {
+        @Override
+        public int map(String value) {
+            PropertySource propertySource = propertySourceMap.get(value);
+            if (propertySource == null)
+                return -1;
+            int propertyIndex = propertySource.getPropertyIndex();
+            return attributes.get("a_property_" + propertyIndex).getLocation();
+        }
     }
 }

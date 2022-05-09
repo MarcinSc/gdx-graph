@@ -17,10 +17,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModel;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.plugin.models.ModelGraphShader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class CommonPropertiesModelInstanceModelAdapter {
@@ -136,29 +135,20 @@ public class CommonPropertiesModelInstanceModelAdapter {
         }
 
         @Override
-        public void render(Camera camera, ModelGraphShader shader) {
-            ShaderProgram shaderProgram = shader.getShaderProgram();
-            int[] attributeLocations = getAttributeLocations(shader, nodePart.meshPart.mesh);
+        public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
+            int[] attributeLocations = getAttributeLocations(nodePart.meshPart.mesh, propertyToLocationMapping);
             nodePart.meshPart.mesh.bind(shaderProgram, attributeLocations);
             nodePart.meshPart.render(shaderProgram);
             nodePart.meshPart.mesh.unbind(shaderProgram, attributeLocations);
         }
 
-        private int[] getAttributeLocations(ModelGraphShader graphShader, Mesh mesh) {
+        private int[] getAttributeLocations(Mesh mesh, IntMapping<String> propertyLocationMapping) {
             if (attributeLocations == null) {
                 VertexAttributes attributes = mesh.getVertexAttributes();
                 IntArray result = new IntArray();
                 for (int i = 0; i < attributes.size(); i++) {
-                    final VertexAttribute attribute = attributes.get(i);
-                    String attributeName = getAttributeName(attribute.alias);
-                    PropertySource propertySource = graphShader.getProperties().get(attributeName);
-                    if (propertySource != null) {
-                        int propertyIndex = propertySource.getPropertyIndex();
-                        final int location = graphShader.getShaderProgram().getAttributeLocation("a_property_" + propertyIndex);
-                        result.add(location);
-                    } else {
-                        result.add(-1);
-                    }
+                    final VertexAttribute vertexAttribute = attributes.get(i);
+                    result.add(propertyLocationMapping.map(getAttributeName(vertexAttribute.alias)));
                 }
                 attributeLocations = result.shrink();
             }

@@ -21,6 +21,6 @@ public class ModelGraphShader extends GraphShader {
         for (StructArrayUniform uniform : localStructArrayUniforms.values()) {
             uniform.getSetter().set(this, uniform.getStartIndex(), uniform.getFieldOffsets(), uniform.getSize(), shaderContext);
         }
-        renderableModel.render(shaderContext.getCamera(), this);
+        renderableModel.render(shaderContext.getCamera(), program, getPropertyToLocationMapping());
     }
 }
