@@ -29,8 +29,8 @@ import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
-import com.gempukku.libgdx.graph.plugin.models.ModelGraphShader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -52,7 +52,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     private int height;
 
     private FrameBuffer frameBuffer;
-    private ModelGraphShader graphShader;
+    private GraphShader graphShader;
     private OpenGLContext renderContext;
 
     private Model rectangleModel;

@@ -7,10 +7,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 
-public abstract class GraphShader extends UniformCachingShader implements GraphShaderContext {
+public class GraphShader extends UniformCachingShader implements GraphShaderContext {
     private final PropertyToLocationMapping propertyToLocationMapping = new PropertyToLocationMapping();
     private final Array<Disposable> disposableList = new Array<>();
     protected ObjectMap<String, PropertySource> propertySourceMap = new ObjectMap<>();
@@ -85,6 +87,21 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
     @Override
     public void addManagedResource(Disposable disposable) {
         disposableList.add(disposable);
+    }
+
+    public void render(ShaderContextImpl shaderContext, RenderableModel renderableModel) {
+        renderableModel.prepareToRender(shaderContext);
+
+        shaderContext.setRenderableModel(renderableModel);
+        shaderContext.setLocalPropertyContainer(renderableModel.getPropertyContainer(getTag()));
+
+        for (Uniform uniform : localUniforms.values()) {
+            uniform.getSetter().set(this, uniform.getLocation(), shaderContext);
+        }
+        for (StructArrayUniform uniform : localStructArrayUniforms.values()) {
+            uniform.getSetter().set(this, uniform.getStartIndex(), uniform.getFieldOffsets(), uniform.getSize(), shaderContext);
+        }
+        renderableModel.render(shaderContext.getCamera(), program, getPropertyToLocationMapping());
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.data.*;
-import com.gempukku.libgdx.graph.plugin.models.ModelGraphShader;
 import com.gempukku.libgdx.graph.plugin.models.ModelShaderConfiguration;
 import com.gempukku.libgdx.graph.plugin.models.ModelsUniformSetters;
 import com.gempukku.libgdx.graph.plugin.particles.ParticlesGraphShader;
@@ -119,10 +118,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static ModelGraphShader buildModelShader(String tag, Texture defaultTexture,
-                                                    Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
-                                                    boolean designTime) {
-        ModelGraphShader graphShader = new ModelGraphShader(tag, defaultTexture);
+    public static GraphShader buildModelShader(String tag, Texture defaultTexture,
+                                               Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
+                                               boolean designTime) {
+        GraphShader graphShader = new GraphShader(tag, defaultTexture);
 
         VertexShaderBuilder vertexShaderBuilder = new VertexShaderBuilder(graphShader);
         FragmentShaderBuilder fragmentShaderBuilder = new FragmentShaderBuilder(graphShader);
@@ -144,10 +143,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static ModelGraphShader buildModelDepthShader(String tag, Texture defaultTexture,
-                                                         Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
-                                                         boolean designTime) {
-        ModelGraphShader graphShader = new ModelGraphShader(tag, defaultTexture);
+    public static GraphShader buildModelDepthShader(String tag, Texture defaultTexture,
+                                                    Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
+                                                    boolean designTime) {
+        GraphShader graphShader = new GraphShader(tag, defaultTexture);
 
         VertexShaderBuilder vertexShaderBuilder = new VertexShaderBuilder(graphShader);
         FragmentShaderBuilder fragmentShaderBuilder = new FragmentShaderBuilder(graphShader);
