@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.desktop;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.plugin.callback.design.RenderCallbackPluginDesignInitializer;
@@ -26,10 +26,10 @@ public class DesktopLauncher {
     public static void main(String[] arg) throws IOException {
         setupPlugins();
 
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = 1440;
-        config.height = 810;
-        new LwjglApplication(new LibgdxGraphApplication(), config);
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setWindowedMode(1440, 810);
+        LibgdxGraphApplication application = new LibgdxGraphApplication();
+        new Lwjgl3Application(application, config);
     }
 
     private static void setupPlugins() throws MalformedURLException {
