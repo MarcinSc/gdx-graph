@@ -10,6 +10,7 @@ import com.gempukku.libgdx.graph.util.GdxCompatibilityUtils;
 public class VertexShaderBuilder extends CommonShaderBuilder {
     private final ObjectMap<String, String> attributeComments = new OrderedMap<>();
     private final ObjectMap<String, String> attributeVariables = new OrderedMap<>();
+    // TODO: To be removed
     private final ObjectMap<String, VertexAttribute> attributeVertexVariables = new OrderedMap<>();
 
     public VertexShaderBuilder(UniformRegistry uniformRegistry) {

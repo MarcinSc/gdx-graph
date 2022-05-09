@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.field;
 
 import com.gempukku.libgdx.graph.data.FieldType;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
+import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 
 public class BooleanFieldType implements PipelineFieldType {
     @Override
@@ -16,7 +17,7 @@ public class BooleanFieldType implements PipelineFieldType {
 
     @Override
     public String getName() {
-        return "Boolean";
+        return ShaderFieldType.Boolean;
     }
 
     @Override

@@ -25,18 +25,13 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
     }
 
     @Override
-    public int getNumberOfComponents() {
-        return 4;
-    }
-
-    @Override
     public Object convert(Object value) {
         return value;
     }
 
     @Override
     public String getName() {
-        return "Vector4";
+        return ShaderFieldType.Vector4;
     }
 
     @Override

@@ -60,6 +60,7 @@ project(":desktop") {
         implementation project(":gdx-graph-sprites-design")
         implementation project(":gdx-graph-screen-design")
         implementation project(":gdx-graph-models-design")
+        implementation project(":gdx-graph-boneanimation-design")
         implementation project(":gdx-graph-lighting3d-design")
 
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -137,6 +138,15 @@ project(":gdx-graph-models-design") {
 
     dependencies {
         implementation project(":core")
+    }
+}
+
+project(":gdx-graph-boneanimation-design") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+        implementation project(":gdx-graph-models-design")
     }
 }
 

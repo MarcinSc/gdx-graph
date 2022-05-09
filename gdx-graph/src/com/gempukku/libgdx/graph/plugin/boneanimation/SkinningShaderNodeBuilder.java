@@ -1,11 +1,11 @@
-package com.gempukku.libgdx.graph.plugin.models.provided;
+package com.gempukku.libgdx.graph.plugin.boneanimation;
 
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.gempukku.libgdx.graph.plugin.models.ModelsUniformSetters;
-import com.gempukku.libgdx.graph.plugin.models.config.provided.SkinningShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.plugin.boneanimation.config.SkinningShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.plugin.boneanimation.property.BoneTransformFieldType;
+import com.gempukku.libgdx.graph.plugin.boneanimation.property.BoneWeightFieldType;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -21,15 +21,15 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        int boneCount = data.getInt("boneCount");
-        int boneWeightCount = data.getInt("boneWeightCount");
+        FieldOutput boneWeights = inputs.get("boneWeights");
+        BoneWeightFieldType boneWeightFieldType = (BoneWeightFieldType) boneWeights.getFieldType();
+        FieldOutput boneTransformations = inputs.get("boneTransformations");
+        BoneTransformFieldType boneTransformFieldType = (BoneTransformFieldType) boneTransformations.getFieldType();
 
-        if (!vertexShaderBuilder.hasUniformVariable("u_bones")) {
-            vertexShaderBuilder.addArrayUniformVariable("u_bones", boneCount, "mat4", false, new ModelsUniformSetters.Bones(boneCount), "Skeletal bones");
-            for (int i = 0; i < boneWeightCount; i++) {
-                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2", "Bone-weight property - " + i);
-            }
-        }
+        String boneTransformVariableName = boneTransformations.getRepresentation();
+        String boneWeightVariableName = boneWeights.getRepresentation() + "_";
+
+        int boneWeightCount = boneWeightFieldType.getMaxBoneWeightCount();
 
         String functionName = "getSkinning_" + nodeId;
         String skinningMatrixName = "skinning_" + nodeId;
@@ -38,7 +38,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
             getSkinning.append("mat4 " + functionName + "() {\n");
             getSkinning.append("  mat4 skinning = mat4(0.0);\n");
             for (int i = 0; i < boneWeightCount; i++) {
-                getSkinning.append("  skinning += (a_boneWeight").append(i).append(".y) * u_bones[int(a_boneWeight").append(i).append(".x)];\n");
+                getSkinning.append("  skinning += (").append(boneWeightVariableName).append(i).append(".y) * " + boneTransformVariableName + "[int(").append(boneWeightVariableName).append(i).append(".x)];\n");
             }
             getSkinning.append("  return skinning;\n");
             getSkinning.append("}\n");
@@ -83,15 +83,16 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        int boneCount = data.getInt("boneCount");
-        int boneWeightCount = data.getInt("boneWeightCount");
+        FieldOutput boneWeights = inputs.get("boneWeights");
+        BoneWeightFieldType boneWeightFieldType = (BoneWeightFieldType) boneWeights.getFieldType();
+        FieldOutput boneTransformations = inputs.get("boneTransformations");
+        BoneTransformFieldType boneTransformFieldType = (BoneTransformFieldType) boneTransformations.getFieldType();
 
-        if (!vertexShaderBuilder.hasUniformVariable("u_bones")) {
-            vertexShaderBuilder.addArrayUniformVariable("u_bones", boneCount, "mat4", false, new ModelsUniformSetters.Bones(boneCount), "Skeletal bones");
-            for (int i = 0; i < boneWeightCount; i++) {
-                vertexShaderBuilder.addAttributeVariable(VertexAttribute.BoneWeight(i), "vec2", "Bone-weight property - " + i);
-            }
-        }
+        String boneTransformVariableName = boneTransformations.getRepresentation();
+        String boneWeightVariableName = boneWeights.getRepresentation() + "_";
+
+        int boneCount = boneWeightFieldType.getMaxBoneWeightCount();
+        int boneWeightCount = boneTransformFieldType.getMaxBoneCount();
 
         String skinningMatrixName = "skinning_" + nodeId;
         String functionName = "getSkinning_" + nodeId;
@@ -100,7 +101,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
             getSkinning.append("mat4 " + functionName + "() {\n");
             getSkinning.append("  mat4 skinning = mat4(0.0);\n");
             for (int i = 0; i < boneWeightCount; i++) {
-                getSkinning.append("  skinning += (a_boneWeight").append(i).append(".y) * u_bones[int(a_boneWeight").append(i).append(".x)];\n");
+                getSkinning.append("  skinning += (").append(boneWeightVariableName).append(i).append(".y) * " + boneTransformVariableName + "[int(").append(boneWeightVariableName).append(i).append(".x)];\n");
             }
             getSkinning.append("  return skinning;\n");
             getSkinning.append("}\n");

@@ -125,11 +125,6 @@ public class CommonPropertiesModelInstanceModelAdapter {
         }
 
         @Override
-        public Matrix4[] getBones(String tag) {
-            return nodePart.bones;
-        }
-
-        @Override
         public boolean isRendered(Camera camera) {
             return nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
         }

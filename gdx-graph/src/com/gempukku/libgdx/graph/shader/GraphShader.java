@@ -15,6 +15,7 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
     private final Array<Disposable> disposableList = new Array<>();
     protected ObjectMap<String, PropertySource> propertySourceMap = new ObjectMap<>();
     private ShaderProgram shaderProgram;
+    // TODO: To be removed
     private VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
@@ -34,10 +35,12 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
         return attributes;
     }
 
+    // TODO: To be removed
     public void setVertexAttributes(VertexAttributes vertexAttributes) {
         this.vertexAttributes = vertexAttributes;
     }
 
+    // TODO: To be removed
     public VertexAttributes getVertexAttributes() {
         return vertexAttributes;
     }
@@ -100,8 +103,18 @@ public abstract class GraphShader extends UniformCachingShader implements GraphS
         @Override
         public int map(String value) {
             PropertySource propertySource = propertySourceMap.get(value);
-            if (propertySource == null)
+            if (propertySource == null) {
+                int lastIndex = value.lastIndexOf('_');
+                if (lastIndex > -1) {
+                    String arrayValue = value.substring(0, lastIndex);
+                    propertySource = propertySourceMap.get(arrayValue);
+                    if (!propertySource.isArray())
+                        return -1;
+                    int index = Integer.parseInt(value.substring(lastIndex + 1));
+                    return attributes.get("a_property_" + propertySource.getPropertyIndex() + "_" + index).getLocation();
+                }
                 return -1;
+            }
             int propertyIndex = propertySource.getPropertyIndex();
             return attributes.get("a_property_" + propertyIndex).getLocation();
         }

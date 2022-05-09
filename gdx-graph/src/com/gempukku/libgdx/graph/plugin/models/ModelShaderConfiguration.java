@@ -2,10 +2,12 @@ package com.gempukku.libgdx.graph.plugin.models;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.plugin.boneanimation.SkinningShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.EndShadowShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.models.producer.EndModelShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.models.provided.*;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
+import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.GraphShaderPropertyProducer;
 
@@ -27,8 +29,13 @@ public class ModelShaderConfiguration implements GraphConfiguration {
         addGraphShaderNodeBuilder(new InstanceIdShaderNodeBuilder());
     }
 
-    private static void addGraphShaderNodeBuilder(GraphShaderNodeBuilder builder) {
+    public static void addGraphShaderNodeBuilder(GraphShaderNodeBuilder builder) {
         graphShaderNodeBuilders.put(builder.getType(), builder);
+    }
+
+    public static void registerPropertyProducer(GraphShaderPropertyProducer graphShaderPropertyProducer) {
+        graphShaderPropertyProducers.add(graphShaderPropertyProducer);
+        ShaderFieldTypeRegistry.registerShaderFieldType(graphShaderPropertyProducer.getType());
     }
 
     @Override

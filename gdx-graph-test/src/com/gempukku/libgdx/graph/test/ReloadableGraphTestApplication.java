@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.models.ModelsPluginRuntimeInitializer;
@@ -20,9 +21,6 @@ import com.gempukku.libgdx.graph.plugin.screen.ScreenPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.sprites.SpritesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
-import com.gempukku.libgdx.graph.test.scenes.ParticlesShaderTestScene;
-import com.gempukku.libgdx.graph.test.scenes.ShadowShaderTestScene;
-import com.gempukku.libgdx.graph.test.scenes.SpriteShaderTestScene;
 import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
 
 public class ReloadableGraphTestApplication extends ApplicationAdapter {
@@ -41,13 +39,14 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
 
     @Override
     public void create() {
-        //Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+        Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
         RenderCallbackPluginRuntimeInitializer.register();
         UIPluginRuntimeInitializer.register();
         ParticlesPluginRuntimeInitializer.register();
         SpritesPluginRuntimeInitializer.register();
         ScreenPluginRuntimeInitializer.register();
         ModelsPluginRuntimeInitializer.register();
+        BoneAnimationPluginRuntimeInitializer.register();
         Lighting3DPluginRuntimeInitializer.register(
                 1, 0, 0,
                 0.2f, 5);
@@ -68,7 +67,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode14Scene(),
                 new Episode15Scene(),
                 new Episode16Scene(),
-                new Episode17Scene(),
+                new Episode17Scene()/*,
                 new Episode18Scene(),
                 new Episode19Scene(),
                 new Episode20Scene(),
@@ -78,7 +77,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode24Scene(),
                 new SpriteShaderTestScene(),
                 new ParticlesShaderTestScene(),
-                new ShadowShaderTestScene()
+                new ShadowShaderTestScene()*/
         };
         loadedIndex = scenes.length - 1;
 

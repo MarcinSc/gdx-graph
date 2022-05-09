@@ -57,26 +57,4 @@ public class ModelsUniformSetters {
             shader.setUniform(location, tmpM.set(((ModelShaderContext) shaderContext).getRenderableModel().getWorldTransform(shader.getTag())).toNormalMatrix());
         }
     };
-
-    public static class Bones implements UniformRegistry.UniformSetter {
-        private final static Matrix4 idtMatrix = new Matrix4();
-        public final float[] bones;
-
-        public Bones(final int numBones) {
-            this.bones = new float[numBones * 16];
-        }
-
-        @Override
-        public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            Matrix4[] modelBones = ((ModelShaderContext) shaderContext).getRenderableModel().getBones(shader.getTag());
-            for (int i = 0; i < bones.length; i += 16) {
-                final int idx = i / 16;
-                if (modelBones == null || idx >= modelBones.length || modelBones[idx] == null)
-                    System.arraycopy(idtMatrix.val, 0, bones, i, 16);
-                else
-                    System.arraycopy(modelBones[idx].val, 0, bones, i, 16);
-            }
-            shader.setUniformMatrix4Array(location, bones);
-        }
-    }
 }

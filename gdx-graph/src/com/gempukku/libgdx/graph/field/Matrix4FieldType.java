@@ -28,18 +28,13 @@ public class Matrix4FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public int getNumberOfComponents() {
-        return 16;
-    }
-
-    @Override
     public Object convert(Object value) {
         return value;
     }
 
     @Override
     public String getName() {
-        return "Matrix4";
+        return ShaderFieldType.Matrix4;
     }
 
     @Override

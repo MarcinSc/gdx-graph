@@ -285,11 +285,6 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         }
 
         @Override
-        public Matrix4[] getBones(String tag) {
-            return new Matrix4[0];
-        }
-
-        @Override
         public boolean isRendered(Camera camera) {
             return true;
         }

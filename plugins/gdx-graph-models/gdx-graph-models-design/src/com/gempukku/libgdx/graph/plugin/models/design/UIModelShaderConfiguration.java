@@ -2,18 +2,18 @@ package com.gempukku.libgdx.graph.plugin.models.design;
 
 import com.gempukku.libgdx.graph.plugin.models.config.provided.*;
 import com.gempukku.libgdx.graph.plugin.models.design.producer.EndModelShaderBoxProducer;
-import com.gempukku.libgdx.graph.plugin.models.design.producer.SkinningShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
 
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, GraphBoxProducer> graphBoxProducers = new TreeMap<>();
+    private static Map<String, PropertyBoxProducer> propertyProducers = new LinkedHashMap<>();
 
     public static void register(GraphBoxProducer producer) {
         String menuLocation = producer.getMenuLocation();
@@ -29,8 +29,11 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
         register(new GraphBoxProducerImpl(new ObjectToWorldShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ObjectNormalToWorldShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ModelFragmentCoordinateShaderNodeConfiguration()));
-        register(new SkinningShaderBoxProducer());
         register(new GraphBoxProducerImpl(new InstanceIdShaderNodeConfiguration()));
+    }
+
+    public static void registerPropertyType(PropertyBoxProducer propertyBoxProducer) {
+        propertyProducers.put(propertyBoxProducer.getType(), propertyBoxProducer);
     }
 
     @Override
@@ -40,6 +43,6 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
 
     @Override
     public Map<String, PropertyBoxProducer> getPropertyBoxProducers() {
-        return Collections.emptyMap();
+        return propertyProducers;
     }
 }

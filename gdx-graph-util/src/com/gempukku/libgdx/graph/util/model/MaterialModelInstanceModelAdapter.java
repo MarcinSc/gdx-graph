@@ -138,7 +138,7 @@ public class MaterialModelInstanceModelAdapter {
         }
     }
 
-    private class NodePartRenderableModel implements RenderableModel {
+    private class NodePartRenderableModel implements RenderableModel, PropertyContainer {
         private Node node;
         private NodePart nodePart;
         private Vector3 tmpVector = new Vector3();
@@ -152,7 +152,14 @@ public class MaterialModelInstanceModelAdapter {
 
         @Override
         public PropertyContainer getPropertyContainer(String tag) {
-            return materialProperties.get(nodePart.material);
+            return this;
+        }
+
+        @Override
+        public Object getValue(String name) {
+            if (name.equals("Bone Transforms"))
+                return nodePart.bones;
+            return materialProperties.get(nodePart.material).getValue(name);
         }
 
         @Override
@@ -169,11 +176,6 @@ public class MaterialModelInstanceModelAdapter {
             else
                 worldTransform.idt();
             return worldTransform;
-        }
-
-        @Override
-        public Matrix4[] getBones(String tag) {
-            return nodePart.bones;
         }
 
         @Override
@@ -217,6 +219,8 @@ public class MaterialModelInstanceModelAdapter {
                 case ShaderProgram.TEXCOORD_ATTRIBUTE + "0":
                     return "UV";
             }
+            if (alias.startsWith(ShaderProgram.BONEWEIGHT_ATTRIBUTE))
+                return "Bone Weights_" + alias.substring(ShaderProgram.BONEWEIGHT_ATTRIBUTE.length());
             return "";
         }
     }

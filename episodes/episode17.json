@@ -3,6 +3,22 @@
   "type": "Render_Pipeline",
   "nodes": [
     {
+      "id": "72be9695e45949ccb5f449dbacdfd619",
+      "type": "Property",
+      "x": 50.0,
+      "y": 513.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 410.0,
+      "y": 632.0
+    },
+    {
       "id": "ab9169f2cec74938876cc48202e635a1",
       "type": "GraphShaderRenderer",
       "x": 304.0,
@@ -18,20 +34,20 @@
               "type": "Model_Shader",
               "nodes": [
                 {
-                  "id": "d8764cf2efd544638ddbc51f3dfd6504",
-                  "type": "Sampler2D",
-                  "x": 312.0,
-                  "y": 284.0
+                  "id": "28cd99c3e14a483baae03864b2947aa9",
+                  "type": "Property",
+                  "x": 72.00003051757812,
+                  "y": 595.0,
+                  "data": {
+                    "name": "Bone Weights",
+                    "type": "BoneWeights"
+                  }
                 },
                 {
-                  "id": "9c9dbd938de54f8bab2c833482ea2866",
-                  "type": "Property",
-                  "x": 77.0,
-                  "y": 573.0,
-                  "data": {
-                    "name": "Position",
-                    "type": "Vector3"
-                  }
+                  "id": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+                  "type": "Skinning",
+                  "x": 315.0,
+                  "y": 516.0
                 },
                 {
                   "id": "3e3873ce6e7e44e9a31331f308f77d50",
@@ -44,18 +60,23 @@
                   }
                 },
                 {
-                  "id": "end",
-                  "type": "ShaderEnd",
-                  "x": 600.0,
-                  "y": 50.0,
+                  "id": "41dff5b3f2364864b53585b3a6118520",
+                  "type": "Property",
+                  "x": 72.0,
+                  "y": 514.0,
                   "data": {
-                    "positionType": "Object space",
-                    "culling": "back",
-                    "depthWrite": true,
-                    "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
+                    "name": "Bone Transforms",
+                    "type": "BoneTransforms"
+                  }
+                },
+                {
+                  "id": "9c9dbd938de54f8bab2c833482ea2866",
+                  "type": "Property",
+                  "x": 78.0,
+                  "y": 659.0,
+                  "data": {
+                    "name": "Position",
+                    "type": "Vector3"
                   }
                 },
                 {
@@ -69,28 +90,37 @@
                   }
                 },
                 {
-                  "id": "3ac9493cf3b34d89ac8a3b7e885fb88b",
-                  "type": "Skinning",
-                  "x": 315.0,
-                  "y": 516.0,
+                  "id": "d8764cf2efd544638ddbc51f3dfd6504",
+                  "type": "Sampler2D",
+                  "x": 312.0,
+                  "y": 284.0
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 600.0,
+                  "y": 50.0,
                   "data": {
-                    "boneCount": 12,
-                    "boneWeightCount": 5
+                    "positionType": "Object space",
+                    "culling": "back",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
                   }
                 }
               ],
               "connections": [
                 {
-                  "fromNode": "d8764cf2efd544638ddbc51f3dfd6504",
-                  "fromField": "color",
-                  "toNode": "end",
-                  "toField": "color"
+                  "fromNode": "28cd99c3e14a483baae03864b2947aa9",
+                  "fromField": "value",
+                  "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+                  "toField": "boneWeights"
                 },
                 {
-                  "fromNode": "d032d9108220435399a6e4c254410c4f",
-                  "fromField": "value",
-                  "toNode": "d8764cf2efd544638ddbc51f3dfd6504",
-                  "toField": "uv"
+                  "fromNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+                  "fromField": "skinnedPosition",
+                  "toNode": "end",
+                  "toField": "position"
                 },
                 {
                   "fromNode": "3e3873ce6e7e44e9a31331f308f77d50",
@@ -99,16 +129,28 @@
                   "toField": "texture"
                 },
                 {
+                  "fromNode": "41dff5b3f2364864b53585b3a6118520",
+                  "fromField": "value",
+                  "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+                  "toField": "boneTransformations"
+                },
+                {
                   "fromNode": "9c9dbd938de54f8bab2c833482ea2866",
                   "fromField": "value",
                   "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
                   "toField": "position"
                 },
                 {
-                  "fromNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
-                  "fromField": "skinnedPosition",
+                  "fromNode": "d032d9108220435399a6e4c254410c4f",
+                  "fromField": "value",
+                  "toNode": "d8764cf2efd544638ddbc51f3dfd6504",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "d8764cf2efd544638ddbc51f3dfd6504",
+                  "fromField": "color",
                   "toNode": "end",
-                  "toField": "position"
+                  "toField": "color"
                 }
               ],
               "properties": [
@@ -138,6 +180,22 @@
                   "data": {
                     "previewPath": null
                   }
+                },
+                {
+                  "name": "Bone Weights",
+                  "type": "BoneWeights",
+                  "location": "Attribute",
+                  "data": {
+                    "maxBoneWeightCount": 4
+                  }
+                },
+                {
+                  "name": "Bone Transforms",
+                  "type": "BoneTransforms",
+                  "location": "Uniform",
+                  "data": {
+                    "maxBoneCount": 12
+                  }
                 }
               ],
               "groups": []
@@ -153,7 +211,7 @@
                 {
                   "id": "190ac1738d0b4f2495a16d6f668a7d31",
                   "type": "Property",
-                  "x": 547.0,
+                  "x": 551.0,
                   "y": 405.0,
                   "data": {
                     "name": "Outline Width",
@@ -161,19 +219,9 @@
                   }
                 },
                 {
-                  "id": "5333afbcf7574d56af7ee4ad8a750ab4",
-                  "type": "Skinning",
-                  "x": 249.0,
-                  "y": 563.0,
-                  "data": {
-                    "boneCount": 12,
-                    "boneWeightCount": 5
-                  }
-                },
-                {
                   "id": "3056fde1fa2c47deb960cf6105a3ea90",
                   "type": "Property",
-                  "x": 51.0,
+                  "x": 55.0,
                   "y": 608.0,
                   "data": {
                     "name": "Position",
@@ -181,45 +229,21 @@
                   }
                 },
                 {
-                  "id": "e2f2bb559ff249f1849b7b27bd320023",
-                  "type": "ValueColor",
-                  "x": 789.0,
-                  "y": 154.0,
-                  "data": {
-                    "color": "ffffffff"
-                  }
+                  "id": "4b75b1bbe44c47578cb9d0183497342d",
+                  "type": "ObjectToWorld",
+                  "x": 482.0,
+                  "y": 602.0
                 },
                 {
-                  "id": "cd087e8c81e44289b7f98c670cd38d93",
-                  "type": "ObjectNormalToWorld",
-                  "x": 456.0,
-                  "y": 489.0
-                },
-                {
-                  "id": "b2fe8e7758c14a598730a09673de9679",
-                  "type": "Add",
-                  "x": 933.0,
-                  "y": 486.0
-                },
-                {
-                  "id": "end",
-                  "type": "ShaderEnd",
-                  "x": 1134.0,
-                  "y": 50.0,
-                  "data": {
-                    "positionType": "World space",
-                    "culling": "front",
-                    "depthWrite": true,
-                    "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
-                  }
+                  "id": "5333afbcf7574d56af7ee4ad8a750ab4",
+                  "type": "Skinning",
+                  "x": 253.0,
+                  "y": 563.0
                 },
                 {
                   "id": "6896061ca80f4c69ad07a5e82fe866d3",
                   "type": "Property",
-                  "x": 50.0,
+                  "x": 54.0,
                   "y": 538.0,
                   "data": {
                     "name": "Normal",
@@ -227,31 +251,67 @@
                   }
                 },
                 {
+                  "id": "89a061756c6b40f4841f4ce59ff972f2",
+                  "type": "Property",
+                  "x": 50.0,
+                  "y": 410.0,
+                  "data": {
+                    "name": "Bone Transforms",
+                    "type": "BoneTransforms"
+                  }
+                },
+                {
+                  "id": "b2fe8e7758c14a598730a09673de9679",
+                  "type": "Add",
+                  "x": 937.0,
+                  "y": 486.0
+                },
+                {
+                  "id": "bfd3f13d94e747679cd5e191f0007340",
+                  "type": "Property",
+                  "x": 51.0,
+                  "y": 477.0,
+                  "data": {
+                    "name": "Bone Weights",
+                    "type": "BoneWeights"
+                  }
+                },
+                {
                   "id": "c99ca0f820bd492680e3660b101ac8c0",
                   "type": "Multiply",
-                  "x": 748.0,
+                  "x": 752.0,
                   "y": 421.0
                 },
                 {
-                  "id": "4b75b1bbe44c47578cb9d0183497342d",
-                  "type": "ObjectToWorld",
-                  "x": 478.0,
-                  "y": 602.0
+                  "id": "cd087e8c81e44289b7f98c670cd38d93",
+                  "type": "ObjectNormalToWorld",
+                  "x": 460.0,
+                  "y": 489.0
+                },
+                {
+                  "id": "e2f2bb559ff249f1849b7b27bd320023",
+                  "type": "ValueColor",
+                  "x": 793.0,
+                  "y": 154.0,
+                  "data": {
+                    "color": "ffffffff"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 1138.0,
+                  "y": 50.0,
+                  "data": {
+                    "positionType": "World space",
+                    "culling": "front",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
+                  }
                 }
               ],
               "connections": [
-                {
-                  "fromNode": "e2f2bb559ff249f1849b7b27bd320023",
-                  "fromField": "value",
-                  "toNode": "end",
-                  "toField": "color"
-                },
-                {
-                  "fromNode": "c99ca0f820bd492680e3660b101ac8c0",
-                  "fromField": "output",
-                  "toNode": "b2fe8e7758c14a598730a09673de9679",
-                  "toField": "inputs"
-                },
                 {
                   "fromNode": "190ac1738d0b4f2495a16d6f668a7d31",
                   "fromField": "value",
@@ -265,10 +325,10 @@
                   "toField": "position"
                 },
                 {
-                  "fromNode": "6896061ca80f4c69ad07a5e82fe866d3",
-                  "fromField": "value",
-                  "toNode": "5333afbcf7574d56af7ee4ad8a750ab4",
-                  "toField": "normal"
+                  "fromNode": "4b75b1bbe44c47578cb9d0183497342d",
+                  "fromField": "output",
+                  "toNode": "b2fe8e7758c14a598730a09673de9679",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "5333afbcf7574d56af7ee4ad8a750ab4",
@@ -277,28 +337,52 @@
                   "toField": "input"
                 },
                 {
-                  "fromNode": "cd087e8c81e44289b7f98c670cd38d93",
-                  "fromField": "output",
-                  "toNode": "c99ca0f820bd492680e3660b101ac8c0",
-                  "toField": "inputs"
-                },
-                {
                   "fromNode": "5333afbcf7574d56af7ee4ad8a750ab4",
                   "fromField": "skinnedPosition",
                   "toNode": "4b75b1bbe44c47578cb9d0183497342d",
                   "toField": "input"
                 },
                 {
-                  "fromNode": "4b75b1bbe44c47578cb9d0183497342d",
-                  "fromField": "output",
-                  "toNode": "b2fe8e7758c14a598730a09673de9679",
-                  "toField": "inputs"
+                  "fromNode": "6896061ca80f4c69ad07a5e82fe866d3",
+                  "fromField": "value",
+                  "toNode": "5333afbcf7574d56af7ee4ad8a750ab4",
+                  "toField": "normal"
+                },
+                {
+                  "fromNode": "89a061756c6b40f4841f4ce59ff972f2",
+                  "fromField": "value",
+                  "toNode": "5333afbcf7574d56af7ee4ad8a750ab4",
+                  "toField": "boneTransformations"
                 },
                 {
                   "fromNode": "b2fe8e7758c14a598730a09673de9679",
                   "fromField": "output",
                   "toNode": "end",
                   "toField": "position"
+                },
+                {
+                  "fromNode": "bfd3f13d94e747679cd5e191f0007340",
+                  "fromField": "value",
+                  "toNode": "5333afbcf7574d56af7ee4ad8a750ab4",
+                  "toField": "boneWeights"
+                },
+                {
+                  "fromNode": "c99ca0f820bd492680e3660b101ac8c0",
+                  "fromField": "output",
+                  "toNode": "b2fe8e7758c14a598730a09673de9679",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "cd087e8c81e44289b7f98c670cd38d93",
+                  "fromField": "output",
+                  "toNode": "c99ca0f820bd492680e3660b101ac8c0",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "e2f2bb559ff249f1849b7b27bd320023",
+                  "fromField": "value",
+                  "toNode": "end",
+                  "toField": "color"
                 }
               ],
               "properties": [
@@ -329,6 +413,22 @@
                     "y": 0.0,
                     "z": 0.0
                   }
+                },
+                {
+                  "name": "Bone Weights",
+                  "type": "BoneWeights",
+                  "location": "Attribute",
+                  "data": {
+                    "maxBoneWeightCount": 4
+                  }
+                },
+                {
+                  "name": "Bone Transforms",
+                  "type": "BoneTransforms",
+                  "location": "Uniform",
+                  "data": {
+                    "maxBoneCount": 12
+                  }
                 }
               ],
               "groups": []
@@ -338,13 +438,12 @@
       }
     },
     {
-      "id": "72be9695e45949ccb5f449dbacdfd619",
-      "type": "Property",
-      "x": 50.0,
-      "y": 513.0,
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 162.0,
+      "y": 644.0,
       "data": {
-        "name": "Camera",
-        "type": "Camera"
+        "color": "000000ff"
       }
     },
     {
@@ -361,24 +460,27 @@
       "type": "PipelineEnd",
       "x": 409.0,
       "y": 50.0
-    },
-    {
-      "id": "d54b356d4a1242cab5e6cb3f836b1930",
-      "type": "ValueColor",
-      "x": 162.0,
-      "y": 644.0,
-      "data": {
-        "color": "000000ff"
-      }
-    },
-    {
-      "id": "746da9b276d442f0bc74ed9847a26a4b",
-      "type": "PipelineStart",
-      "x": 410.0,
-      "y": 632.0
     }
   ],
   "connections": [
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "ab9169f2cec74938876cc48202e635a1",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "ab9169f2cec74938876cc48202e635a1",
+      "toField": "input"
+    },
+    {
+      "fromNode": "ab9169f2cec74938876cc48202e635a1",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
     {
       "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
       "fromField": "value",
@@ -389,24 +491,6 @@
       "fromNode": "dffb152d405a49d38792e850749129b2",
       "fromField": "output",
       "toNode": "end",
-      "toField": "input"
-    },
-    {
-      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
-      "fromField": "value",
-      "toNode": "ab9169f2cec74938876cc48202e635a1",
-      "toField": "camera"
-    },
-    {
-      "fromNode": "ab9169f2cec74938876cc48202e635a1",
-      "fromField": "output",
-      "toNode": "dffb152d405a49d38792e850749129b2",
-      "toField": "input"
-    },
-    {
-      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
-      "fromField": "output",
-      "toNode": "ab9169f2cec74938876cc48202e635a1",
       "toField": "input"
     }
   ],

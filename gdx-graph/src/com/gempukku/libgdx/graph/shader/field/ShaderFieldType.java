@@ -19,8 +19,6 @@ public interface ShaderFieldType extends FieldType {
 
     String getShaderType();
 
-    int getNumberOfComponents();
-
     Object convertFromJson(JsonValue data);
 
     GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, PropertySource propertySource);

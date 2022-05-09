@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.libgdx.graph.plugin.boneanimation.design.BoneAnimationPluginDesignInitializer;
 import com.gempukku.libgdx.graph.plugin.callback.design.RenderCallbackPluginDesignInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.Lighting3DPluginDesignInitializer;
 import com.gempukku.libgdx.graph.plugin.models.design.ModelsPluginDesignInitializer;
@@ -54,6 +55,9 @@ public class DesktopLauncher {
         PluginRegistry.addPluginDefinition(
                 new PluginDefinition("internal", ModelsPluginDesignInitializer.class,
                         "Model shaders", "latest", false, false));
+        PluginRegistry.addPluginDefinition(
+                new PluginDefinition("internal", BoneAnimationPluginDesignInitializer.class,
+                        "Model skinning", "latest", false, false));
         PluginRegistry.addPluginDefinition(
                 new PluginDefinition("internal", Lighting3DPluginDesignInitializer.class,
                         "3D Lighting", "latest", false, false));

@@ -13,6 +13,21 @@
       }
     },
     {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 412.0,
+      "y": 593.0
+    },
+    {
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 163.0,
+      "y": 620.0,
+      "data": {
+        "color": "000000ff"
+      }
+    },
+    {
       "id": "dffb152d405a49d38792e850749129b2",
       "type": "UIRenderer",
       "x": 377.0,
@@ -26,15 +41,6 @@
       "type": "PipelineEnd",
       "x": 412.0,
       "y": 50.0
-    },
-    {
-      "id": "d54b356d4a1242cab5e6cb3f836b1930",
-      "type": "ValueColor",
-      "x": 163.0,
-      "y": 620.0,
-      "data": {
-        "color": "000000ff"
-      }
     },
     {
       "id": "ff6f63af3181472da525343236652acd",
@@ -52,58 +58,6 @@
               "type": "Model_Shader",
               "nodes": [
                 {
-                  "id": "6726d27a0d914f6caaba01534d231163",
-                  "type": "Property",
-                  "x": 507.0,
-                  "y": 499.0,
-                  "data": {
-                    "name": "Emissive Texture",
-                    "type": "TextureRegion"
-                  }
-                },
-                {
-                  "id": "c67e9085f7dc47e9b6f9ef315742a10e",
-                  "type": "Property",
-                  "x": 508.0,
-                  "y": 260.0,
-                  "data": {
-                    "name": "Specular Texture",
-                    "type": "TextureRegion"
-                  }
-                },
-                {
-                  "id": "c2deac23337148a9b5a8c786e00478dd",
-                  "type": "Property",
-                  "x": 711.0,
-                  "y": 548.0,
-                  "data": {
-                    "name": "Emissive Color",
-                    "type": "Vector4"
-                  }
-                },
-                {
-                  "id": "36e710d2263e4b998bf404930b8db882",
-                  "type": "Multiply",
-                  "x": 903.0,
-                  "y": 284.0
-                },
-                {
-                  "id": "f65c7c94d7ab401893c75a81faeee776",
-                  "type": "Property",
-                  "x": 50.0,
-                  "y": 520.0,
-                  "data": {
-                    "name": "UV",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "456cdc704f4e49e8b7b6115b5804473d",
-                  "type": "Sampler2D",
-                  "x": 712.0,
-                  "y": 395.0
-                },
-                {
                   "id": "031d723ecadc449e8cb1d13ea2e905b0",
                   "type": "Property",
                   "x": 1329.0,
@@ -114,25 +68,33 @@
                   }
                 },
                 {
-                  "id": "f237e24622d74fb6becad0a40a0cf7bf",
-                  "type": "ObjectNormalToWorld",
-                  "x": 857.0,
-                  "y": 935.0
-                },
-                {
-                  "id": "2019351e62264cd6b45ad8c3781eb2d2",
-                  "type": "Multiply",
-                  "x": 903.0,
-                  "y": 548.0
-                },
-                {
-                  "id": "bce87c9decab4914abd6a172d851c514",
+                  "id": "037375b3cb2341d1ae899238a93ae089",
                   "type": "Property",
-                  "x": 710.0,
-                  "y": 284.0,
+                  "x": 405.0,
+                  "y": 1011.0,
                   "data": {
-                    "name": "Specular Color",
-                    "type": "Vector4"
+                    "name": "Bone Transforms",
+                    "type": "BoneTransforms"
+                  }
+                },
+                {
+                  "id": "1611ef93a3e447528050000f50be2064",
+                  "type": "Property",
+                  "x": 408.0,
+                  "y": 1077.0,
+                  "data": {
+                    "name": "Bone Weights",
+                    "type": "BoneWeights"
+                  }
+                },
+                {
+                  "id": "1d7c936918584771afd33f58c3da9dab",
+                  "type": "Property",
+                  "x": 405.0,
+                  "y": 1144.0,
+                  "data": {
+                    "name": "Normal",
+                    "type": "Vector3"
                   }
                 },
                 {
@@ -146,26 +108,10 @@
                   }
                 },
                 {
-                  "id": "5df03da164b046af872b5a6db4eaffb6",
-                  "type": "Property",
-                  "x": 913.0,
-                  "y": 50.0,
-                  "data": {
-                    "name": "Shininess",
-                    "type": "Float"
-                  }
-                },
-                {
-                  "id": "ed1d588e101a40fb953a3f2efe70abca",
+                  "id": "2019351e62264cd6b45ad8c3781eb2d2",
                   "type": "Multiply",
-                  "x": 899.0,
-                  "y": 833.0
-                },
-                {
-                  "id": "af7e7313f5424b55954d6a16eafcb27f",
-                  "type": "Sampler2D",
-                  "x": 714.0,
-                  "y": 127.0
+                  "x": 903.0,
+                  "y": 548.0
                 },
                 {
                   "id": "26c315a4d2424e4e953d5263fa0f75d4",
@@ -178,10 +124,99 @@
                   }
                 },
                 {
-                  "id": "ffd366ddd51246b29171086b39f91ace",
+                  "id": "36e710d2263e4b998bf404930b8db882",
+                  "type": "Multiply",
+                  "x": 903.0,
+                  "y": 284.0
+                },
+                {
+                  "id": "456cdc704f4e49e8b7b6115b5804473d",
                   "type": "Sampler2D",
-                  "x": 705.0,
-                  "y": 675.0
+                  "x": 712.0,
+                  "y": 395.0
+                },
+                {
+                  "id": "49ad39d6e184499ebec92228552e5873",
+                  "type": "BlinnPhongLighting",
+                  "x": 1271.0,
+                  "y": 705.0,
+                  "data": {
+                    "id": ""
+                  }
+                },
+                {
+                  "id": "567f85b4e38846b4905e982ae023d960",
+                  "type": "WorldPosition",
+                  "x": 894.0,
+                  "y": 1006.0
+                },
+                {
+                  "id": "5df03da164b046af872b5a6db4eaffb6",
+                  "type": "Property",
+                  "x": 913.0,
+                  "y": 50.0,
+                  "data": {
+                    "name": "Shininess",
+                    "type": "Float"
+                  }
+                },
+                {
+                  "id": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "type": "Skinning",
+                  "x": 631.0,
+                  "y": 1178.0
+                },
+                {
+                  "id": "6726d27a0d914f6caaba01534d231163",
+                  "type": "Property",
+                  "x": 507.0,
+                  "y": 499.0,
+                  "data": {
+                    "name": "Emissive Texture",
+                    "type": "TextureRegion"
+                  }
+                },
+                {
+                  "id": "af7e7313f5424b55954d6a16eafcb27f",
+                  "type": "Sampler2D",
+                  "x": 714.0,
+                  "y": 127.0
+                },
+                {
+                  "id": "bce87c9decab4914abd6a172d851c514",
+                  "type": "Property",
+                  "x": 710.0,
+                  "y": 284.0,
+                  "data": {
+                    "name": "Specular Color",
+                    "type": "Vector4"
+                  }
+                },
+                {
+                  "id": "c2deac23337148a9b5a8c786e00478dd",
+                  "type": "Property",
+                  "x": 711.0,
+                  "y": 548.0,
+                  "data": {
+                    "name": "Emissive Color",
+                    "type": "Vector4"
+                  }
+                },
+                {
+                  "id": "c67e9085f7dc47e9b6f9ef315742a10e",
+                  "type": "Property",
+                  "x": 508.0,
+                  "y": 260.0,
+                  "data": {
+                    "name": "Specular Texture",
+                    "type": "TextureRegion"
+                  }
+                },
+                {
+                  "id": "ed1d588e101a40fb953a3f2efe70abca",
+                  "type": "Multiply",
+                  "x": 899.0,
+                  "y": 833.0
                 },
                 {
                   "id": "ee7e01f6f2bd46a8aba56812e3506aa0",
@@ -201,73 +236,64 @@
                   "data": {
                     "positionType": "Object space",
                     "culling": "back",
-                    "depthWrite": true,
                     "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
+                    "depthTest": "less",
+                    "depthWrite": true
                   }
                 },
                 {
-                  "id": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
-                  "type": "Skinning",
-                  "x": 631.0,
-                  "y": 1178.0,
-                  "data": {
-                    "boneCount": 12,
-                    "boneWeightCount": 4
-                  }
+                  "id": "f237e24622d74fb6becad0a40a0cf7bf",
+                  "type": "ObjectNormalToWorld",
+                  "x": 857.0,
+                  "y": 935.0
                 },
                 {
-                  "id": "49ad39d6e184499ebec92228552e5873",
-                  "type": "BlinnPhongLighting",
-                  "x": 1271.0,
-                  "y": 705.0,
-                  "data": {
-                    "id": ""
-                  }
-                },
-                {
-                  "id": "1d7c936918584771afd33f58c3da9dab",
+                  "id": "f65c7c94d7ab401893c75a81faeee776",
                   "type": "Property",
-                  "x": 405.0,
-                  "y": 1144.0,
+                  "x": 50.0,
+                  "y": 520.0,
                   "data": {
-                    "name": "Normal",
-                    "type": "Vector3"
+                    "name": "UV",
+                    "type": "Vector2"
                   }
                 },
                 {
-                  "id": "567f85b4e38846b4905e982ae023d960",
-                  "type": "WorldPosition",
-                  "x": 894.0,
-                  "y": 1006.0
+                  "id": "ffd366ddd51246b29171086b39f91ace",
+                  "type": "Sampler2D",
+                  "x": 705.0,
+                  "y": 675.0
                 }
               ],
               "connections": [
                 {
-                  "fromNode": "49ad39d6e184499ebec92228552e5873",
-                  "fromField": "output",
+                  "fromNode": "031d723ecadc449e8cb1d13ea2e905b0",
+                  "fromField": "value",
                   "toNode": "end",
-                  "toField": "color"
+                  "toField": "alphaClip"
                 },
                 {
-                  "fromNode": "ffd366ddd51246b29171086b39f91ace",
-                  "fromField": "color",
-                  "toNode": "ed1d588e101a40fb953a3f2efe70abca",
-                  "toField": "inputs"
+                  "fromNode": "037375b3cb2341d1ae899238a93ae089",
+                  "fromField": "value",
+                  "toNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "toField": "boneTransformations"
                 },
                 {
-                  "fromNode": "ed1d588e101a40fb953a3f2efe70abca",
-                  "fromField": "output",
-                  "toNode": "49ad39d6e184499ebec92228552e5873",
-                  "toField": "albedo"
+                  "fromNode": "1611ef93a3e447528050000f50be2064",
+                  "fromField": "value",
+                  "toNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "toField": "boneWeights"
                 },
                 {
-                  "fromNode": "456cdc704f4e49e8b7b6115b5804473d",
-                  "fromField": "color",
-                  "toNode": "2019351e62264cd6b45ad8c3781eb2d2",
-                  "toField": "inputs"
+                  "fromNode": "1d7c936918584771afd33f58c3da9dab",
+                  "fromField": "value",
+                  "toNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "toField": "normal"
+                },
+                {
+                  "fromNode": "1dfd95b1cc7f49298240115710714c93",
+                  "fromField": "value",
+                  "toNode": "ffd366ddd51246b29171086b39f91ace",
+                  "toField": "texture"
                 },
                 {
                   "fromNode": "2019351e62264cd6b45ad8c3781eb2d2",
@@ -276,9 +302,9 @@
                   "toField": "emission"
                 },
                 {
-                  "fromNode": "af7e7313f5424b55954d6a16eafcb27f",
-                  "fromField": "color",
-                  "toNode": "36e710d2263e4b998bf404930b8db882",
+                  "fromNode": "26c315a4d2424e4e953d5263fa0f75d4",
+                  "fromField": "value",
+                  "toNode": "ed1d588e101a40fb953a3f2efe70abca",
                   "toField": "inputs"
                 },
                 {
@@ -288,10 +314,16 @@
                   "toField": "specular"
                 },
                 {
-                  "fromNode": "ffd366ddd51246b29171086b39f91ace",
-                  "fromField": "a",
+                  "fromNode": "456cdc704f4e49e8b7b6115b5804473d",
+                  "fromField": "color",
+                  "toNode": "2019351e62264cd6b45ad8c3781eb2d2",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "49ad39d6e184499ebec92228552e5873",
+                  "fromField": "output",
                   "toNode": "end",
-                  "toField": "alpha"
+                  "toField": "color"
                 },
                 {
                   "fromNode": "567f85b4e38846b4905e982ae023d960",
@@ -300,34 +332,22 @@
                   "toField": "position"
                 },
                 {
-                  "fromNode": "f65c7c94d7ab401893c75a81faeee776",
-                  "fromField": "value",
-                  "toNode": "ffd366ddd51246b29171086b39f91ace",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "1dfd95b1cc7f49298240115710714c93",
-                  "fromField": "value",
-                  "toNode": "ffd366ddd51246b29171086b39f91ace",
-                  "toField": "texture"
-                },
-                {
-                  "fromNode": "031d723ecadc449e8cb1d13ea2e905b0",
-                  "fromField": "value",
-                  "toNode": "end",
-                  "toField": "alphaClip"
-                },
-                {
                   "fromNode": "5df03da164b046af872b5a6db4eaffb6",
                   "fromField": "value",
                   "toNode": "49ad39d6e184499ebec92228552e5873",
                   "toField": "shininess"
                 },
                 {
-                  "fromNode": "26c315a4d2424e4e953d5263fa0f75d4",
-                  "fromField": "value",
-                  "toNode": "ed1d588e101a40fb953a3f2efe70abca",
-                  "toField": "inputs"
+                  "fromNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "fromField": "skinnedNormal",
+                  "toNode": "f237e24622d74fb6becad0a40a0cf7bf",
+                  "toField": "input"
+                },
+                {
+                  "fromNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "fromField": "skinnedPosition",
+                  "toNode": "end",
+                  "toField": "position"
                 },
                 {
                   "fromNode": "6726d27a0d914f6caaba01534d231163",
@@ -336,15 +356,9 @@
                   "toField": "texture"
                 },
                 {
-                  "fromNode": "c67e9085f7dc47e9b6f9ef315742a10e",
-                  "fromField": "value",
-                  "toNode": "af7e7313f5424b55954d6a16eafcb27f",
-                  "toField": "texture"
-                },
-                {
-                  "fromNode": "c2deac23337148a9b5a8c786e00478dd",
-                  "fromField": "value",
-                  "toNode": "2019351e62264cd6b45ad8c3781eb2d2",
+                  "fromNode": "af7e7313f5424b55954d6a16eafcb27f",
+                  "fromField": "color",
+                  "toNode": "36e710d2263e4b998bf404930b8db882",
                   "toField": "inputs"
                 },
                 {
@@ -354,10 +368,22 @@
                   "toField": "inputs"
                 },
                 {
-                  "fromNode": "f237e24622d74fb6becad0a40a0cf7bf",
+                  "fromNode": "c2deac23337148a9b5a8c786e00478dd",
+                  "fromField": "value",
+                  "toNode": "2019351e62264cd6b45ad8c3781eb2d2",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "c67e9085f7dc47e9b6f9ef315742a10e",
+                  "fromField": "value",
+                  "toNode": "af7e7313f5424b55954d6a16eafcb27f",
+                  "toField": "texture"
+                },
+                {
+                  "fromNode": "ed1d588e101a40fb953a3f2efe70abca",
                   "fromField": "output",
                   "toNode": "49ad39d6e184499ebec92228552e5873",
-                  "toField": "normal"
+                  "toField": "albedo"
                 },
                 {
                   "fromNode": "ee7e01f6f2bd46a8aba56812e3506aa0",
@@ -366,22 +392,10 @@
                   "toField": "position"
                 },
                 {
-                  "fromNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
-                  "fromField": "skinnedPosition",
-                  "toNode": "end",
-                  "toField": "position"
-                },
-                {
-                  "fromNode": "1d7c936918584771afd33f58c3da9dab",
-                  "fromField": "value",
-                  "toNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
+                  "fromNode": "f237e24622d74fb6becad0a40a0cf7bf",
+                  "fromField": "output",
+                  "toNode": "49ad39d6e184499ebec92228552e5873",
                   "toField": "normal"
-                },
-                {
-                  "fromNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",
-                  "fromField": "skinnedNormal",
-                  "toNode": "f237e24622d74fb6becad0a40a0cf7bf",
-                  "toField": "input"
                 },
                 {
                   "fromNode": "f65c7c94d7ab401893c75a81faeee776",
@@ -394,6 +408,24 @@
                   "fromField": "value",
                   "toNode": "af7e7313f5424b55954d6a16eafcb27f",
                   "toField": "uv"
+                },
+                {
+                  "fromNode": "f65c7c94d7ab401893c75a81faeee776",
+                  "fromField": "value",
+                  "toNode": "ffd366ddd51246b29171086b39f91ace",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "ffd366ddd51246b29171086b39f91ace",
+                  "fromField": "a",
+                  "toNode": "end",
+                  "toField": "alpha"
+                },
+                {
+                  "fromNode": "ffd366ddd51246b29171086b39f91ace",
+                  "fromField": "color",
+                  "toNode": "ed1d588e101a40fb953a3f2efe70abca",
+                  "toField": "inputs"
                 }
               ],
               "properties": [
@@ -489,18 +521,25 @@
                   "data": {
                     "color": "ffffffff"
                   }
+                },
+                {
+                  "name": "Bone Weights",
+                  "type": "BoneWeights",
+                  "location": "Attribute",
+                  "data": {
+                    "maxBoneWeightCount": 4
+                  }
+                },
+                {
+                  "name": "Bone Transforms",
+                  "type": "BoneTransforms",
+                  "location": "Uniform",
+                  "data": {
+                    "maxBoneCount": 12
+                  }
                 }
               ],
               "groups": [
-                {
-                  "name": "Specular",
-                  "nodes": [
-                    "c67e9085f7dc47e9b6f9ef315742a10e",
-                    "36e710d2263e4b998bf404930b8db882",
-                    "af7e7313f5424b55954d6a16eafcb27f",
-                    "bce87c9decab4914abd6a172d851c514"
-                  ]
-                },
                 {
                   "name": "Emissive",
                   "nodes": [
@@ -518,6 +557,15 @@
                     "26c315a4d2424e4e953d5263fa0f75d4",
                     "ed1d588e101a40fb953a3f2efe70abca"
                   ]
+                },
+                {
+                  "name": "Specular",
+                  "nodes": [
+                    "c67e9085f7dc47e9b6f9ef315742a10e",
+                    "36e710d2263e4b998bf404930b8db882",
+                    "af7e7313f5424b55954d6a16eafcb27f",
+                    "bce87c9decab4914abd6a172d851c514"
+                  ]
                 }
               ]
             }
@@ -530,81 +578,6 @@
               "type": "Model_Shader",
               "nodes": [
                 {
-                  "id": "71a4b8b843f64757855d64183ede30d8",
-                  "type": "Skinning",
-                  "x": 376.0,
-                  "y": 1144.0,
-                  "data": {
-                    "boneCount": 12,
-                    "boneWeightCount": 4
-                  }
-                },
-                {
-                  "id": "b418bbc608dc4b67a96fa293dc0ce5ed",
-                  "type": "ValueFloat",
-                  "x": 1252.0,
-                  "y": 315.0,
-                  "data": {
-                    "v1": 0.20000000298023224
-                  }
-                },
-                {
-                  "id": "8383cd7ea6d240ec8b9c450659326144",
-                  "type": "Sampler2D",
-                  "x": 1647.0,
-                  "y": 58.0
-                },
-                {
-                  "id": "9c390700cf564dcf813ce98f2705e293",
-                  "type": "Multiply",
-                  "x": 2151.0,
-                  "y": 461.0
-                },
-                {
-                  "id": "64cd39b3cbda437ba3edd269c8918624",
-                  "type": "Property",
-                  "x": 763.0,
-                  "y": 562.0,
-                  "data": {
-                    "name": "Shininess",
-                    "type": "Float"
-                  }
-                },
-                {
-                  "id": "0a160173eee84e39bac8755301d7fc51",
-                  "type": "Remap",
-                  "x": 1647.0,
-                  "y": 609.0
-                },
-                {
-                  "id": "6202135db877465e8405f3d74b8d3a61",
-                  "type": "Intensity",
-                  "x": 1252.0,
-                  "y": 254.0
-                },
-                {
-                  "id": "c953ec4a360742dc97d0f72bec4d2f8f",
-                  "type": "ValueVector2",
-                  "x": 1449.0,
-                  "y": 482.0,
-                  "data": {
-                    "v1": 0.0,
-                    "v2": 0.6000000238418579
-                  }
-                },
-                {
-                  "id": "63e8f2f3f3434cd1a9f71a6fe5711562",
-                  "type": "Smoothstep",
-                  "x": 1432.0,
-                  "y": 330.0
-                },
-                {
-                  "id": "515dd9be3f4f42248e8e137228486d36",
-                  "type": "ObjectNormalToWorld",
-                  "x": 619.0,
-                  "y": 745.0
-                },
-                {
                   "id": "01ad6bcbf35b4dfdb60ebc84a11137ba",
                   "type": "BlinnPhongLighting",
                   "x": 995.0,
@@ -614,46 +587,25 @@
                   }
                 },
                 {
-                  "id": "fa77402d63be464187e20046c79e4e8c",
-                  "type": "AmbientLight",
-                  "x": 1390.0,
-                  "y": 909.0,
-                  "data": {
-                    "id": ""
-                  }
-                },
-                {
-                  "id": "end",
-                  "type": "ShaderEnd",
-                  "x": 2353.0,
-                  "y": 151.0,
-                  "data": {
-                    "positionType": "Object space",
-                    "culling": "back",
-                    "depthWrite": true,
-                    "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
-                  }
-                },
-                {
-                  "id": "72fbfc1b408146ec842185e243d51bc4",
-                  "type": "Smoothstep",
-                  "x": 1448.0,
-                  "y": 609.0
-                },
-                {
-                  "id": "da94bc99b65e44b2b6490064ba210d2f",
-                  "type": "Intensity",
-                  "x": 1645.0,
-                  "y": 909.0
-                },
-                {
                   "id": "02320ce52706433e8e8b2b4fecca7eb4",
                   "type": "Add",
                   "x": 1952.0,
                   "y": 491.0
+                },
+                {
+                  "id": "063a647eb2d0465ca18db7fba690d7d6",
+                  "type": "ValueFloat",
+                  "x": 1253.0,
+                  "y": 654.0,
+                  "data": {
+                    "v1": 0.25
+                  }
+                },
+                {
+                  "id": "0a160173eee84e39bac8755301d7fc51",
+                  "type": "Remap",
+                  "x": 1647.0,
+                  "y": 609.0
                 },
                 {
                   "id": "146ca684107a45b0ae273243e0403f6d",
@@ -666,64 +618,10 @@
                   }
                 },
                 {
-                  "id": "fac9e4381fe94ae19e60f8da2f1ecc67",
-                  "type": "Property",
-                  "x": 1364.0,
-                  "y": 123.0,
-                  "data": {
-                    "name": "Diffuse Texture",
-                    "type": "TextureRegion"
-                  }
-                },
-                {
                   "id": "15924b9d061841dfa0e40f9f1217163a",
                   "type": "WorldPosition",
                   "x": 659.0,
                   "y": 812.0
-                },
-                {
-                  "id": "3f3d045e866c4d9a962d8b0294dfaa96",
-                  "type": "ValueVector2",
-                  "x": 1450.0,
-                  "y": 545.0,
-                  "data": {
-                    "v1": 0.0,
-                    "v2": 1.0
-                  }
-                },
-                {
-                  "id": "6194b516e50c4b0cbb1f38663b82a077",
-                  "type": "Property",
-                  "x": 50.0,
-                  "y": 1059.0,
-                  "data": {
-                    "name": "Normal",
-                    "type": "Vector3"
-                  }
-                },
-                {
-                  "id": "063a647eb2d0465ca18db7fba690d7d6",
-                  "type": "ValueFloat",
-                  "x": 1253.0,
-                  "y": 654.0,
-                  "data": {
-                    "v1": 0.25
-                  }
-                },
-                {
-                  "id": "b5eec827755c4271b161c6214ce63ec4",
-                  "type": "Intensity",
-                  "x": 1251.0,
-                  "y": 537.0
-                },
-                {
-                  "id": "7001f58b833a42849e42c1fab99ea758",
-                  "type": "ValueFloat",
-                  "x": 1252.0,
-                  "y": 375.0,
-                  "data": {
-                    "v1": 0.014999999664723873
-                  }
                 },
                 {
                   "id": "2b3570c480cb45ed9e25d3ef76c759eb",
@@ -736,12 +634,176 @@
                   }
                 },
                 {
+                  "id": "3f3d045e866c4d9a962d8b0294dfaa96",
+                  "type": "ValueVector2",
+                  "x": 1450.0,
+                  "y": 545.0,
+                  "data": {
+                    "v1": 0.0,
+                    "v2": 1.0
+                  }
+                },
+                {
+                  "id": "515dd9be3f4f42248e8e137228486d36",
+                  "type": "ObjectNormalToWorld",
+                  "x": 619.0,
+                  "y": 745.0
+                },
+                {
+                  "id": "6194b516e50c4b0cbb1f38663b82a077",
+                  "type": "Property",
+                  "x": 50.0,
+                  "y": 1059.0,
+                  "data": {
+                    "name": "Normal",
+                    "type": "Vector3"
+                  }
+                },
+                {
+                  "id": "6202135db877465e8405f3d74b8d3a61",
+                  "type": "Intensity",
+                  "x": 1252.0,
+                  "y": 254.0
+                },
+                {
+                  "id": "63e8f2f3f3434cd1a9f71a6fe5711562",
+                  "type": "Smoothstep",
+                  "x": 1432.0,
+                  "y": 330.0
+                },
+                {
+                  "id": "64cd39b3cbda437ba3edd269c8918624",
+                  "type": "Property",
+                  "x": 763.0,
+                  "y": 562.0,
+                  "data": {
+                    "name": "Shininess",
+                    "type": "Float"
+                  }
+                },
+                {
+                  "id": "7001f58b833a42849e42c1fab99ea758",
+                  "type": "ValueFloat",
+                  "x": 1252.0,
+                  "y": 375.0,
+                  "data": {
+                    "v1": 0.014999999664723873
+                  }
+                },
+                {
+                  "id": "7184df465a824cb393f4c6fc6bc8d84a",
+                  "type": "Property",
+                  "x": 89.0,
+                  "y": 959.0,
+                  "data": {
+                    "name": "Bone Weights",
+                    "type": "BoneWeights"
+                  }
+                },
+                {
+                  "id": "71a4b8b843f64757855d64183ede30d8",
+                  "type": "Skinning",
+                  "x": 376.0,
+                  "y": 1144.0
+                },
+                {
+                  "id": "72fbfc1b408146ec842185e243d51bc4",
+                  "type": "Smoothstep",
+                  "x": 1448.0,
+                  "y": 609.0
+                },
+                {
+                  "id": "8383cd7ea6d240ec8b9c450659326144",
+                  "type": "Sampler2D",
+                  "x": 1647.0,
+                  "y": 58.0
+                },
+                {
                   "id": "8a08efac54a740eabf38bcf394b08b4b",
                   "type": "ValueFloat",
                   "x": 1254.0,
                   "y": 594.0,
                   "data": {
                     "v1": 0.2549999952316284
+                  }
+                },
+                {
+                  "id": "9c390700cf564dcf813ce98f2705e293",
+                  "type": "Multiply",
+                  "x": 2151.0,
+                  "y": 461.0
+                },
+                {
+                  "id": "b418bbc608dc4b67a96fa293dc0ce5ed",
+                  "type": "ValueFloat",
+                  "x": 1252.0,
+                  "y": 315.0,
+                  "data": {
+                    "v1": 0.20000000298023224
+                  }
+                },
+                {
+                  "id": "b5eec827755c4271b161c6214ce63ec4",
+                  "type": "Intensity",
+                  "x": 1251.0,
+                  "y": 537.0
+                },
+                {
+                  "id": "c953ec4a360742dc97d0f72bec4d2f8f",
+                  "type": "ValueVector2",
+                  "x": 1449.0,
+                  "y": 482.0,
+                  "data": {
+                    "v1": 0.0,
+                    "v2": 0.6000000238418579
+                  }
+                },
+                {
+                  "id": "da94bc99b65e44b2b6490064ba210d2f",
+                  "type": "Intensity",
+                  "x": 1645.0,
+                  "y": 909.0
+                },
+                {
+                  "id": "ed4374fc0ece4b5d9211d63ee8d73029",
+                  "type": "Property",
+                  "x": 112.0,
+                  "y": 867.0,
+                  "data": {
+                    "name": "Bone Transforms",
+                    "type": "BoneTransforms"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 2353.0,
+                  "y": 151.0,
+                  "data": {
+                    "positionType": "Object space",
+                    "culling": "back",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
+                  }
+                },
+                {
+                  "id": "fa77402d63be464187e20046c79e4e8c",
+                  "type": "AmbientLight",
+                  "x": 1390.0,
+                  "y": 909.0,
+                  "data": {
+                    "id": ""
+                  }
+                },
+                {
+                  "id": "fac9e4381fe94ae19e60f8da2f1ecc67",
+                  "type": "Property",
+                  "x": 1364.0,
+                  "y": 123.0,
+                  "data": {
+                    "name": "Diffuse Texture",
+                    "type": "TextureRegion"
                   }
                 }
               ],
@@ -753,88 +815,10 @@
                   "toField": "color"
                 },
                 {
-                  "fromNode": "8383cd7ea6d240ec8b9c450659326144",
-                  "fromField": "color",
-                  "toNode": "9c390700cf564dcf813ce98f2705e293",
-                  "toField": "inputs"
-                },
-                {
-                  "fromNode": "9c390700cf564dcf813ce98f2705e293",
-                  "fromField": "output",
-                  "toNode": "end",
-                  "toField": "color"
-                },
-                {
-                  "fromNode": "b5eec827755c4271b161c6214ce63ec4",
-                  "fromField": "output",
-                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
-                  "toField": "input"
-                },
-                {
-                  "fromNode": "8a08efac54a740eabf38bcf394b08b4b",
-                  "fromField": "value",
-                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
-                  "toField": "edge1"
-                },
-                {
-                  "fromNode": "063a647eb2d0465ca18db7fba690d7d6",
-                  "fromField": "value",
-                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
-                  "toField": "edge0"
-                },
-                {
-                  "fromNode": "fa77402d63be464187e20046c79e4e8c",
-                  "fromField": "ambient",
-                  "toNode": "da94bc99b65e44b2b6490064ba210d2f",
-                  "toField": "color"
-                },
-                {
-                  "fromNode": "72fbfc1b408146ec842185e243d51bc4",
-                  "fromField": "output",
-                  "toNode": "0a160173eee84e39bac8755301d7fc51",
-                  "toField": "input"
-                },
-                {
-                  "fromNode": "3f3d045e866c4d9a962d8b0294dfaa96",
-                  "fromField": "value",
-                  "toNode": "0a160173eee84e39bac8755301d7fc51",
-                  "toField": "from"
-                },
-                {
-                  "fromNode": "c953ec4a360742dc97d0f72bec4d2f8f",
-                  "fromField": "value",
-                  "toNode": "0a160173eee84e39bac8755301d7fc51",
-                  "toField": "to"
-                },
-                {
                   "fromNode": "01ad6bcbf35b4dfdb60ebc84a11137ba",
                   "fromField": "specularOut",
                   "toNode": "6202135db877465e8405f3d74b8d3a61",
                   "toField": "color"
-                },
-                {
-                  "fromNode": "6202135db877465e8405f3d74b8d3a61",
-                  "fromField": "output",
-                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
-                  "toField": "input"
-                },
-                {
-                  "fromNode": "7001f58b833a42849e42c1fab99ea758",
-                  "fromField": "value",
-                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
-                  "toField": "edge0"
-                },
-                {
-                  "fromNode": "b418bbc608dc4b67a96fa293dc0ce5ed",
-                  "fromField": "value",
-                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
-                  "toField": "edge1"
-                },
-                {
-                  "fromNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
-                  "fromField": "output",
-                  "toNode": "02320ce52706433e8e8b2b4fecca7eb4",
-                  "toField": "inputs"
                 },
                 {
                   "fromNode": "02320ce52706433e8e8b2b4fecca7eb4",
@@ -843,13 +827,61 @@
                   "toField": "inputs"
                 },
                 {
-                  "fromNode": "da94bc99b65e44b2b6490064ba210d2f",
+                  "fromNode": "063a647eb2d0465ca18db7fba690d7d6",
+                  "fromField": "value",
+                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
+                  "toField": "edge0"
+                },
+                {
+                  "fromNode": "0a160173eee84e39bac8755301d7fc51",
                   "fromField": "output",
                   "toNode": "02320ce52706433e8e8b2b4fecca7eb4",
                   "toField": "inputs"
                 },
                 {
-                  "fromNode": "0a160173eee84e39bac8755301d7fc51",
+                  "fromNode": "146ca684107a45b0ae273243e0403f6d",
+                  "fromField": "value",
+                  "toNode": "71a4b8b843f64757855d64183ede30d8",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "15924b9d061841dfa0e40f9f1217163a",
+                  "fromField": "output",
+                  "toNode": "01ad6bcbf35b4dfdb60ebc84a11137ba",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "2b3570c480cb45ed9e25d3ef76c759eb",
+                  "fromField": "value",
+                  "toNode": "8383cd7ea6d240ec8b9c450659326144",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "3f3d045e866c4d9a962d8b0294dfaa96",
+                  "fromField": "value",
+                  "toNode": "0a160173eee84e39bac8755301d7fc51",
+                  "toField": "from"
+                },
+                {
+                  "fromNode": "515dd9be3f4f42248e8e137228486d36",
+                  "fromField": "output",
+                  "toNode": "01ad6bcbf35b4dfdb60ebc84a11137ba",
+                  "toField": "normal"
+                },
+                {
+                  "fromNode": "6194b516e50c4b0cbb1f38663b82a077",
+                  "fromField": "value",
+                  "toNode": "71a4b8b843f64757855d64183ede30d8",
+                  "toField": "normal"
+                },
+                {
+                  "fromNode": "6202135db877465e8405f3d74b8d3a61",
+                  "fromField": "output",
+                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
+                  "toField": "input"
+                },
+                {
+                  "fromNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
                   "fromField": "output",
                   "toNode": "02320ce52706433e8e8b2b4fecca7eb4",
                   "toField": "inputs"
@@ -861,34 +893,22 @@
                   "toField": "shininess"
                 },
                 {
-                  "fromNode": "15924b9d061841dfa0e40f9f1217163a",
-                  "fromField": "output",
-                  "toNode": "01ad6bcbf35b4dfdb60ebc84a11137ba",
-                  "toField": "position"
-                },
-                {
-                  "fromNode": "515dd9be3f4f42248e8e137228486d36",
-                  "fromField": "output",
-                  "toNode": "01ad6bcbf35b4dfdb60ebc84a11137ba",
-                  "toField": "normal"
-                },
-                {
-                  "fromNode": "fac9e4381fe94ae19e60f8da2f1ecc67",
+                  "fromNode": "7001f58b833a42849e42c1fab99ea758",
                   "fromField": "value",
-                  "toNode": "8383cd7ea6d240ec8b9c450659326144",
-                  "toField": "texture"
+                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
+                  "toField": "edge0"
                 },
                 {
-                  "fromNode": "2b3570c480cb45ed9e25d3ef76c759eb",
-                  "fromField": "value",
-                  "toNode": "8383cd7ea6d240ec8b9c450659326144",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "146ca684107a45b0ae273243e0403f6d",
+                  "fromNode": "7184df465a824cb393f4c6fc6bc8d84a",
                   "fromField": "value",
                   "toNode": "71a4b8b843f64757855d64183ede30d8",
-                  "toField": "position"
+                  "toField": "boneWeights"
+                },
+                {
+                  "fromNode": "71a4b8b843f64757855d64183ede30d8",
+                  "fromField": "skinnedNormal",
+                  "toNode": "515dd9be3f4f42248e8e137228486d36",
+                  "toField": "input"
                 },
                 {
                   "fromNode": "71a4b8b843f64757855d64183ede30d8",
@@ -897,16 +917,70 @@
                   "toField": "position"
                 },
                 {
-                  "fromNode": "6194b516e50c4b0cbb1f38663b82a077",
-                  "fromField": "value",
-                  "toNode": "71a4b8b843f64757855d64183ede30d8",
-                  "toField": "normal"
+                  "fromNode": "72fbfc1b408146ec842185e243d51bc4",
+                  "fromField": "output",
+                  "toNode": "0a160173eee84e39bac8755301d7fc51",
+                  "toField": "input"
                 },
                 {
-                  "fromNode": "71a4b8b843f64757855d64183ede30d8",
-                  "fromField": "skinnedNormal",
-                  "toNode": "515dd9be3f4f42248e8e137228486d36",
+                  "fromNode": "8383cd7ea6d240ec8b9c450659326144",
+                  "fromField": "color",
+                  "toNode": "9c390700cf564dcf813ce98f2705e293",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "8a08efac54a740eabf38bcf394b08b4b",
+                  "fromField": "value",
+                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
+                  "toField": "edge1"
+                },
+                {
+                  "fromNode": "9c390700cf564dcf813ce98f2705e293",
+                  "fromField": "output",
+                  "toNode": "end",
+                  "toField": "color"
+                },
+                {
+                  "fromNode": "b418bbc608dc4b67a96fa293dc0ce5ed",
+                  "fromField": "value",
+                  "toNode": "63e8f2f3f3434cd1a9f71a6fe5711562",
+                  "toField": "edge1"
+                },
+                {
+                  "fromNode": "b5eec827755c4271b161c6214ce63ec4",
+                  "fromField": "output",
+                  "toNode": "72fbfc1b408146ec842185e243d51bc4",
                   "toField": "input"
+                },
+                {
+                  "fromNode": "c953ec4a360742dc97d0f72bec4d2f8f",
+                  "fromField": "value",
+                  "toNode": "0a160173eee84e39bac8755301d7fc51",
+                  "toField": "to"
+                },
+                {
+                  "fromNode": "da94bc99b65e44b2b6490064ba210d2f",
+                  "fromField": "output",
+                  "toNode": "02320ce52706433e8e8b2b4fecca7eb4",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "ed4374fc0ece4b5d9211d63ee8d73029",
+                  "fromField": "value",
+                  "toNode": "71a4b8b843f64757855d64183ede30d8",
+                  "toField": "boneTransformations"
+                },
+                {
+                  "fromNode": "fa77402d63be464187e20046c79e4e8c",
+                  "fromField": "ambient",
+                  "toNode": "da94bc99b65e44b2b6490064ba210d2f",
+                  "toField": "color"
+                },
+                {
+                  "fromNode": "fac9e4381fe94ae19e60f8da2f1ecc67",
+                  "fromField": "value",
+                  "toNode": "8383cd7ea6d240ec8b9c450659326144",
+                  "toField": "texture"
                 }
               ],
               "properties": [
@@ -962,9 +1036,34 @@
                   "data": {
                     "previewPath": null
                   }
+                },
+                {
+                  "name": "Bone Weights",
+                  "type": "BoneWeights",
+                  "location": "Attribute",
+                  "data": {
+                    "maxBoneWeightCount": 4
+                  }
+                },
+                {
+                  "name": "Bone Transforms",
+                  "type": "BoneTransforms",
+                  "location": "Uniform",
+                  "data": {
+                    "maxBoneCount": 12
+                  }
                 }
               ],
               "groups": [
+                {
+                  "name": "Specular lighting",
+                  "nodes": [
+                    "b418bbc608dc4b67a96fa293dc0ce5ed",
+                    "7001f58b833a42849e42c1fab99ea758",
+                    "6202135db877465e8405f3d74b8d3a61",
+                    "63e8f2f3f3434cd1a9f71a6fe5711562"
+                  ]
+                },
                 {
                   "name": "Diffuse lighting",
                   "nodes": [
@@ -978,25 +1077,16 @@
                   ]
                 },
                 {
+                  "name": "Base color",
+                  "nodes": [
+                    "8383cd7ea6d240ec8b9c450659326144"
+                  ]
+                },
+                {
                   "name": "Ambient lighting",
                   "nodes": [
                     "fa77402d63be464187e20046c79e4e8c",
                     "da94bc99b65e44b2b6490064ba210d2f"
-                  ]
-                },
-                {
-                  "name": "Specular lighting",
-                  "nodes": [
-                    "b418bbc608dc4b67a96fa293dc0ce5ed",
-                    "7001f58b833a42849e42c1fab99ea758",
-                    "6202135db877465e8405f3d74b8d3a61",
-                    "63e8f2f3f3434cd1a9f71a6fe5711562"
-                  ]
-                },
-                {
-                  "name": "Base color",
-                  "nodes": [
-                    "8383cd7ea6d240ec8b9c450659326144"
                   ]
                 }
               ]
@@ -1004,12 +1094,6 @@
           }
         ]
       }
-    },
-    {
-      "id": "746da9b276d442f0bc74ed9847a26a4b",
-      "type": "PipelineStart",
-      "x": 412.0,
-      "y": 593.0
     }
   ],
   "connections": [
@@ -1032,15 +1116,15 @@
       "toField": "background"
     },
     {
-      "fromNode": "ff6f63af3181472da525343236652acd",
-      "fromField": "output",
-      "toNode": "dffb152d405a49d38792e850749129b2",
-      "toField": "input"
-    },
-    {
       "fromNode": "dffb152d405a49d38792e850749129b2",
       "fromField": "output",
       "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "ff6f63af3181472da525343236652acd",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
       "toField": "input"
     }
   ],

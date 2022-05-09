@@ -8,13 +8,24 @@ public class PropertySource {
     private final ShaderFieldType shaderFieldType;
     private final PropertyLocation location;
     private final Object defaultValue;
+    private final boolean array;
 
     public PropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue) {
+        this(propertyIndex, propertyName, shaderFieldType, location, defaultValue, false);
+    }
+
+    public PropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue,
+                          boolean array) {
         this.propertyIndex = propertyIndex;
         this.propertyName = propertyName;
         this.shaderFieldType = shaderFieldType;
         this.location = location;
         this.defaultValue = defaultValue;
+        this.array = array;
+    }
+
+    public boolean isArray() {
+        return array;
     }
 
     public int getPropertyIndex() {

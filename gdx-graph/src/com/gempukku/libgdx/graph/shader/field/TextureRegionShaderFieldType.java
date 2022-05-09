@@ -27,18 +27,13 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
     }
 
     @Override
-    public int getNumberOfComponents() {
-        return 4;
-    }
-
-    @Override
     public Object convert(Object value) {
         return value;
     }
 
     @Override
     public String getName() {
-        return "TextureRegion";
+        return ShaderFieldType.TextureRegion;
     }
 
     @Override

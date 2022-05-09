@@ -34,14 +34,6 @@ public interface RenderableModel {
     Matrix4 getWorldTransform(String tag);
 
     /**
-     * Should return bone transformations to use with the given 'tag' (shader).
-     *
-     * @param tag
-     * @return
-     */
-    Matrix4[] getBones(String tag);
-
-    /**
      * Should return properties of the model for a given 'tag' (shader).
      *
      * @param tag
