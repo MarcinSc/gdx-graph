@@ -7,7 +7,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.LightColor;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.provider.Lights3DProvider;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderContext;
 import com.gempukku.libgdx.graph.shader.*;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -31,7 +30,7 @@ public class AmbientLightShaderNodeBuilder extends ConfigurationCommonShaderNode
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        LightColor ambientColor = lights3DProvider.getAmbientLight(environment, ((ModelShaderContext) shaderContext).getRenderableModel());
+                        LightColor ambientColor = lights3DProvider.getAmbientLight(environment, shaderContext.getRenderableModel());
                         if (ambientColor != null) {
                             shader.setUniform(location, ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), 1f);
                         } else {

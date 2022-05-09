@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.plugin.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
-import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
@@ -13,7 +12,6 @@ public class SpriteGraphShader extends GraphShader {
 
     public SpriteGraphShader(String tag, Texture defaultTexture) {
         super(tag, defaultTexture);
-        setCulling(BasicShader.Culling.none);
     }
 
     public Array<String> getTextureUniformNames() {

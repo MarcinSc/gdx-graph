@@ -9,7 +9,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.LightColor;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.provider.Lights3DProvider;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderContext;
 import com.gempukku.libgdx.graph.shader.*;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -36,7 +35,7 @@ public class DirectionalLightShaderNodeBuilder extends ConfigurationCommonShader
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Directional3DLight> directionalLights = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), index + 1);
+                            Array<Directional3DLight> directionalLights = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), index + 1);
                             if (directionalLights != null && directionalLights.size > index && directionalLights.get(index) != null) {
                                 Directional3DLight directionalLight = directionalLights.get(index);
                                 shader.setUniform(location, directionalLight.getDirectionX(), directionalLight.getDirectionY(), directionalLight.getDirectionZ());
@@ -56,7 +55,7 @@ public class DirectionalLightShaderNodeBuilder extends ConfigurationCommonShader
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Directional3DLight> directionalLights = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), index + 1);
+                            Array<Directional3DLight> directionalLights = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), index + 1);
                             if (directionalLights != null && directionalLights.size > index && directionalLights.get(index) != null) {
                                 Directional3DLight directionalLight = directionalLights.get(index);
                                 LightColor color = directionalLight.getColor();

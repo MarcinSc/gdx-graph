@@ -9,7 +9,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.provider.Lights3DProvider;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderContext;
 import com.gempukku.libgdx.graph.shader.*;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -36,7 +35,7 @@ public class PointLightShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), index + 1);
+                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, shaderContext.getRenderableModel(), index + 1);
                             if (pointLights != null && pointLights.size > index && pointLights.get(index) != null) {
                                 Point3DLight pointLight = pointLights.get(index);
                                 shader.setUniform(location, pointLight.getPosition());
@@ -56,7 +55,7 @@ public class PointLightShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), index + 1);
+                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, shaderContext.getRenderableModel(), index + 1);
                             if (pointLights != null && pointLights.size > index && pointLights.get(index) != null) {
                                 Point3DLight pointLight = pointLights.get(index);
                                 LightColor color = pointLight.getColor();
@@ -77,7 +76,7 @@ public class PointLightShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), index + 1);
+                            Array<Point3DLight> pointLights = lights3DProvider.getPointLights(environment, shaderContext.getRenderableModel(), index + 1);
                             if (pointLights != null && pointLights.size > index && pointLights.get(index) != null) {
                                 Point3DLight pointLight = pointLights.get(index);
                                 shader.setUniform(location, pointLight.getIntensity());

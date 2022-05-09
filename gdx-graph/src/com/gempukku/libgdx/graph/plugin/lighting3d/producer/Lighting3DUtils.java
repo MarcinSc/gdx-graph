@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.*;
 import com.gempukku.libgdx.graph.plugin.lighting3d.provider.Lights3DProvider;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderContext;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
@@ -23,7 +22,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        LightColor ambientColor = lights3DProvider.getAmbientLight(environment, ((ModelShaderContext) shaderContext).getRenderableModel());
+                        LightColor ambientColor = lights3DProvider.getAmbientLight(environment, shaderContext.getRenderableModel());
                         if (ambientColor != null) {
                             shader.setUniform(location, ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue());
                         } else {
@@ -47,7 +46,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Spot3DLight> spots = lights3DProvider.getSpotLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfSpotlights);
+                        Array<Spot3DLight> spots = lights3DProvider.getSpotLights(environment, shaderContext.getRenderableModel(), maxNumberOfSpotlights);
 
                         for (int i = 0; i < maxNumberOfSpotlights; i++) {
                             int location = startingLocation + i * structSize;
@@ -87,7 +86,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Point3DLight> points = lights3DProvider.getPointLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfPointLights);
+                        Array<Point3DLight> points = lights3DProvider.getPointLights(environment, shaderContext.getRenderableModel(), maxNumberOfPointLights);
 
                         for (int i = 0; i < maxNumberOfPointLights; i++) {
                             int location = startingLocation + i * structSize;
@@ -151,7 +150,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -174,7 +173,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -198,7 +197,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -222,7 +221,7 @@ public class Lighting3DUtils {
                         Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                         Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                         Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -251,7 +250,7 @@ public class Lighting3DUtils {
                             Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
                             Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
                             Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, ((ModelShaderContext) shaderContext).getRenderableModel(), maxNumberOfDirectionalLights);
+                            Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
                             if (dirs != null) {
                                 RenderPipelineBuffer shadowFrameBuffer = null;
                                 if (dirs.size > lightIndex)
