@@ -115,6 +115,17 @@ public class MultiPageSpriteBatchModel implements Disposable {
         return false;
     }
 
+    public void disposeEmptyPages() {
+        Array.ArrayIterator<SpriteBatchModelPage> iterator = pages.iterator();
+        while (iterator.hasNext()) {
+            SpriteBatchModelPage page = iterator.next();
+            if (page.getSpriteCount() == 0) {
+                disposePage(page);
+                iterator.remove();
+            }
+        }
+    }
+
     public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
     }
@@ -122,11 +133,14 @@ public class MultiPageSpriteBatchModel implements Disposable {
     @Override
     public void dispose() {
         for (SpriteBatchModelPage page : pages) {
-            page.dispose();
-            graphModels.removeModel(modelMap.get(page));
+            disposePage(page);
         }
         pages.clear();
-        modelMap.clear();
+    }
+
+    private void disposePage(SpriteBatchModelPage page) {
+        page.dispose();
+        graphModels.removeModel(modelMap.remove(page));
     }
 
     private class SpriteBatchModelPage implements RenderableModel, Disposable {
@@ -199,6 +213,10 @@ public class MultiPageSpriteBatchModel implements Disposable {
         public void updateSprite(RenderableSprite sprite) {
             if (hasSprite(sprite))
                 updatedSprites.add(sprite);
+        }
+
+        public int getSpriteCount() {
+            return spriteCount;
         }
 
         @Override
