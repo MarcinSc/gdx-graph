@@ -29,7 +29,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
         String boneTransformVariableName = boneTransformations.getRepresentation();
         String boneWeightVariableName = boneWeights.getRepresentation() + "_";
 
-        int boneWeightCount = boneWeightFieldType.getMaxBoneWeightCount();
+        int boneWeightCount = boneWeightFieldType.getArrayLength();
 
         String functionName = "getSkinning_" + nodeId;
         String skinningMatrixName = "skinning_" + nodeId;
@@ -84,15 +84,13 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
         FieldOutput boneWeights = inputs.get("boneWeights");
-        BoneWeightFieldType boneWeightFieldType = (BoneWeightFieldType) boneWeights.getFieldType();
         FieldOutput boneTransformations = inputs.get("boneTransformations");
         BoneTransformFieldType boneTransformFieldType = (BoneTransformFieldType) boneTransformations.getFieldType();
 
         String boneTransformVariableName = boneTransformations.getRepresentation();
         String boneWeightVariableName = boneWeights.getRepresentation() + "_";
 
-        int boneCount = boneWeightFieldType.getMaxBoneWeightCount();
-        int boneWeightCount = boneTransformFieldType.getMaxBoneCount();
+        int boneTransformCount = boneTransformFieldType.getArrayLength();
 
         String skinningMatrixName = "skinning_" + nodeId;
         String functionName = "getSkinning_" + nodeId;
@@ -100,7 +98,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
             StringBuilder getSkinning = new StringBuilder();
             getSkinning.append("mat4 " + functionName + "() {\n");
             getSkinning.append("  mat4 skinning = mat4(0.0);\n");
-            for (int i = 0; i < boneWeightCount; i++) {
+            for (int i = 0; i < boneTransformCount; i++) {
                 getSkinning.append("  skinning += (").append(boneWeightVariableName).append(i).append(".y) * " + boneTransformVariableName + "[int(").append(boneWeightVariableName).append(i).append(".x)];\n");
             }
             getSkinning.append("  return skinning;\n");

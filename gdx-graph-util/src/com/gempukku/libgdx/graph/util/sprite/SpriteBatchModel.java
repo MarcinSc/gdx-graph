@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModel;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
@@ -13,11 +15,11 @@ import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
+import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 
 public class SpriteBatchModel implements Disposable {
     private final Matrix4 worldTransform = new Matrix4();
@@ -30,10 +32,9 @@ public class SpriteBatchModel implements Disposable {
 
     private final Mesh mesh;
     private final int spriteCapacity;
-    private final ObjectMap<String, PropertySource> shaderProperties;
+    private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
     private final float[] vertexData;
     private final int floatCountPerVertex;
-    private final IntMap<String> propertyIndexNames = new IntMap<>();
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
@@ -53,43 +54,22 @@ public class SpriteBatchModel implements Disposable {
         this.spriteCapacity = spriteCapacity;
         this.graphModels = graphModels;
         this.tag = tag;
-        this.shaderProperties = graphModels.getShaderProperties(tag);
         this.propertyContainer = propertyContainer;
 
-        if (shaderProperties == null)
-            throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
+        vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
 
-        Array<VertexAttribute> vertexAttributeArray = new Array<>(VertexAttribute.class);
-        for (ObjectMap.Entry<String, PropertySource> shaderProperty : shaderProperties) {
-            PropertyLocation propertyLocation = shaderProperty.value.getPropertyLocation();
-            if (propertyLocation == PropertyLocation.Attribute) {
-                ShaderFieldType shaderFieldType = shaderProperty.value.getShaderFieldType();
-                vertexAttributeArray.add(new VertexAttribute(1024, shaderFieldType.getNumberOfComponents(), shaderProperty.value.getAttributeName()));
-                propertyIndexNames.put(shaderProperty.value.getPropertyIndex(), shaderProperty.key);
-            }
-        }
-
-        vertexAttributes = new VertexAttributes(vertexAttributeArray.toArray());
+        vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
         floatCountPerVertex = vertexAttributes.vertexSize / 4;
 
         spritePosition = new RenderableSprite[spriteCapacity];
+
         vertexData = new float[4 * floatCountPerVertex * spriteCapacity];
 
-        int numberOfIndices = 6 * spriteCapacity;
-        mesh = new Mesh(staticBatch, true, 4 * spriteCapacity, numberOfIndices, vertexAttributes);
+        mesh = new Mesh(staticBatch, true, 4 * spriteCapacity, 6 * spriteCapacity, vertexAttributes);
         mesh.setVertices(vertexData);
-        short[] indices = new short[numberOfIndices];
-        int vertexIndex = 0;
-        for (int i = 0; i < numberOfIndices; i += 6) {
-            indices[i + 0] = (short) (vertexIndex * 4 + 0);
-            indices[i + 1] = (short) (vertexIndex * 4 + 2);
-            indices[i + 2] = (short) (vertexIndex * 4 + 1);
-            indices[i + 3] = (short) (vertexIndex * 4 + 2);
-            indices[i + 4] = (short) (vertexIndex * 4 + 3);
-            indices[i + 5] = (short) (vertexIndex * 4 + 1);
-            vertexIndex++;
-        }
+
+        short[] indices = SpriteUtil.createSpriteIndicesArray(spriteCapacity);
         mesh.setIndices(indices, 0, indices.length);
 
         graphModel = graphModels.addModel(tag, new BatchRenderableModel());
@@ -170,10 +150,9 @@ public class SpriteBatchModel implements Disposable {
     private void updateSpriteData(RenderableSprite sprite, int spriteIndex) {
         int spriteDataStart = getSpriteDataStart(spriteIndex);
         for (VertexAttribute vertexAttribute : vertexAttributes) {
-            String alias = vertexAttribute.alias;
-            int attributeOffset = vertexAttribute.offset / 4;
-            PropertySource propertySource = findPropertyByAttributeName(alias);
+            PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
 
+            int attributeOffset = vertexAttribute.offset / 4;
             ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
             Object attributeValue = sprite.getPropertyContainer().getValue(propertySource.getPropertyName());
             if (attributeValue instanceof ValuePerVertex) {
@@ -194,22 +173,6 @@ public class SpriteBatchModel implements Disposable {
         }
 
         markSpriteUpdated(spriteIndex);
-    }
-
-    private PropertySource findPropertyByAttributeName(String attributeName) {
-        for (PropertySource propertySource : shaderProperties.values()) {
-            if (attributeName.equals(propertySource.getAttributeName()))
-                return propertySource;
-        }
-        return null;
-    }
-
-    private void initializeAttributeLocations(ShaderProgram shaderProgram) {
-        IntArray resultArray = new IntArray();
-        for (VertexAttribute vertexAttribute : vertexAttributes) {
-            resultArray.add(shaderProgram.getAttributeLocation(vertexAttribute.alias));
-        }
-        attributeLocations = resultArray.toArray();
     }
 
     @Override
@@ -268,7 +231,7 @@ public class SpriteBatchModel implements Disposable {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
                 Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
             if (attributeLocations == null)
-                initializeAttributeLocations(shaderProgram);
+                attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
             mesh.bind(shaderProgram, attributeLocations);
             Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, 6 * spriteCount, GL20.GL_UNSIGNED_SHORT, 0);
             mesh.unbind(shaderProgram, attributeLocations);

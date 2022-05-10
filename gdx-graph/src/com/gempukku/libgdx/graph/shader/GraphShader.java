@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
+import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
@@ -95,10 +97,18 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
                 if (lastIndex > -1) {
                     String arrayValue = value.substring(0, lastIndex);
                     propertySource = propertySourceMap.get(arrayValue);
-                    if (!propertySource.isArray())
+                    if (propertySource == null)
                         return -1;
+
+                    ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
+                    if (!(shaderFieldType instanceof ArrayShaderFieldType))
+                        return -1;
+
                     int index = Integer.parseInt(value.substring(lastIndex + 1));
-                    return attributes.get(propertySource.getAttributeName() + "_" + index).getLocation();
+                    ArrayShaderFieldType arrayShaderFieldType = (ArrayShaderFieldType) shaderFieldType;
+                    if (index >= arrayShaderFieldType.getArrayLength())
+                        return -1;
+                    return attributes.get(propertySource.getAttributeName(index)).getLocation();
                 }
                 return -1;
             }

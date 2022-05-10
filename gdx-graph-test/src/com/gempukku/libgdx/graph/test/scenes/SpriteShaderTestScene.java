@@ -15,13 +15,13 @@ import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 
 public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
-    private SpriteBatchModel spriteBatch;
+    private MultiPageSpriteBatchModel spriteBatch;
 
     @Override
     public void initializeScene() {
@@ -33,7 +33,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         GraphModels graphModels = pipelineRenderer.getPluginData(GraphModels.class);
 
-        spriteBatch = new SpriteBatchModel(true, 2, graphModels, "Test");
+        spriteBatch = new MultiPageSpriteBatchModel(true, 2, graphModels, "Test");
 
         MapWritablePropertyContainer sprite1 = new MapWritablePropertyContainer();
         sprite1.setValue("Position", new Vector3(0, 0, -10));

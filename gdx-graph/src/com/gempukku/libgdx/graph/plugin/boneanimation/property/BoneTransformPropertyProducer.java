@@ -24,6 +24,6 @@ public class BoneTransformPropertyProducer implements GraphShaderPropertyProduce
             defaultValue[i] = new Matrix4().idt();
         }
 
-        return new PropertySource(index, name, new BoneTransformFieldType(boneCount), location, defaultValue, true);
+        return new PropertySource(index, name, new BoneTransformFieldType(boneCount), location, defaultValue);
     }
 }

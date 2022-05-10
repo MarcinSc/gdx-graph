@@ -8,12 +8,12 @@ import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
-import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 
-public class BoneWeightFieldType implements ShaderFieldType {
+public class BoneWeightFieldType implements ArrayShaderFieldType {
     public static final String type = "BoneWeights";
     private final int maxBoneWeightCount;
 
@@ -25,7 +25,8 @@ public class BoneWeightFieldType implements ShaderFieldType {
         this.maxBoneWeightCount = maxBoneWeightCount;
     }
 
-    public int getMaxBoneWeightCount() {
+    @Override
+    public int getArrayLength() {
         return maxBoneWeightCount;
     }
 
@@ -65,7 +66,7 @@ public class BoneWeightFieldType implements ShaderFieldType {
     }
 
     private int getBoneWeightCount(PropertySource propertySource) {
-        return ((BoneWeightFieldType) propertySource.getShaderFieldType()).getMaxBoneWeightCount();
+        return ((BoneWeightFieldType) propertySource.getShaderFieldType()).getArrayLength();
     }
 
     @Override

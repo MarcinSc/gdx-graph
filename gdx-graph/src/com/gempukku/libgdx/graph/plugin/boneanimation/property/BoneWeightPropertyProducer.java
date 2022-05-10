@@ -24,6 +24,6 @@ public class BoneWeightPropertyProducer implements GraphShaderPropertyProducer {
             defaultValue[i] = new Vector2(0, 1);
         }
 
-        return new PropertySource(index, name, new BoneWeightFieldType(boneWeightCount), location, defaultValue, true);
+        return new PropertySource(index, name, new BoneWeightFieldType(boneWeightCount), location, defaultValue);
     }
 }

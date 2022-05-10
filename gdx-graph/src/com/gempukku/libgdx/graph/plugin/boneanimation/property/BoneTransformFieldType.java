@@ -9,12 +9,12 @@ import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
-import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 
-public class BoneTransformFieldType implements ShaderFieldType {
+public class BoneTransformFieldType implements ArrayShaderFieldType {
     public static final String type = "BoneTransforms";
     private final int maxBoneCount;
 
@@ -26,7 +26,8 @@ public class BoneTransformFieldType implements ShaderFieldType {
         this.maxBoneCount = maxBoneCount;
     }
 
-    public int getMaxBoneCount() {
+    @Override
+    public int getArrayLength() {
         return maxBoneCount;
     }
 
@@ -67,7 +68,7 @@ public class BoneTransformFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getMaxBoneCount();
+        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getArrayLength();
         String variableName = propertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", true,
                 new GlobalBonesUniformSetter(boneCount, propertySource), "Skeletal bones - " + propertySource.getPropertyName());
@@ -77,7 +78,7 @@ public class BoneTransformFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getMaxBoneCount();
+        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getArrayLength();
         String variableName = propertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", false,
                 new LocalBonesUniformSetter(boneCount, propertySource), "Skeletal bones");

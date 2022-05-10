@@ -8,20 +8,13 @@ public class PropertySource {
     private final ShaderFieldType shaderFieldType;
     private final PropertyLocation location;
     private final Object defaultValue;
-    private final boolean array;
 
     public PropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue) {
-        this(propertyIndex, propertyName, shaderFieldType, location, defaultValue, false);
-    }
-
-    public PropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue,
-                          boolean array) {
         this.propertyIndex = propertyIndex;
         this.propertyName = propertyName;
         this.shaderFieldType = shaderFieldType;
         this.location = location;
         this.defaultValue = defaultValue;
-        this.array = array;
     }
 
     public String getAttributeName() {
@@ -32,7 +25,7 @@ public class PropertySource {
     }
 
     public String getAttributeName(int index) {
-        if (location == PropertyLocation.Attribute && array) {
+        if (location == PropertyLocation.Attribute) {
             return "a_property_" + propertyIndex + "_" + index;
         }
         return null;
@@ -48,10 +41,6 @@ public class PropertySource {
 
     public String getUniformName() {
         return "u_property_" + propertyIndex;
-    }
-
-    public boolean isArray() {
-        return array;
     }
 
     public int getPropertyIndex() {
