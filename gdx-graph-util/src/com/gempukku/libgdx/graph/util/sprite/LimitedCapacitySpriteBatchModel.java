@@ -79,13 +79,13 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public Matrix4 getWorldTransform() {
-        return worldTransform;
+    public void setPosition(Vector3 position) {
+        this.position.set(position);
     }
 
     @Override
-    public Vector3 getPosition() {
-        return position;
+    public void setWorldTransform(Matrix4 worldTransform) {
+        this.worldTransform.set(worldTransform);
     }
 
     @Override

@@ -64,13 +64,13 @@ public class MultiPageSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public Vector3 getPosition() {
-        return position;
+    public void setPosition(Vector3 position) {
+        this.position.set(position);
     }
 
     @Override
-    public Matrix4 getWorldTransform() {
-        return worldTransform;
+    public void setWorldTransform(Matrix4 worldTransform) {
+        this.worldTransform.set(worldTransform);
     }
 
     @Override

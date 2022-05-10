@@ -19,7 +19,7 @@ public interface SpriteBatchModel extends Disposable {
 
     void setCullingTest(CullingTest cullingTest);
 
-    Vector3 getPosition();
+    void setPosition(Vector3 position);
 
-    Matrix4 getWorldTransform();
+    void setWorldTransform(Matrix4 worldTransform);
 }
