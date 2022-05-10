@@ -22,7 +22,7 @@ import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 
-public class MultiPageSpriteBatchModel implements Disposable {
+public class MultiPageSpriteBatchModel implements SpriteBatchModel {
     private final boolean staticBatch;
     private final int pageSpriteCapacity;
     private final GraphModels graphModels;
@@ -63,18 +63,22 @@ public class MultiPageSpriteBatchModel implements Disposable {
         return tag;
     }
 
+    @Override
     public Vector3 getPosition() {
         return position;
     }
 
+    @Override
     public Matrix4 getWorldTransform() {
         return worldTransform;
     }
 
+    @Override
     public void setCullingTest(CullingTest cullingTest) {
         this.cullingTest = cullingTest;
     }
 
+    @Override
     public boolean hasSprite(RenderableSprite sprite) {
         for (SpriteBatchModelPage page : pages) {
             if (page.hasSprite(sprite))
@@ -84,10 +88,11 @@ public class MultiPageSpriteBatchModel implements Disposable {
         return false;
     }
 
-    public void addSprite(RenderableSprite sprite) {
+    @Override
+    public boolean addSprite(RenderableSprite sprite) {
         for (SpriteBatchModelPage page : pages) {
             if (page.addSprite(sprite))
-                return;
+                return true;
         }
 
         SpriteBatchModelPage newPage = new SpriteBatchModelPage();
@@ -96,17 +101,22 @@ public class MultiPageSpriteBatchModel implements Disposable {
 
         GraphModel model = graphModels.addModel(tag, newPage);
         modelMap.put(newPage, model);
+
+        return true;
     }
 
-    public void updateSprite(RenderableSprite sprite) {
+    @Override
+    public boolean updateSprite(RenderableSprite sprite) {
         for (SpriteBatchModelPage page : pages) {
             if (page.hasSprite(sprite)) {
                 page.updateSprite(sprite);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
+    @Override
     public boolean removeSprite(RenderableSprite sprite) {
         for (SpriteBatchModelPage page : pages) {
             if (page.removeSprite(sprite))
@@ -126,6 +136,7 @@ public class MultiPageSpriteBatchModel implements Disposable {
         }
     }
 
+    @Override
     public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
     }
