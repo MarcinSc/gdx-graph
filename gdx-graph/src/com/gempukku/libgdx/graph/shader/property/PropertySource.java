@@ -31,8 +31,19 @@ public class PropertySource {
         return null;
     }
 
+    public String getAttributeName(int index) {
+        if (location == PropertyLocation.Attribute && array) {
+            return "a_property_" + propertyIndex + "_" + index;
+        }
+        return null;
+    }
+
     public String getVariableName() {
         return "v_property_" + propertyIndex;
+    }
+
+    public String getVariableName(int index) {
+        return "v_property_" + propertyIndex + "_" + index;
     }
 
     public String getUniformName() {

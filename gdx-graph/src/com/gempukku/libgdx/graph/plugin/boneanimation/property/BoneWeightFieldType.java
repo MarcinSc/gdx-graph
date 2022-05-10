@@ -111,30 +111,29 @@ public class BoneWeightFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String attributeName = propertySource.getAttributeName();
         for (int i = 0; i < boneWeightCount; i++) {
-            vertexShaderBuilder.addAttributeVariable(attributeName + "_" + i, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            vertexShaderBuilder.addAttributeVariable(propertySource.getAttributeName(i), 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
         }
 
-        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), attributeName);
+        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), propertySource.getAttributeName());
     }
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String attributeName = propertySource.getAttributeName();
-        String variableName = propertySource.getVariableName();
         for (int i = 0; i < boneWeightCount; i++) {
-            vertexShaderBuilder.addAttributeVariable(attributeName + "_" + i, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
-            if (!vertexShaderBuilder.hasVaryingVariable(variableName + "_" + i)) {
-                vertexShaderBuilder.addVaryingVariable(variableName + "_" + i, "vec2");
-                vertexShaderBuilder.addMainLine(variableName + "_" + i + " = " + attributeName + "_" + i + ";");
+            String attributeName = propertySource.getAttributeName(i);
+            String variableName = propertySource.getVariableName(i);
+            vertexShaderBuilder.addAttributeVariable(attributeName, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {
+                vertexShaderBuilder.addVaryingVariable(variableName, "vec2");
+                vertexShaderBuilder.addMainLine(variableName + " = " + attributeName + ";");
 
                 fragmentShaderBuilder.addVaryingVariable(variableName + "_" + i, "vec2");
             }
         }
 
-        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), variableName);
+        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), propertySource.getAttributeName());
     }
 
     @Override
