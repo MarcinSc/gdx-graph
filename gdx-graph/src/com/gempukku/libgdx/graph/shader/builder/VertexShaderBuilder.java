@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.shader.builder;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
@@ -10,23 +9,23 @@ import com.gempukku.libgdx.graph.util.GdxCompatibilityUtils;
 public class VertexShaderBuilder extends CommonShaderBuilder {
     private final ObjectMap<String, String> attributeComments = new OrderedMap<>();
     private final ObjectMap<String, String> attributeVariables = new OrderedMap<>();
-    // TODO: To be removed
-    private final ObjectMap<String, VertexAttribute> attributeVertexVariables = new OrderedMap<>();
 
     public VertexShaderBuilder(UniformRegistry uniformRegistry) {
         super(uniformRegistry);
     }
 
     public void addAttributeVariable(VertexAttribute vertexAttribute, String type, String comment) {
-        String name = vertexAttribute.alias;
+        addAttributeVariable(vertexAttribute.alias, vertexAttribute.numComponents, type, comment);
+    }
+
+    public void addAttributeVariable(String name, int componentCount, String type, String comment) {
         String existingType = attributeVariables.get(name);
         if (existingType != null && !existingType.equals(type))
             throw new IllegalStateException("Already contains vertex attribute of that name with different type");
         if (existingType == null) {
-            uniformRegistry.registerAttribute(name);
+            uniformRegistry.registerAttribute(name, componentCount);
             attributeVariables.put(name, type);
             attributeComments.put(name, comment);
-            attributeVertexVariables.put(name, vertexAttribute);
         }
     }
 
@@ -57,9 +56,5 @@ public class VertexShaderBuilder extends CommonShaderBuilder {
         appendMain(result);
 
         return result.toString();
-    }
-
-    public VertexAttributes getVertexAttributes() {
-        return new VertexAttributes(attributeVertexVariables.values().toArray().toArray(VertexAttribute.class));
     }
 }

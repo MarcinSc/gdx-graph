@@ -27,6 +27,11 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 4;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }
@@ -55,7 +60,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
         if (data.has("vWrap"))
             textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
 
-        String textureVariableName = "u_property_" + propertySource.getPropertyIndex();
+        String textureVariableName = propertySource.getUniformName();
         String uvTransformVariableName = "u_uvTransform_" + propertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", true,
                 new UniformRegistry.UniformSetter() {
@@ -101,7 +106,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
         if (data.has("vWrap"))
             textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
 
-        String textureVariableName = "u_property_" + propertySource.getPropertyIndex();
+        String textureVariableName = propertySource.getUniformName();
         String uvTransformVariableName = "u_uvTransform_" + propertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
@@ -145,8 +150,8 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
         if (data.has("vWrap"))
             textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
 
-        String textureVariableName = "u_property_" + propertySource.getPropertyIndex();
-        String uvTransformAttributeName = "a_property_" + propertySource.getPropertyIndex();
+        String textureVariableName = propertySource.getUniformName();
+        String uvTransformAttributeName = propertySource.getAttributeName();
         vertexShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -176,9 +181,9 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
         if (data.has("vWrap"))
             textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
 
-        String textureVariableName = "u_property_" + propertySource.getPropertyIndex();
-        String uvTransformAttributeName = "a_property_" + propertySource.getPropertyIndex();
-        String uvTransformVariableName = "v_property_" + propertySource.getPropertyIndex();
+        String textureVariableName = propertySource.getUniformName();
+        String uvTransformAttributeName = propertySource.getAttributeName();
+        String uvTransformVariableName = propertySource.getVariableName();
         fragmentShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override

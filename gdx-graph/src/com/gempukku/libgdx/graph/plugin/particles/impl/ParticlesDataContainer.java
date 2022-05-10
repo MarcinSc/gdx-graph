@@ -3,7 +3,9 @@ package com.gempukku.libgdx.graph.plugin.particles.impl;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.plugin.particles.ParticleUpdater;
 import com.gempukku.libgdx.graph.plugin.particles.ParticlesGraphShader;
@@ -17,6 +19,7 @@ public class ParticlesDataContainer implements Disposable {
     private Object[] particleDataStorage;
     private float[] particlesData;
     private Mesh mesh;
+    private int[] attributeLocations;
 
     private final VertexAttributes vertexAttributes;
     private final ParticleModel particleModel;
@@ -46,13 +49,13 @@ public class ParticlesDataContainer implements Disposable {
 
         for (VertexAttribute vertexAttribute : vertexAttributes) {
             String alias = vertexAttribute.alias;
-            if (alias.equalsIgnoreCase("a_birthTime"))
+            PropertySource propertySource = findPropertyByAttributeName(alias);
+            if (propertySource != null) {
+                attributeToPropertyMap.put(alias, propertySource.getPropertyName());
+            } else if (alias.equalsIgnoreCase("a_birthTime")) {
                 birthTimeOffset = vertexAttribute.offset / 4;
-            else if (alias.equalsIgnoreCase("a_deathTime"))
+            } else if (alias.equalsIgnoreCase("a_deathTime")) {
                 deathTimeOffset = vertexAttribute.offset / 4;
-            else if (alias.startsWith("a_property_")) {
-                int propertyIndex = Integer.parseInt(alias.substring(11));
-                attributeToPropertyMap.put(alias, getPropertyNameByIndex(propertyIndex));
             }
         }
         initBuffers(vertexAttributes);
@@ -60,10 +63,10 @@ public class ParticlesDataContainer implements Disposable {
             particleDataStorage = new Object[numberOfParticles];
     }
 
-    private String getPropertyNameByIndex(int propertyIndex) {
-        for (PropertySource property : properties.values()) {
-            if (property.getPropertyIndex() == propertyIndex)
-                return property.getPropertyName();
+    private PropertySource findPropertyByAttributeName(String attributeName) {
+        for (PropertySource propertySource : properties.values()) {
+            if (attributeName.equals(propertySource.getAttributeName()))
+                return propertySource;
         }
         return null;
     }
@@ -140,8 +143,19 @@ public class ParticlesDataContainer implements Disposable {
 
     public void render(ParticlesGraphShader graphShader, ShaderContext shaderContext, float currentTime) {
         if (currentTime < maxParticleDeath) {
-            graphShader.renderParticles(shaderContext, particleModel, mesh);
+            if (attributeLocations == null)
+                initAttributeLocations(graphShader.getShaderProgram());
+            graphShader.renderParticles(shaderContext, particleModel, mesh, attributeLocations);
         }
+    }
+
+    private void initAttributeLocations(ShaderProgram shaderProgram) {
+        IntArray resultArray = new IntArray();
+        for (VertexAttribute vertexAttribute : vertexAttributes) {
+            resultArray.add(shaderProgram.getAttributeLocation(vertexAttribute.alias));
+        }
+
+        attributeLocations = resultArray.toArray();
     }
 
     @Override

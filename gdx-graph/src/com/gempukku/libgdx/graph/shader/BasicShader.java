@@ -70,12 +70,14 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
         }
     }
 
-    protected static class Attribute {
+    public static class Attribute {
         private final String alias;
+        private final int componentCount;
         private int location = -1;
 
-        public Attribute(String alias) {
+        public Attribute(String alias, int componentCount) {
             this.alias = alias;
+            this.componentCount = componentCount;
         }
 
         private void setLocation(int location) {
@@ -84,6 +86,10 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
 
         public int getLocation() {
             return location;
+        }
+
+        public int getComponentCount() {
+            return componentCount;
         }
     }
 
@@ -200,10 +206,10 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
     }
 
     @Override
-    public void registerAttribute(String alias) {
+    public void registerAttribute(String alias, int componentCount) {
         if (initialized) throw new GdxRuntimeException("Cannot register an uniform after initialization");
         validateNewAttribute(alias);
-        attributes.put(alias, new Attribute(alias));
+        attributes.put(alias, new Attribute(alias, componentCount));
     }
 
     @Override

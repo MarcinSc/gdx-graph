@@ -15,8 +15,6 @@ import com.gempukku.libgdx.graph.plugin.particles.ParticlesGraphShader;
 import com.gempukku.libgdx.graph.plugin.particles.ParticlesShaderConfiguration;
 import com.gempukku.libgdx.graph.plugin.screen.ScreenGraphShader;
 import com.gempukku.libgdx.graph.plugin.screen.ScreenShaderConfiguration;
-import com.gempukku.libgdx.graph.plugin.sprites.SpriteGraphShader;
-import com.gempukku.libgdx.graph.plugin.sprites.SpriteShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -34,34 +32,6 @@ public class GraphShaderBuilder {
             new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ScreenShaderConfiguration()};
     private static final GraphConfiguration[] particleConfigurations = new GraphConfiguration[]{
             new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ParticlesShaderConfiguration()};
-    private static final GraphConfiguration[] spriteConfigurations = new GraphConfiguration[]{
-            new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new SpriteShaderConfiguration()};
-
-    public static SpriteGraphShader buildSpriteShader(String tag, Texture defaultTexture,
-                                                      Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
-                                                      boolean designTime) {
-
-        SpriteGraphShader graphShader = new SpriteGraphShader(tag, defaultTexture);
-
-        VertexShaderBuilder vertexShaderBuilder = new VertexShaderBuilder(graphShader);
-        FragmentShaderBuilder fragmentShaderBuilder = new FragmentShaderBuilder(graphShader);
-
-        initialize(graph, designTime, graphShader, vertexShaderBuilder, fragmentShaderBuilder, spriteConfigurations);
-
-        buildSpriteVertexShader(graph, designTime, graphShader, vertexShaderBuilder, fragmentShaderBuilder);
-        buildSpriteFragmentShader(graph, designTime, graphShader, vertexShaderBuilder, fragmentShaderBuilder);
-
-        String vertexShader = vertexShaderBuilder.buildProgram();
-        String fragmentShader = fragmentShaderBuilder.buildProgram();
-
-        graphShader.setVertexAttributes(vertexShaderBuilder.getVertexAttributes());
-
-        debugShaders("sprite", vertexShader, fragmentShader);
-
-        finalizeShader(graphShader, vertexShader, fragmentShader);
-
-        return graphShader;
-    }
 
     public static ParticlesGraphShader buildParticlesShader(String tag, Texture defaultTexture, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
                                                             boolean designTime) {
@@ -83,8 +53,6 @@ public class GraphShaderBuilder {
 
         String vertexShader = vertexShaderBuilder.buildProgram();
         String fragmentShader = fragmentShaderBuilder.buildProgram();
-
-        graphShader.setVertexAttributes(vertexShaderBuilder.getVertexAttributes());
 
         debugShaders("particles", vertexShader, fragmentShader);
 
@@ -109,8 +77,6 @@ public class GraphShaderBuilder {
         String vertexShader = vertexShaderBuilder.buildProgram();
         String fragmentShader = fragmentShaderBuilder.buildProgram();
 
-        graphShader.setVertexAttributes(vertexShaderBuilder.getVertexAttributes());
-
         debugShaders("screen", vertexShader, fragmentShader);
 
         finalizeShader(graphShader, vertexShader, fragmentShader);
@@ -133,8 +99,6 @@ public class GraphShaderBuilder {
 
         String vertexShader = vertexShaderBuilder.buildProgram();
         String fragmentShader = fragmentShaderBuilder.buildProgram();
-
-        graphShader.setVertexAttributes(vertexShaderBuilder.getVertexAttributes());
 
         debugShaders("color", vertexShader, fragmentShader);
 
@@ -159,8 +123,6 @@ public class GraphShaderBuilder {
 
         String vertexShader = vertexShaderBuilder.buildProgram();
         String fragmentShader = fragmentShaderBuilder.buildProgram();
-
-        graphShader.setVertexAttributes(vertexShaderBuilder.getVertexAttributes());
 
         debugShaders("depth", vertexShader, fragmentShader);
 
@@ -249,35 +211,6 @@ public class GraphShaderBuilder {
         String alphaClip = (alphaClipField != null) ? alphaClipField.getRepresentation() : "0.0";
         applyAlphaDiscard(fragmentShaderBuilder, alphaField, alpha, alphaClipField, alphaClip);
         fragmentShaderBuilder.addMainLine("gl_FragColor = vec4(packFloatToVec3(distance(v_position_world, u_cameraPosition), u_cameraClipping.x, u_cameraClipping.y), 1.0);");
-    }
-
-    private static void buildSpriteFragmentShader(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph, boolean designTime, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
-        ObjectMap<String, ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>> fragmentNodeOutputs = new ObjectMap<>();
-        GraphShaderNodeBuilder.FieldOutput alphaField = getOutput(findInputVertices(graph, "end", "alpha"),
-                designTime, true, graph, graphShader, graphShader, fragmentNodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, spriteConfigurations);
-        String alpha = (alphaField != null) ? alphaField.getRepresentation() : "1.0";
-        GraphShaderNodeBuilder.FieldOutput alphaClipField = getOutput(findInputVertices(graph, "end", "alphaClip"),
-                designTime, true, graph, graphShader, graphShader, fragmentNodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, spriteConfigurations);
-        String alphaClip = (alphaClipField != null) ? alphaClipField.getRepresentation() : "0.0";
-        applyAlphaDiscard(fragmentShaderBuilder, alphaField, alpha, alphaClipField, alphaClip);
-
-        GraphShaderNodeBuilder.FieldOutput colorField = getOutput(findInputVertices(graph, "end", "color"),
-                designTime, true, graph, graphShader, graphShader, fragmentNodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, spriteConfigurations);
-
-        String color;
-        if (colorField == null) {
-            color = "vec4(1.0, 1.0, 1.0, " + alpha + ")";
-        } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector4)) {
-            color = "vec4(" + colorField.getRepresentation() + ".rgb, " + alpha + ")";
-        } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector3)) {
-            color = "vec4(" + colorField.getRepresentation() + ", " + alpha + ")";
-        } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector2)) {
-            color = "vec4(" + colorField.getRepresentation() + ", 0.0, " + alpha + ")";
-        } else {
-            color = "vec4(vec3(" + colorField.getRepresentation() + "), " + alpha + ")";
-        }
-        fragmentShaderBuilder.addMainLine("// End Graph Node");
-        fragmentShaderBuilder.addMainLine("gl_FragColor = " + color + ";");
     }
 
     private static void buildParticlesFragmentShader(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph, boolean designTime, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
@@ -412,24 +345,6 @@ public class GraphShaderBuilder {
             fragmentShaderBuilder.addMainLine("// End Graph Node");
             fragmentShaderBuilder.addMainLine("if (" + alpha + " <= " + alphaClip + ")");
             fragmentShaderBuilder.addMainLine("  discard;");
-        }
-    }
-
-    private static void buildSpriteVertexShader(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph, boolean designTime, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
-        ObjectMap<String, ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>> vertexNodeOutputs = new ObjectMap<>();
-        GraphShaderNodeBuilder.FieldOutput positionField = getOutput(findInputVertices(graph, "end", "position"),
-                designTime, false, graph, graphShader, graphShader, vertexNodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, spriteConfigurations);
-        vertexShaderBuilder.addMainLine("// End Graph Node");
-
-        String positionType = graph.getNodeById("end").getData().getString("positionType", "World space");
-        if (positionType.equals("World space")) {
-            vertexShaderBuilder.addUniformVariable("u_projViewTrans", "mat4", true, UniformSetters.projViewTrans,
-                    "Project view transformation");
-            vertexShaderBuilder.addMainLine("gl_Position = u_projViewTrans * vec4(" + positionField.getRepresentation() + ", 1.0);");
-        } else if (positionType.equals("Screen space")) {
-            vertexShaderBuilder.addUniformVariable("u_viewportSize", "vec2", true, UniformSetters.viewportSize,
-                    "Viewport size");
-            vertexShaderBuilder.addMainLine("gl_Position = vec4((2.0 * " + positionField.getRepresentation() + " / vec3(u_viewportSize, 1.0)) - vec3(1.0, 1.0, 0.0), 1.0);");
         }
     }
 

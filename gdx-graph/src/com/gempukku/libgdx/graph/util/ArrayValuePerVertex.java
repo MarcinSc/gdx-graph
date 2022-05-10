@@ -1,6 +1,4 @@
-package com.gempukku.libgdx.graph.plugin.sprites;
-
-import com.gempukku.libgdx.graph.util.ValuePerVertex;
+package com.gempukku.libgdx.graph.util;
 
 public final class ArrayValuePerVertex<T extends Object> implements ValuePerVertex {
     private final T[] vertexValues;

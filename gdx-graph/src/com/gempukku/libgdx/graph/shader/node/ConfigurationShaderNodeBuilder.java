@@ -79,7 +79,7 @@ public abstract class ConfigurationShaderNodeBuilder implements GraphShaderNodeB
         else
             throw new IllegalArgumentException("Unable to figure out variable type from attribute with numComponents: " + attribute.numComponents);
 
-        vertexShaderBuilder.addAttributeVariable(attribute, type, comment);
+        vertexShaderBuilder.addAttributeVariable(attribute.alias, attribute.numComponents, type, comment);
         if (!vertexShaderBuilder.hasVaryingVariable(varyingName)) {
             vertexShaderBuilder.addVaryingVariable(varyingName, type);
             vertexShaderBuilder.addMainLine(varyingName + " = " + attributeValue + ";");

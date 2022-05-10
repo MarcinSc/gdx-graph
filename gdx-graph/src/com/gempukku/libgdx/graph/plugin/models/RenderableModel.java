@@ -29,18 +29,16 @@ public interface RenderableModel {
     /**
      * Should return a world transform to use with the given 'tag' (shader).
      *
-     * @param tag
      * @return
      */
-    Matrix4 getWorldTransform(String tag);
+    Matrix4 getWorldTransform();
 
     /**
      * Should return properties of the model for a given 'tag' (shader).
      *
-     * @param tag
      * @return
      */
-    PropertyContainer getPropertyContainer(String tag);
+    PropertyContainer getPropertyContainer();
 
     void prepareToRender(ShaderContext shaderContext);
 

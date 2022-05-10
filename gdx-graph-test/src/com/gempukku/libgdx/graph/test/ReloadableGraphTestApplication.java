@@ -18,7 +18,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitia
 import com.gempukku.libgdx.graph.plugin.models.ModelsPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.particles.ParticlesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.screen.ScreenPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.sprites.SpritesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
 import com.gempukku.libgdx.graph.test.scenes.ParticlesShaderTestScene;
@@ -46,7 +45,6 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         RenderCallbackPluginRuntimeInitializer.register();
         UIPluginRuntimeInitializer.register();
         ParticlesPluginRuntimeInitializer.register();
-        SpritesPluginRuntimeInitializer.register();
         ScreenPluginRuntimeInitializer.register();
         ModelsPluginRuntimeInitializer.register();
         BoneAnimationPluginRuntimeInitializer.register();
@@ -72,12 +70,6 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode16Scene(),
                 new Episode17Scene(),
                 new Episode18Scene(),
-                new Episode19Scene(),
-                new Episode20Scene(),
-                new Episode21Scene(),
-                new Episode22Scene(),
-                new Episode23Scene(),
-                new Episode24Scene(),
                 new SpriteShaderTestScene(),
                 new ParticlesShaderTestScene(),
                 new ShadowShaderTestScene()

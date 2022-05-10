@@ -1,5 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.particles.impl;
 
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -8,6 +11,7 @@ import com.gempukku.libgdx.graph.plugin.RuntimePipelinePlugin;
 import com.gempukku.libgdx.graph.plugin.particles.*;
 import com.gempukku.libgdx.graph.plugin.particles.model.ParticleModel;
 import com.gempukku.libgdx.graph.plugin.particles.model.QuadParticleModel;
+import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
@@ -25,7 +29,16 @@ public class GraphParticleEffectsImpl implements GraphParticleEffects, RuntimePi
     public void registerEffect(String tag, ParticlesGraphShader shader) {
         if (effectsConfiguration.containsKey(tag))
             throw new IllegalStateException("Duplicate particle effect with tag - " + tag);
-        effectsConfiguration.put(tag, new ParticleEffectConfiguration(shader.getVertexAttributes(), shader.getProperties(),
+
+        Array<VertexAttribute> vertexAttributeArray = new Array<>(VertexAttribute.class);
+        for (ObjectMap.Entry<String, BasicShader.Attribute> attribute : shader.getAttributes()) {
+            String attributeName = attribute.key;
+            vertexAttributeArray.add(new VertexAttribute(1024, attribute.value.getComponentCount(), attributeName));
+        }
+
+        VertexAttributes vertexAttributes = new VertexAttributes(vertexAttributeArray.toArray());
+
+        effectsConfiguration.put(tag, new ParticleEffectConfiguration(vertexAttributes, shader.getProperties(),
                 shader.getMaxNumberOfParticles()));
         globalProperties.put(tag, new MapWritablePropertyContainer());
         effectsByTag.put(tag, new ObjectSet<GraphParticleEffectImpl>());

@@ -25,6 +25,11 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 4;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }
@@ -41,7 +46,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), true,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -56,7 +61,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -71,7 +76,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
 
         vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType(), "Vector4 property - " + propertySource.getPropertyName());
 
@@ -80,8 +85,8 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
-        String variableName = "v_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
+        String variableName = propertySource.getVariableName();
 
         vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, attributeName), getShaderType(), "Vector4 property - " + propertySource.getPropertyName());
         if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {

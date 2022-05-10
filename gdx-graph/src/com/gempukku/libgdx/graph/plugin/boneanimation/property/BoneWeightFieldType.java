@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.boneanimation.property;
 
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.BasicShader;
@@ -56,6 +55,11 @@ public class BoneWeightFieldType implements ShaderFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 2 * maxBoneWeightCount;
+    }
+
+    @Override
     public Object convertFromJson(JsonValue data) {
         return null;
     }
@@ -67,7 +71,7 @@ public class BoneWeightFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         for (int i = 0; i < boneWeightCount; i++) {
             final int finalI = i;
             commonShaderBuilder.addUniformVariable(variableName + "_" + i, "vec2", true,
@@ -87,7 +91,7 @@ public class BoneWeightFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         for (int i = 0; i < boneWeightCount; i++) {
             final int finalI = i;
             commonShaderBuilder.addUniformVariable(variableName + "_" + i, "vec2", false,
@@ -107,9 +111,9 @@ public class BoneWeightFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
         for (int i = 0; i < boneWeightCount; i++) {
-            vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, attributeName + "_" + i), "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            vertexShaderBuilder.addAttributeVariable(attributeName + "_" + i, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
         }
 
         return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), attributeName);
@@ -118,10 +122,10 @@ public class BoneWeightFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
         int boneWeightCount = getBoneWeightCount(propertySource);
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
-        String variableName = "v_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
+        String variableName = propertySource.getVariableName();
         for (int i = 0; i < boneWeightCount; i++) {
-            vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, attributeName + "_" + i), "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            vertexShaderBuilder.addAttributeVariable(attributeName + "_" + i, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
             if (!vertexShaderBuilder.hasVaryingVariable(variableName + "_" + i)) {
                 vertexShaderBuilder.addVaryingVariable(variableName + "_" + i, "vec2");
                 vertexShaderBuilder.addMainLine(variableName + "_" + i + " = " + attributeName + "_" + i + ";");

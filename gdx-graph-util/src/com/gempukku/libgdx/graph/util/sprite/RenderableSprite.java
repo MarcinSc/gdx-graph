@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.plugin.sprites;
+package com.gempukku.libgdx.graph.util.sprite;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
@@ -24,10 +24,9 @@ public interface RenderableSprite {
     boolean isRendered(Camera camera);
 
     /**
-     * Should return properties of the sprite for a given 'tag' (shader).
+     * Should return properties of the sprite.
      *
-     * @param tag
      * @return
      */
-    PropertyContainer getPropertyContainer(String tag);
+    PropertyContainer getPropertyContainer();
 }

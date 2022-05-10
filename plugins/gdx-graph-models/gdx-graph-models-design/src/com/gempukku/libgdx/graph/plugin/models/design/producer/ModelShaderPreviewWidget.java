@@ -132,7 +132,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
             timeKeeper = new DefaultTimeKeeper();
             graphShader = GraphShaderBuilder.buildModelShader("Test", WhitePixel.sharedInstance.texture, graph, true);
             frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
-            createModel(graphShader.getVertexAttributes());
+            createModel();
 
             MapWritablePropertyContainer globalPropertyContainer = new MapWritablePropertyContainer();
             for (GraphProperty property : graph.getProperties()) {
@@ -174,7 +174,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         }
     }
 
-    private void createModel(VertexAttributes vertexAttributes) {
+    private void createModel() {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
 
@@ -270,7 +270,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         }
 
         @Override
-        public PropertyContainer getPropertyContainer(String tag) {
+        public PropertyContainer getPropertyContainer() {
             return localPropertyContainer;
         }
 
@@ -280,7 +280,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         }
 
         @Override
-        public Matrix4 getWorldTransform(String tag) {
+        public Matrix4 getWorldTransform() {
             return transform;
         }
 

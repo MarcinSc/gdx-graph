@@ -56,6 +56,11 @@ public class BoneTransformFieldType implements ShaderFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 16 * maxBoneCount;
+    }
+
+    @Override
     public Object convertFromJson(JsonValue data) {
         return null;
     }
@@ -63,7 +68,7 @@ public class BoneTransformFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
         int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getMaxBoneCount();
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", true,
                 new GlobalBonesUniformSetter(boneCount, propertySource), "Skeletal bones - " + propertySource.getPropertyName());
 
@@ -73,7 +78,7 @@ public class BoneTransformFieldType implements ShaderFieldType {
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
         int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getMaxBoneCount();
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", false,
                 new LocalBonesUniformSetter(boneCount, propertySource), "Skeletal bones");
 

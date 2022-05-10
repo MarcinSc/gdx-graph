@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.particles.particle;
 
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -22,8 +21,8 @@ public class ParticleLifePercentageShaderNodeBuilder extends ConfigurationShader
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 1, "a_birthTime"), "float", "Particle birth-time");
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(2048, 1, "a_deathTime"), "float", "Particle death-time");
+        vertexShaderBuilder.addAttributeVariable("a_birthTime", 1, "float", "Particle birth-time");
+        vertexShaderBuilder.addAttributeVariable("a_deathTime", 1, "float", "Particle death-time");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
 
@@ -36,8 +35,8 @@ public class ParticleLifePercentageShaderNodeBuilder extends ConfigurationShader
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 1, "a_birthTime"), "float", "Particle birth-time");
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(2048, 1, "a_deathTime"), "float", "Particle death-time");
+        vertexShaderBuilder.addAttributeVariable("a_birthTime", 1, "float", "Particle birth-time");
+        vertexShaderBuilder.addAttributeVariable("a_deathTime", 1, "float", "Particle death-time");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
 

@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.field;
 
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.FieldType;
@@ -28,6 +27,11 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
+    public int getNumberOfComponents() {
+        return 2;
+    }
+
+    @Override
     public Object convert(Object value) {
         return value;
     }
@@ -51,7 +55,7 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), true,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -66,7 +70,7 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = "u_property_" + propertySource.getPropertyIndex();
+        String variableName = propertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -81,19 +85,19 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
 
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, attributeName), getShaderType(), "Vector2 property - " + propertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(attributeName, 2, getShaderType(), "Vector2 property - " + propertySource.getPropertyName());
 
         return new DefaultFieldOutput(getName(), attributeName);
     }
 
     @Override
     public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = "a_property_" + propertySource.getPropertyIndex();
-        String variableName = "v_property_" + propertySource.getPropertyIndex();
+        String attributeName = propertySource.getAttributeName();
+        String variableName = propertySource.getVariableName();
 
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, attributeName), getShaderType(), "Vector2 property - " + propertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(attributeName, 2, getShaderType(), "Vector2 property - " + propertySource.getPropertyName());
         if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {
             vertexShaderBuilder.addVaryingVariable(variableName, getShaderType());
             vertexShaderBuilder.addMainLine(variableName + " = " + attributeName + ";");

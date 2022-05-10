@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader;
 
 public interface UniformRegistry {
-    void registerAttribute(final String alias);
+    void registerAttribute(final String alias, int componentCount);
 
     void registerGlobalUniform(final String alias, final UniformSetter setter);
 

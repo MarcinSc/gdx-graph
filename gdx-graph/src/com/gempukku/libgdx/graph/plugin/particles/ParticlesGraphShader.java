@@ -21,14 +21,13 @@ public class ParticlesGraphShader extends GraphShader {
         this.maxNumberOfParticles = maxNumberOfParticles;
     }
 
-    public void renderParticles(ShaderContext shaderContext, ParticleModel particleModel, Mesh mesh) {
+    public void renderParticles(ShaderContext shaderContext, ParticleModel particleModel, Mesh mesh, int[] attributeLocation) {
         for (Uniform uniform : localUniforms.values()) {
             uniform.getSetter().set(this, uniform.getLocation(), shaderContext);
         }
         for (StructArrayUniform uniform : localStructArrayUniforms.values()) {
             uniform.getSetter().set(this, uniform.getStartIndex(), uniform.getFieldOffsets(), uniform.getSize(), shaderContext);
         }
-        int[] attributeLocations = getAttributeLocations();
-        particleModel.renderMesh(program, mesh, attributeLocations);
+        particleModel.renderMesh(program, mesh, attributeLocation);
     }
 }

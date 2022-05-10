@@ -57,7 +57,6 @@ project(":desktop") {
         // Plugins
         implementation project(":gdx-graph-callback-design")
         implementation project(":gdx-graph-particles-design")
-        implementation project(":gdx-graph-sprites-design")
         implementation project(":gdx-graph-screen-design")
         implementation project(":gdx-graph-models-design")
         implementation project(":gdx-graph-boneanimation-design")
@@ -110,14 +109,6 @@ project(":gdx-graph") {
 }
 
 project(":gdx-graph-particles-design") {
-    apply plugin: "java-library"
-
-    dependencies {
-        implementation project(":core")
-    }
-}
-
-project(":gdx-graph-sprites-design") {
     apply plugin: "java-library"
 
     dependencies {

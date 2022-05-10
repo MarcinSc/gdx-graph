@@ -152,7 +152,7 @@ public class MaterialModelInstanceModelAdapter {
         }
 
         @Override
-        public PropertyContainer getPropertyContainer(String tag) {
+        public PropertyContainer getPropertyContainer() {
             return this;
         }
 
@@ -165,11 +165,11 @@ public class MaterialModelInstanceModelAdapter {
 
         @Override
         public Vector3 getPosition() {
-            return getWorldTransform(null).getTranslation(tmpVector);
+            return getWorldTransform().getTranslation(tmpVector);
         }
 
         @Override
-        public Matrix4 getWorldTransform(String tag) {
+        public Matrix4 getWorldTransform() {
             if (nodePart.bones == null && modelInstance.transform != null)
                 worldTransform.set(modelInstance.transform).mul(node.globalTransform);
             else if (modelInstance.transform != null)

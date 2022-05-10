@@ -24,6 +24,21 @@ public class PropertySource {
         this.array = array;
     }
 
+    public String getAttributeName() {
+        if (location == PropertyLocation.Attribute) {
+            return "a_property_" + propertyIndex;
+        }
+        return null;
+    }
+
+    public String getVariableName() {
+        return "v_property_" + propertyIndex;
+    }
+
+    public String getUniformName() {
+        return "u_property_" + propertyIndex;
+    }
+
     public boolean isArray() {
         return array;
     }

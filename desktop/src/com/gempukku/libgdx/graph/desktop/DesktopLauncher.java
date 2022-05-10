@@ -11,7 +11,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.design.Lighting3DPluginDesign
 import com.gempukku.libgdx.graph.plugin.models.design.ModelsPluginDesignInitializer;
 import com.gempukku.libgdx.graph.plugin.particles.design.ParticlesPluginDesignInitializer;
 import com.gempukku.libgdx.graph.plugin.screen.design.ScreenPluginDesignInitializer;
-import com.gempukku.libgdx.graph.plugin.sprites.design.SpritesPluginDesignInitializer;
 import com.gempukku.libgdx.graph.ui.LibgdxGraphApplication;
 import com.gempukku.libgdx.graph.ui.plugin.PluginDefinition;
 import com.gempukku.libgdx.graph.ui.plugin.PluginPreferences;
@@ -46,9 +45,6 @@ public class DesktopLauncher {
         PluginRegistry.addPluginDefinition(
                 new PluginDefinition("internal", ScreenPluginDesignInitializer.class,
                         "Screen shaders", "latest", false, false));
-        PluginRegistry.addPluginDefinition(
-                new PluginDefinition("internal", SpritesPluginDesignInitializer.class,
-                        "Sprite shaders", "latest", false, false));
         PluginRegistry.addPluginDefinition(
                 new PluginDefinition("internal", ParticlesPluginDesignInitializer.class,
                         "Particle shaders", "latest", false, false));

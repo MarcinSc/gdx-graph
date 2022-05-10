@@ -167,7 +167,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             timeKeeper = new DefaultTimeKeeper();
             graphShader = GraphShaderBuilder.buildParticlesShader("Test", WhitePixel.sharedInstance.texture, graph, true);
             frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
-            createModel(graphShader.getVertexAttributes());
+            createModel();
 
             shaderContext.setTimeProvider(timeKeeper);
             shaderContext.setGlobalPropertyContainer(
@@ -221,9 +221,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         }
     }
 
-    private void createModel(VertexAttributes vertexAttributes) {
+    private void createModel() {
         renderableParticleEffect = new CommonPropertiesRenderableParticleEffect(createGenerator());
-        particleEffect = new GraphParticleEffectImpl("tag", new ParticleEffectConfiguration(vertexAttributes, graphShader.getProperties(),
+        particleEffect = new GraphParticleEffectImpl("tag", new ParticleEffectConfiguration(null, graphShader.getProperties(),
                 graphShader.getMaxNumberOfParticles()),
                 renderableParticleEffect, new QuadParticleModel(), false);
         if (running)
