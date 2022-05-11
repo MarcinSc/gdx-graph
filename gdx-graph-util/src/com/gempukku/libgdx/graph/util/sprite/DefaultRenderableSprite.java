@@ -2,15 +2,15 @@ package com.gempukku.libgdx.graph.util.sprite;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class DefaultRenderableSprite implements RenderableSprite {
     private final Vector3 position = new Vector3();
     private CullingTest cullingTest;
-    private final PropertyContainer propertyContainer;
+    private final WritablePropertyContainer propertyContainer;
 
-    public DefaultRenderableSprite(PropertyContainer propertyContainer) {
+    public DefaultRenderableSprite(WritablePropertyContainer propertyContainer) {
         this.propertyContainer = propertyContainer;
     }
 
@@ -29,7 +29,7 @@ public class DefaultRenderableSprite implements RenderableSprite {
     }
 
     @Override
-    public PropertyContainer getPropertyContainer() {
+    public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
     }
 }
