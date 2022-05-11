@@ -9,44 +9,37 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntArray;
 import com.gempukku.libgdx.graph.data.Graph;
 import com.gempukku.libgdx.graph.data.GraphConnection;
 import com.gempukku.libgdx.graph.data.GraphNode;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 
 public class ModelShaderPreviewWidget extends Widget implements Disposable {
     public enum ShaderPreviewModel {
-        Sphere, Rectangle
+        Sphere, Rectangle;
     }
 
+    private Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph;
     private boolean shaderInitialized;
     private int width;
     private int height;
@@ -55,10 +48,8 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     private GraphShader graphShader;
     private OpenGLContext renderContext;
 
-    private Model rectangleModel;
-    private RenderableModel rectangleShaderModel;
-    private Model sphereModel;
-    private RenderableModel sphereShaderModel;
+    private MeshBasedRenderableModel rectangleShaderModel;
+    private MeshBasedRenderableModel sphereShaderModel;
 
     private Camera camera;
     private DefaultTimeKeeper timeKeeper;
@@ -66,7 +57,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     private ShaderContextImpl shaderContext;
     private ShaderPreviewModel model = ShaderPreviewModel.Sphere;
 
-    private MapWritablePropertyContainer localPropertyContainer;
+    private final MapWritablePropertyContainer localPropertyContainer;
 
     public ModelShaderPreviewWidget(int width, int height) {
         this.width = width;
@@ -103,6 +94,34 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         shaderContext.setRenderWidth(width);
         shaderContext.setRenderHeight(height);
         shaderContext.setColorTexture(PatternTextures.sharedInstance.texture);
+
+        localPropertyContainer = new MapWritablePropertyContainer();
+
+        createModelPropertyContainers();
+    }
+
+    private void createModelPropertyContainers() {
+        ModelBuilder modelBuilder = new ModelBuilder();
+        Material material = new Material();
+
+        Model rectangleModel = modelBuilder.createRect(
+                0, -0.5f, -0.5f,
+                0, -0.5f, 0.5f,
+                0, 0.5f, 0.5f,
+                0, 0.5f, -0.5f,
+                1, 0, 0,
+                material,
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
+        float sphereDiameter = 0.8f;
+        Model sphereModel = modelBuilder.createSphere(sphereDiameter, sphereDiameter, sphereDiameter, 50, 50,
+                material,
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
+
+        rectangleShaderModel = new MeshBasedRenderableModel(rectangleModel.meshes.get(0));
+        sphereShaderModel = new MeshBasedRenderableModel(sphereModel.meshes.get(0));
+
+        rectangleModel.dispose();
+        sphereModel.dispose();
     }
 
     public void setModel(ShaderPreviewModel model) {
@@ -114,6 +133,8 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         super.setStage(stage);
         if (stage == null && shaderInitialized) {
             destroyShader();
+        } else if (stage != null && !shaderInitialized && graph != null) {
+            createShader(graph);
         }
     }
 
@@ -132,7 +153,6 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
             timeKeeper = new DefaultTimeKeeper();
             graphShader = GraphShaderBuilder.buildModelShader("Test", WhitePixel.sharedInstance.texture, graph, true);
             frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
-            createModel();
 
             MapWritablePropertyContainer globalPropertyContainer = new MapWritablePropertyContainer();
             for (GraphProperty property : graph.getProperties()) {
@@ -143,7 +163,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
             }
             shaderContext.setGlobalPropertyContainer(globalPropertyContainer);
 
-            localPropertyContainer = new MapWritablePropertyContainer();
+            localPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {
                 if (property.getLocation() == PropertyLocation.Uniform) {
                     ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
@@ -166,6 +186,9 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
 
             shaderContext.setTimeProvider(timeKeeper);
 
+            rectangleShaderModel.updateModel(graphShader.getProperties(), localPropertyContainer);
+            sphereShaderModel.updateModel(graphShader.getProperties(), localPropertyContainer);
+
             shaderInitialized = true;
         } catch (Exception exp) {
             exp.printStackTrace();
@@ -174,29 +197,7 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         }
     }
 
-    private void createModel() {
-        ModelBuilder modelBuilder = new ModelBuilder();
-        Material material = new Material();
-
-        rectangleModel = modelBuilder.createRect(
-                0, -0.5f, -0.5f,
-                0, -0.5f, 0.5f,
-                0, 0.5f, 0.5f,
-                0, 0.5f, -0.5f,
-                1, 0, 0,
-                material,
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-        rectangleShaderModel = new SimpleRenderableModel(rectangleModel);
-        float sphereDiameter = 0.8f;
-        sphereModel = modelBuilder.createSphere(sphereDiameter, sphereDiameter, sphereDiameter, 50, 50,
-                material,
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-        sphereShaderModel = new SimpleRenderableModel(sphereModel);
-    }
-
     private void destroyShader() {
-        sphereModel.dispose();
-        rectangleModel.dispose();
         frameBuffer.dispose();
         frameBuffer = null;
         graphShader.dispose();
@@ -207,6 +208,8 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     public void dispose() {
         if (shaderInitialized)
             destroyShader();
+        rectangleShaderModel.dispose();
+        sphereShaderModel.dispose();
     }
 
     @Override
@@ -249,6 +252,12 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     }
 
     public void graphChanged(boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
+        if (hasErrors) {
+            this.graph = null;
+        } else {
+            this.graph = graph;
+        }
+
         if (hasErrors && shaderInitialized) {
             destroyShader();
         } else if (!hasErrors && !shaderInitialized) {
@@ -256,82 +265,6 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
         } else if (!hasErrors && shaderInitialized) {
             destroyShader();
             createShader(graph);
-        }
-    }
-
-    private class SimpleRenderableModel implements RenderableModel {
-        private Model model;
-        private Vector3 position = new Vector3();
-        private Matrix4 transform = new Matrix4();
-        private int[] attributeLocations;
-
-        public SimpleRenderableModel(Model model) {
-            this.model = model;
-        }
-
-        @Override
-        public PropertyContainer getPropertyContainer() {
-            return localPropertyContainer;
-        }
-
-        @Override
-        public Vector3 getPosition() {
-            return position;
-        }
-
-        @Override
-        public Matrix4 getWorldTransform() {
-            return transform;
-        }
-
-        @Override
-        public boolean isRendered(Camera camera) {
-            return true;
-        }
-
-        @Override
-        public void prepareToRender(ShaderContext shaderContext) {
-
-        }
-
-        @Override
-        public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-            Mesh mesh = model.meshes.get(0);
-            int[] attributeLocations = getAttributeLocations(mesh, propertyToLocationMapping);
-            mesh.bind(shaderProgram, attributeLocations);
-            mesh.render(shaderProgram, GL20.GL_TRIANGLES);
-            mesh.unbind(shaderProgram, attributeLocations);
-        }
-
-        private int[] getAttributeLocations(Mesh mesh, IntMapping<String> propertyLocationMapping) {
-            if (attributeLocations == null) {
-                VertexAttributes attributes = mesh.getVertexAttributes();
-                IntArray result = new IntArray();
-                for (int i = 0; i < attributes.size(); i++) {
-                    final VertexAttribute vertexAttribute = attributes.get(i);
-                    result.add(propertyLocationMapping.map(getAttributeName(vertexAttribute.alias)));
-                }
-                attributeLocations = result.shrink();
-            }
-            return attributeLocations;
-        }
-
-        private String getAttributeName(String alias) {
-            switch (alias) {
-                case ShaderProgram.POSITION_ATTRIBUTE:
-                    return "Position";
-                case ShaderProgram.NORMAL_ATTRIBUTE:
-                    return "Normal";
-                case ShaderProgram.BINORMAL_ATTRIBUTE:
-                    return "BiNormal";
-                case ShaderProgram.TANGENT_ATTRIBUTE:
-                    return "Tangent";
-                case ShaderProgram.COLOR_ATTRIBUTE:
-                    return "Color";
-                case ShaderProgram.TEXCOORD_ATTRIBUTE + "0":
-                    return "UV";
-            }
-            return "";
         }
     }
 }

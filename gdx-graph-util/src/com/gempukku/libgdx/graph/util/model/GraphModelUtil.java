@@ -17,11 +17,7 @@ public class GraphModelUtil {
     private GraphModelUtil() {
     }
 
-    public static VertexAttributes getShaderVertexAttributes(GraphModels graphModels, String tag) {
-        ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
-        if (shaderProperties == null)
-            throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
-
+    public static VertexAttributes getVertexAttributes(ObjectMap<String, PropertySource> shaderProperties) {
         Array<VertexAttribute> vertexAttributeArray = new Array<>(VertexAttribute.class);
         for (ObjectMap.Entry<String, PropertySource> shaderProperty : shaderProperties) {
             PropertySource propertySource = shaderProperty.value;
@@ -42,12 +38,25 @@ public class GraphModelUtil {
         return new VertexAttributes(vertexAttributeArray.toArray());
     }
 
+    public static VertexAttributes getShaderVertexAttributes(GraphModels graphModels, String tag) {
+        ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
+        if (shaderProperties == null)
+            throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
+
+        return getVertexAttributes(shaderProperties);
+    }
+
     public static ObjectMap<VertexAttribute, PropertySource> getPropertySourceMap(GraphModels graphModels, String tag,
                                                                                   VertexAttributes vertexAttributes) {
         ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
         if (shaderProperties == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
+        return getPropertySourceMap(vertexAttributes, shaderProperties);
+    }
+
+    public static ObjectMap<VertexAttribute, PropertySource> getPropertySourceMap(VertexAttributes vertexAttributes,
+                                                                                  ObjectMap<String, PropertySource> shaderProperties) {
         ObjectMap<VertexAttribute, PropertySource> result = new ObjectMap<>();
 
         for (VertexAttribute vertexAttribute : vertexAttributes) {

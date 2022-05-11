@@ -8,6 +8,10 @@ public class HierarchicalPropertyContainer implements WritablePropertyContainer 
     private PropertyContainer parent;
     private ObjectMap<String, Object> childValues = new ObjectMap<>();
 
+    public HierarchicalPropertyContainer() {
+
+    }
+
     public HierarchicalPropertyContainer(PropertyContainer parent) {
         this.parent = parent;
     }
@@ -16,13 +20,20 @@ public class HierarchicalPropertyContainer implements WritablePropertyContainer 
         return parent;
     }
 
+    public void setParent(PropertyContainer parent) {
+        this.parent = parent;
+    }
+
     @Override
     public Object getValue(String name) {
         Object result = childValues.get(name);
         if (result != null)
             return result;
 
-        return parent.getValue(name);
+        if (parent != null)
+            return parent.getValue(name);
+
+        return null;
     }
 
     @Override

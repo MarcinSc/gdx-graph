@@ -115,6 +115,8 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
             if (propertySource.getPropertyLocation() != PropertyLocation.Attribute)
                 return -1;
             Attribute attribute = attributes.get(propertySource.getAttributeName());
+            if (attribute == null)
+                return -1;
             return attribute.getLocation();
         }
     }
