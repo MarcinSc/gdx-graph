@@ -15,6 +15,8 @@ import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRender
 
 public class BasicSpriteBatchModel implements SpriteBatchModel {
     private SpriteRenderableModel delegate;
+    private GraphModels graphModels;
+    private String tag;
 
     public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag) {
@@ -24,6 +26,9 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
     public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag,
                                  WritablePropertyContainer propertyContainer) {
+        this.graphModels = graphModels;
+        this.tag = tag;
+
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
@@ -79,6 +84,7 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
 
     @Override
     public void dispose() {
+        graphModels.removeModel(tag, delegate);
         delegate.dispose();
     }
 }
