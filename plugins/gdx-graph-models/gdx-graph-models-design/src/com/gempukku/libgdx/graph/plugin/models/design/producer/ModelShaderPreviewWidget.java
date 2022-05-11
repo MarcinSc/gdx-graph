@@ -181,6 +181,22 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
                             localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
                         }
                     }
+                } else if (property.getLocation() == PropertyLocation.Attribute) {
+                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
+                    Object value = propertyType.convertFromJson(property.getData());
+                    if (propertyType.isTexture()) {
+                        if (value != null) {
+                            try {
+                                Texture texture = new Texture(Gdx.files.absolute((String) value));
+                                graphShader.addManagedResource(texture);
+                                localPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
+                            } catch (Exception exp) {
+                                localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                            }
+                        } else {
+                            localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                        }
+                    }
                 }
             }
 
