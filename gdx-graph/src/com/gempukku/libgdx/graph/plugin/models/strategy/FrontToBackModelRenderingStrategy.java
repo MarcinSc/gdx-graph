@@ -2,26 +2,38 @@ package com.gempukku.libgdx.graph.plugin.models.strategy;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.plugin.models.GraphModel;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 
 public class FrontToBackModelRenderingStrategy implements ModelRenderingStrategy {
-    private final Array<GraphModel> orderingArray = new Array<>();
+    private static final Pool<ModelWithTag> pool = Pools.get(ModelWithTag.class);
+    private final Array<ModelWithTag> orderingArray = new Array<>();
     private final DistanceModelSorter modelSorter = new DistanceModelSorter(DistanceModelSorter.Order.Front_To_Back);
 
     @Override
-    public void processModels(GraphModelsImpl models, Array<String> tags, Camera camera, ModelRenderingStrategy.StrategyCallback callback) {
+    public void processModels(GraphModelsImpl models, Array<String> tags, Camera camera, StrategyCallback callback) {
         callback.begin();
-        orderingArray.clear();
+        clearSortingArray();
         for (String tag : tags) {
-            for (GraphModel model : models.getModels(tag))
-                if (model.getRenderableModel().isRendered(camera))
-                    orderingArray.add(model);
+            for (RenderableModel model : models.getModels(tag))
+                if (model.isRendered(camera)) {
+                    ModelWithTag modelWithTag = pool.obtain();
+                    modelWithTag.setTag(tag);
+                    modelWithTag.setRenderableModel(model);
+                    orderingArray.add(modelWithTag);
+                }
         }
         modelSorter.sort(camera.position, orderingArray);
-        for (GraphModel graphModel : orderingArray) {
-            callback.process(graphModel.getRenderableModel(), graphModel.getTag());
+        for (ModelWithTag model : orderingArray) {
+            callback.process(model.getRenderableModel(), model.getTag());
         }
         callback.end();
+    }
+
+    private void clearSortingArray() {
+        pool.freeAll(orderingArray);
+        orderingArray.clear();
     }
 }

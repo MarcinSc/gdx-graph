@@ -2,26 +2,38 @@ package com.gempukku.libgdx.graph.plugin.models.strategy;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.plugin.models.GraphModel;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 
 public class ShaderFrontToBackModelRenderingStrategy implements ModelRenderingStrategy {
-    private final Array<GraphModel> orderingArray = new Array<>();
+    private static final Pool<ModelWithTag> pool = Pools.get(ModelWithTag.class);
+    private final Array<ModelWithTag> orderingArray = new Array<>();
     private final DistanceModelSorter modelSorter = new DistanceModelSorter(DistanceModelSorter.Order.Front_To_Back);
 
     @Override
     public void processModels(GraphModelsImpl models, Array<String> tags, Camera camera, StrategyCallback callback) {
         callback.begin();
         for (String tag : tags) {
-            orderingArray.clear();
-            for (GraphModel model : models.getModels(tag))
-                if (model.getRenderableModel().isRendered(camera))
-                    orderingArray.add(model);
+            clearSortingArray();
+            for (RenderableModel model : models.getModels(tag))
+                if (model.isRendered(camera)) {
+                    ModelWithTag modelWithTag = pool.obtain();
+                    modelWithTag.setTag(tag);
+                    modelWithTag.setRenderableModel(model);
+                    orderingArray.add(modelWithTag);
+                }
             modelSorter.sort(camera.position, orderingArray);
-            for (GraphModel graphModel : orderingArray) {
-                callback.process(graphModel.getRenderableModel(), tag);
+            for (ModelWithTag model : orderingArray) {
+                callback.process(model.getRenderableModel(), model.getTag());
             }
         }
         callback.end();
+    }
+
+    private void clearSortingArray() {
+        pool.freeAll(orderingArray);
+        orderingArray.clear();
     }
 }

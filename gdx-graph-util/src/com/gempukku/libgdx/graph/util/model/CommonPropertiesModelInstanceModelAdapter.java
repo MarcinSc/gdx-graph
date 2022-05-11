@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.GraphModel;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
@@ -26,7 +25,7 @@ import com.gempukku.libgdx.graph.util.culling.CullingTest;
 public class CommonPropertiesModelInstanceModelAdapter {
     private ModelInstance modelInstance;
     private GraphModels graphModels;
-    private ObjectMap<String, ObjectSet<GraphModel>> graphModelsByTag = new ObjectMap<>();
+    private ObjectMap<String, ObjectSet<RenderableModel>> graphModelsByTag = new ObjectMap<>();
     private WritablePropertyContainer propertyContainer;
     private CullingTest cullingTest;
 
@@ -52,7 +51,7 @@ public class CommonPropertiesModelInstanceModelAdapter {
         if (graphModelsByTag.containsKey(tag))
             throw new IllegalArgumentException("This model instance is already registered for this tag");
 
-        ObjectSet<GraphModel> models = new ObjectSet<>();
+        ObjectSet<RenderableModel> models = new ObjectSet<>();
 
         for (Node node : modelInstance.nodes) {
             registerNodeForTag(models, node, tag);
@@ -62,12 +61,12 @@ public class CommonPropertiesModelInstanceModelAdapter {
         graphModelsByTag.put(tag, models);
     }
 
-    private void registerNodeForTag(ObjectSet<GraphModel> models, Node node, String tag) {
+    private void registerNodeForTag(ObjectSet<RenderableModel> models, Node node, String tag) {
         if (node.parts.size > 0) {
             for (NodePart nodePart : node.parts) {
                 NodePartRenderableModel renderableModel = new NodePartRenderableModel(node, nodePart);
-                GraphModel graphModel = graphModels.addModel(tag, renderableModel);
-                models.add(graphModel);
+                graphModels.addModel(tag, renderableModel);
+                models.add(renderableModel);
             }
         }
 
@@ -80,9 +79,9 @@ public class CommonPropertiesModelInstanceModelAdapter {
         if (!hasTag(tag))
             throw new IllegalArgumentException("This model instance does not have this tag");
 
-        ObjectSet<GraphModel> models = graphModelsByTag.get(tag);
-        for (GraphModel graphModel : models) {
-            graphModels.removeModel(graphModel);
+        ObjectSet<RenderableModel> models = graphModelsByTag.get(tag);
+        for (RenderableModel graphModel : models) {
+            graphModels.removeModel(tag, graphModel);
         }
 
         graphModelsByTag.remove(tag);

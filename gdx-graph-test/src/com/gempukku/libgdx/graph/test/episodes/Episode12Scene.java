@@ -26,7 +26,6 @@ import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPublicData;
-import com.gempukku.libgdx.graph.plugin.models.GraphModelInstance;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -43,7 +42,6 @@ public class Episode12Scene implements LibgdxGraphTestScene {
     private Stage stage;
     private Skin skin;
     private Lighting3DEnvironment lights;
-    private GraphModelInstance sphereInstanceId;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private MaterialModelInstanceModelAdapter sphereModel;
 

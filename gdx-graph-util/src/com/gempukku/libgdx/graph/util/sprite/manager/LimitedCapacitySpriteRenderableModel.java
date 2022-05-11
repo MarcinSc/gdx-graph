@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite;
+package com.gempukku.libgdx.graph.util.sprite.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -8,25 +8,21 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.GraphModel;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 
-public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
+public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
     private final Matrix4 worldTransform = new Matrix4();
     private final Vector3 position = new Vector3();
-    private final GraphModels graphModels;
-    private final String tag;
     private final WritablePropertyContainer propertyContainer;
-    private final GraphModel graphModel;
     private CullingTest cullingTest;
 
     private final Mesh mesh;
@@ -42,22 +38,20 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
     private int spriteCount = 0;
     private int minUpdatedIndex = Integer.MAX_VALUE;
     private int maxUpdatedIndex = -1;
+
     private final ObjectSet<RenderableSprite> updatedSprites = new ObjectSet<>();
+    private final ObjectSet<RenderableSprite> allSprites = new ObjectSet<>();
 
-    public LimitedCapacitySpriteBatchModel(boolean staticBatch, int spriteCapacity, GraphModels graphModels, String tag) {
-        this(staticBatch, spriteCapacity, graphModels, tag, new MapWritablePropertyContainer());
-    }
-
-    public LimitedCapacitySpriteBatchModel(boolean staticBatch, int spriteCapacity, GraphModels graphModels, String tag,
-                                           WritablePropertyContainer propertyContainer) {
+    public LimitedCapacitySpriteRenderableModel(
+            boolean staticBatch, int spriteCapacity,
+            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+            WritablePropertyContainer propertyContainer) {
         this.spriteCapacity = spriteCapacity;
-        this.graphModels = graphModels;
-        this.tag = tag;
         this.propertyContainer = propertyContainer;
 
-        vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
+        this.vertexAttributes = vertexAttributes;
 
-        vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+        this.vertexPropertySources = vertexPropertySources;
 
         floatCountPerVertex = vertexAttributes.vertexSize / 4;
 
@@ -70,12 +64,11 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
 
         short[] indices = SpriteUtil.createSpriteIndicesArray(spriteCapacity);
         mesh.setIndices(indices, 0, indices.length);
-
-        graphModel = graphModels.addModel(tag, new BatchRenderableModel());
     }
 
-    public String getTag() {
-        return tag;
+    @Override
+    public int getSpriteCount() {
+        return spriteCount;
     }
 
     @Override
@@ -95,7 +88,7 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
 
     @Override
     public boolean hasSprite(RenderableSprite sprite) {
-        return findSpriteIndex(sprite) != -1;
+        return allSprites.contains(sprite);
     }
 
     @Override
@@ -106,6 +99,7 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
         spritePosition[spriteCount] = sprite;
 
         updatedSprites.add(sprite);
+        allSprites.add(sprite);
 
         spriteCount++;
 
@@ -128,6 +122,7 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
             return false;
 
         updatedSprites.remove(sprite);
+        allSprites.remove(sprite);
 
         if (spriteCount > 1 && position != spriteCount - 1) {
             // Need to shrink the arrays
@@ -196,64 +191,56 @@ public class LimitedCapacitySpriteBatchModel implements SpriteBatchModel {
 
     @Override
     public void dispose() {
-        graphModels.removeModel(graphModel);
         mesh.dispose();
     }
 
-    private class BatchRenderableModel implements RenderableModel {
-        @Override
-        public Vector3 getPosition() {
-            return position;
+    @Override
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    @Override
+    public boolean isRendered(Camera camera) {
+        return spriteCount > 0 && !isCulled(camera);
+    }
+
+    private boolean isCulled(Camera camera) {
+        return cullingTest != null && cullingTest.isCulled(camera, getPosition());
+    }
+
+    @Override
+    public Matrix4 getWorldTransform() {
+        return worldTransform;
+    }
+
+    @Override
+    public void prepareToRender(ShaderContext shaderContext) {
+        boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
+        if (debug && !updatedSprites.isEmpty())
+            Gdx.app.debug("Sprite", "Updating info of " + updatedSprites.size + " sprite(s)");
+
+        for (RenderableSprite updatedSprite : updatedSprites) {
+            updateSpriteData(updatedSprite, findSpriteIndex(updatedSprite));
         }
+        updatedSprites.clear();
 
-        @Override
-        public boolean isRendered(Camera camera) {
-            return spriteCount > 0 && !isCulled(camera);
+        if (minUpdatedIndex != Integer.MAX_VALUE) {
+            if (debug)
+                Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
+            mesh.updateVertices(minUpdatedIndex, vertexData, minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
+            minUpdatedIndex = Integer.MAX_VALUE;
+            maxUpdatedIndex = -1;
         }
+    }
 
-        private boolean isCulled(Camera camera) {
-            return cullingTest != null && cullingTest.isCulled(camera, getPosition());
-        }
-
-        @Override
-        public Matrix4 getWorldTransform() {
-            return worldTransform;
-        }
-
-        @Override
-        public WritablePropertyContainer getPropertyContainer() {
-            return LimitedCapacitySpriteBatchModel.this.getPropertyContainer();
-        }
-
-        @Override
-        public void prepareToRender(ShaderContext shaderContext) {
-            boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
-            if (debug && !updatedSprites.isEmpty())
-                Gdx.app.debug("Sprite", "Updating info of " + updatedSprites.size + " sprite(s)");
-
-            for (RenderableSprite updatedSprite : updatedSprites) {
-                updateSpriteData(updatedSprite, findSpriteIndex(updatedSprite));
-            }
-            updatedSprites.clear();
-
-            if (minUpdatedIndex != Integer.MAX_VALUE) {
-                if (debug)
-                    Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
-                mesh.updateVertices(minUpdatedIndex, vertexData, minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
-                minUpdatedIndex = Integer.MAX_VALUE;
-                maxUpdatedIndex = -1;
-            }
-        }
-
-        @Override
-        public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
-            if (attributeLocations == null)
-                attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
-            mesh.bind(shaderProgram, attributeLocations);
-            Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, 6 * spriteCount, GL20.GL_UNSIGNED_SHORT, 0);
-            mesh.unbind(shaderProgram, attributeLocations);
-        }
+    @Override
+    public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
+        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
+            Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
+        if (attributeLocations == null)
+            attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
+        mesh.bind(shaderProgram, attributeLocations);
+        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, 6 * spriteCount, GL20.GL_UNSIGNED_SHORT, 0);
+        mesh.unbind(shaderProgram, attributeLocations);
     }
 }

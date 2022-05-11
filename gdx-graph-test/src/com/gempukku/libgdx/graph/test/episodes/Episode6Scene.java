@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
-import com.gempukku.libgdx.graph.plugin.models.GraphModelInstance;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -32,7 +31,6 @@ public class Episode6Scene implements LibgdxGraphTestScene {
     private Model model;
     private Camera camera;
     private Stage stage;
-    private GraphModelInstance shipInstance;
     private Skin skin;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private MaterialModelInstanceModelAdapter modelAdapter;

@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
-import com.gempukku.libgdx.graph.plugin.models.GraphModelInstance;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -35,7 +34,6 @@ import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 public class Episode5Scene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
     private Model sphereModel;
-    private GraphModelInstance sphereModelInstance;
     private Camera camera;
     private Texture rockTexture;
     private Stage stage;

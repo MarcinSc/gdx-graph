@@ -54,6 +54,15 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
+    public int getSpriteCount() {
+        int result = 0;
+        for (SpriteBatchModel value : batchModelPerTextureSignature.values()) {
+            result += value.getSpriteCount();
+        }
+        return result;
+    }
+
+    @Override
     public boolean addSprite(RenderableSprite sprite) {
         String textureSignature = getTextureSignature(sprite);
 

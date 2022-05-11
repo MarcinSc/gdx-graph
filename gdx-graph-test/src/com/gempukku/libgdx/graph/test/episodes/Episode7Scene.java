@@ -25,7 +25,6 @@ import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPublicData;
-import com.gempukku.libgdx.graph.plugin.models.GraphModelInstance;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -40,7 +39,6 @@ public class Episode7Scene implements LibgdxGraphTestScene {
     private Camera camera;
     private Stage stage;
     private Skin skin;
-    private GraphModelInstance modelInstance;
     private Lighting3DEnvironment lights;
     private final float cameraSpeed = -0.8f;
     private float cameraAngle = 0f;

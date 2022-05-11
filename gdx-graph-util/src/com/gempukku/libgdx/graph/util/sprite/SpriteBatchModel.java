@@ -15,6 +15,8 @@ public interface SpriteBatchModel extends Disposable {
 
     boolean updateSprite(RenderableSprite sprite);
 
+    int getSpriteCount();
+
     WritablePropertyContainer getPropertyContainer();
 
     void setCullingTest(CullingTest cullingTest);

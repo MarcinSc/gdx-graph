@@ -14,14 +14,15 @@ public interface GraphModels {
      * @param model
      * @return
      */
-    GraphModel addModel(String tag, RenderableModel model);
+    void addModel(String tag, RenderableModel model);
 
     /**
      * Removes the provided model from being rendered.
      *
+     * @param tag
      * @param model
      */
-    void removeModel(GraphModel model);
+    void removeModel(String tag, RenderableModel model);
 
     /**
      * Returns a definition of shader properties for a given 'tag' (shader).
