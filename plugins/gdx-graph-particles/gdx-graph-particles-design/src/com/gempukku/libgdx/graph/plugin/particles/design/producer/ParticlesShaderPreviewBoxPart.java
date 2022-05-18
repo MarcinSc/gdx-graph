@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.particles.design.producer;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.Graph;
 import com.gempukku.libgdx.graph.data.GraphConnection;
@@ -11,7 +11,6 @@ import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.ui.graph.GraphBoxInputConnector;
 import com.gempukku.libgdx.graph.ui.graph.GraphBoxOutputConnector;
 import com.gempukku.libgdx.graph.ui.graph.GraphBoxPart;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -21,9 +20,6 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
     private final VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel> selectBox;
 
     public ParticlesShaderPreviewBoxPart() {
-        final VisCheckBox running = new VisCheckBox("Running");
-        running.setChecked(true);
-        running.align(Align.left);
         selectBox = new VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel>();
         selectBox.setItems(ParticlesShaderPreviewWidget.ShaderPreviewModel.values());
 
@@ -40,11 +36,11 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
         perSecondCount.setValue(10f);
 
         shaderPreviewWidget = new ParticlesShaderPreviewWidget(300, 300);
-        shaderPreviewWidget.setRunning(true);
+        shaderPreviewWidget.setModel(ParticlesShaderPreviewWidget.ShaderPreviewModel.Point);
         shaderPreviewWidget.setCameraDistance(1f);
         shaderPreviewWidget.setLifetime(3f);
-        shaderPreviewWidget.setInitialCount(0f);
-        shaderPreviewWidget.setPerSecondCount(10f);
+        shaderPreviewWidget.setInitialCount(0);
+        shaderPreviewWidget.setParticlesPerSecond(10f);
 
         cameraDistance.addListener(
                 new ChangeListener() {
@@ -64,21 +60,14 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        shaderPreviewWidget.setInitialCount(initialCount.getValue());
+                        shaderPreviewWidget.setInitialCount(MathUtils.round(initialCount.getValue()));
                     }
                 });
         perSecondCount.addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        shaderPreviewWidget.setPerSecondCount(perSecondCount.getValue());
-                    }
-                });
-        running.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        shaderPreviewWidget.setRunning(running.isChecked());
+                        shaderPreviewWidget.setParticlesPerSecond(perSecondCount.getValue());
                     }
                 });
         selectBox.addListener(
@@ -99,7 +88,6 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
         add(perSecondCount).colspan(2).growX().row();
         add("Camera distance:").colspan(2).growX().row();
         add(cameraDistance).colspan(2).growX().row();
-        add(running).colspan(2).left().growX().row();
         add(shaderPreviewWidget).colspan(2).grow().row();
     }
 

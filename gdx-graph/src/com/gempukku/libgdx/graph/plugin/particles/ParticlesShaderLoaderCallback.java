@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.*;
 import com.gempukku.libgdx.graph.loader.GraphDataLoaderCallback;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 
-public class ParticlesShaderLoaderCallback extends GraphDataLoaderCallback<ParticlesGraphShader, ShaderFieldType> {
+public class ParticlesShaderLoaderCallback extends GraphDataLoaderCallback<GraphShader, ShaderFieldType> {
     private final String tag;
     private final Texture defaultTexture;
     private final GraphConfiguration[] graphConfigurations;
@@ -26,7 +27,7 @@ public class ParticlesShaderLoaderCallback extends GraphDataLoaderCallback<Parti
     }
 
     @Override
-    public ParticlesGraphShader end() {
+    public GraphShader end() {
         GraphValidator<GraphNode, GraphConnection, GraphProperty> graphValidator = new GraphValidator<>();
         GraphValidator.ValidationResult<GraphNode, GraphConnection, GraphProperty> result = graphValidator.validateGraph(this, "end");
         if (result.hasErrors())

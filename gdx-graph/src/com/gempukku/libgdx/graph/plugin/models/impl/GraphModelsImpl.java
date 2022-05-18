@@ -6,6 +6,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.plugin.RuntimePipelinePlugin;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
@@ -13,14 +14,14 @@ import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
     private final ObjectMap<String, ObjectSet<RenderableModel>> modelsByTag = new ObjectMap<>();
-    private final ObjectMap<String, ObjectMap<String, PropertySource>> propertiesByTag = new ObjectMap<>();
+    private final ObjectMap<String, GraphShader> shaderByTag = new ObjectMap<>();
     private final ObjectMap<String, MapWritablePropertyContainer> propertiesForTag = new ObjectMap<>();
 
     public void registerTag(String tag, GraphShader shader) {
         if (modelsByTag.containsKey(tag))
             throw new IllegalStateException("There is already a shader with tag: " + tag);
         modelsByTag.put(tag, new ObjectSet<RenderableModel>());
-        propertiesByTag.put(tag, shader.getProperties());
+        shaderByTag.put(tag, shader);
         propertiesForTag.put(tag, new MapWritablePropertyContainer());
     }
 
@@ -38,7 +39,18 @@ public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
 
     @Override
     public ObjectMap<String, PropertySource> getShaderProperties(String tag) {
-        return propertiesByTag.get(tag);
+        GraphShader graphShader = shaderByTag.get(tag);
+        if (graphShader == null)
+            return null;
+        return graphShader.getProperties();
+    }
+
+    @Override
+    public ObjectMap<String, BasicShader.Attribute> getShaderAttributes(String tag) {
+        GraphShader graphShader = shaderByTag.get(tag);
+        if (graphShader == null)
+            return null;
+        return graphShader.getAttributes();
     }
 
     @Override

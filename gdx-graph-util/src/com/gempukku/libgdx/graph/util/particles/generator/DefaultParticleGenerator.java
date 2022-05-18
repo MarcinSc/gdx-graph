@@ -1,63 +1,69 @@
 package com.gempukku.libgdx.graph.util.particles.generator;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.plugin.particles.generator.ParticleGenerator;
-import com.gempukku.libgdx.graph.plugin.particles.generator.value.FloatValue;
-import com.gempukku.libgdx.graph.plugin.particles.generator.value.RangeFloatValue;
-import com.gempukku.libgdx.graph.plugin.particles.generator.value.StaticFloatValue;
-import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.util.particles.generator.value.FloatValue;
+import com.gempukku.libgdx.graph.util.particles.generator.value.RangeFloatValue;
+import com.gempukku.libgdx.graph.util.particles.generator.value.StaticFloatValue;
 
-public class DefaultParticleGenerator<T> implements ParticleGenerator<T> {
-    private TimeProvider timeProvider;
+public class DefaultParticleGenerator implements ParticleGenerator {
     private FloatValue lifeLength;
     private FloatValue initialParticles;
     private FloatValue particlesPerSecond;
-    private ParticleDataGenerator<T> particleDataGenerator;
-    private String positionAttribute = "Position";
-    private PositionGenerator positionGenerator;
-    private Vector3 tmpVector = new Vector3();
+
+    private ObjectMap<String, PropertyGenerator> propertyGenerators = new ObjectMap<>();
 
     private float lastParticleGenerated;
 
-    public DefaultParticleGenerator(TimeProvider timeProvider, float lifeLength,
+    public DefaultParticleGenerator(float lifeLength,
                                     int initialParticles, float particlesPerSecond) {
-        this(timeProvider, new StaticFloatValue(lifeLength), new StaticFloatValue(initialParticles), new StaticFloatValue(particlesPerSecond));
+        this(new StaticFloatValue(lifeLength), new StaticFloatValue(initialParticles), new StaticFloatValue(particlesPerSecond));
     }
 
-    public DefaultParticleGenerator(TimeProvider timeProvider, float minLifeLength, float maxLifeLength,
+    public DefaultParticleGenerator(float minLifeLength, float maxLifeLength,
                                     int initialParticles, float particlesPerSecond) {
-        this(timeProvider, new RangeFloatValue(minLifeLength, maxLifeLength), new StaticFloatValue(initialParticles),
+        this(new RangeFloatValue(minLifeLength, maxLifeLength), new StaticFloatValue(initialParticles),
                 new StaticFloatValue(particlesPerSecond));
     }
 
-    public DefaultParticleGenerator(TimeProvider timeProvider, FloatValue lifeLength,
+    public DefaultParticleGenerator(FloatValue lifeLength,
                                     FloatValue initialParticles, FloatValue particlesPerSecond) {
-        this(timeProvider, lifeLength, initialParticles, particlesPerSecond, null);
-    }
-
-    public DefaultParticleGenerator(TimeProvider timeProvider, FloatValue lifeLength,
-                                    FloatValue initialParticles, FloatValue particlesPerSecond,
-                                    ParticleDataGenerator<T> particleDataGenerator) {
-        this.timeProvider = timeProvider;
         this.lifeLength = lifeLength;
         this.initialParticles = initialParticles;
         this.particlesPerSecond = particlesPerSecond;
-        this.particleDataGenerator = particleDataGenerator;
     }
 
-    public void setPositionAttribute(String positionAttribute) {
-        this.positionAttribute = positionAttribute;
+    public void setLifeLength(float lifeLength) {
+        setLifeLength(new StaticFloatValue(lifeLength));
     }
 
-    public void setPositionGenerator(PositionGenerator positionGenerator) {
-        this.positionGenerator = positionGenerator;
+    public void setLifeLength(FloatValue lifeLength) {
+        this.lifeLength = lifeLength;
+    }
+
+    public void setInitialParticles(int initialParticles) {
+        setInitialParticles(new StaticFloatValue(initialParticles));
+    }
+
+    public void setInitialParticles(FloatValue initialParticles) {
+        this.initialParticles = initialParticles;
+    }
+
+    public void setParticlesPerSecond(float particlesPerSecond) {
+        setParticlesPerSecond(new StaticFloatValue(particlesPerSecond));
+    }
+
+    public void setParticlesPerSecond(FloatValue particlesPerSecond) {
+        this.particlesPerSecond = particlesPerSecond;
+    }
+
+    public void setPropertyGenerator(String propertyName, PropertyGenerator propertyGenerator) {
+        propertyGenerators.put(propertyName, propertyGenerator);
     }
 
     @Override
-    public void initialCreateParticles(ParticleCreateCallback<T> createCallback) {
-        float currentTime = timeProvider.getTime();
+    public void initialCreateParticles(float currentTime, ParticleCreateCallback createCallback) {
         // This is first invocation after start
         int particlesToGenerate = MathUtils.floor(initialParticles.getValue(MathUtils.random()));
         for (int i = 0; i < particlesToGenerate; i++) {
@@ -67,8 +73,7 @@ public class DefaultParticleGenerator<T> implements ParticleGenerator<T> {
     }
 
     @Override
-    public void createParticles(ParticleCreateCallback<T> createCallback) {
-        float currentTime = timeProvider.getTime();
+    public void createParticles(float currentTime, ParticleCreateCallback createCallback) {
         float timeElapsed = currentTime - lastParticleGenerated;
         float particleDelay = 1 / particlesPerSecond.getValue(MathUtils.random());
         int particleCount = MathUtils.floor(timeElapsed / particleDelay);
@@ -78,23 +83,14 @@ public class DefaultParticleGenerator<T> implements ParticleGenerator<T> {
         lastParticleGenerated += particleDelay * particleCount;
     }
 
-    private ObjectMap<String, Object> attributes = new ObjectMap<>();
-
-    private void generateParticle(float particleBirth, ParticleCreateCallback<T> createCallback) {
-        attributes.clear();
+    private void generateParticle(float particleBirth, ParticleCreateCallback createCallback) {
+        MapWritablePropertyContainer properties = new MapWritablePropertyContainer();
 
         float lifeLengthValue = lifeLength.getValue(MathUtils.random());
-        T particleData = null;
-        if (particleDataGenerator != null)
-            particleData = particleDataGenerator.generateData();
-        if (positionGenerator != null)
-            attributes.put(positionAttribute, positionGenerator.generateLocation(tmpVector));
-        generateAttributes(attributes);
+        for (ObjectMap.Entry<String, PropertyGenerator> propertyGenerator : propertyGenerators) {
+            properties.setValue(propertyGenerator.key, propertyGenerator.value.generateProperty());
+        }
 
-        createCallback.createParticle(particleBirth, lifeLengthValue, particleData, attributes);
-    }
-
-    protected void generateAttributes(ObjectMap<String, Object> attributes) {
-
+        createCallback.createParticle(particleBirth, lifeLengthValue, properties);
     }
 }

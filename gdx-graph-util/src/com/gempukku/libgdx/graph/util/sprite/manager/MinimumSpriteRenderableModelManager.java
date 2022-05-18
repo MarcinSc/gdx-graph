@@ -14,6 +14,7 @@ public class MinimumSpriteRenderableModelManager implements SpriteRenderableMode
     private final int spriteCapacity;
     private final GraphModels graphModels;
     private final String tag;
+
     private final VertexAttributes vertexAttributes;
     private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
 

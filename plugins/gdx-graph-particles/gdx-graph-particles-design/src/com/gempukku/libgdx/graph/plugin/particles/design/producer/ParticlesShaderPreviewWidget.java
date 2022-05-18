@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.data.Graph;
 import com.gempukku.libgdx.graph.data.GraphConnection;
@@ -23,44 +24,47 @@ import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
-import com.gempukku.libgdx.graph.plugin.particles.ParticleEffectConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.ParticlesGraphShader;
-import com.gempukku.libgdx.graph.plugin.particles.generator.ParticleGenerator;
-import com.gempukku.libgdx.graph.plugin.particles.impl.GraphParticleEffectImpl;
-import com.gempukku.libgdx.graph.plugin.particles.model.QuadParticleModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
+import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
+import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
+import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
+import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
+import com.gempukku.libgdx.graph.util.particles.ParticleSpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+
+import java.util.Iterator;
 
 public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     public enum ShaderPreviewModel {
         Point, SphereSurface, Sphere, Line
     }
 
+    private Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph;
     private boolean shaderInitialized;
-    private boolean running;
     private int width;
     private int height;
 
     private FrameBuffer frameBuffer;
-    private ParticlesGraphShader graphShader;
+    private GraphShader graphShader;
     private OpenGLContext renderContext;
 
+    private ParticleSpriteRenderableModel particleModel;
+    private Array<ParticleRenderableSprite> sprites = new Array<>();
+    private DefaultParticleGenerator particleGenerator;
+
     private Camera camera;
-    private DefaultTimeKeeper timeKeeper;
+    private final DefaultTimeKeeper timeKeeper;
     private Lighting3DEnvironment graphShaderEnvironment;
     private ShaderContextImpl shaderContext;
-    private CommonPropertiesRenderableParticleEffect renderableParticleEffect;
-    private GraphParticleEffectImpl particleEffect;
-    private ShaderPreviewModel model = ShaderPreviewModel.Point;
-    private float lifetime = 3f;
-    private float initialCount = 1f;
-    private float perSecondCount = 10f;
+
+    private final MapWritablePropertyContainer localPropertyContainer;
 
     public ParticlesShaderPreviewWidget(int width, int height) {
         this.width = width;
@@ -69,15 +73,17 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
-        camera.position.set(-1f, 1f, 0f);
+        camera.position.set(-0.9f, 0f, 0f);
         camera.up.set(0f, 1f, 0f);
-        camera.lookAt(0, 1f, 0f);
+        camera.lookAt(0, 0f, 0f);
         camera.update();
 
+        timeKeeper = new DefaultTimeKeeper();
+
         graphShaderEnvironment = new Lighting3DEnvironment();
-        graphShaderEnvironment.setAmbientColor(Color.DARK_GRAY);
+        graphShaderEnvironment.setAmbientColor(new Color(0.1f, 0.1f, 0.1f, 1f));
         PointLight pointLight = new PointLight();
-        pointLight.set(Color.WHITE, -2f, 1f, 1f, 2f);
+        pointLight.set(Color.WHITE, -4f, 1.8f, 1.8f, 8f);
         graphShaderEnvironment.addPointLight(new Point3DLight(pointLight));
 
         final Lighting3DPrivateData data = new Lighting3DPrivateData();
@@ -97,34 +103,54 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         shaderContext.setRenderWidth(width);
         shaderContext.setRenderHeight(height);
         shaderContext.setColorTexture(PatternTextures.sharedInstance.texture);
+
+        localPropertyContainer = new MapWritablePropertyContainer();
+
+        particleGenerator = new DefaultParticleGenerator(3f, 1, 10f);
+        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(getPositionGenerator(ShaderPreviewModel.Sphere)));
+        particleGenerator.setPropertyGenerator("UV",
+                new PropertyGenerator() {
+                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
+                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
+
+                    @Override
+                    public Object generateProperty() {
+                        return uvPerVertex;
+                    }
+                });
+    }
+
+    private static PositionGenerator getPositionGenerator(ShaderPreviewModel model) {
+        switch (model) {
+            case Point:
+                return new PointPositionGenerator();
+            case Sphere:
+                return new SpherePositionGenerator();
+            case SphereSurface:
+                return new SphereSurfacePositionGenerator();
+            case Line:
+                LinePositionGenerator lineGenerator = new LinePositionGenerator();
+                lineGenerator.getPoint1().set(0, 0, -1f);
+                lineGenerator.getPoint2().set(0, 0, 1f);
+                return lineGenerator;
+        }
+        return null;
     }
 
     public void setLifetime(float lifetime) {
-        this.lifetime = lifetime;
-        if (particleEffect != null) {
-            renderableParticleEffect.setParticleGenerator(createGenerator());
-        }
+        particleGenerator.setLifeLength(lifetime);
     }
 
-    public void setInitialCount(float initialCount) {
-        this.initialCount = initialCount;
-        if (particleEffect != null) {
-            renderableParticleEffect.setParticleGenerator(createGenerator());
-        }
+    public void setInitialCount(int initialCount) {
+        particleGenerator.setInitialParticles(initialCount);
     }
 
-    public void setPerSecondCount(float perSecondCount) {
-        this.perSecondCount = perSecondCount;
-        if (particleEffect != null) {
-            renderableParticleEffect.setParticleGenerator(createGenerator());
-        }
+    public void setParticlesPerSecond(float particlesPerSecond) {
+        particleGenerator.setParticlesPerSecond(particlesPerSecond);
     }
 
     public void setModel(ShaderPreviewModel model) {
-        this.model = model;
-        if (particleEffect != null) {
-            renderableParticleEffect.setParticleGenerator(createGenerator());
-        }
+        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(getPositionGenerator(model)));
     }
 
     public void setCameraDistance(float distance) {
@@ -134,21 +160,13 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         camera.update();
     }
 
-    public void setRunning(boolean running) {
-        this.running = running;
-        if (particleEffect != null) {
-            if (running)
-                particleEffect.start();
-            else
-                particleEffect.stop();
-        }
-    }
-
     @Override
     protected void setStage(Stage stage) {
         super.setStage(stage);
         if (stage == null && shaderInitialized) {
             destroyShader();
+        } else if (stage != null && !shaderInitialized && graph != null) {
+            createShader(graph);
         }
     }
 
@@ -164,52 +182,57 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
     private void createShader(final Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
         try {
-            timeKeeper = new DefaultTimeKeeper();
             graphShader = GraphShaderBuilder.buildParticlesShader("Test", WhitePixel.sharedInstance.texture, graph, true);
             frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
-            createModel();
+
+            MapWritablePropertyContainer globalPropertyContainer = new MapWritablePropertyContainer();
+            for (GraphProperty property : graph.getProperties()) {
+                if (property.getLocation() == PropertyLocation.Global_Uniform) {
+                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
+                    globalPropertyContainer.setValue(property.getName(), propertyType.convertFromJson(property.getData()));
+                }
+            }
+            shaderContext.setGlobalPropertyContainer(globalPropertyContainer);
+
+            localPropertyContainer.clear();
+            for (GraphProperty property : graph.getProperties()) {
+                if (property.getLocation() == PropertyLocation.Uniform || property.getLocation() == PropertyLocation.Attribute) {
+                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
+                    Object value = propertyType.convertFromJson(property.getData());
+                    if (propertyType.isTexture()) {
+                        if (value != null) {
+                            try {
+                                Texture texture = new Texture(Gdx.files.absolute((String) value));
+                                graphShader.addManagedResource(texture);
+                                localPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
+                            } catch (Exception exp) {
+                                localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                            }
+                        } else {
+                            localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                        }
+                    }
+                }
+            }
 
             shaderContext.setTimeProvider(timeKeeper);
-            shaderContext.setGlobalPropertyContainer(
-                    new PropertyContainer() {
+
+            if (particleModel != null) {
+                particleModel.dispose();
+                sprites.clear();
+            }
+            VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
+            particleModel = new ParticleSpriteRenderableModel(false, 1000,
+                    vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
+                    localPropertyContainer);
+
+            particleGenerator.initialCreateParticles(timeKeeper.getTime(),
+                    new ParticleGenerator.ParticleCreateCallback() {
                         @Override
-                        public Object getValue(String name) {
-                            for (GraphProperty property : graph.getProperties()) {
-                                if (property.getName().equals(name) && property.getLocation() == PropertyLocation.Global_Uniform) {
-                                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
-                                    return propertyType.convertFromJson(property.getData());
-                                }
-                            }
-
-                            return null;
-                        }
-                    });
-            shaderContext.setLocalPropertyContainer(
-                    new PropertyContainer() {
-                        @Override
-                        public Object getValue(String name) {
-                            for (GraphProperty property : graph.getProperties()) {
-                                if (property.getName().equals(name) && property.getLocation() != PropertyLocation.Global_Uniform) {
-                                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
-                                    Object value = propertyType.convertFromJson(property.getData());
-                                    if (propertyType.isTexture()) {
-                                        if (value != null) {
-                                            try {
-                                                Texture texture = new Texture(Gdx.files.absolute((String) value));
-                                                graphShader.addManagedResource(texture);
-                                                return new TextureRegion(texture);
-                                            } catch (Exception exp) {
-
-                                            }
-                                        }
-                                        return WhitePixel.sharedInstance.textureRegion;
-                                    } else {
-                                        return value;
-                                    }
-                                }
-                            }
-
-                            return null;
+                        public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
+                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
+                            sprites.add(sprite);
+                            particleModel.addSprite(sprite);
                         }
                     });
 
@@ -221,40 +244,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         }
     }
 
-    private void createModel() {
-        renderableParticleEffect = new CommonPropertiesRenderableParticleEffect(createGenerator());
-        particleEffect = new GraphParticleEffectImpl("tag", new ParticleEffectConfiguration(null, graphShader.getProperties(),
-                graphShader.getMaxNumberOfParticles()),
-                renderableParticleEffect, new QuadParticleModel(), false);
-        if (running)
-            particleEffect.start();
-    }
-
-    private ParticleGenerator createGenerator() {
-        DefaultParticleGenerator generator = new DefaultParticleGenerator(timeKeeper, lifetime, MathUtils.floor(initialCount), perSecondCount);
-        switch (model) {
-            case Point:
-                generator.setPositionGenerator(new PointPositionGenerator());
-                break;
-            case Sphere:
-                generator.setPositionGenerator(new SpherePositionGenerator());
-                break;
-            case SphereSurface:
-                generator.setPositionGenerator(new SphereSurfacePositionGenerator());
-                break;
-            case Line:
-                LinePositionGenerator lineGenerator = new LinePositionGenerator();
-                lineGenerator.getPoint1().set(0, 0, -1f);
-                lineGenerator.getPoint2().set(0, 0, 1f);
-                generator.setPositionGenerator(lineGenerator);
-                break;
-        }
-        return generator;
-    }
-
     private void destroyShader() {
-        particleEffect.dispose();
-        particleEffect = null;
         frameBuffer.dispose();
         frameBuffer = null;
         graphShader.dispose();
@@ -265,6 +255,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     public void dispose() {
         if (shaderInitialized)
             destroyShader();
+        particleModel.dispose();
     }
 
     @Override
@@ -274,22 +265,39 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         if (frameBuffer != null) {
             batch.end();
 
-
             timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
             try {
-                particleEffect.generateParticles();
-
                 frameBuffer.begin();
                 camera.viewportWidth = width;
                 camera.viewportHeight = height;
                 camera.update();
 
+                float currentTime = timeKeeper.getTime();
+                Iterator<ParticleRenderableSprite> spriteIterator = sprites.iterator();
+                while (spriteIterator.hasNext()) {
+                    ParticleRenderableSprite sprite = spriteIterator.next();
+                    if (sprite.getParticleDeath() < currentTime) {
+                        particleModel.removeSprite(sprite);
+                        spriteIterator.remove();
+                    }
+                }
+
+                particleGenerator.createParticles(currentTime,
+                        new ParticleGenerator.ParticleCreateCallback() {
+                            @Override
+                            public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
+                                ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
+                                sprites.add(sprite);
+                                particleModel.addSprite(sprite);
+                            }
+                        });
+
                 renderContext.begin();
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
                 graphShader.begin(shaderContext, renderContext);
-                particleEffect.render(graphShader, shaderContext);
+                graphShader.render(shaderContext, particleModel);
                 graphShader.end();
                 frameBuffer.end();
                 renderContext.end();
@@ -307,6 +315,12 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     }
 
     public void graphChanged(boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
+        if (hasErrors) {
+            this.graph = null;
+        } else {
+            this.graph = graph;
+        }
+
         if (hasErrors && shaderInitialized) {
             destroyShader();
         } else if (!hasErrors && !shaderInitialized) {

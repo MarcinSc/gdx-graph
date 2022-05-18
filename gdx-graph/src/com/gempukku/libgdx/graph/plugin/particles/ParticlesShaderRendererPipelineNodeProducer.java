@@ -15,8 +15,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
-import com.gempukku.libgdx.graph.plugin.particles.impl.GraphParticleEffectImpl;
-import com.gempukku.libgdx.graph.plugin.particles.impl.GraphParticleEffectsImpl;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
@@ -38,7 +39,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
         final ShaderContextImpl shaderContext = new ShaderContextImpl(pluginPrivateDataSource);
 
-        final Array<ParticlesGraphShader> particleShaders = new Array<>();
+        final Array<GraphShader> particleShaders = new Array<>();
         final JsonValue shaderDefinitions = data.get("shaders");
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
@@ -48,29 +49,29 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
         return new SingleInputsPipelineNode(result) {
             private FullScreenRender fullScreenRender;
             private TimeProvider timeProvider;
-            private GraphParticleEffectsImpl particleEffects;
+            private GraphModelsImpl particleEffects;
 
             @Override
             public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
                 timeProvider = pipelineDataProvider.getTimeProvider();
-                particleEffects = pipelineDataProvider.getPrivatePluginData(GraphParticleEffectsImpl.class);
+                particleEffects = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
                     String tag = shaderDefinition.getString("tag");
                     JsonValue shaderGraph = shaderDefinition.get("shader");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final ParticlesGraphShader graphShader = GraphLoader.loadGraph(shaderGraph, new ParticlesShaderLoaderCallback(tag, pipelineDataProvider.getWhitePixel().texture, configurations), PropertyLocation.Uniform);
+                    final GraphShader graphShader = GraphLoader.loadGraph(shaderGraph, new ParticlesShaderLoaderCallback(tag, pipelineDataProvider.getWhitePixel().texture, configurations), PropertyLocation.Uniform);
                     particleShaders.add(graphShader);
                 }
 
-                for (ParticlesGraphShader particleShader : particleShaders) {
-                    particleEffects.registerEffect(particleShader.getTag(), particleShader);
+                for (GraphShader particleShader : particleShaders) {
+                    particleEffects.registerTag(particleShader.getTag(), particleShader);
                 }
             }
 
             private boolean usesDepth() {
-                for (ParticlesGraphShader particleShader : particleShaders) {
+                for (GraphShader particleShader : particleShaders) {
                     if (particleShader.isUsingDepthTexture()) {
                         return true;
                     }
@@ -92,7 +93,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
                     boolean usesDepth = usesDepth();
 
                     boolean needsSceneColor = false;
-                    for (ParticlesGraphShader particleShader : particleShaders) {
+                    for (GraphShader particleShader : particleShaders) {
                         if (particleShader.isUsingColorTexture()) {
                             needsSceneColor = true;
                             break;
@@ -121,19 +122,14 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
 
                     currentBuffer.beginColor();
 
-                    for (ParticlesGraphShader particleShader : particleShaders) {
+                    for (GraphShader particleShader : particleShaders) {
                         String tag = particleShader.getTag();
-                        if (particleEffects.hasEffects(tag)) {
-                            shaderContext.setGlobalPropertyContainer(particleEffects.getGlobalPropertyContainer(tag));
-                            particleShader.begin(shaderContext, pipelineRenderingContext.getRenderContext());
-                            for (GraphParticleEffectImpl particleEffect : particleEffects.getParticleEffects(tag)) {
-                                if (particleEffect.getRenderableParticleEffect().isRendered(shaderContext.getCamera(), tag)) {
-                                    shaderContext.setLocalPropertyContainer(particleEffect.getPropertyContainer());
-                                    particleEffect.render(particleShader, shaderContext);
-                                }
-                            }
-                            particleShader.end();
+                        shaderContext.setGlobalPropertyContainer(particleEffects.getGlobalProperties(tag));
+                        particleShader.begin(shaderContext, pipelineRenderingContext.getRenderContext());
+                        for (RenderableModel model : particleEffects.getModels(tag)) {
+                            particleShader.render(shaderContext, model);
                         }
+                        particleShader.end();
                     }
 
                     currentBuffer.endColor();
@@ -155,7 +151,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
 
             @Override
             public void dispose() {
-                for (ParticlesGraphShader particleShader : particleShaders) {
+                for (GraphShader particleShader : particleShaders) {
                     particleShader.dispose();
                 }
             }

@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.plugin.particles.generator.value;
+package com.gempukku.libgdx.graph.util.particles.generator.value;
 
 public class RangeFloatValue implements FloatValue {
     private final float minimum;

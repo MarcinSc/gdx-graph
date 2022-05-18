@@ -139,6 +139,12 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
         return true;
     }
 
+    public void removeAllSprites() {
+        spriteCount = 0;
+        updatedSprites.clear();
+        allSprites.clear();
+    }
+
     @Override
     public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
@@ -164,24 +170,31 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private void updateSpriteData(RenderableSprite sprite, int spriteIndex) {
         int spriteDataStart = getSpriteDataStart(spriteIndex);
         for (VertexAttribute vertexAttribute : vertexAttributes) {
-            PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
-
             int attributeOffset = vertexAttribute.offset / 4;
-            ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
-            Object attributeValue = sprite.getPropertyContainer().getValue(propertySource.getPropertyName());
-            if (attributeValue instanceof ValuePerVertex) {
+
+            PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
+            if (propertySource == null) {
                 for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
                     int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
-
-                    Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                    shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, propertySource.getValueToUse(vertexValue));
+                    sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexData, vertexOffset + attributeOffset);
                 }
             } else {
-                attributeValue = propertySource.getValueToUse(attributeValue);
-                for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
-                    int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
+                ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
+                Object attributeValue = sprite.getPropertyContainer().getValue(propertySource.getPropertyName());
+                if (attributeValue instanceof ValuePerVertex) {
+                    for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
+                        int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
 
-                    shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, attributeValue);
+                        Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
+                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, propertySource.getValueToUse(vertexValue));
+                    }
+                } else {
+                    attributeValue = propertySource.getValueToUse(attributeValue);
+                    for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
+                        int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
+
+                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, attributeValue);
+                    }
                 }
             }
         }

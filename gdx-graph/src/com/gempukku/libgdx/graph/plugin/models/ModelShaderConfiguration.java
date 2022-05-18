@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.plugin.models;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.plugin.boneanimation.SkinningShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.EndShadowShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.models.producer.EndModelShaderNodeBuilder;
 import com.gempukku.libgdx.graph.plugin.models.provided.*;
@@ -24,7 +23,6 @@ public class ModelShaderConfiguration implements GraphConfiguration {
         addGraphShaderNodeBuilder(new WorldPositionShaderNodeBuilder());
         addGraphShaderNodeBuilder(new ObjectToWorldShaderNodeBuilder());
         addGraphShaderNodeBuilder(new ObjectNormalToWorldShaderNodeBuilder());
-        addGraphShaderNodeBuilder(new SkinningShaderNodeBuilder());
         addGraphShaderNodeBuilder(new ModelFragmentCoordinateShaderNodeBuilder());
         addGraphShaderNodeBuilder(new InstanceIdShaderNodeBuilder());
     }

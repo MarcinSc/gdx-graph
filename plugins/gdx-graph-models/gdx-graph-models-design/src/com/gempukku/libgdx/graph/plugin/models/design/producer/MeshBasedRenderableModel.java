@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
@@ -92,13 +93,14 @@ public class MeshBasedRenderableModel implements RenderableModel, Disposable {
         return new ArrayValuePerVertex<>(result.toArray());
     }
 
-    public void updateModel(ObjectMap<String, PropertySource> propertySourceMap, PropertyContainer propertyContainer) {
+    public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
+                            ObjectMap<String, PropertySource> propertySourceMap, PropertyContainer propertyContainer) {
         if (propertiesRenderableModel != null)
             propertiesRenderableModel.dispose();
 
         hierarchicalPropertyContainer.setParent(propertyContainer);
 
-        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(propertySourceMap);
+        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
         ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
 
         propertiesRenderableModel = new PropertiesRenderableModel(

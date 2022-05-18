@@ -4,23 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
-import com.gempukku.libgdx.graph.plugin.particles.GraphParticleEffects;
+import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
+import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.particles.CommonPropertiesParticleEffectAdapter;
+import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
+import com.gempukku.libgdx.graph.util.particles.generator.PositionPropertyGenerator;
+import com.gempukku.libgdx.graph.util.particles.generator.PropertyGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.SpherePositionGenerator;
 
 public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
+    private ParticleModel particleModel;
 
     @Override
     public void initializeScene() {
@@ -34,32 +39,44 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
 
         pipelineRenderer = loadPipelineRenderer();
 
-        GraphParticleEffects particleEffects = pipelineRenderer.getPluginData(GraphParticleEffects.class);
+        GraphModels particleEffects = pipelineRenderer.getPluginData(GraphModels.class);
         particleEffects.setGlobalProperty("Test", "Color", Color.RED);
 
-        createEffect(particleEffects, new Vector3(0, 0, 0), 0.1f);
-        createEffect(particleEffects, new Vector3(2, 0, 0), 0.2f);
+        particleModel = new ParticleModel(1000, particleEffects, "Test");
+
+        createEffect(particleModel, new Vector3(0, 0, 0), 0.1f);
+        createEffect(particleModel, new Vector3(2, 0, 0), 0.2f);
     }
 
-    private void createEffect(GraphParticleEffects particleEffects, Vector3 center, float size) {
+    private void createEffect(ParticleModel particleModel, Vector3 center, float size) {
         SpherePositionGenerator positionGenerator = new SpherePositionGenerator();
         positionGenerator.getCenter().set(center);
         positionGenerator.setRadius(0.3f);
-        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(timeKeeper, 1f, 0, 10);
-        particleGenerator.setPositionGenerator(positionGenerator);
+        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(1f, 0, 10);
+        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(positionGenerator));
+        particleGenerator.setPropertyGenerator("UV",
+                new PropertyGenerator() {
+                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
+                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
+
+                    @Override
+                    public Object generateProperty() {
+                        return uvPerVertex;
+                    }
+                });
 
         MapWritablePropertyContainer properties = new MapWritablePropertyContainer();
         properties.setValue("Size", size);
 
-        CommonPropertiesParticleEffectAdapter particleEffectAdapter = new CommonPropertiesParticleEffectAdapter(particleEffects, Vector3.Zero, null, properties);
-        particleEffectAdapter.addTag("Test", particleGenerator);
-        particleEffectAdapter.startEffect("Test");
+        particleModel.addGenerator(timeKeeper.getTime(), particleGenerator);
     }
 
     @Override
     public void renderScene() {
         float delta = Gdx.graphics.getDeltaTime();
         timeKeeper.updateTime(delta);
+
+        particleModel.update(timeKeeper.getTime());
 
         pipelineRenderer.render(RenderOutputs.drawToScreen);
     }
@@ -73,6 +90,7 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
 
     @Override
     public void disposeScene() {
+        particleModel.dispose();
         pipelineRenderer.dispose();
     }
 

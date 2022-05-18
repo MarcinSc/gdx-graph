@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
@@ -27,16 +27,18 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPublicData;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.plugin.particles.GraphParticleEffects;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
+import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
-import com.gempukku.libgdx.graph.util.particles.CommonPropertiesParticleEffectAdapter;
+import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.LinePositionGenerator;
+import com.gempukku.libgdx.graph.util.particles.generator.PositionPropertyGenerator;
+import com.gempukku.libgdx.graph.util.particles.generator.PropertyGenerator;
 
 public class Episode18Scene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
@@ -49,6 +51,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
     private final float cameraDistance = 1.5f;
     private float cameraPositionAngle = 0f;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
+    private ParticleModel particleModel;
 
     @Override
     public void initializeScene() {
@@ -61,7 +64,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         updateCamera();
 
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class), pipelineRenderer.getPluginData(GraphParticleEffects.class));
+        createModels(pipelineRenderer.getPluginData(GraphModels.class));
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -90,7 +93,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models, GraphParticleEffects effects) {
+    private void createModels(GraphModels models) {
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         model = modelLoader.loadModel(Gdx.files.classpath("model/fighter/fighter.g3db"));
@@ -107,28 +110,40 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         float min = 0.2f;
         float max = 0.3f;
 
-        createExhaust(effects, new Vector3(min, height, distance), new Vector3(max, height, distance));
-        createExhaust(effects, new Vector3(-min, height, distance), new Vector3(-max, height, distance));
-        createExhaust(effects, new Vector3(min, -height, distance), new Vector3(max, -height, distance));
-        createExhaust(effects, new Vector3(-min, -height, distance), new Vector3(-max, -height, distance));
+        particleModel = new ParticleModel(1000, models, "exhaust");
+
+        createExhaust(particleModel, new Vector3(min, height, distance), new Vector3(max, height, distance));
+        createExhaust(particleModel, new Vector3(-min, height, distance), new Vector3(-max, height, distance));
+        createExhaust(particleModel, new Vector3(min, -height, distance), new Vector3(max, -height, distance));
+        createExhaust(particleModel, new Vector3(-min, -height, distance), new Vector3(-max, -height, distance));
     }
 
-    private void createExhaust(GraphParticleEffects effects, Vector3 point1, Vector3 point2) {
+    private void createExhaust(ParticleModel model, Vector3 point1, Vector3 point2) {
         final LinePositionGenerator positionGenerator = new LinePositionGenerator();
         positionGenerator.getPoint1().set(point1);
         positionGenerator.getPoint2().set(point2);
-        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(timeKeeper, 0.5f, 0, 1000) {
+        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(0.5f, 0, 1000);
+        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(positionGenerator));
+        particleGenerator.setPropertyGenerator("UV",
+                new PropertyGenerator() {
+                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
+                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
+
+                    @Override
+                    public Object generateProperty() {
+                        return uvPerVertex;
+                    }
+                });
+        PropertyGenerator randomGenerator = new PropertyGenerator() {
             @Override
-            protected void generateAttributes(ObjectMap attributes) {
-                attributes.put("Move X", MathUtils.random(-0.05f, 0.05f));
-                attributes.put("Move Y", MathUtils.random(-0.05f, 0.05f));
+            public Object generateProperty() {
+                return MathUtils.random(-0.05f, 0.05f);
             }
         };
-        particleGenerator.setPositionGenerator(positionGenerator);
+        particleGenerator.setPropertyGenerator("Move X", randomGenerator);
+        particleGenerator.setPropertyGenerator("Move Y", randomGenerator);
 
-        CommonPropertiesParticleEffectAdapter particleEffectAdapter = new CommonPropertiesParticleEffectAdapter(effects);
-        particleEffectAdapter.addTag("exhaust", particleGenerator);
-        particleEffectAdapter.startEffect("exhaust");
+        model.addGenerator(0, particleGenerator);
     }
 
     private Stage createStage() {
@@ -181,6 +196,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         timeKeeper.updateTime(delta);
 
         stage.act(delta);
+        particleModel.update(timeKeeper.getTime());
 
         pipelineRenderer.render(RenderOutputs.drawToScreen);
     }

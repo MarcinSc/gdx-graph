@@ -2,8 +2,6 @@ package com.gempukku.libgdx.graph.plugin.particles.design;
 
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifePercentageShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifetimeShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticlePositionShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticleUVShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
@@ -27,8 +25,6 @@ public class UIParticlesShaderConfiguration implements UIGraphConfiguration {
     static {
         register(new EndParticlesShaderBoxProducer());
 
-        register(new GraphBoxProducerImpl(new ParticleUVShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ParticlePositionShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ParticleLifetimeShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new ParticleLifePercentageShaderNodeConfiguration()));
     }

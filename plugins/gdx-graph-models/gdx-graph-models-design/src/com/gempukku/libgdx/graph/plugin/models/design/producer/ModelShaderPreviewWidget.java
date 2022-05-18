@@ -186,8 +186,8 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
 
             shaderContext.setTimeProvider(timeKeeper);
 
-            rectangleShaderModel.updateModel(graphShader.getProperties(), localPropertyContainer);
-            sphereShaderModel.updateModel(graphShader.getProperties(), localPropertyContainer);
+            rectangleShaderModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+            sphereShaderModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
 
             shaderInitialized = true;
         } catch (Exception exp) {

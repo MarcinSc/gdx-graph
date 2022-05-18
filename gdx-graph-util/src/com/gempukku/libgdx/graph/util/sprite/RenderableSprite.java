@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.util.sprite;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 
@@ -29,4 +30,6 @@ public interface RenderableSprite {
      * @return
      */
     PropertyContainer getPropertyContainer();
+
+    void setUnknownPropertyInAttribute(VertexAttribute vertexAttribute, float[] vertexData, int startIndex);
 }

@@ -8,42 +8,27 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
-import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
+import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 
 public class GraphModelUtil {
     private GraphModelUtil() {
     }
 
-    public static VertexAttributes getVertexAttributes(ObjectMap<String, PropertySource> shaderProperties) {
+    public static VertexAttributes getVertexAttributes(ObjectMap<String, BasicShader.Attribute> shaderAttributes) {
         Array<VertexAttribute> vertexAttributeArray = new Array<>(VertexAttribute.class);
-        for (ObjectMap.Entry<String, PropertySource> shaderProperty : shaderProperties) {
-            PropertySource propertySource = shaderProperty.value;
-            PropertyLocation propertyLocation = propertySource.getPropertyLocation();
-            if (propertyLocation == PropertyLocation.Attribute) {
-                ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
-                if (shaderFieldType instanceof ArrayShaderFieldType) {
-                    int arraySize = ((ArrayShaderFieldType) shaderFieldType).getArrayLength();
-                    for (int i = 0; i < arraySize; i++) {
-                        vertexAttributeArray.add(new VertexAttribute(1024, shaderFieldType.getNumberOfComponents(), propertySource.getAttributeName(i)));
-                    }
-                } else {
-                    vertexAttributeArray.add(new VertexAttribute(1024, shaderFieldType.getNumberOfComponents(), propertySource.getAttributeName()));
-                }
-            }
+        for (ObjectMap.Entry<String, BasicShader.Attribute> shaderAttribute : shaderAttributes) {
+            vertexAttributeArray.add(new VertexAttribute(1024, shaderAttribute.value.getComponentCount(), shaderAttribute.key));
         }
-
         return new VertexAttributes(vertexAttributeArray.toArray());
     }
 
     public static VertexAttributes getShaderVertexAttributes(GraphModels graphModels, String tag) {
-        ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
-        if (shaderProperties == null)
+        ObjectMap<String, BasicShader.Attribute> shaderAttributes = graphModels.getShaderAttributes(tag);
+        if (shaderAttributes == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
-        return getVertexAttributes(shaderProperties);
+        return getVertexAttributes(shaderAttributes);
     }
 
     public static ObjectMap<VertexAttribute, PropertySource> getPropertySourceMap(GraphModels graphModels, String tag,
