@@ -13,6 +13,8 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.SpriteRenderableModelManager;
+import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class ParticleModel implements Disposable {
     private final ObjectSet<ParticleGenerator> particleGenerators = new ObjectSet<>();
@@ -21,8 +23,12 @@ public class ParticleModel implements Disposable {
     private final MultiPageSpriteBatchModel spriteBatchModel;
     private ParticleSpriteRenderableModel lastSpriteModel;
 
-    public ParticleModel(int spriteCapacity, GraphModels graphModels, String tag) {
-        spriteModelManager = new ParticlesSpriteRenderableModelManager(false, spriteCapacity, graphModels, tag);
+    public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
+        this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
+    }
+
+    public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
+        spriteModelManager = new ParticlesSpriteRenderableModelManager(false, particlesPerPage, spriteModel, graphModels, tag);
         spriteBatchModel = new MultiPageSpriteBatchModel(spriteModelManager);
     }
 
@@ -63,6 +69,7 @@ public class ParticleModel implements Disposable {
     private class ParticlesSpriteRenderableModelManager implements SpriteRenderableModelManager<ParticleSpriteRenderableModel> {
         private final boolean staticBatch;
         private final int spriteCapacity;
+        private final SpriteModel spriteModel;
         private final GraphModels graphModels;
         private final String tag;
 
@@ -71,9 +78,11 @@ public class ParticleModel implements Disposable {
         private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
 
         public ParticlesSpriteRenderableModelManager(boolean staticBatch, int spriteCapacity,
+                                                     SpriteModel spriteModel,
                                                      GraphModels graphModels, String tag) {
             this.staticBatch = staticBatch;
             this.spriteCapacity = spriteCapacity;
+            this.spriteModel = spriteModel;
             this.graphModels = graphModels;
             this.tag = tag;
 
@@ -83,7 +92,10 @@ public class ParticleModel implements Disposable {
 
         @Override
         public ParticleSpriteRenderableModel createNewModel(WritablePropertyContainer propertyContainer) {
-            ParticleSpriteRenderableModel model = new ParticleSpriteRenderableModel(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer);
+            ParticleSpriteRenderableModel model = new ParticleSpriteRenderableModel(
+                    staticBatch, spriteCapacity,
+                    vertexAttributes, vertexPropertySources, propertyContainer,
+                    spriteModel);
             lastSpriteModel = model;
             models.add(model);
             graphModels.addModel(tag, model);

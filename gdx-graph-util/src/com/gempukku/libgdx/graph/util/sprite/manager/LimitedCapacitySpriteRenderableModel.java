@@ -1,7 +1,10 @@
 package com.gempukku.libgdx.graph.util.sprite.manager;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -17,7 +20,8 @@ import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
-import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
+import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
     private final Matrix4 worldTransform = new Matrix4();
@@ -29,6 +33,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private final int spriteCapacity;
     private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
     private final float[] vertexData;
+    private final SpriteModel spriteModel;
     private final int floatCountPerVertex;
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
@@ -46,8 +51,17 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
             boolean staticBatch, int spriteCapacity,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer) {
+        this(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer,
+                new QuadSpriteModel());
+    }
+
+    public LimitedCapacitySpriteRenderableModel(
+            boolean staticBatch, int spriteCapacity,
+            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+            WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.spriteCapacity = spriteCapacity;
         this.propertyContainer = propertyContainer;
+        this.spriteModel = spriteModel;
 
         this.vertexAttributes = vertexAttributes;
 
@@ -57,12 +71,16 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
         spritePosition = new RenderableSprite[spriteCapacity];
 
-        vertexData = new float[4 * floatCountPerVertex * spriteCapacity];
+        vertexData = new float[spriteModel.getVertexCount() * floatCountPerVertex * spriteCapacity];
 
-        mesh = new Mesh(staticBatch, true, 4 * spriteCapacity, 6 * spriteCapacity, vertexAttributes);
+        mesh = new Mesh(staticBatch, true,
+                spriteModel.getVertexCount() * spriteCapacity,
+                spriteModel.getIndexCount() * spriteCapacity, vertexAttributes);
         mesh.setVertices(vertexData);
 
-        short[] indices = SpriteUtil.createSpriteIndicesArray(spriteCapacity);
+        short[] indices = new short[spriteModel.getIndexCount() * spriteCapacity];
+        spriteModel.initializeIndexBuffer(indices, spriteCapacity);
+
         mesh.setIndices(indices, 0, indices.length);
     }
 
@@ -129,7 +147,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
             spritePosition[position] = spritePosition[spriteCount - 1];
             int sourcePosition = getSpriteDataStart(spriteCount - 1);
             int destinationPosition = getSpriteDataStart(position);
-            int floatCount = floatCountPerVertex * 4;
+            int floatCount = floatCountPerVertex * spriteModel.getVertexCount();
             System.arraycopy(vertexData, sourcePosition, vertexData, destinationPosition, floatCount);
 
             markSpriteUpdated(position);
@@ -156,7 +174,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     }
 
     private int getSpriteDataStart(int spriteIndex) {
-        return spriteIndex * floatCountPerVertex * 4;
+        return spriteIndex * floatCountPerVertex * spriteModel.getVertexCount();
     }
 
     private int findSpriteIndex(RenderableSprite sprite) {
@@ -169,12 +187,14 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     private void updateSpriteData(RenderableSprite sprite, int spriteIndex) {
         int spriteDataStart = getSpriteDataStart(spriteIndex);
+        int vertexCount = spriteModel.getVertexCount();
+
         for (VertexAttribute vertexAttribute : vertexAttributes) {
             int attributeOffset = vertexAttribute.offset / 4;
 
             PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
             if (propertySource == null) {
-                for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
+                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                     int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
                     sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexData, vertexOffset + attributeOffset);
                 }
@@ -182,7 +202,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
                 ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
                 Object attributeValue = sprite.getPropertyContainer().getValue(propertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
-                    for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
+                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
 
                         Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
@@ -190,7 +210,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
                     }
                 } else {
                     attributeValue = propertySource.getValueToUse(attributeValue);
-                    for (int vertexIndex = 0; vertexIndex < 4; vertexIndex++) {
+                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
 
                         shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, attributeValue);
@@ -252,8 +272,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
             Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
-        mesh.bind(shaderProgram, attributeLocations);
-        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, 6 * spriteCount, GL20.GL_UNSIGNED_SHORT, 0);
-        mesh.unbind(shaderProgram, attributeLocations);
+
+        spriteModel.renderMesh(shaderProgram, mesh, 0, spriteCount, attributeLocations);
     }
 }

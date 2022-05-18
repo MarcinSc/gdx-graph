@@ -38,6 +38,7 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.ParticleSpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 
 import java.util.Iterator;
 
@@ -224,7 +225,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
             particleModel = new ParticleSpriteRenderableModel(false, 1000,
                     vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
-                    localPropertyContainer);
+                    localPropertyContainer, new QuadSpriteModel());
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),
                     new ParticleGenerator.ParticleCreateCallback() {

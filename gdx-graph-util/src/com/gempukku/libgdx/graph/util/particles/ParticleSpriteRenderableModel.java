@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class ParticleSpriteRenderableModel extends LimitedCapacitySpriteRenderableModel {
     private float maxDeathTime = Float.MIN_VALUE;
@@ -13,8 +14,9 @@ public class ParticleSpriteRenderableModel extends LimitedCapacitySpriteRenderab
     public ParticleSpriteRenderableModel(boolean staticBatch, int spriteCapacity,
                                          VertexAttributes vertexAttributes,
                                          ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
-                                         WritablePropertyContainer propertyContainer) {
-        super(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer);
+                                         WritablePropertyContainer propertyContainer,
+                                         SpriteModel spriteModel) {
+        super(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
     }
 
     public void updateWithMaxDeathTime(float maxDeathTime) {
