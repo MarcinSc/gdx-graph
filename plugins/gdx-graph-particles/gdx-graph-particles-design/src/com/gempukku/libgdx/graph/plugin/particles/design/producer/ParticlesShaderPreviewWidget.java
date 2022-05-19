@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
@@ -34,9 +35,9 @@ import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
-import com.gempukku.libgdx.graph.util.particles.ParticleSpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
+import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 
 import java.util.Iterator;
@@ -55,7 +56,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private GraphShader graphShader;
     private OpenGLContext renderContext;
 
-    private ParticleSpriteRenderableModel particleModel;
+    private LimitedCapacitySpriteRenderableModel particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
     private DefaultParticleGenerator particleGenerator;
 
@@ -107,7 +108,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         localPropertyContainer = new MapWritablePropertyContainer();
 
         particleGenerator = new DefaultParticleGenerator(3f, 1, 10f);
-        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(getPositionGenerator(ShaderPreviewModel.Sphere)));
+        setPositionPropertyGenerator(ShaderPreviewModel.Sphere);
         particleGenerator.setPropertyGenerator("UV",
                 new PropertyGenerator() {
                     @Override
@@ -115,6 +116,16 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                         return SpriteUtil.QUAD_UVS;
                     }
                 });
+    }
+
+    private void setPositionPropertyGenerator(ShaderPreviewModel model) {
+        final PositionGenerator positionGenerator = getPositionGenerator(model);
+        particleGenerator.setPropertyGenerator("Position", new PropertyGenerator() {
+            @Override
+            public Object generateProperty(float seed) {
+                return positionGenerator.generateLocation(new Vector3());
+            }
+        });
     }
 
     private static PositionGenerator getPositionGenerator(ShaderPreviewModel model) {
@@ -147,7 +158,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     }
 
     public void setModel(ShaderPreviewModel model) {
-        particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(getPositionGenerator(model)));
+        setPositionPropertyGenerator(model);
     }
 
     public void setCameraDistance(float distance) {
@@ -231,7 +242,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 sprites.clear();
             }
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
-            particleModel = new ParticleSpriteRenderableModel(false, 32767 / 4,
+            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4,
                     vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
                     localPropertyContainer, new QuadSpriteModel());
 

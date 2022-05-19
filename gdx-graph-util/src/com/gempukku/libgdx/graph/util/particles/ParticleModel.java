@@ -28,7 +28,7 @@ public class ParticleModel implements Disposable {
     }
 
     public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
-        spriteModelManager = new ParticlesSpriteRenderableModelManager(false, particlesPerPage, spriteModel, graphModels, tag);
+        spriteModelManager = new ParticlesSpriteRenderableModelManager(particlesPerPage, spriteModel, graphModels, tag);
         spriteBatchModel = new MultiPageSpriteBatchModel(spriteModelManager);
     }
 
@@ -67,7 +67,6 @@ public class ParticleModel implements Disposable {
     }
 
     private class ParticlesSpriteRenderableModelManager implements SpriteRenderableModelManager<ParticleSpriteRenderableModel> {
-        private final boolean staticBatch;
         private final int spriteCapacity;
         private final SpriteModel spriteModel;
         private final GraphModels graphModels;
@@ -77,10 +76,9 @@ public class ParticleModel implements Disposable {
         private final VertexAttributes vertexAttributes;
         private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
 
-        public ParticlesSpriteRenderableModelManager(boolean staticBatch, int spriteCapacity,
+        public ParticlesSpriteRenderableModelManager(int spriteCapacity,
                                                      SpriteModel spriteModel,
                                                      GraphModels graphModels, String tag) {
-            this.staticBatch = staticBatch;
             this.spriteCapacity = spriteCapacity;
             this.spriteModel = spriteModel;
             this.graphModels = graphModels;
@@ -93,7 +91,7 @@ public class ParticleModel implements Disposable {
         @Override
         public ParticleSpriteRenderableModel createNewModel(WritablePropertyContainer propertyContainer) {
             ParticleSpriteRenderableModel model = new ParticleSpriteRenderableModel(
-                    staticBatch, spriteCapacity,
+                    spriteCapacity,
                     vertexAttributes, vertexPropertySources, propertyContainer,
                     spriteModel);
             lastSpriteModel = model;
