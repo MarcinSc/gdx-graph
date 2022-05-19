@@ -13,7 +13,6 @@ import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.graph.ui.part.*;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
-import com.kotcrab.vis.ui.util.Validators;
 
 public class EndParticlesShaderBoxProducer extends GraphBoxProducerImpl {
     public EndParticlesShaderBoxProducer() {
@@ -38,11 +37,6 @@ public class EndParticlesShaderBoxProducer extends GraphBoxProducerImpl {
                 }
             }
         };
-
-        IntegerBoxPart particleCountBox = new IntegerBoxPart("Max particles ", "maxParticles", 100,
-                new Validators.GreaterThanValidator(0, false));
-        particleCountBox.initialize(data);
-        result.addGraphBoxPart(particleCountBox);
 
         addConfigurationInputsAndOutputs(result);
 

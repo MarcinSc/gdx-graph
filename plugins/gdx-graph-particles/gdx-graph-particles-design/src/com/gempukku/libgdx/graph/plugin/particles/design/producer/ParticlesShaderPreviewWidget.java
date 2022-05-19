@@ -218,12 +218,24 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
             shaderContext.setTimeProvider(timeKeeper);
 
+            resetParticles();
+
+            shaderInitialized = true;
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            if (graphShader != null)
+                graphShader.dispose();
+        }
+    }
+
+    public void resetParticles() {
+        if (graphShader != null) {
             if (particleModel != null) {
                 particleModel.dispose();
                 sprites.clear();
             }
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
-            particleModel = new ParticleSpriteRenderableModel(false, 1000,
+            particleModel = new ParticleSpriteRenderableModel(false, 32767 / 4,
                     vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
                     localPropertyContainer, new QuadSpriteModel());
 
@@ -236,12 +248,6 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                             particleModel.addSprite(sprite);
                         }
                     });
-
-            shaderInitialized = true;
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            if (graphShader != null)
-                graphShader.dispose();
         }
     }
 
@@ -249,6 +255,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         frameBuffer.dispose();
         frameBuffer = null;
         graphShader.dispose();
+        graphShader = null;
         shaderInitialized = false;
     }
 

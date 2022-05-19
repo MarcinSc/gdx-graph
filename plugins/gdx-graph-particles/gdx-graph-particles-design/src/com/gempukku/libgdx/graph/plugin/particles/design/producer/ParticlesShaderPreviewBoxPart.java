@@ -14,13 +14,13 @@ import com.gempukku.libgdx.graph.ui.graph.GraphBoxPart;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxPart {
     private final ParticlesShaderPreviewWidget shaderPreviewWidget;
-    private final VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel> selectBox;
 
     public ParticlesShaderPreviewBoxPart() {
-        selectBox = new VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel>();
+        final VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel> selectBox = new VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel>();
         selectBox.setItems(ParticlesShaderPreviewWidget.ShaderPreviewModel.values());
 
         final VisSlider cameraDistance = new VisSlider(0.5f, 10f, 0.01f, false);
@@ -35,6 +35,9 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
         final VisSlider perSecondCount = new VisSlider(0, 100f, 0.1f, false);
         perSecondCount.setValue(10f);
 
+        final VisTextButton resetButton = new VisTextButton("Reset particles");
+        resetButton.padLeft(10).padRight(10);
+
         shaderPreviewWidget = new ParticlesShaderPreviewWidget(300, 300);
         shaderPreviewWidget.setModel(ParticlesShaderPreviewWidget.ShaderPreviewModel.Point);
         shaderPreviewWidget.setCameraDistance(1f);
@@ -42,6 +45,13 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
         shaderPreviewWidget.setInitialCount(0);
         shaderPreviewWidget.setParticlesPerSecond(10f);
 
+        resetButton.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        shaderPreviewWidget.resetParticles();
+                    }
+                });
         cameraDistance.addListener(
                 new ChangeListener() {
                     @Override
@@ -88,6 +98,7 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
         add(perSecondCount).colspan(2).growX().row();
         add("Camera distance:").colspan(2).growX().row();
         add(cameraDistance).colspan(2).growX().row();
+        add(resetButton).colspan(2).center().pad(2).row();
         add(shaderPreviewWidget).colspan(2).grow().row();
     }
 
