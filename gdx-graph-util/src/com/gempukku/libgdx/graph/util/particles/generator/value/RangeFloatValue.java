@@ -10,7 +10,7 @@ public class RangeFloatValue implements FloatValue {
     }
 
     @Override
-    public float getValue(float seed) {
+    public Float getValue(float seed) {
         return minimum + (maximum - minimum) * seed;
     }
 }

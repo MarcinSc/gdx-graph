@@ -7,7 +7,7 @@ public class IdentityValue implements FloatValue {
     }
 
     @Override
-    public float getValue(float seed) {
+    public Float getValue(float seed) {
         return seed;
     }
 }

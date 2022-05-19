@@ -8,7 +8,7 @@ public class StaticFloatValue implements FloatValue {
     }
 
     @Override
-    public float getValue(float seed) {
+    public Float getValue(float seed) {
         return value;
     }
 }
