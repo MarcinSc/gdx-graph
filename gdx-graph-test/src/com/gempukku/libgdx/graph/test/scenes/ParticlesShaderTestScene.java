@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
@@ -13,13 +12,13 @@ import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
-import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PositionPropertyGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PropertyGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.SpherePositionGenerator;
+import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 
 public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
@@ -56,12 +55,9 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
         particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(positionGenerator));
         particleGenerator.setPropertyGenerator("UV",
                 new PropertyGenerator() {
-                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
-                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
-
                     @Override
-                    public Object generateProperty() {
-                        return uvPerVertex;
+                    public Object generateProperty(float seed) {
+                        return SpriteUtil.QUAD_UVS;
                     }
                 });
 

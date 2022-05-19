@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -31,7 +30,6 @@ import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
-import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 import com.gempukku.libgdx.graph.util.particles.ParticleModel;
@@ -39,6 +37,7 @@ import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerat
 import com.gempukku.libgdx.graph.util.particles.generator.LinePositionGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PositionPropertyGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PropertyGenerator;
+import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 
 public class Episode18Scene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
@@ -126,17 +125,14 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(positionGenerator));
         particleGenerator.setPropertyGenerator("UV",
                 new PropertyGenerator() {
-                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
-                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
-
                     @Override
-                    public Object generateProperty() {
-                        return uvPerVertex;
+                    public Object generateProperty(float seed) {
+                        return SpriteUtil.QUAD_UVS;
                     }
                 });
         PropertyGenerator randomGenerator = new PropertyGenerator() {
             @Override
-            public Object generateProperty() {
+            public Object generateProperty(float seed) {
                 return MathUtils.random(-0.05f, 0.05f);
             }
         };

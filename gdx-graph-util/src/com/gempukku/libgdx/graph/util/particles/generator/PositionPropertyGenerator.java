@@ -12,7 +12,7 @@ public class PositionPropertyGenerator implements PropertyGenerator {
     }
 
     @Override
-    public Object generateProperty() {
+    public Object generateProperty(float seed) {
         return positionGenerator.generateLocation(tmpVector);
     }
 }

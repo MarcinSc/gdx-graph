@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
@@ -31,13 +30,13 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
-import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.ParticleSpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 
 import java.util.Iterator;
@@ -111,12 +110,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(getPositionGenerator(ShaderPreviewModel.Sphere)));
         particleGenerator.setPropertyGenerator("UV",
                 new PropertyGenerator() {
-                    private ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
-                            new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
-
                     @Override
-                    public Object generateProperty() {
-                        return uvPerVertex;
+                    public Object generateProperty(float seed) {
+                        return SpriteUtil.QUAD_UVS;
                     }
                 });
     }
