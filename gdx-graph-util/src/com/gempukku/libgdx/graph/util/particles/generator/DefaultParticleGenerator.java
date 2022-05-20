@@ -86,9 +86,10 @@ public class DefaultParticleGenerator implements ParticleGenerator {
     private void generateParticle(float particleBirth, ParticleCreateCallback createCallback) {
         MapWritablePropertyContainer properties = new MapWritablePropertyContainer();
 
-        float lifeLengthValue = lifeLength.getValue(MathUtils.random());
+        float seed = MathUtils.random();
+        float lifeLengthValue = lifeLength.getValue(seed);
         for (ObjectMap.Entry<String, PropertyGenerator> propertyGenerator : propertyGenerators) {
-            properties.setValue(propertyGenerator.key, propertyGenerator.value.generateProperty(MathUtils.random()));
+            properties.setValue(propertyGenerator.key, propertyGenerator.value.generateProperty(seed));
         }
 
         createCallback.createParticle(particleBirth, lifeLengthValue, properties);
