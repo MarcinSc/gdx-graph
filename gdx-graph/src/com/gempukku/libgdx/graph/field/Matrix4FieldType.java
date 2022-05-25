@@ -14,6 +14,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.ValueOperations;
 
 public class Matrix4FieldType implements ShaderFieldType, PipelineFieldType {
     @Override
@@ -114,8 +115,7 @@ public class Matrix4FieldType implements ShaderFieldType, PipelineFieldType {
 
     @Override
     public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
-        com.badlogic.gdx.math.Matrix4 matrix = (Matrix4) value;
-        System.arraycopy(matrix.val, 0, vertices, startIndex, 16);
+        ValueOperations.copyMatrix4IntoArray((Matrix4) value, vertices, startIndex);
     }
 
     @Override

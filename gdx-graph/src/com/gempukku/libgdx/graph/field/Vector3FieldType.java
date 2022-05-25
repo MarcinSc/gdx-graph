@@ -14,6 +14,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.ValueOperations;
 
 public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
     @Override
@@ -111,9 +112,7 @@ public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
 
     @Override
     public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
-        vertices[startIndex + 0] = ((Vector3) value).x;
-        vertices[startIndex + 1] = ((Vector3) value).y;
-        vertices[startIndex + 2] = ((Vector3) value).z;
+        ValueOperations.copyVector3IntoArray((Vector3) value, vertices, startIndex);
     }
 
     @Override

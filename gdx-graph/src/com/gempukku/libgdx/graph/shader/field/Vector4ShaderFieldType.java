@@ -12,6 +12,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.util.ValueOperations;
 
 public class Vector4ShaderFieldType implements ShaderFieldType {
     @Override
@@ -101,10 +102,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
 
     @Override
     public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
-        vertices[startIndex + 0] = ((Color) value).r;
-        vertices[startIndex + 1] = ((Color) value).g;
-        vertices[startIndex + 2] = ((Color) value).b;
-        vertices[startIndex + 3] = ((Color) value).a;
+        ValueOperations.copyColorIntoArray((Color) value, vertices, startIndex);
     }
 
     @Override
