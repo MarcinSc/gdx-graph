@@ -5,5 +5,6 @@ sourceCompatibility = 1.7
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["resources/"]
+sourceSets.test.java.srcDirs = [ "test/" ]
 
 eclipse.project.name = "gdx-graph-util"

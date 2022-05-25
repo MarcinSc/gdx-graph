@@ -11,7 +11,6 @@ public class PointPositionGenerator implements PositionGenerator {
 
     @Override
     public Vector3 generateLocation(Vector3 location) {
-        location.set(point);
-        return location;
+        return location.set(point);
     }
 }

@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.util.particles.generator;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 public class ParallelogramPositionGenerator implements PositionGenerator {
@@ -22,7 +21,10 @@ public class ParallelogramPositionGenerator implements PositionGenerator {
 
     @Override
     public Vector3 generateLocation(Vector3 location) {
-        location.set(origin).mulAdd(direction1, MathUtils.random()).mulAdd(direction2, MathUtils.random());
-        return location;
+        return RandomPosition.uniformParallelogramPosition(
+                origin.x, origin.y, origin.z,
+                direction1.x, direction1.y, direction1.z,
+                direction2.x, direction2.y, direction2.z,
+                location);
     }
 }
