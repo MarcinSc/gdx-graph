@@ -41,6 +41,10 @@ public class ParticleModel implements Disposable {
         particleGenerators.remove(generator);
     }
 
+    public WritablePropertyContainer getPropertyContainer() {
+        return spriteBatchModel.getPropertyContainer();
+    }
+
     public void update(float currentTime) {
         for (ParticleGenerator particleGenerator : particleGenerators) {
             particleGenerator.createParticles(currentTime, callback);
