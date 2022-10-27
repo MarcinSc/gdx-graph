@@ -116,8 +116,8 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
         if (textureSignature.equals(oldTextureSignature)) {
             return batchModelPerTextureSignature.get(textureSignature).updateSprite(sprite);
         } else {
-            batchModelPerTextureSignature.get(oldTextureSignature).removeSprite(sprite);
-            return batchModelPerTextureSignature.get(textureSignature).addSprite(sprite);
+            removeSprite(sprite);
+            return addSprite(sprite);
         }
     }
 
