@@ -12,6 +12,8 @@ import com.gempukku.libgdx.graph.shader.property.PropertySource;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class BasicSpriteBatchModel implements SpriteBatchModel {
     private SpriteRenderableModel delegate;
@@ -26,6 +28,12 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
     public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag,
                                  WritablePropertyContainer propertyContainer) {
+        this(staticBatch, spriteCapacity, graphModels, tag, propertyContainer, new QuadSpriteModel());
+    }
+
+    public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
+                                 GraphModels graphModels, String tag,
+                                 WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.graphModels = graphModels;
         this.tag = tag;
 
@@ -33,7 +41,7 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
         delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity,
-                vertexAttributes, vertexPropertySources, propertyContainer);
+                vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
         graphModels.addModel(tag, delegate);
     }
 
