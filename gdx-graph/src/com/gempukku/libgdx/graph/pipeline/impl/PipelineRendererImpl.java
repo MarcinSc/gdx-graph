@@ -90,26 +90,30 @@ public class PipelineRendererImpl implements PipelineRenderer {
 
     @Override
     public void render(final RenderOutput renderOutput) {
-        pipelineRenderingContext.setRenderOutput(renderOutput);
-        if (ownsResources)
-            resources.startFrame();
+        // Some platforms are chocking (throwing Exception) when asked to create
+        // a Render Buffer with a dimension of 0
+        if (renderOutput.getRenderWidth() != 0 && renderOutput.getRenderHeight() != 0) {
+            pipelineRenderingContext.setRenderOutput(renderOutput);
+            if (ownsResources)
+                resources.startFrame();
 
-        preparedRenderingPipeline.startFrame();
+            preparedRenderingPipeline.startFrame();
 
-        pipelineRenderingContext.update();
+            pipelineRenderingContext.update();
 
-        pipelineRenderingContext.getRenderContext().begin();
+            pipelineRenderingContext.getRenderContext().begin();
 
-        // Execute nodes
-        RenderPipeline renderPipeline = preparedRenderingPipeline.execute(pipelineRenderingContext);
-        renderOutput.output(renderPipeline, pipelineRenderingContext, pipelineRenderingContext.getFullScreenRender());
-        renderPipeline.destroyDefaultBuffer();
-        pipelineRenderingContext.getRenderContext().end();
+            // Execute nodes
+            RenderPipeline renderPipeline = preparedRenderingPipeline.execute(pipelineRenderingContext);
+            renderOutput.output(renderPipeline, pipelineRenderingContext, pipelineRenderingContext.getFullScreenRender());
+            renderPipeline.destroyDefaultBuffer();
+            pipelineRenderingContext.getRenderContext().end();
 
-        preparedRenderingPipeline.endFrame();
+            preparedRenderingPipeline.endFrame();
 
-        if (ownsResources)
-            resources.endFrame();
+            if (ownsResources)
+                resources.endFrame();
+        }
     }
 
     @Override
