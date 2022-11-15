@@ -7,7 +7,9 @@ A library for [libGDX](https://libgdx.badlogicgames.com/ "libGDX") cross-platfor
 GDX-graph is undery heavy development at the moment. The devlogs are available
 on [YouTube](https://www.youtube.com/playlist?list=PLqpawGIg6Qj5CvjOaCbB536z862XhjPQi)
 
-Current version is 0.5.1 - beta release.
+
+[ ![Download](https://maven-badges.herokuapp.com/maven-central/com.gempukku.libgdx.graph/libgdx-graph/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.gempukku.libgdx.graph/libgdx-graph/badge.svg) beta release.
+
 
 ## Goal
 
