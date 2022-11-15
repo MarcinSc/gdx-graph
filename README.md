@@ -8,7 +8,7 @@ GDX-graph is undery heavy development at the moment. The devlogs are available
 on [YouTube](https://www.youtube.com/playlist?list=PLqpawGIg6Qj5CvjOaCbB536z862XhjPQi)
 
 
-[ ![Download](https://maven-badges.herokuapp.com/maven-central/com.gempukku.libgdx.graph/libgdx-graph/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.gempukku.libgdx.graph/libgdx-graph/badge.svg) beta release.
+[ ![Download](https://maven-badges.herokuapp.com/maven-central/com.gempukku.libgdx.graph/libgdx-graph/badge.svg) ](https://mvnrepository.com/artifact/com.gempukku.libgdx.graph/libgdx-graph) beta release.
 
 
 ## Goal
