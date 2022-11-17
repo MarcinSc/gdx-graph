@@ -22,7 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class DesktopLauncher {
+public class GraphEditorLauncher {
     public static void main(String[] arg) throws IOException {
         setupPlugins();
 
