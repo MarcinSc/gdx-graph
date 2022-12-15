@@ -206,7 +206,6 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
                 Gdx.app.debug("Particles", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
 
             mesh.updateVertices(minUpdatedIndex, spriteStorage.getFloatArray(), minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
-
             spriteStorage.resetUpdates();
         }
     }
