@@ -200,11 +200,9 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
         int minUpdatedIndex = spriteStorage.getMinUpdatedIndex();
         int maxUpdatedIndex = spriteStorage.getMaxUpdatedIndex();
 
-        if (minUpdatedIndex != Integer.MAX_VALUE && minUpdatedIndex != maxUpdatedIndex) {
-            boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
-            if (debug)
+        if (minUpdatedIndex < maxUpdatedIndex) {
+            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
                 Gdx.app.debug("Particles", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
-
             mesh.updateVertices(minUpdatedIndex, spriteStorage.getFloatArray(), minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
             spriteStorage.resetUpdates();
         }
@@ -213,9 +211,8 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         int spriteCount = spriteStorage.getObjectCount();
-        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG) {
+        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
             Gdx.app.debug("Particles", "Rendering " + spriteCount + " particles(s)");
-        }
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
 

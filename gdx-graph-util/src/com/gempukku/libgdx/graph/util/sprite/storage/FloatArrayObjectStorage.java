@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.util.sprite.storage;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectIntMap;
 
@@ -100,7 +99,6 @@ public class FloatArrayObjectStorage<T> {
     private void markObjectUpdated(int objectIndex) {
         minUpdatedIndex = Math.min(minUpdatedIndex, objectIndex * objectSize);
         maxUpdatedIndex = Math.max(maxUpdatedIndex, (objectIndex + 1) * objectSize);
-        Gdx.app.debug("Sprite", "Update: " + objectIndex + ", " + minUpdatedIndex + " " + maxUpdatedIndex);
     }
 
     public int getObjectCount() {
@@ -112,7 +110,7 @@ public class FloatArrayObjectStorage<T> {
     }
 
     public int getMinUpdatedIndex() {
-        return Math.min(minUpdatedIndex, objectCount * objectSize);
+        return minUpdatedIndex;
     }
 
     public int getMaxUpdatedIndex() {
@@ -122,6 +120,5 @@ public class FloatArrayObjectStorage<T> {
     public void resetUpdates() {
         minUpdatedIndex = Integer.MAX_VALUE;
         maxUpdatedIndex = -1;
-        Gdx.app.debug("Sprite", "Reset: " + minUpdatedIndex + " " + maxUpdatedIndex);
     }
 }
