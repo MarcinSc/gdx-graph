@@ -1,8 +1,6 @@
 package com.gempukku.libgdx.graph.util.particles;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 
@@ -23,16 +21,6 @@ public class ParticleRenderableSprite implements RenderableSprite {
 
     public float getParticleDeath() {
         return particleBirth + lifeLength;
-    }
-
-    @Override
-    public Vector3 getPosition() {
-        return null;
-    }
-
-    @Override
-    public boolean isRendered(Camera camera) {
-        return false;
     }
 
     @Override
