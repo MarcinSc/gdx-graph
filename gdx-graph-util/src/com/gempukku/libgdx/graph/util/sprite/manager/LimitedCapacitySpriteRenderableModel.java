@@ -150,7 +150,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
                 }
             } else {
                 ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
-                Object attributeValue = sprite.getPropertyContainer().getValue(propertySource.getPropertyName());
+                Object attributeValue = sprite.getValue(propertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
                     for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;

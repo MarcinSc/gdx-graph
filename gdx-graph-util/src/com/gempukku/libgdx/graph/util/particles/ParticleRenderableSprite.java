@@ -24,8 +24,8 @@ public class ParticleRenderableSprite implements RenderableSprite {
     }
 
     @Override
-    public PropertyContainer getPropertyContainer() {
-        return propertyContainer;
+    public Object getValue(String name) {
+        return propertyContainer.getValue(name);
     }
 
     @Override

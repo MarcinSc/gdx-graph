@@ -180,7 +180,7 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
     private void setupTextures(SpriteBatchModel spriteBatchModel, RenderableSprite sprite) {
         WritablePropertyContainer propertyContainer = spriteBatchModel.getPropertyContainer();
         for (PropertySource textureUniform : textureUniforms) {
-            Object region = sprite.getPropertyContainer().getValue(textureUniform.getPropertyName());
+            Object region = sprite.getValue(textureUniform.getPropertyName());
             region = textureUniform.getValueToUse(region);
             propertyContainer.setValue(textureUniform.getPropertyName(), new TextureRegion(((TextureRegion) region).getTexture()));
         }
@@ -192,7 +192,7 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
 
         StringBuilder sb = new StringBuilder();
         for (PropertySource textureUniform : textureUniforms) {
-            Object region = sprite.getPropertyContainer().getValue(textureUniform.getPropertyName());
+            Object region = sprite.getValue(textureUniform.getPropertyName());
             region = textureUniform.getValueToUse(region);
             sb.append(((TextureRegion) region).getTexture().getTextureObjectHandle()).append(",");
         }

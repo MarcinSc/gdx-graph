@@ -9,7 +9,6 @@ import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
@@ -35,19 +34,19 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         spriteBatch = new BasicSpriteBatchModel(true, 2, graphModels, "Test");
 
-        MapWritablePropertyContainer sprite1 = new MapWritablePropertyContainer();
+        DefaultRenderableSprite sprite1 = new DefaultRenderableSprite();
         sprite1.setValue("Position", new Vector3(0, 0, -10));
         sprite1.setValue("UV", uvPerVertex);
         ArrayValuePerVertex<Vector2> colorPerVertex = new ArrayValuePerVertex<>(
                 new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(1, 1));
         sprite1.setValue("Vertex Color", colorPerVertex);
 
-        MapWritablePropertyContainer sprite2 = new MapWritablePropertyContainer();
+        DefaultRenderableSprite sprite2 = new DefaultRenderableSprite();
         sprite2.setValue("Position", new Vector3(150, 0, -10));
         sprite2.setValue("UV", uvPerVertex);
 
-        spriteBatch.addSprite(new DefaultRenderableSprite(sprite1));
-        spriteBatch.addSprite(new DefaultRenderableSprite(sprite2));
+        spriteBatch.addSprite(sprite1);
+        spriteBatch.addSprite(sprite2);
 
         graphModels.setGlobalProperty("Test", "Color", new Vector2(1f, 1f));
     }
