@@ -110,7 +110,7 @@ public class FloatArrayObjectStorage<T> {
     }
 
     public int getMinUpdatedIndex() {
-        return minUpdatedIndex;
+        return Math.min(minUpdatedIndex, objectCount * objectSize);
     }
 
     public int getMaxUpdatedIndex() {

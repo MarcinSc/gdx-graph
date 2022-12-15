@@ -196,13 +196,11 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public void prepareToRender(ShaderContext shaderContext) {
-        boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
-
         int minUpdatedIndex = spriteStorage.getMinUpdatedIndex();
         int maxUpdatedIndex = spriteStorage.getMaxUpdatedIndex();
 
-        if (minUpdatedIndex != Integer.MAX_VALUE) {
-            if (debug)
+        if (minUpdatedIndex != Integer.MAX_VALUE && minUpdatedIndex != maxUpdatedIndex) {
+            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
                 Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
             mesh.updateVertices(minUpdatedIndex, spriteStorage.getFloatArray(), minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
             spriteStorage.resetUpdates();

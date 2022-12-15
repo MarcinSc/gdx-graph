@@ -199,7 +199,8 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     public void prepareToRender(ShaderContext shaderContext) {
         int minUpdatedIndex = spriteStorage.getMinUpdatedIndex();
         int maxUpdatedIndex = spriteStorage.getMaxUpdatedIndex();
-        if (minUpdatedIndex != Integer.MAX_VALUE) {
+
+        if (minUpdatedIndex != Integer.MAX_VALUE && minUpdatedIndex != maxUpdatedIndex) {
             boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
             if (debug)
                 Gdx.app.debug("Particles", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
