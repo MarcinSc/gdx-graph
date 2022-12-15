@@ -4,6 +4,8 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 
 public interface SpriteRenderableModelManager<T extends SpriteRenderableModel> {
+    int getIdentifierCount();
+
     T createNewModel(WritablePropertyContainer propertyContainer);
 
     boolean shouldDisposeEmptyModel(T model);

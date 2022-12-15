@@ -40,7 +40,7 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
-        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity,
+        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity, 20000,
                 vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
         graphModels.addModel(tag, delegate);
     }
@@ -51,28 +51,28 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public boolean addSprite(RenderableSprite sprite) {
+    public int addSprite(RenderableSprite sprite) {
         return delegate.addSprite(sprite);
     }
 
     @Override
-    public boolean hasSprite(RenderableSprite sprite) {
-        return delegate.hasSprite(sprite);
+    public void removeSprite(int spriteIndex) {
+        delegate.removeSprite(spriteIndex);
     }
 
     @Override
-    public boolean removeSprite(RenderableSprite sprite) {
-        return delegate.removeSprite(sprite);
-    }
-
-    @Override
-    public boolean updateSprite(RenderableSprite sprite) {
-        return delegate.updateSprite(sprite);
+    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
+        return delegate.updateSprite(sprite, spriteIndex);
     }
 
     @Override
     public int getSpriteCount() {
         return delegate.getSpriteCount();
+    }
+
+    @Override
+    public boolean isAtCapacity() {
+        return delegate.isAtCapacity();
     }
 
     @Override

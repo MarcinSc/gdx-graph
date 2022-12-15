@@ -24,11 +24,11 @@ public class ParticleModel implements Disposable {
     private ParticleSpriteRenderableModel lastSpriteModel;
 
     public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
-        this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
+        this(particlesPerPage, 20000, new QuadSpriteModel(), graphModels, tag);
     }
 
-    public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
-        spriteModelManager = new ParticlesSpriteRenderableModelManager(particlesPerPage, spriteModel, graphModels, tag);
+    public ParticleModel(int particlesPerPage, int identifierCount, SpriteModel spriteModel, GraphModels graphModels, String tag) {
+        spriteModelManager = new ParticlesSpriteRenderableModelManager(particlesPerPage, identifierCount, spriteModel, graphModels, tag);
         spriteBatchModel = new MultiPageSpriteBatchModel(spriteModelManager);
     }
 
@@ -72,6 +72,7 @@ public class ParticleModel implements Disposable {
 
     private class ParticlesSpriteRenderableModelManager implements SpriteRenderableModelManager<ParticleSpriteRenderableModel> {
         private final int spriteCapacity;
+        private int identifierCountPerPage;
         private final SpriteModel spriteModel;
         private final GraphModels graphModels;
         private final String tag;
@@ -80,10 +81,11 @@ public class ParticleModel implements Disposable {
         private final VertexAttributes vertexAttributes;
         private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
 
-        public ParticlesSpriteRenderableModelManager(int spriteCapacity,
+        public ParticlesSpriteRenderableModelManager(int spriteCapacity, int identifierCountPerPage,
                                                      SpriteModel spriteModel,
                                                      GraphModels graphModels, String tag) {
             this.spriteCapacity = spriteCapacity;
+            this.identifierCountPerPage = identifierCountPerPage;
             this.spriteModel = spriteModel;
             this.graphModels = graphModels;
             this.tag = tag;
@@ -93,9 +95,14 @@ public class ParticleModel implements Disposable {
         }
 
         @Override
+        public int getIdentifierCount() {
+            return identifierCountPerPage;
+        }
+
+        @Override
         public ParticleSpriteRenderableModel createNewModel(WritablePropertyContainer propertyContainer) {
             ParticleSpriteRenderableModel model = new ParticleSpriteRenderableModel(
-                    spriteCapacity,
+                    spriteCapacity, identifierCountPerPage,
                     vertexAttributes, vertexPropertySources, propertyContainer,
                     spriteModel);
             lastSpriteModel = model;

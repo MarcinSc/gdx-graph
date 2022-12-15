@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.data.Graph;
 import com.gempukku.libgdx.graph.data.GraphConnection;
 import com.gempukku.libgdx.graph.data.GraphNode;
@@ -58,6 +59,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
     private LimitedCapacitySpriteRenderableModel particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
+    private ObjectMap<ParticleRenderableSprite, Integer> spriteIdentifiers = new ObjectMap<>();
     private DefaultParticleGenerator particleGenerator;
 
     private Camera camera;
@@ -239,10 +241,11 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
         if (graphShader != null) {
             if (particleModel != null) {
                 particleModel.dispose();
+                spriteIdentifiers.clear();
                 sprites.clear();
             }
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
-            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4,
+            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4, 20000,
                     vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
                     localPropertyContainer, new QuadSpriteModel());
 
@@ -252,7 +255,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                         public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                             ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                             sprites.add(sprite);
-                            particleModel.addSprite(sprite);
+                            spriteIdentifiers.put(sprite, particleModel.addSprite(sprite));
                         }
                     });
         }
@@ -293,7 +296,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 while (spriteIterator.hasNext()) {
                     ParticleRenderableSprite sprite = spriteIterator.next();
                     if (sprite.getParticleDeath() < currentTime) {
-                        particleModel.removeSprite(sprite);
+                        particleModel.removeSprite(spriteIdentifiers.remove(sprite));
                         spriteIterator.remove();
                     }
                 }
@@ -304,7 +307,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                             public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                                 ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                                 sprites.add(sprite);
-                                particleModel.addSprite(sprite);
+                                spriteIdentifiers.put(sprite, particleModel.addSprite(sprite));
                             }
                         });
 

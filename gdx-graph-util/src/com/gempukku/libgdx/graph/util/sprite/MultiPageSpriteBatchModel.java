@@ -8,22 +8,24 @@ import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.sprite.manager.SpriteRenderableModelManager;
 
-public class MultiPageSpriteBatchModel implements SpriteBatchModel {
-    private SpriteRenderableModelManager renderableModelManager;
+public class MultiPageSpriteBatchModel<T extends SpriteRenderableModel> implements SpriteBatchModel {
+    private final int identifierCountPerPage;
+    private final SpriteRenderableModelManager<T> renderableModelManager;
     private final WritablePropertyContainer propertyContainer;
 
-    private Array<SpriteRenderableModel> pages = new Array<>();
+    private final Array<T> pages = new Array<>();
 
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageSpriteBatchModel(SpriteRenderableModelManager<?> renderableModelManager) {
+    public MultiPageSpriteBatchModel(SpriteRenderableModelManager<T> renderableModelManager) {
         this(renderableModelManager, new MapWritablePropertyContainer());
     }
 
-    public MultiPageSpriteBatchModel(SpriteRenderableModelManager<?> renderableModelManager,
+    public MultiPageSpriteBatchModel(SpriteRenderableModelManager<T> renderableModelManager,
                                      WritablePropertyContainer propertyContainer) {
+        this.identifierCountPerPage = renderableModelManager.getIdentifierCount();
         this.renderableModelManager = renderableModelManager;
         this.propertyContainer = propertyContainer;
     }
@@ -32,10 +34,17 @@ public class MultiPageSpriteBatchModel implements SpriteBatchModel {
     public int getSpriteCount() {
         int result = 0;
         for (SpriteRenderableModel page : pages) {
-            result += page.getSpriteCount();
+            if (page != null) {
+                result += page.getSpriteCount();
+            }
         }
 
         return result;
+    }
+
+    @Override
+    public boolean isAtCapacity() {
+        return false;
     }
 
     @Override
@@ -54,65 +63,64 @@ public class MultiPageSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public boolean hasSprite(RenderableSprite sprite) {
-        for (SpriteRenderableModel page : pages) {
-            if (page.hasSprite(sprite))
-                return true;
+    public int addSprite(RenderableSprite sprite) {
+        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
+            SpriteRenderableModel page = pages.get(pageIndex);
+            if (page != null && !page.isAtCapacity()) {
+                int spriteIndexOnPage = page.addSprite(sprite);
+                return identifierCountPerPage * pageIndex + spriteIndexOnPage;
+            }
         }
 
-        return false;
-    }
-
-    @Override
-    public boolean addSprite(RenderableSprite sprite) {
-        for (SpriteRenderableModel page : pages) {
-            if (page.addSprite(sprite))
-                return true;
-        }
-
-        SpriteRenderableModel newPage = renderableModelManager.createNewModel(propertyContainer);
+        T newPage = renderableModelManager.createNewModel(propertyContainer);
         newPage.setCullingTest(cullingTest);
         newPage.setPosition(position);
         newPage.setWorldTransform(worldTransform);
 
-        newPage.addSprite(sprite);
-        pages.add(newPage);
+        int spriteIndexOnPage = newPage.addSprite(sprite);
+        int pageIndex = findFirstEmptyPageIndex();
+        if (pageIndex > -1) {
+            pages.set(pageIndex, newPage);
+        } else {
+            pages.add(newPage);
+            pageIndex = pages.size - 1;
+        }
+        return identifierCountPerPage * pageIndex + spriteIndexOnPage;
+    }
 
-        return true;
+    private int findFirstEmptyPageIndex() {
+        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
+            SpriteRenderableModel page = pages.get(pageIndex);
+            if (page == null)
+                return pageIndex;
+        }
+        return -1;
     }
 
     @Override
-    public boolean updateSprite(RenderableSprite sprite) {
-        for (SpriteRenderableModel page : pages) {
-            if (page.hasSprite(sprite)) {
-                page.updateSprite(sprite);
-                return true;
-            }
-        }
-        return false;
+    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
+        int pageIndex = spriteIndex / identifierCountPerPage;
+        int newSpriteIndex = pages.get(pageIndex).updateSprite(sprite, spriteIndex % identifierCountPerPage);
+        return pageIndex * identifierCountPerPage + newSpriteIndex;
     }
 
     @Override
-    public boolean removeSprite(RenderableSprite sprite) {
-        for (SpriteRenderableModel page : pages) {
-            if (page.removeSprite(sprite)) {
-                if (page.getSpriteCount() == 0) {
-                    if (renderableModelManager.shouldDisposeEmptyModel(page))
-                        disposePage(page);
-                }
-                return true;
-            }
+    public void removeSprite(int spriteIndex) {
+        int pageIndex = spriteIndex / identifierCountPerPage;
+        T page = pages.get(pageIndex);
+        page.removeSprite(spriteIndex % identifierCountPerPage);
+        if (page.getSpriteCount() == 0 && renderableModelManager.shouldDisposeEmptyModel(page)) {
+            disposePage(page);
+            pages.set(pageIndex, null);
         }
-        return false;
     }
 
     public void disposeEmptyPages() {
-        Array.ArrayIterator<SpriteRenderableModel> iterator = pages.iterator();
-        while (iterator.hasNext()) {
-            SpriteRenderableModel page = iterator.next();
-            if (page.getSpriteCount() == 0) {
+        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
+            T page = pages.get(pageIndex);
+            if (page != null && page.getSpriteCount() == 0) {
                 disposePage(page);
-                iterator.remove();
+                pages.set(pageIndex, null);
             }
         }
     }
@@ -124,13 +132,13 @@ public class MultiPageSpriteBatchModel implements SpriteBatchModel {
 
     @Override
     public void dispose() {
-        for (SpriteRenderableModel page : pages) {
+        for (T page : pages) {
             disposePage(page);
         }
         pages.clear();
     }
 
-    private void disposePage(SpriteRenderableModel page) {
+    private void disposePage(T page) {
         renderableModelManager.disposeModel(page);
     }
 }

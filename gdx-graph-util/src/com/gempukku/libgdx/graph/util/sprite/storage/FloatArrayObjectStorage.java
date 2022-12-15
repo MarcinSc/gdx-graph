@@ -1,9 +1,11 @@
 package com.gempukku.libgdx.graph.util.sprite.storage;
 
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectIntMap;
 
 public class FloatArrayObjectStorage<T> {
     private final int objectCapacity;
+    private int identifierCount;
     private final int objectSize;
     private final ToFloatArraySerializer<T> serializer;
     private final float[] floatArray;
@@ -17,8 +19,11 @@ public class FloatArrayObjectStorage<T> {
     private int minUpdatedIndex = Integer.MAX_VALUE;
     private int maxUpdatedIndex = -1;
 
-    public FloatArrayObjectStorage(int objectCapacity, ToFloatArraySerializer<T> serializer) {
+    public FloatArrayObjectStorage(int objectCapacity, int identifierCount, ToFloatArraySerializer<T> serializer) {
+        if (objectCapacity > identifierCount)
+            throw new IllegalArgumentException("Object capacity cannot be greater than identifierCount! " + objectCapacity + " > " + identifierCount);
         this.objectCapacity = objectCapacity;
+        this.identifierCount = identifierCount;
         this.objectSize = serializer.getFloatCount();
         this.serializer = serializer;
         this.floatArray = new float[objectCapacity * objectSize];
@@ -27,20 +32,29 @@ public class FloatArrayObjectStorage<T> {
 
     public int addObject(T object) {
         if (isAtCapacity())
-            return -1;
+            throw new GdxRuntimeException("Should not attempt to add more sprites, already at capacity");
 
         int objectIndex = objectCount;
 
         objectCount++;
         serializer.serializeToFloatArray(object, floatArray, objectIndex * objectSize);
 
-        int objectId = nextIdentifier++;
+        int objectId = getNextIdentifier();
         objectIds[objectIndex] = objectId;
         unitLocations.put(objectId, objectIndex);
 
         markObjectUpdated(objectIndex);
 
         return objectId;
+    }
+
+    private int getNextIdentifier() {
+        int result;
+        do {
+            result = (nextIdentifier % identifierCount);
+            nextIdentifier++;
+        } while (unitLocations.get(result, -1) != -1);
+        return result;
     }
 
     public float[] getFloatArray() {
@@ -58,7 +72,7 @@ public class FloatArrayObjectStorage<T> {
         return true;
     }
 
-    public boolean deleteObject(int objectId) {
+    public boolean removeObject(int objectId) {
         int objectIndex = unitLocations.remove(objectId, -1);
         if (objectIndex == -1)
             return false;
@@ -75,6 +89,11 @@ public class FloatArrayObjectStorage<T> {
         }
         objectCount--;
         return true;
+    }
+
+    public void clear() {
+        objectCount = 0;
+        unitLocations.clear();
     }
 
     private void markObjectUpdated(int objectIndex) {

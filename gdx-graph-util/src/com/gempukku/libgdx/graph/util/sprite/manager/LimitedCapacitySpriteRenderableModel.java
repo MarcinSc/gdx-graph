@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -22,6 +21,8 @@ import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.FloatArrayObjectStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.ToFloatArraySerializer;
 
 public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
     private final Matrix4 worldTransform = new Matrix4();
@@ -30,36 +31,26 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private CullingTest cullingTest;
 
     private final Mesh mesh;
-    private final int spriteCapacity;
     private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
-    private final float[] vertexData;
     private final SpriteModel spriteModel;
     private final int floatCountPerVertex;
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
-    private final RenderableSprite[] spritePosition;
-
-    private int spriteCount = 0;
-    private int minUpdatedIndex = Integer.MAX_VALUE;
-    private int maxUpdatedIndex = -1;
-
-    private final ObjectSet<RenderableSprite> updatedSprites = new ObjectSet<>();
-    private final ObjectSet<RenderableSprite> allSprites = new ObjectSet<>();
+    private FloatArrayObjectStorage<RenderableSprite> spriteStorage;
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity,
+            boolean staticBatch, int spriteCapacity, int identifierCount,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer) {
-        this(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer,
+        this(staticBatch, spriteCapacity, identifierCount, vertexAttributes, vertexPropertySources, propertyContainer,
                 new QuadSpriteModel());
     }
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity,
+            boolean staticBatch, int spriteCapacity, int identifierCount,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
-        this.spriteCapacity = spriteCapacity;
         this.propertyContainer = propertyContainer;
         this.spriteModel = spriteModel;
 
@@ -69,14 +60,25 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
         floatCountPerVertex = vertexAttributes.vertexSize / 4;
 
-        spritePosition = new RenderableSprite[spriteCapacity];
+        final int floatCountPerSprite = floatCountPerVertex * spriteModel.getVertexCount();
 
-        vertexData = new float[spriteModel.getVertexCount() * floatCountPerVertex * spriteCapacity];
+        spriteStorage = new FloatArrayObjectStorage<>(spriteCapacity, identifierCount,
+                new ToFloatArraySerializer<RenderableSprite>() {
+                    @Override
+                    public int getFloatCount() {
+                        return floatCountPerSprite;
+                    }
+
+                    @Override
+                    public void serializeToFloatArray(RenderableSprite value, float[] floatArray, int startIndex) {
+                        updateSpriteData(value, floatArray, startIndex);
+                    }
+                });
 
         mesh = new Mesh(staticBatch, true,
                 spriteModel.getVertexCount() * spriteCapacity,
                 spriteModel.getIndexCount() * spriteCapacity, vertexAttributes);
-        mesh.setVertices(vertexData);
+        mesh.setVertices(spriteStorage.getFloatArray());
 
         short[] indices = new short[spriteModel.getIndexCount() * spriteCapacity];
         spriteModel.initializeIndexBuffer(indices, spriteCapacity);
@@ -86,7 +88,12 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public int getSpriteCount() {
-        return spriteCount;
+        return spriteStorage.getObjectCount();
+    }
+
+    @Override
+    public boolean isAtCapacity() {
+        return spriteStorage.isAtCapacity();
     }
 
     @Override
@@ -105,62 +112,23 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     }
 
     @Override
-    public boolean hasSprite(RenderableSprite sprite) {
-        return allSprites.contains(sprite);
+    public int addSprite(RenderableSprite sprite) {
+        return spriteStorage.addObject(sprite);
     }
 
     @Override
-    public boolean addSprite(RenderableSprite sprite) {
-        if (spriteCount == spriteCapacity)
-            return false;
-
-        spritePosition[spriteCount] = sprite;
-
-        updatedSprites.add(sprite);
-        allSprites.add(sprite);
-
-        spriteCount++;
-
-        return true;
+    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
+        spriteStorage.updateObject(sprite, spriteIndex);
+        return spriteIndex;
     }
 
     @Override
-    public boolean updateSprite(RenderableSprite sprite) {
-        if (hasSprite(sprite)) {
-            updatedSprites.add(sprite);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean removeSprite(RenderableSprite sprite) {
-        int position = findSpriteIndex(sprite);
-        if (position == -1)
-            return false;
-
-        updatedSprites.remove(sprite);
-        allSprites.remove(sprite);
-
-        if (spriteCount > 1 && position != spriteCount - 1) {
-            // Need to shrink the arrays
-            spritePosition[position] = spritePosition[spriteCount - 1];
-            int sourcePosition = getSpriteDataStart(spriteCount - 1);
-            int destinationPosition = getSpriteDataStart(position);
-            int floatCount = floatCountPerVertex * spriteModel.getVertexCount();
-            System.arraycopy(vertexData, sourcePosition, vertexData, destinationPosition, floatCount);
-
-            markSpriteUpdated(position);
-        }
-        spriteCount--;
-
-        return true;
+    public void removeSprite(int spriteIndex) {
+        spriteStorage.removeObject(spriteIndex);
     }
 
     public void removeAllSprites() {
-        spriteCount = 0;
-        updatedSprites.clear();
-        allSprites.clear();
+        spriteStorage.clear();
     }
 
     @Override
@@ -168,25 +136,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
         return propertyContainer;
     }
 
-    private void markSpriteUpdated(int spriteIndex) {
-        minUpdatedIndex = Math.min(minUpdatedIndex, getSpriteDataStart(spriteIndex));
-        maxUpdatedIndex = Math.max(maxUpdatedIndex, getSpriteDataStart(spriteIndex + 1));
-    }
-
-    private int getSpriteDataStart(int spriteIndex) {
-        return spriteIndex * floatCountPerVertex * spriteModel.getVertexCount();
-    }
-
-    private int findSpriteIndex(RenderableSprite sprite) {
-        for (int i = 0; i < spriteCount; i++) {
-            if (spritePosition[i] == sprite)
-                return i;
-        }
-        return -1;
-    }
-
-    private void updateSpriteData(RenderableSprite sprite, int spriteIndex) {
-        int spriteDataStart = getSpriteDataStart(spriteIndex);
+    private void updateSpriteData(RenderableSprite sprite, float[] vertexData, int spriteDataStart) {
         int vertexCount = spriteModel.getVertexCount();
 
         for (VertexAttribute vertexAttribute : vertexAttributes) {
@@ -218,8 +168,6 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
                 }
             }
         }
-
-        markSpriteUpdated(spriteIndex);
     }
 
     @Override
@@ -234,7 +182,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public boolean isRendered(Camera camera) {
-        return spriteCount > 0 && !isCulled(camera);
+        return spriteStorage.getObjectCount() > 0 && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {
@@ -249,25 +197,21 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     @Override
     public void prepareToRender(ShaderContext shaderContext) {
         boolean debug = Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG;
-        if (debug && !updatedSprites.isEmpty())
-            Gdx.app.debug("Sprite", "Updating info of " + updatedSprites.size + " sprite(s)");
 
-        for (RenderableSprite updatedSprite : updatedSprites) {
-            updateSpriteData(updatedSprite, findSpriteIndex(updatedSprite));
-        }
-        updatedSprites.clear();
+        int minUpdatedIndex = spriteStorage.getMinUpdatedIndex();
+        int maxUpdatedIndex = spriteStorage.getMaxUpdatedIndex();
 
         if (minUpdatedIndex != Integer.MAX_VALUE) {
             if (debug)
                 Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
-            mesh.updateVertices(minUpdatedIndex, vertexData, minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
-            minUpdatedIndex = Integer.MAX_VALUE;
-            maxUpdatedIndex = -1;
+            mesh.updateVertices(minUpdatedIndex, spriteStorage.getFloatArray(), minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
+            spriteStorage.resetUpdates();
         }
     }
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
+        int spriteCount = spriteStorage.getObjectCount();
         if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
             Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
         if (attributeLocations == null)

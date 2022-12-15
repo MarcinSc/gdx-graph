@@ -10,7 +10,7 @@ public class FloatArrayObjectStorageTest {
 
     @Test
     public void testEmpty() {
-        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, serializer);
+        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, 20, serializer);
         assertEquals(20, floatArrayObjectStorage.getFloatArray().length);
         assertEquals(0, floatArrayObjectStorage.getObjectCount());
         assertEquals(Integer.MAX_VALUE, floatArrayObjectStorage.getMinUpdatedIndex());
@@ -19,7 +19,7 @@ public class FloatArrayObjectStorageTest {
 
     @Test
     public void testAddUnit() {
-        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, serializer);
+        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, 20, serializer);
         floatArrayObjectStorage.addObject(new TwoFloats(1, 2));
         assertEquals(1, floatArrayObjectStorage.getObjectCount());
         assertEquals(1f, floatArrayObjectStorage.getFloatArray()[0], 0.001f);
@@ -30,10 +30,10 @@ public class FloatArrayObjectStorageTest {
 
     @Test
     public void testAddTwoRemoveFirst() {
-        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, serializer);
+        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, 20, serializer);
         int object1 = floatArrayObjectStorage.addObject(new TwoFloats(1, 2));
         int object2 = floatArrayObjectStorage.addObject(new TwoFloats(3, 4));
-        assertTrue(floatArrayObjectStorage.deleteObject(object1));
+        assertTrue(floatArrayObjectStorage.removeObject(object1));
         assertEquals(1, floatArrayObjectStorage.getObjectCount());
         assertEquals(3f, floatArrayObjectStorage.getFloatArray()[0], 0.001f);
         assertEquals(4f, floatArrayObjectStorage.getFloatArray()[1], 0.001f);
@@ -43,10 +43,10 @@ public class FloatArrayObjectStorageTest {
 
     @Test
     public void testAddTwoRemoveSecond() {
-        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, serializer);
+        FloatArrayObjectStorage<TwoFloats> floatArrayObjectStorage = new FloatArrayObjectStorage<>(10, 20, serializer);
         int object1 = floatArrayObjectStorage.addObject(new TwoFloats(1, 2));
         int object2 = floatArrayObjectStorage.addObject(new TwoFloats(3, 4));
-        assertTrue(floatArrayObjectStorage.deleteObject(object2));
+        assertTrue(floatArrayObjectStorage.removeObject(object2));
         assertEquals(1, floatArrayObjectStorage.getObjectCount());
         assertEquals(1f, floatArrayObjectStorage.getFloatArray()[0], 0.001f);
         assertEquals(2f, floatArrayObjectStorage.getFloatArray()[1], 0.001f);

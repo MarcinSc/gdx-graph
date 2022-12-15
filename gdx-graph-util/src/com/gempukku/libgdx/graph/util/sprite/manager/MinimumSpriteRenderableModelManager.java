@@ -14,6 +14,7 @@ public class MinimumSpriteRenderableModelManager implements SpriteRenderableMode
     private final int preserveMinimum;
     private final boolean staticBatch;
     private final int spriteCapacity;
+    private int identifierCount;
     private final GraphModels graphModels;
     private final String tag;
     private SpriteModel spriteModel;
@@ -25,14 +26,15 @@ public class MinimumSpriteRenderableModelManager implements SpriteRenderableMode
 
     public MinimumSpriteRenderableModelManager(int preserveMinimum, boolean staticBatch, int spriteCapacity,
                                                GraphModels graphModels, String tag) {
-        this(preserveMinimum, staticBatch, spriteCapacity, graphModels, tag, new QuadSpriteModel());
+        this(preserveMinimum, staticBatch, spriteCapacity, 20000, graphModels, tag, new QuadSpriteModel());
     }
 
-    public MinimumSpriteRenderableModelManager(int preserveMinimum, boolean staticBatch, int spriteCapacity,
+    public MinimumSpriteRenderableModelManager(int preserveMinimum, boolean staticBatch, int spriteCapacity, int identifierCount,
                                                GraphModels graphModels, String tag, SpriteModel spriteModel) {
         this.preserveMinimum = preserveMinimum;
         this.staticBatch = staticBatch;
         this.spriteCapacity = spriteCapacity;
+        this.identifierCount = identifierCount;
         this.graphModels = graphModels;
         this.tag = tag;
         this.spriteModel = spriteModel;
@@ -42,9 +44,14 @@ public class MinimumSpriteRenderableModelManager implements SpriteRenderableMode
     }
 
     @Override
+    public int getIdentifierCount() {
+        return identifierCount;
+    }
+
+    @Override
     public LimitedCapacitySpriteRenderableModel createNewModel(WritablePropertyContainer propertyContainer) {
         modelCount++;
-        LimitedCapacitySpriteRenderableModel model = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
+        LimitedCapacitySpriteRenderableModel model = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity, identifierCount, vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
         graphModels.addModel(tag, model);
         return model;
     }
