@@ -12,6 +12,8 @@ public class DefaultParticleGenerator implements ParticleGenerator {
     private FloatValue initialParticles;
     private FloatValue particlesPerSecond;
 
+    private MapWritablePropertyContainer tempPropertyContainer = new MapWritablePropertyContainer();
+
     private ObjectMap<String, PropertyGenerator> propertyGenerators = new ObjectMap<>();
 
     private float lastParticleGenerated;
@@ -84,14 +86,14 @@ public class DefaultParticleGenerator implements ParticleGenerator {
     }
 
     private void generateParticle(float particleBirth, ParticleCreateCallback createCallback) {
-        MapWritablePropertyContainer properties = new MapWritablePropertyContainer();
+        tempPropertyContainer.clear();
 
         float seed = MathUtils.random();
         float lifeLengthValue = lifeLength.getValue(seed);
         for (ObjectMap.Entry<String, PropertyGenerator> propertyGenerator : propertyGenerators) {
-            properties.setValue(propertyGenerator.key, propertyGenerator.value.generateProperty(seed));
+            tempPropertyContainer.setValue(propertyGenerator.key, propertyGenerator.value.generateProperty(seed));
         }
 
-        createCallback.createParticle(particleBirth, lifeLengthValue, properties);
+        createCallback.createParticle(particleBirth, lifeLengthValue, tempPropertyContainer);
     }
 }
