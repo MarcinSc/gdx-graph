@@ -27,6 +27,8 @@ allprojects {
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
         visUiVersion = '1.4.8'
+        artemisOdbVersion = '2.3.0'
+        gdxGempLibVersion = '391da2b'
     }
 
     repositories {
@@ -83,12 +85,15 @@ project(":gdx-graph-test") {
     apply plugin: "java-library"
 
     dependencies {
-        implementation project(":gdx-graph-util")
+        implementation project(":gdx-graph-artemis")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.ashley:ashley:1.7.3"
+        api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
+        api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
+        api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-box2d-artemis:$gdxGempLibVersion"
     }
 }
 
@@ -98,6 +103,16 @@ project(":gdx-graph-util") {
     dependencies {
         api project(":gdx-graph")
         testImplementation "junit:junit:4.13"
+    }
+}
+
+project(":gdx-graph-artemis") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api project(":gdx-graph-util")
+        api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+        api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
     }
 }
 
