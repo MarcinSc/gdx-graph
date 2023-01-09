@@ -31,6 +31,8 @@ import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraCon
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
+import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
+import com.gempukku.libgdx.lib.artemis.input.UserInputSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
@@ -71,8 +73,6 @@ public class Episode19Scene implements LibgdxGraphTestScene {
         final Entity playerEntity = spawnSystem.spawnEntity("entity/playerBlueWizard.template");
 
         // Setup camera to track player
-        world.getSystem(PlayerControlSystem.class).setPlayerEntity(playerEntity);
-
         Camera2DController cameraController = new Camera2DController(new EntityFocus(
                 new PositionProvider() {
                     @Override
@@ -117,6 +117,8 @@ public class Episode19Scene implements LibgdxGraphTestScene {
                 new TransformSystem(),
                 textureSystem,
                 new CameraSystem(new OrthographicCameraController()),
+                new InputProcessorSystem(),
+                new UserInputSystem(1),
                 physicsSystem);
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
                 new PipelineRendererSystem(),
@@ -128,6 +130,8 @@ public class Episode19Scene implements LibgdxGraphTestScene {
                 new SpriteSystem());
 
         world = new World(worldConfigurationBuilder.build());
+
+        world.getSystem(InputProcessorSystem.class).setupProcessing();
     }
 
     @Override

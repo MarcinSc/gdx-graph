@@ -1,10 +1,9 @@
 package com.gempukku.libgdx.graph.test.system;
 
-import com.artemis.BaseSystem;
+import com.artemis.Aspect;
 import com.artemis.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Matrix4;
+import com.artemis.EntitySystem;
+import com.artemis.utils.Bag;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.box2d.artemis.PhysicsComponent;
@@ -12,77 +11,75 @@ import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty;
+import com.gempukku.libgdx.graph.test.component.PlayerInputControlledComponent;
 import com.gempukku.libgdx.graph.test.component.StateBasedSpriteComponent;
 import com.gempukku.libgdx.graph.test.system.sensor.FootSensorData;
-import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
+import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 
-public class PlayerControlSystem extends BaseSystem {
+public class PlayerControlSystem extends EntitySystem {
     private SpriteSystem spriteSystem;
-    private TransformSystem transformSystem;
     private PipelineRendererSystem pipelineRendererSystem;
 
-    private Entity playerEntity;
-
-    private String currentState = "Idle";
-    private boolean currentlyFacingRight = true;
-
-    private Matrix4 tmpMatrix4 = new Matrix4();
-
-    public void setPlayerEntity(Entity playerEntity) {
-        this.playerEntity = playerEntity;
+    public PlayerControlSystem() {
+        super(Aspect.all(PlayerInputControlledComponent.class));
     }
 
     @Override
     protected void processSystem() {
-        if (playerEntity != null) {
-            PhysicsComponent physicsComponent = playerEntity.getComponent(PhysicsComponent.class);
+        Bag<Entity> playerControlledEntities = getEntities();
+        for (int i = 0, size = playerControlledEntities.size(); i < size; i++) {
+            Entity playerControlledEntity = playerControlledEntities.get(i);
+
+            PlayerInputControlledComponent playerInputControlled = playerControlledEntity.getComponent(PlayerInputControlledComponent.class);
+            PhysicsComponent physicsComponent = playerControlledEntity.getComponent(PhysicsComponent.class);
+            UserInputStateComponent userInputState = playerControlledEntity.getComponent(UserInputStateComponent.class);
 
             FootSensorData footSensorData = (FootSensorData) physicsComponent.getSensorDataOfType("foot").getValue();
             boolean grounded = (footSensorData != null) && footSensorData.isGrounded();
 
             Body playerBody = physicsComponent.getBody();
 
-            float desiredHorizontalVelocity = getDesiredHorizontalVelocity();
+            float desiredHorizontalVelocity = getDesiredHorizontalVelocity(playerInputControlled, userInputState);
 
             float verticalVelocity = playerBody.getLinearVelocity().y;
             playerBody.setLinearVelocity(desiredHorizontalVelocity, verticalVelocity);
 
             if (desiredHorizontalVelocity > 0) {
-                setFaceRight(true);
+                setFaceRight(playerControlledEntity, playerInputControlled, true);
             } else if (desiredHorizontalVelocity < 0) {
-                setFaceRight(false);
+                setFaceRight(playerControlledEntity, playerInputControlled, false);
             }
 
-            StateBasedSpriteComponent stateBasedSprite = playerEntity.getComponent(StateBasedSpriteComponent.class);
+            StateBasedSpriteComponent stateBasedSprite = playerControlledEntity.getComponent(StateBasedSpriteComponent.class);
             if (desiredHorizontalVelocity != 0 && grounded) {
-                updateSpriteState(stateBasedSprite, "Walk");
+                updateSpriteState(playerControlledEntity, playerInputControlled, stateBasedSprite, "Walk");
             } else if (verticalVelocity == 0) {
-                updateSpriteState(stateBasedSprite, "Idle");
+                updateSpriteState(playerControlledEntity, playerInputControlled, stateBasedSprite, "Idle");
             }
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && footSensorData != null && grounded) {
-                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 14);
+            if (userInputState.getSignals().contains("jump") && footSensorData != null && grounded) {
+                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, playerInputControlled.getJumpVelocity());
             }
 
             if (verticalVelocity != 0 && !grounded) {
-                updateSpriteState(stateBasedSprite, "Jump");
+                updateSpriteState(playerControlledEntity, playerInputControlled, stateBasedSprite, "Jump");
             }
         }
     }
 
-    private void setFaceRight(boolean faceRight) {
-        if (currentlyFacingRight != faceRight) {
+    private void setFaceRight(Entity playerEntity, PlayerInputControlledComponent playerInputControlled, boolean faceRight) {
+        if (playerInputControlled.isCurrentlyFacingRight() != faceRight) {
             ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getSprites().get(0).getProperties();
             SpriteUVProperty spriteUVProperty = (SpriteUVProperty) properties.get("UV");
             spriteUVProperty.setInvertedX(!faceRight);
             spriteSystem.updateSprite(playerEntity.getId(), 0);
 
-            currentlyFacingRight = faceRight;
+            playerInputControlled.setCurrentlyFacingRight(faceRight);
         }
     }
 
-    private void updateSpriteState(StateBasedSpriteComponent stateBasedSprite, String state) {
-        if (!state.equals(currentState)) {
+    private void updateSpriteState(Entity playerEntity, PlayerInputControlledComponent playerInputControlled, StateBasedSpriteComponent stateBasedSprite, String state) {
+        if (!state.equals(playerInputControlled.getCurrentState())) {
             ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getSprites().get(0).getProperties();
             ObjectMap<String, Object> stateProperties = stateBasedSprite.getStateProperties().get(state);
             for (ObjectMap.Entry<String, Object> stateProperty : stateProperties) {
@@ -91,24 +88,24 @@ public class PlayerControlSystem extends BaseSystem {
             properties.put("Animation Start", pipelineRendererSystem.getCurrentTime());
             spriteSystem.updateSprite(playerEntity.getId(), 0);
 
-            currentState = state;
+            playerInputControlled.setCurrentState(state);
         }
     }
 
-    private float getDesiredHorizontalVelocity() {
-        if (isRightPressed() && !isLeftPressed())
-            return 5;
-        else if (isLeftPressed() && !isRightPressed())
-            return -5;
+    private float getDesiredHorizontalVelocity(PlayerInputControlledComponent playerInputControlled, UserInputStateComponent userInputState) {
+        if (isRightPressed(userInputState) && !isLeftPressed(userInputState))
+            return playerInputControlled.getRunVelocity();
+        else if (isLeftPressed(userInputState) && !isRightPressed(userInputState))
+            return -playerInputControlled.getRunVelocity();
         else
             return 0;
     }
 
-    private boolean isRightPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+    private boolean isRightPressed(UserInputStateComponent userInputState) {
+        return userInputState.getStates().contains("right");
     }
 
-    private boolean isLeftPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.LEFT);
+    private boolean isLeftPressed(UserInputStateComponent userInputState) {
+        return userInputState.getStates().contains("left");
     }
 }

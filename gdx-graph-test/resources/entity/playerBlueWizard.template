@@ -1,4 +1,17 @@
 {
+  "com.gempukku.libgdx.graph.test.component.PlayerInputControlledComponent": {
+    "runVelocity": 5,
+    "jumpVelocity": 14
+  },
+  "com.gempukku.libgdx.lib.artemis.input.UserInputComponent": {
+    "keyState": {
+      "Left": "left",
+      "Right": "right"
+    },
+    "keySignal": {
+      "Up": "jump"
+    }
+  },
   "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
     "localTransform": {
       "val": [
