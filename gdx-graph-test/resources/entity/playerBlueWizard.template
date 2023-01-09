@@ -58,13 +58,27 @@
             },
             "upVector": {
               "x": 0,
-              "y": -256,
+              "y": 256,
               "z": 0
             }
           },
-          "Texture": {
+          "Animated Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "image/BlueWizardIdle.png",
             "region": "image/BlueWizardIdle.png"
+          },
+          "Sprite Count": {
+            "class": "com.badlogic.gdx.math.Vector2",
+            "x": 20,
+            "y": 1
+          },
+          "Animation Speed": {
+            "class": "java.lang.Float",
+            "value": 20
+          },
+          "Animation Looping": {
+            "class": "java.lang.Float",
+            "value": 1
           }
         }
       }
@@ -73,34 +87,64 @@
   "com.gempukku.libgdx.graph.test.component.StateBasedSpriteComponent": {
     "stateProperties": {
       "Idle": {
-        "texture": {
+        "Animated Texture": {
           "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "atlas": "image/BlueWizardIdle.png",
           "region": "image/BlueWizardIdle.png"
         },
-        "width": 20,
-        "height": 1,
-        "speed": 20,
-        "looping": true
+        "Sprite Count": {
+          "class": "com.badlogic.gdx.math.Vector2",
+          "x": 20,
+          "y": 1
+        },
+        "Animation Speed": {
+          "class": "java.lang.Float",
+          "value": 20
+        },
+        "Animation Looping": {
+          "class": "java.lang.Float",
+          "value": 1
+        }
       },
       "Walk": {
-        "texture": {
+        "Animated Texture": {
           "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "atlas": "image/BlueWizardWalk.png",
           "region": "image/BlueWizardWalk.png"
         },
-        "width": 5,
-        "height": 4,
-        "speed": 20,
-        "looping": true
+        "Sprite Count": {
+          "class": "com.badlogic.gdx.math.Vector2",
+          "x": 5,
+          "y": 4
+        },
+        "Animation Speed": {
+          "class": "java.lang.Float",
+          "value": 20
+        },
+        "Animation Looping": {
+          "class": "java.lang.Float",
+          "value": 1
+        }
       },
       "Jump": {
-        "texture": {
+        "Animated Texture": {
           "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "atlas": "image/BlueWizardJump.png",
           "region": "image/BlueWizardJump.png"
         },
-        "width": 8,
-        "height": 1,
-        "speed": 20,
-        "looping": false
+        "Sprite Count": {
+          "class": "com.badlogic.gdx.math.Vector2",
+          "x": 8,
+          "y": 1
+        },
+        "Animation Speed": {
+          "class": "java.lang.Float",
+          "value": 20
+        },
+        "Animation Looping": {
+          "class": "java.lang.Float",
+          "value": 0
+        }
       }
     }
   },
@@ -117,7 +161,7 @@
     "shape": "box",
     "shapeData": {
       "width": 128,
-      "height": 204.8
+      "height": 150
     },
     "sensors": [
       {
@@ -126,7 +170,8 @@
         "shape": "box",
         "shapeData": {
           "width": 64,
-          "height": 12.8
+          "height": 12.8,
+          "centerY": -78
         },
         "mask": [
           "Environment"

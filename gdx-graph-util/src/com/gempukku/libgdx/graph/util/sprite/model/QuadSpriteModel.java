@@ -24,11 +24,11 @@ public class QuadSpriteModel implements SpriteModel {
         int vertexIndex = 0;
         for (int i = 0; i < numberOfSprites * INDEX_COUNT; i += INDEX_COUNT) {
             indexBuffer[i + 0] = (short) (vertexIndex * 4 + 0);
-            indexBuffer[i + 1] = (short) (vertexIndex * 4 + 2);
-            indexBuffer[i + 2] = (short) (vertexIndex * 4 + 1);
+            indexBuffer[i + 1] = (short) (vertexIndex * 4 + 1);
+            indexBuffer[i + 2] = (short) (vertexIndex * 4 + 2);
             indexBuffer[i + 3] = (short) (vertexIndex * 4 + 2);
-            indexBuffer[i + 4] = (short) (vertexIndex * 4 + 3);
-            indexBuffer[i + 5] = (short) (vertexIndex * 4 + 1);
+            indexBuffer[i + 4] = (short) (vertexIndex * 4 + 1);
+            indexBuffer[i + 5] = (short) (vertexIndex * 4 + 3);
             vertexIndex++;
         }
     }

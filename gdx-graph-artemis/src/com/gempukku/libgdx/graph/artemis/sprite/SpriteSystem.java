@@ -33,7 +33,10 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
     private TransformSystem transformSystem;
     private EvaluatePropertySystem evaluatePropertySystem;
 
-    public static final Vector2ValuePerVertex uvAttribute = new Vector2ValuePerVertex(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
+    public static final Vector2ValuePerVertex uvAttribute = new Vector2ValuePerVertex(new float[]{0, 1, 1, 1, 0, 0, 1, 0});
+    public static final Vector2ValuePerVertex uvAttributeInvertedX = new Vector2ValuePerVertex(new float[]{1, 1, 0, 1, 1, 0, 0, 0});
+    public static final Vector2ValuePerVertex uvAttributeInvertedY = new Vector2ValuePerVertex(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
+    public static final Vector2ValuePerVertex uvAttributeInvertedBoth = new Vector2ValuePerVertex(new float[]{1, 0, 0, 0, 1, 1, 0, 1});
 
     private final Matrix4 tempMatrix = new Matrix4();
 
@@ -117,9 +120,21 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
             Vector3 upVector = spritePositionProperty.getUpVector();
 
             return VectorUtil.createCenterSpritePosition(1f, 1f, rightVector, upVector, resultTransform);
-        } else {
-            return uvAttribute;
+        } else if (value instanceof SpriteUVProperty) {
+            SpriteUVProperty spriteUVProperty = (SpriteUVProperty) value;
+            if (spriteUVProperty.isInvertedX()) {
+                if (spriteUVProperty.isInvertedY())
+                    return uvAttributeInvertedBoth;
+                else
+                    return uvAttributeInvertedX;
+            } else {
+                if (spriteUVProperty.isInvertedY())
+                    return uvAttributeInvertedY;
+                else
+                    return uvAttribute;
+            }
         }
+        return null;
     }
 
     @Override
@@ -160,11 +175,6 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
 
     @Override
     public void dispose() {
-        for (Array<BatchNameWithSpriteIndex> spriteArray : spriteMap.values()) {
-            for (BatchNameWithSpriteIndex sprite : spriteArray) {
-                spriteBatchSystem.getSpriteBatchModel(sprite.batchName).removeSprite(sprite.spriteIndex);
-            }
-        }
         spriteMap.clear();
     }
 

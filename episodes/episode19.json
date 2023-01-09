@@ -39,6 +39,8 @@
                   "x": 208.0,
                   "y": 620.0,
                   "data": {
+                    "uWrap": "Repeat",
+                    "vWrap": "Repeat",
                     "name": "Tile Texture",
                     "type": "TextureRegion"
                   }
@@ -98,7 +100,7 @@
                 {
                   "id": "end",
                   "type": "ShaderEnd",
-                  "x": 702.0000610351562,
+                  "x": 702.0,
                   "y": 50.0,
                   "data": {
                     "positionType": "Object space",
@@ -121,6 +123,12 @@
                   "fromField": "value",
                   "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
                   "toField": "offset"
+                },
+                {
+                  "fromNode": "866d186a9be04fe98276b71cd71c734b",
+                  "fromField": "a",
+                  "toNode": "end",
+                  "toField": "alpha"
                 },
                 {
                   "fromNode": "866d186a9be04fe98276b71cd71c734b",
@@ -214,13 +222,13 @@
                   "id": "07512bd21acd4c97a0a459710ed147d6",
                   "type": "Subtract",
                   "x": 265.0,
-                  "y": 385.9999694824219
+                  "y": 385.0
                 },
                 {
                   "id": "194cc43ebafb41aba8a16e02bd3e08e0",
                   "type": "Property",
                   "x": 264.0,
-                  "y": 482.9999694824219,
+                  "y": 482.0,
                   "data": {
                     "name": "Animation Speed",
                     "type": "Float"
@@ -230,7 +238,7 @@
                   "id": "22827a48ad06431197ea6f9898697da7",
                   "type": "Time",
                   "x": 50.0,
-                  "y": 342.9999694824219,
+                  "y": 342.0,
                   "data": {
                     "multiplier": 1.0
                   }
@@ -275,7 +283,7 @@
                   "id": "b361c8b5860149afaaa72bd1be7fedf3",
                   "type": "UVFlipbook",
                   "x": 875.0,
-                  "y": 442.9999694824219,
+                  "y": 442.0,
                   "data": {
                     "invertX": false,
                     "invertY": false
@@ -295,7 +303,7 @@
                   "id": "c48d007526b74e7c9db2efc10d21c6e2",
                   "type": "Property",
                   "x": 50.0,
-                  "y": 272.9999694824219,
+                  "y": 272.0,
                   "data": {
                     "name": "Animation Start",
                     "type": "Float"
@@ -305,7 +313,7 @@
                   "id": "e1b2b6fb4ab94725ba740c03c4c7a1ee",
                   "type": "Multiply",
                   "x": 451.0,
-                  "y": 449.9999694824219
+                  "y": 449.0
                 },
                 {
                   "id": "ebf5474ee225421b9793bdf42941c1a1",
@@ -355,6 +363,12 @@
                   "fromField": "value",
                   "toNode": "b361c8b5860149afaaa72bd1be7fedf3",
                   "toField": "tileCount"
+                },
+                {
+                  "fromNode": "718dc265f88a404d96bed6aacf765772",
+                  "fromField": "a",
+                  "toNode": "end",
+                  "toField": "alpha"
                 },
                 {
                   "fromNode": "718dc265f88a404d96bed6aacf765772",

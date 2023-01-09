@@ -17,6 +17,9 @@
     },
     {
       "tpl:extends": "entity/tiledBatch.template"
+    },
+    {
+      "tpl:extends": "entity/camera.template"
     }
   ]
 }

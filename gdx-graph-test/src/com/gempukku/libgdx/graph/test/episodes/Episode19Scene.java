@@ -4,8 +4,6 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -22,17 +20,20 @@ import com.gempukku.libgdx.camera2d.focus.PositionProvider;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
+import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.test.system.CameraControlSystem;
 import com.gempukku.libgdx.graph.test.system.PlayerControlSystem;
 import com.gempukku.libgdx.graph.test.system.sensor.FootSensorContactListener;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
+import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraControlSystem;
 import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
+import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 
 public class Episode19Scene implements LibgdxGraphTestScene {
@@ -72,8 +73,7 @@ public class Episode19Scene implements LibgdxGraphTestScene {
         // Setup camera to track player
         world.getSystem(PlayerControlSystem.class).setPlayerEntity(playerEntity);
 
-        Camera mainCamera = world.getSystem(CameraSystem.class).getCamera("Main");
-        Camera2DController cameraController = new Camera2DController(mainCamera, new EntityFocus(
+        Camera2DController cameraController = new Camera2DController(new EntityFocus(
                 new PositionProvider() {
                     @Override
                     public Vector2 getPosition(Vector2 position) {
@@ -85,7 +85,7 @@ public class Episode19Scene implements LibgdxGraphTestScene {
                 new SnapToWindowCamera2DConstraint(new Rectangle(0.2f, 0.1f, 0.2f, 0.4f), new Vector2(0.1f, 0.1f)),
                 new LockedToWindowCamera2DConstraint(new Rectangle(0.1f, 0.1f, 0.4f, 0.6f))
         );
-        world.getSystem(CameraControlSystem.class).setCameraController(cameraController);
+        world.getSystem(OrthographicCameraControlSystem.class).setCameraController("Main", cameraController);
 
         if (debugRender) {
             debugRenderer = new Box2DDebugRenderer();
@@ -93,29 +93,34 @@ public class Episode19Scene implements LibgdxGraphTestScene {
     }
 
     private void createSystems() {
-        PhysicsSystem physicsSystem = new PhysicsSystem(new Vector2(0, -30f), pixelsToMeters);
-
         short environmentCategory = 0b001;
         short characterCategory = 0b010;
         short sensorCategory = 0b100;
+
+        PhysicsSystem physicsSystem = new PhysicsSystem(new Vector2(0, -30f), pixelsToMeters);
         physicsSystem.addCategory("Environment", environmentCategory);
         physicsSystem.addCategory("Character", characterCategory);
         physicsSystem.addCategory("Sensor", sensorCategory);
         physicsSystem.addShapeHandler("box", new BoxShapeHandler());
         physicsSystem.addSensorContactListener("foot", new FootSensorContactListener(environmentCategory));
 
+        TextureSystem textureSystem = new TextureSystem();
+        textureSystem.setDefaultTextureHandler(new RuntimeTextureHandler());
+
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         worldConfigurationBuilder.alwaysDelayComponentRemoval(true);
         worldConfigurationBuilder.with(INDEPENDENT_SYSTEMS,
+                new TimeKeepingSystem(),
                 new SpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
                 new EvaluatePropertySystem(),
                 new TransformSystem(),
+                textureSystem,
                 new CameraSystem(new OrthographicCameraController()),
                 physicsSystem);
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
                 new PipelineRendererSystem(),
-                new CameraControlSystem(),
+                new OrthographicCameraControlSystem(),
                 new PlayerControlSystem());
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new SpriteBatchSystem());
@@ -123,15 +128,6 @@ public class Episode19Scene implements LibgdxGraphTestScene {
                 new SpriteSystem());
 
         world = new World(worldConfigurationBuilder.build());
-    }
-
-    private OrthographicCamera createCamera() {
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false);
-        camera.position.set(0, 0, 0);
-        camera.update();
-
-        return camera;
     }
 
     @Override
@@ -147,7 +143,7 @@ public class Episode19Scene implements LibgdxGraphTestScene {
         world.process();
 
         if (debugRender) {
-            tmpMatrix4.set(world.getSystem(CameraSystem.class).getCamera("Main").combined).scale(pixelsToMeters, pixelsToMeters, 0);
+            tmpMatrix4.set(world.getSystem(CameraSystem.class).getCamera("Main").projection).scale(pixelsToMeters, pixelsToMeters, 0);
             debugRenderer.render(world.getSystem(PhysicsSystem.class).getBox2DWorld(), tmpMatrix4);
         }
     }
