@@ -13,297 +13,420 @@
       }
     },
     {
-      "id": "dffb152d405a49d38792e850749129b2",
-      "type": "UIRenderer",
-      "x": 409.0,
-      "y": 134.0,
-      "data": {
-        "id": ""
-      }
-    },
-    {
-      "id": "end",
-      "type": "PipelineEnd",
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
       "x": 444.0,
-      "y": 50.0
-    },
-    {
-      "id": "d54b356d4a1242cab5e6cb3f836b1930",
-      "type": "ValueColor",
-      "x": 218.0,
-      "y": 637.0,
-      "data": {
-        "color": "638c99ff"
-      }
+      "y": 614.0
     },
     {
       "id": "ce7263bb711843b590f125cc3f49f1e9",
-      "type": "SpriteShaderRenderer",
+      "type": "GraphShaderRenderer",
       "x": 338.0,
       "y": 253.0,
       "data": {
         "renderOrder": "Shader_Unordered",
         "shaders": [
           {
-            "id": "655a2dce015649fab9dbbde01974d0e9",
+            "id": "b7fecf1fa59f4532a515e60b72a51a8c",
+            "tag": "Tiled",
+            "shader": {
+              "version": "0.5.0",
+              "type": "Model_Shader",
+              "nodes": [
+                {
+                  "id": "273d1a567f094fb3b336147538354a71",
+                  "type": "Property",
+                  "x": 208.0,
+                  "y": 620.0,
+                  "data": {
+                    "name": "Tile Texture",
+                    "type": "TextureRegion"
+                  }
+                },
+                {
+                  "id": "683e23aae2e6489d8bfd22cfdcaaa242",
+                  "type": "Property",
+                  "x": 56.0,
+                  "y": 415.0,
+                  "data": {
+                    "name": "Tile Offset",
+                    "type": "Vector2"
+                  }
+                },
+                {
+                  "id": "866d186a9be04fe98276b71cd71c734b",
+                  "type": "Sampler2D",
+                  "x": 464.0,
+                  "y": 547.0
+                },
+                {
+                  "id": "8cf526a4606e449fab19bc45f33d1f6f",
+                  "type": "UVTilingOffset",
+                  "x": 252.0,
+                  "y": 507.0
+                },
+                {
+                  "id": "9442cdae85be4d94ad90cfa98bac29dc",
+                  "type": "Property",
+                  "x": 52.0,
+                  "y": 560.0,
+                  "data": {
+                    "name": "UV",
+                    "type": "Vector2"
+                  }
+                },
+                {
+                  "id": "d7d83ca9797e4534a2cf0a869028eaf9",
+                  "type": "Property",
+                  "x": 471.0,
+                  "y": 737.0,
+                  "data": {
+                    "name": "Position",
+                    "type": "Vector3"
+                  }
+                },
+                {
+                  "id": "e47fe68a79ef45ad8dbad8c20c21adaa",
+                  "type": "Property",
+                  "x": 50.0,
+                  "y": 494.0,
+                  "data": {
+                    "name": "Tile Repeat",
+                    "type": "Vector2"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 702.0000610351562,
+                  "y": 50.0,
+                  "data": {
+                    "positionType": "Object space",
+                    "culling": "back",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
+                  }
+                }
+              ],
+              "connections": [
+                {
+                  "fromNode": "273d1a567f094fb3b336147538354a71",
+                  "fromField": "value",
+                  "toNode": "866d186a9be04fe98276b71cd71c734b",
+                  "toField": "texture"
+                },
+                {
+                  "fromNode": "683e23aae2e6489d8bfd22cfdcaaa242",
+                  "fromField": "value",
+                  "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+                  "toField": "offset"
+                },
+                {
+                  "fromNode": "866d186a9be04fe98276b71cd71c734b",
+                  "fromField": "color",
+                  "toNode": "end",
+                  "toField": "color"
+                },
+                {
+                  "fromNode": "8cf526a4606e449fab19bc45f33d1f6f",
+                  "fromField": "output",
+                  "toNode": "866d186a9be04fe98276b71cd71c734b",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "9442cdae85be4d94ad90cfa98bac29dc",
+                  "fromField": "value",
+                  "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "d7d83ca9797e4534a2cf0a869028eaf9",
+                  "fromField": "value",
+                  "toNode": "end",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "e47fe68a79ef45ad8dbad8c20c21adaa",
+                  "fromField": "value",
+                  "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+                  "toField": "tiling"
+                }
+              ],
+              "properties": [
+                {
+                  "name": "Position",
+                  "type": "Vector3",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                {
+                  "name": "UV",
+                  "type": "Vector2",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0
+                  }
+                },
+                {
+                  "name": "Tile Repeat",
+                  "type": "Vector2",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 1.0,
+                    "y": 1.0
+                  }
+                },
+                {
+                  "name": "Tile Texture",
+                  "type": "TextureRegion",
+                  "location": "Attribute",
+                  "data": {
+                    "previewPath": null
+                  }
+                },
+                {
+                  "name": "Tile Offset",
+                  "type": "Vector2",
+                  "location": "Uniform",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0
+                  }
+                }
+              ],
+              "groups": []
+            }
+          },
+          {
+            "id": "b4ab07597a0a484c88067dd609e427e4",
             "tag": "Animated",
             "shader": {
               "version": "0.5.0",
-              "type": "Sprite_Shader",
+              "type": "Model_Shader",
               "nodes": [
                 {
-                  "id": "cb06a9014aa14f6cbc8aba7c79ba4978",
+                  "id": "07512bd21acd4c97a0a459710ed147d6",
                   "type": "Subtract",
-                  "x": 264.0,
-                  "y": 161.0
+                  "x": 265.0,
+                  "y": 385.9999694824219
                 },
                 {
-                  "id": "d9e1a2bf9834405aa5260163d8818f82",
+                  "id": "194cc43ebafb41aba8a16e02bd3e08e0",
                   "type": "Property",
-                  "x": 262.0,
-                  "y": 245.0,
+                  "x": 264.0,
+                  "y": 482.9999694824219,
                   "data": {
                     "name": "Animation Speed",
                     "type": "Float"
                   }
                 },
                 {
-                  "id": "1140308b879e4cd7a4c96752e0708839",
-                  "type": "SpriteUV",
-                  "x": 618.0,
-                  "y": 409.0
-                },
-                {
-                  "id": "e99c9493abfa4c85b6b8d38e3e69dc4d",
+                  "id": "22827a48ad06431197ea6f9898697da7",
                   "type": "Time",
-                  "x": 52.0,
-                  "y": 115.0,
+                  "x": 50.0,
+                  "y": 342.9999694824219,
                   "data": {
                     "multiplier": 1.0
                   }
                 },
                 {
-                  "id": "ea05983941c244be9197c6b8ca8b4474",
-                  "type": "BillboardSprite",
-                  "x": 1277.0,
-                  "y": 511.0
-                },
-                {
-                  "id": "3a83146b38634b1e812b8396fd2dfcc4",
+                  "id": "4d1134a0ce40401bb7bf6e6ae861882e",
                   "type": "Property",
-                  "x": 50.0,
-                  "y": 50.0,
-                  "data": {
-                    "name": "Animation Start",
-                    "type": "Float"
-                  }
-                },
-                {
-                  "id": "2affc280f9074df4bcd62e7fcd2513c9",
-                  "type": "Sampler2D",
-                  "x": 1024.0,
-                  "y": 365.0
-                },
-                {
-                  "id": "a085b0923c604a9bb35c80b8cd602b0a",
-                  "type": "Property",
-                  "x": 621.0,
-                  "y": 158.0,
-                  "data": {
-                    "name": "Animation Looping",
-                    "type": "Float"
-                  }
-                },
-                {
-                  "id": "a8912ea0d5ca437d91f2a4e5956abc81",
-                  "type": "SpriteUV",
-                  "x": 1020.0,
-                  "y": 643.0
-                },
-                {
-                  "id": "9285c5404dfa43878781f87d81052ac2",
-                  "type": "Property",
-                  "x": 1024.0,
-                  "y": 516.0,
-                  "data": {
-                    "name": "Size",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "f3c5520f52974179af5ceb000f35f890",
-                  "type": "Property",
-                  "x": 618.0,
-                  "y": 350.0,
+                  "x": 642.0,
+                  "y": 562.0,
                   "data": {
                     "name": "Sprite Count",
                     "type": "Vector2"
                   }
                 },
                 {
-                  "id": "17061776ddbe4018b09cfe3a3574b454",
+                  "id": "718dc265f88a404d96bed6aacf765772",
+                  "type": "Sampler2D",
+                  "x": 1112.0,
+                  "y": 512.0
+                },
+                {
+                  "id": "7dd91308084a4384879b6cf28ca2f15d",
                   "type": "Property",
-                  "x": 819.0,
-                  "y": 432.0,
+                  "x": 875.0,
+                  "y": 628.0,
                   "data": {
-                    "name": "Texture",
+                    "name": "Animated Texture",
                     "type": "TextureRegion"
                   }
                 },
                 {
-                  "id": "180a7715db0d494784b6629bfb054c9b",
-                  "type": "Multiply",
-                  "x": 451.0,
-                  "y": 216.0
-                },
-                {
-                  "id": "end",
-                  "type": "SpriteShaderEnd",
-                  "x": 1489.0,
-                  "y": 125.0,
+                  "id": "7dfee781c13549cd897d6c9cbb1e6db1",
+                  "type": "Property",
+                  "x": 641.0,
+                  "y": 629.0,
                   "data": {
-                    "positionType": "World space",
-                    "depthWrite": true,
-                    "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
+                    "name": "UV",
+                    "type": "Vector2"
                   }
                 },
                 {
-                  "id": "17bd3d3ae9b341ee8a1ae5724f2bed40",
-                  "type": "SpritePosition",
-                  "x": 1021.0,
-                  "y": 700.0
-                },
-                {
-                  "id": "656d45cb9eed4e4ebf7d010f93f67fb7",
+                  "id": "b361c8b5860149afaaa72bd1be7fedf3",
                   "type": "UVFlipbook",
-                  "x": 821.0,
-                  "y": 258.0,
+                  "x": 875.0,
+                  "y": 442.9999694824219,
                   "data": {
                     "invertX": false,
                     "invertY": false
                   }
                 },
                 {
-                  "id": "3dec18bff3984555979890bfb4f80e92",
+                  "id": "c25020479d374e0199fc08f996bb21b7",
                   "type": "Property",
-                  "x": 1024.0,
-                  "y": 578.0,
+                  "x": 642.0,
+                  "y": 385.0,
                   "data": {
-                    "name": "Anchor",
-                    "type": "Vector2"
+                    "name": "Animation Looping",
+                    "type": "Float"
+                  }
+                },
+                {
+                  "id": "c48d007526b74e7c9db2efc10d21c6e2",
+                  "type": "Property",
+                  "x": 50.0,
+                  "y": 272.9999694824219,
+                  "data": {
+                    "name": "Animation Start",
+                    "type": "Float"
+                  }
+                },
+                {
+                  "id": "e1b2b6fb4ab94725ba740c03c4c7a1ee",
+                  "type": "Multiply",
+                  "x": 451.0,
+                  "y": 449.9999694824219
+                },
+                {
+                  "id": "ebf5474ee225421b9793bdf42941c1a1",
+                  "type": "Property",
+                  "x": 1112.0,
+                  "y": 687.0,
+                  "data": {
+                    "name": "Position",
+                    "type": "Vector3"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 1349.0,
+                  "y": 50.0,
+                  "data": {
+                    "positionType": "Object space",
+                    "culling": "back",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
                   }
                 }
               ],
               "connections": [
                 {
-                  "fromNode": "2affc280f9074df4bcd62e7fcd2513c9",
-                  "fromField": "a",
-                  "toNode": "end",
-                  "toField": "alpha"
-                },
-                {
-                  "fromNode": "1140308b879e4cd7a4c96752e0708839",
-                  "fromField": "uv",
-                  "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+                  "fromNode": "07512bd21acd4c97a0a459710ed147d6",
                   "fromField": "output",
-                  "toNode": "2affc280f9074df4bcd62e7fcd2513c9",
-                  "toField": "uv"
+                  "toNode": "e1b2b6fb4ab94725ba740c03c4c7a1ee",
+                  "toField": "inputs"
                 },
                 {
-                  "fromNode": "2affc280f9074df4bcd62e7fcd2513c9",
+                  "fromNode": "194cc43ebafb41aba8a16e02bd3e08e0",
+                  "fromField": "value",
+                  "toNode": "e1b2b6fb4ab94725ba740c03c4c7a1ee",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "22827a48ad06431197ea6f9898697da7",
+                  "fromField": "time",
+                  "toNode": "07512bd21acd4c97a0a459710ed147d6",
+                  "toField": "a"
+                },
+                {
+                  "fromNode": "4d1134a0ce40401bb7bf6e6ae861882e",
+                  "fromField": "value",
+                  "toNode": "b361c8b5860149afaaa72bd1be7fedf3",
+                  "toField": "tileCount"
+                },
+                {
+                  "fromNode": "718dc265f88a404d96bed6aacf765772",
                   "fromField": "color",
                   "toNode": "end",
                   "toField": "color"
                 },
                 {
-                  "fromNode": "17061776ddbe4018b09cfe3a3574b454",
+                  "fromNode": "7dd91308084a4384879b6cf28ca2f15d",
                   "fromField": "value",
-                  "toNode": "2affc280f9074df4bcd62e7fcd2513c9",
+                  "toNode": "718dc265f88a404d96bed6aacf765772",
                   "toField": "texture"
                 },
                 {
-                  "fromNode": "e99c9493abfa4c85b6b8d38e3e69dc4d",
-                  "fromField": "time",
-                  "toNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
-                  "toField": "a"
-                },
-                {
-                  "fromNode": "3a83146b38634b1e812b8396fd2dfcc4",
+                  "fromNode": "7dfee781c13549cd897d6c9cbb1e6db1",
                   "fromField": "value",
-                  "toNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
-                  "toField": "b"
+                  "toNode": "b361c8b5860149afaaa72bd1be7fedf3",
+                  "toField": "uv"
                 },
                 {
-                  "fromNode": "cb06a9014aa14f6cbc8aba7c79ba4978",
+                  "fromNode": "b361c8b5860149afaaa72bd1be7fedf3",
                   "fromField": "output",
-                  "toNode": "180a7715db0d494784b6629bfb054c9b",
-                  "toField": "inputs"
+                  "toNode": "718dc265f88a404d96bed6aacf765772",
+                  "toField": "uv"
                 },
                 {
-                  "fromNode": "d9e1a2bf9834405aa5260163d8818f82",
+                  "fromNode": "c25020479d374e0199fc08f996bb21b7",
                   "fromField": "value",
-                  "toNode": "180a7715db0d494784b6629bfb054c9b",
-                  "toField": "inputs"
-                },
-                {
-                  "fromNode": "a085b0923c604a9bb35c80b8cd602b0a",
-                  "fromField": "value",
-                  "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+                  "toNode": "b361c8b5860149afaaa72bd1be7fedf3",
                   "toField": "looping"
                 },
                 {
-                  "fromNode": "180a7715db0d494784b6629bfb054c9b",
+                  "fromNode": "c48d007526b74e7c9db2efc10d21c6e2",
+                  "fromField": "value",
+                  "toNode": "07512bd21acd4c97a0a459710ed147d6",
+                  "toField": "b"
+                },
+                {
+                  "fromNode": "e1b2b6fb4ab94725ba740c03c4c7a1ee",
                   "fromField": "output",
-                  "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
+                  "toNode": "b361c8b5860149afaaa72bd1be7fedf3",
                   "toField": "index"
                 },
                 {
-                  "fromNode": "f3c5520f52974179af5ceb000f35f890",
+                  "fromNode": "ebf5474ee225421b9793bdf42941c1a1",
                   "fromField": "value",
-                  "toNode": "656d45cb9eed4e4ebf7d010f93f67fb7",
-                  "toField": "tileCount"
-                },
-                {
-                  "fromNode": "ea05983941c244be9197c6b8ca8b4474",
-                  "fromField": "output",
                   "toNode": "end",
                   "toField": "position"
-                },
-                {
-                  "fromNode": "3dec18bff3984555979890bfb4f80e92",
-                  "fromField": "value",
-                  "toNode": "ea05983941c244be9197c6b8ca8b4474",
-                  "toField": "anchor"
-                },
-                {
-                  "fromNode": "9285c5404dfa43878781f87d81052ac2",
-                  "fromField": "value",
-                  "toNode": "ea05983941c244be9197c6b8ca8b4474",
-                  "toField": "size"
-                },
-                {
-                  "fromNode": "17bd3d3ae9b341ee8a1ae5724f2bed40",
-                  "fromField": "position",
-                  "toNode": "ea05983941c244be9197c6b8ca8b4474",
-                  "toField": "position"
-                },
-                {
-                  "fromNode": "a8912ea0d5ca437d91f2a4e5956abc81",
-                  "fromField": "uv",
-                  "toNode": "ea05983941c244be9197c6b8ca8b4474",
-                  "toField": "uv"
                 }
               ],
               "properties": [
                 {
-                  "name": "Texture",
+                  "name": "Position",
+                  "type": "Vector3",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                {
+                  "name": "UV",
+                  "type": "Vector2",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0
+                  }
+                },
+                {
+                  "name": "Animated Texture",
                   "type": "TextureRegion",
                   "location": "Attribute",
                   "data": {
@@ -342,284 +465,69 @@
                     "x": 1.0,
                     "y": 1.0
                   }
-                },
-                {
-                  "name": "Size",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 20.0,
-                    "y": 20.0
-                  }
-                },
-                {
-                  "name": "Anchor",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 0.5,
-                    "y": 0.5
-                  }
                 }
               ],
               "groups": [
                 {
                   "name": "Animation Frame",
                   "nodes": [
-                    "180a7715db0d494784b6629bfb054c9b",
-                    "e99c9493abfa4c85b6b8d38e3e69dc4d",
-                    "d9e1a2bf9834405aa5260163d8818f82",
-                    "3a83146b38634b1e812b8396fd2dfcc4",
-                    "cb06a9014aa14f6cbc8aba7c79ba4978"
+                    "194cc43ebafb41aba8a16e02bd3e08e0",
+                    "07512bd21acd4c97a0a459710ed147d6",
+                    "22827a48ad06431197ea6f9898697da7",
+                    "e1b2b6fb4ab94725ba740c03c4c7a1ee",
+                    "c48d007526b74e7c9db2efc10d21c6e2"
                   ]
                 }
               ]
-            }
-          },
-          {
-            "id": "f5154f42a2b84096ab58d61817516535",
-            "tag": "Tiled",
-            "shader": {
-              "version": "0.5.0",
-              "type": "Sprite_Shader",
-              "nodes": [
-                {
-                  "id": "df913436472340f89889d9f94aca5df1",
-                  "type": "SpritePosition",
-                  "x": 452.0,
-                  "y": 725.0
-                },
-                {
-                  "id": "21043207e4574bff90022c779cd38aef",
-                  "type": "Property",
-                  "x": 457.0,
-                  "y": 600.0,
-                  "data": {
-                    "name": "Anchor",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "bfbfe2c23431449bb1334e16c764d540",
-                  "type": "Property",
-                  "x": 254.0,
-                  "y": 551.0,
-                  "data": {
-                    "uWrap": "Repeat",
-                    "vWrap": "Repeat",
-                    "name": "Tile Texture",
-                    "type": "TextureRegion"
-                  }
-                },
-                {
-                  "id": "f96fca98d0294cb093ba0ea6dd65772f",
-                  "type": "Property",
-                  "x": 51.0,
-                  "y": 337.0,
-                  "data": {
-                    "name": "Tile Offset",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "04220cbcdab142f29ba7570618f68c20",
-                  "type": "Property",
-                  "x": 50.0,
-                  "y": 394.0,
-                  "data": {
-                    "name": "Tile Repeat",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "847523885dc24a769f3aa2e8552f7e0e",
-                  "type": "UVTilingOffset",
-                  "x": 247.0,
-                  "y": 406.0
-                },
-                {
-                  "id": "60bba06234a9453294a88efa8fee7e72",
-                  "type": "SpriteUV",
-                  "x": 50.0,
-                  "y": 452.0
-                },
-                {
-                  "id": "8b6e6e7d79584a7f9464c299688aea36",
-                  "type": "Sampler2D",
-                  "x": 460.0,
-                  "y": 383.0
-                },
-                {
-                  "id": "b6253e2d47fe4c768d558a3c69178e61",
-                  "type": "SpriteUV",
-                  "x": 458.0,
-                  "y": 667.0
-                },
-                {
-                  "id": "end",
-                  "type": "SpriteShaderEnd",
-                  "x": 925.0,
-                  "y": 50.0,
-                  "data": {
-                    "positionType": "World space",
-                    "depthWrite": true,
-                    "blending": false,
-                    "blendingSourceFactor": "zero",
-                    "blendingDestinationFactor": "one",
-                    "depthTest": "less"
-                  }
-                },
-                {
-                  "id": "711a2c8f843b4de4b5f6e5e438c8cba7",
-                  "type": "Property",
-                  "x": 459.0,
-                  "y": 542.0,
-                  "data": {
-                    "name": "Size",
-                    "type": "Vector2"
-                  }
-                },
-                {
-                  "id": "b5842f551746485e844500a3628edd8f",
-                  "type": "BillboardSprite",
-                  "x": 687.0,
-                  "y": 532.0
-                }
-              ],
-              "connections": [
-                {
-                  "fromNode": "bfbfe2c23431449bb1334e16c764d540",
-                  "fromField": "value",
-                  "toNode": "8b6e6e7d79584a7f9464c299688aea36",
-                  "toField": "texture"
-                },
-                {
-                  "fromNode": "04220cbcdab142f29ba7570618f68c20",
-                  "fromField": "value",
-                  "toNode": "847523885dc24a769f3aa2e8552f7e0e",
-                  "toField": "tiling"
-                },
-                {
-                  "fromNode": "f96fca98d0294cb093ba0ea6dd65772f",
-                  "fromField": "value",
-                  "toNode": "847523885dc24a769f3aa2e8552f7e0e",
-                  "toField": "offset"
-                },
-                {
-                  "fromNode": "60bba06234a9453294a88efa8fee7e72",
-                  "fromField": "uv",
-                  "toNode": "847523885dc24a769f3aa2e8552f7e0e",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "847523885dc24a769f3aa2e8552f7e0e",
-                  "fromField": "output",
-                  "toNode": "8b6e6e7d79584a7f9464c299688aea36",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "8b6e6e7d79584a7f9464c299688aea36",
-                  "fromField": "a",
-                  "toNode": "end",
-                  "toField": "alpha"
-                },
-                {
-                  "fromNode": "8b6e6e7d79584a7f9464c299688aea36",
-                  "fromField": "color",
-                  "toNode": "end",
-                  "toField": "color"
-                },
-                {
-                  "fromNode": "21043207e4574bff90022c779cd38aef",
-                  "fromField": "value",
-                  "toNode": "b5842f551746485e844500a3628edd8f",
-                  "toField": "anchor"
-                },
-                {
-                  "fromNode": "711a2c8f843b4de4b5f6e5e438c8cba7",
-                  "fromField": "value",
-                  "toNode": "b5842f551746485e844500a3628edd8f",
-                  "toField": "size"
-                },
-                {
-                  "fromNode": "b5842f551746485e844500a3628edd8f",
-                  "fromField": "output",
-                  "toNode": "end",
-                  "toField": "position"
-                },
-                {
-                  "fromNode": "b6253e2d47fe4c768d558a3c69178e61",
-                  "fromField": "uv",
-                  "toNode": "b5842f551746485e844500a3628edd8f",
-                  "toField": "uv"
-                },
-                {
-                  "fromNode": "df913436472340f89889d9f94aca5df1",
-                  "fromField": "position",
-                  "toNode": "b5842f551746485e844500a3628edd8f",
-                  "toField": "position"
-                }
-              ],
-              "properties": [
-                {
-                  "name": "Tile Repeat",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 1.0,
-                    "y": 1.0
-                  }
-                },
-                {
-                  "name": "Tile Texture",
-                  "type": "TextureRegion",
-                  "location": "Attribute",
-                  "data": {
-                    "previewPath": "/Users/marcin.sciesinski/private/libgdx-graph/libgdx-graph-test/resources/image/MossyHill1.png"
-                  }
-                },
-                {
-                  "name": "Tile Offset",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 0.0,
-                    "y": 0.0
-                  }
-                },
-                {
-                  "name": "Anchor",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 0.5,
-                    "y": 0.5
-                  }
-                },
-                {
-                  "name": "Size",
-                  "type": "Vector2",
-                  "location": "Attribute",
-                  "data": {
-                    "x": 50.0,
-                    "y": 50.0
-                  }
-                }
-              ],
-              "groups": []
             }
           }
         ]
       }
     },
     {
-      "id": "746da9b276d442f0bc74ed9847a26a4b",
-      "type": "PipelineStart",
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 218.0,
+      "y": 637.0,
+      "data": {
+        "color": "638c99ff"
+      }
+    },
+    {
+      "id": "dffb152d405a49d38792e850749129b2",
+      "type": "UIRenderer",
+      "x": 409.0,
+      "y": 134.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
       "x": 444.0,
-      "y": 614.0
+      "y": 50.0
     }
   ],
   "connections": [
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "toField": "input"
+    },
+    {
+      "fromNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
     {
       "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
       "fromField": "value",
@@ -630,24 +538,6 @@
       "fromNode": "dffb152d405a49d38792e850749129b2",
       "fromField": "output",
       "toNode": "end",
-      "toField": "input"
-    },
-    {
-      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
-      "fromField": "value",
-      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
-      "toField": "camera"
-    },
-    {
-      "fromNode": "ce7263bb711843b590f125cc3f49f1e9",
-      "fromField": "output",
-      "toNode": "dffb152d405a49d38792e850749129b2",
-      "toField": "input"
-    },
-    {
-      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
-      "fromField": "output",
-      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
       "toField": "input"
     }
   ],

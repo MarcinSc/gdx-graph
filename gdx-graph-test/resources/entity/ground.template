@@ -1,0 +1,111 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -350,
+        -9,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "tiledSprite",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 5120,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": -128,
+              "z": 0
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "region": "image/MossyGround.png"
+          },
+          "u": {
+            "class": "java.lang.Float",
+            "value": 0
+          },
+          "v": {
+            "class": "java.lang.Float",
+            "value": 0
+          },
+          "u1": {
+            "class": "java.lang.Float",
+            "value": 1
+          },
+          "v1": {
+            "class": "java.lang.Float",
+            "value": 1
+          },
+          "tileRepeat": {
+            "class": "com.badlogic.gdx.math.Vector2",
+            "x": 10,
+            "y": 1
+          }
+        }
+      }
+    ]
+  },
+  "com.gempukku.libgdx.box2d.artemis.PhysicsComponent": {
+    "type": "Static",
+    "fixedRotation": true,
+    "bullet": false,
+    "category": [
+      "Environment"
+    ],
+    "mask": [
+      "Character",
+      "Sensor"
+    ],
+    "shape": "box",
+    "shapeData": {
+      "width": 5120,
+      "height": 101.6
+    }
+  }
+}

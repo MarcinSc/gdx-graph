@@ -1,0 +1,9 @@
+{
+  "com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchComponent": {
+    "type": "TexturePaged",
+    "name": "tiled",
+    "renderTag": "Tiled",
+    "minimumPages": 1,
+    "staticBatch": true
+  }
+}

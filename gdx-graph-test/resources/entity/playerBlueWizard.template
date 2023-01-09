@@ -1,0 +1,137 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -270,
+        -310,
+        -10,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "animatedSprite",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 256,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": -256,
+              "z": 0
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "region": "image/BlueWizardIdle.png"
+          }
+        }
+      }
+    ]
+  },
+  "com.gempukku.libgdx.graph.test.component.StateBasedSpriteComponent": {
+    "stateProperties": {
+      "Idle": {
+        "texture": {
+          "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "region": "image/BlueWizardIdle.png"
+        },
+        "width": 20,
+        "height": 1,
+        "speed": 20,
+        "looping": true
+      },
+      "Walk": {
+        "texture": {
+          "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "region": "image/BlueWizardWalk.png"
+        },
+        "width": 5,
+        "height": 4,
+        "speed": 20,
+        "looping": true
+      },
+      "Jump": {
+        "texture": {
+          "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+          "region": "image/BlueWizardJump.png"
+        },
+        "width": 8,
+        "height": 1,
+        "speed": 20,
+        "looping": false
+      }
+    }
+  },
+  "com.gempukku.libgdx.box2d.artemis.PhysicsComponent": {
+    "type": "Dynamic",
+    "fixedRotation": true,
+    "bullet": false,
+    "category": [
+      "Character"
+    ],
+    "mask": [
+      "Environment"
+    ],
+    "shape": "box",
+    "shapeData": {
+      "width": 128,
+      "height": 204.8
+    },
+    "sensors": [
+      {
+        "type": "foot",
+        "category": "Sensor",
+        "shape": "box",
+        "shapeData": {
+          "width": 64,
+          "height": 12.8
+        },
+        "mask": [
+          "Environment"
+        ]
+      }
+    ]
+  }
+}

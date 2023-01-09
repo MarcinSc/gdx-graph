@@ -65,6 +65,7 @@ com_crashlytics_export_strings.xml
 /android/build/
 /core/build/
 /gdx-graph/build/
+/gdx-graph-artemis/build/
 /gdx-graph-test/build/
 /gdx-graph-util/build/
 /plugins/*/*/build/

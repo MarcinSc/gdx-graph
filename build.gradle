@@ -28,7 +28,7 @@ allprojects {
         aiVersion = '1.8.0'
         visUiVersion = '1.4.8'
         artemisOdbVersion = '2.3.0'
-        gdxGempLibVersion = '391da2b'
+        gdxGempLibVersion = '858c389'
     }
 
     repositories {
@@ -90,7 +90,7 @@ project(":gdx-graph-test") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-        api "com.badlogicgames.ashley:ashley:1.7.3"
+        api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-camera2d:$gdxGempLibVersion"
         api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
         api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
         api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-box2d-artemis:$gdxGempLibVersion"
