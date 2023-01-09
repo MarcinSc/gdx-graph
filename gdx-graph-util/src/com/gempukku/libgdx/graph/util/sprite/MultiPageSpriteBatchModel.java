@@ -133,7 +133,9 @@ public class MultiPageSpriteBatchModel<T extends SpriteRenderableModel> implemen
     @Override
     public void dispose() {
         for (T page : pages) {
-            disposePage(page);
+            if (page != null) {
+                disposePage(page);
+            }
         }
         pages.clear();
     }

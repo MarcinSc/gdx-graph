@@ -121,7 +121,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         final LinePositionGenerator positionGenerator = new LinePositionGenerator();
         positionGenerator.getPoint1().set(point1);
         positionGenerator.getPoint2().set(point2);
-        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(0.5f, 0, 100);
+        DefaultParticleGenerator particleGenerator = new DefaultParticleGenerator(0.5f, 0, 1000);
         particleGenerator.setPropertyGenerator("Position", new PositionPropertyGenerator(positionGenerator));
         particleGenerator.setPropertyGenerator("UV",
                 new PropertyGenerator() {
