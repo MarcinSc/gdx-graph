@@ -15,6 +15,7 @@ import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.sprite.BasicSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 
 public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
@@ -27,23 +28,20 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         camera = new OrthographicCamera();
         pipelineRenderer = loadPipelineRenderer();
 
-        ArrayValuePerVertex<Vector2> uvPerVertex = new ArrayValuePerVertex<>(
-                new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1));
-
         GraphModels graphModels = pipelineRenderer.getPluginData(GraphModels.class);
 
         spriteBatch = new BasicSpriteBatchModel(true, 2, graphModels, "Test");
 
         DefaultRenderableSprite sprite1 = new DefaultRenderableSprite();
         sprite1.setValue("Position", new Vector3(0, 0, -10));
-        sprite1.setValue("UV", uvPerVertex);
+        sprite1.setValue("UV", SpriteUtil.QUAD_UVS);
         ArrayValuePerVertex<Vector2> colorPerVertex = new ArrayValuePerVertex<>(
                 new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(1, 1));
         sprite1.setValue("Vertex Color", colorPerVertex);
 
         DefaultRenderableSprite sprite2 = new DefaultRenderableSprite();
         sprite2.setValue("Position", new Vector3(150, 0, -10));
-        sprite2.setValue("UV", uvPerVertex);
+        sprite2.setValue("UV", SpriteUtil.QUAD_UVS);
 
         spriteBatch.addSprite(sprite1);
         spriteBatch.addSprite(sprite2);
