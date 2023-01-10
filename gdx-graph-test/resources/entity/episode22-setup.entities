@@ -2,7 +2,7 @@
   "entities": [
     {
       "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
-        "pipelinePath": "episodes/episode21.json",
+        "pipelinePath": "episodes/episode22.json",
         "cameraDefinitions": [
           {
             "cameraProperty": "Camera",
@@ -14,6 +14,9 @@
     },
     {
       "tpl:extends": "entity/animatedBatch.template"
+    },
+    {
+      "tpl:extends": "entity/animatedOutlineBatch.template"
     },
     {
       "tpl:extends": "entity/outlineBatch.template"

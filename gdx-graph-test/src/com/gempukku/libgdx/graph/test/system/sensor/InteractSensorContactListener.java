@@ -4,32 +4,22 @@ import com.artemis.Entity;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.gempukku.libgdx.box2d.artemis.sensor.SensorContactListener;
 import com.gempukku.libgdx.box2d.artemis.sensor.SensorData;
-import com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent;
-import com.gempukku.libgdx.graph.artemis.sprite.SpriteDefinition;
-import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
+import com.gempukku.libgdx.graph.test.system.OutlineSystem;
 
 public class InteractSensorContactListener implements SensorContactListener {
-    private SpriteSystem spriteSystem;
+    private OutlineSystem outlineSystem;
 
-    public InteractSensorContactListener(SpriteSystem spriteSystem) {
-        this.spriteSystem = spriteSystem;
+    public InteractSensorContactListener(OutlineSystem outlineSystem) {
+        this.outlineSystem = outlineSystem;
     }
 
     @Override
     public void contactBegun(SensorData sensor, Fixture other) {
-        Entity entity = (Entity) other.getUserData();
-        SpriteDefinition interactSprite = entity.getComponent(SpriteComponent.class).getSprites().get(1);
-        interactSprite.getProperties().put("Outline Width", 3f);
-
-        spriteSystem.updateSprite(entity.getId(), 1);
+        outlineSystem.setOutline((Entity) other.getUserData(), true);
     }
 
     @Override
     public void contactEnded(SensorData sensor, Fixture other) {
-        Entity entity = (Entity) other.getUserData();
-        SpriteDefinition interactSprite = entity.getComponent(SpriteComponent.class).getSprites().get(1);
-        interactSprite.getProperties().put("Outline Width", 0f);
-
-        spriteSystem.updateSprite(entity.getId(), 1);
+        outlineSystem.setOutline((Entity) other.getUserData(), false);
     }
 }
