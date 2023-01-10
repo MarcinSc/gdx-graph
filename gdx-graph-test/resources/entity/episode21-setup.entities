@@ -1,0 +1,31 @@
+{
+  "entities": [
+    {
+      "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
+        "pipelinePath": "episodes/episode21.json",
+        "cameraDefinitions": [
+          {
+            "cameraProperty": "Camera",
+            "cameraName": "Main"
+          }
+        ]
+      },
+      "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
+    },
+    {
+      "tpl:extends": "entity/animatedBatch.template"
+    },
+    {
+      "tpl:extends": "entity/animatedOutlineBatch.template"
+    },
+    {
+      "tpl:extends": "entity/tiledBatch.template"
+    },
+    {
+      "tpl:extends": "entity/backgroundBatch.template"
+    },
+    {
+      "tpl:extends": "entity/camera.template"
+    }
+  ]
+}

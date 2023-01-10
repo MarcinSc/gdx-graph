@@ -28,7 +28,7 @@ allprojects {
         aiVersion = '1.8.0'
         visUiVersion = '1.4.8'
         artemisOdbVersion = '2.3.0'
-        gdxGempLibVersion = '9758941'
+        gdxGempLibVersion = '0b87311'
     }
 
     repositories {

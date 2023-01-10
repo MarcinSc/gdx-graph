@@ -72,6 +72,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode18Scene(),
                 new Episode19Scene(),
                 new Episode20Scene(),
+                new Episode21Scene(),
                 new SpriteShaderTestScene(),
                 new ParticlesShaderTestScene(),
                 new ShadowShaderTestScene()

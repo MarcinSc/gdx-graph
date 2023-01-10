@@ -191,6 +191,18 @@
         "mask": [
           "Environment"
         ]
+      },
+      {
+        "type": "interact",
+        "category": "Sensor",
+        "shape": "box",
+        "shapeData": {
+          "width": 318,
+          "height": 128
+        },
+        "mask": [
+          "Interactive"
+        ]
       }
     ]
   }
