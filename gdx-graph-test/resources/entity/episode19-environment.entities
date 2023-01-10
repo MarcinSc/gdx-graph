@@ -1,0 +1,7 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "entity/ground.template"
+    }
+  ]
+}

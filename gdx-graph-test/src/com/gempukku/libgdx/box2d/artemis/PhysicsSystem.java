@@ -83,12 +83,15 @@ public class PhysicsSystem extends EntitySystem {
     @Override
     public void inserted(Entity entity) {
         PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
-        Body body = createBody(entity, physicsComponent);
+        Matrix4 resolvedTransform = transformSystem.getResolvedTransform(entity);
+
+        Body body = createBody(entity, physicsComponent, resolvedTransform);
 
         SensorDef[] sensors = physicsComponent.getSensors();
         if (sensors != null) {
             for (SensorDef sensor : sensors) {
                 physicsComponent.addSensor(createSensor(entity, body, sensor.getType(), sensor.getCategory(),
+                        resolvedTransform,
                         sensor.getShape(), sensor.getShapeData(), sensor.getMask()));
             }
         }
@@ -106,9 +109,8 @@ public class PhysicsSystem extends EntitySystem {
         return box2DWorld;
     }
 
-    private Body createBody(Entity entity, PhysicsComponent physicsComponent) {
-        Matrix4 resolvedTransform = transformSystem.getResolvedTransform(entity);
-        Vector3 translation = resolvedTransform.getTranslation(tmpVector3);
+    private Body createBody(Entity entity, PhysicsComponent physicsComponent, Matrix4 transform) {
+        Vector3 translation = transform.getTranslation(tmpVector3);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.fixedRotation = physicsComponent.isFixedRotation();
@@ -119,7 +121,7 @@ public class PhysicsSystem extends EntitySystem {
         Body body = box2DWorld.createBody(bodyDef);
 
         FixtureShapeHandler fixtureShapeHandler = shapeHandlers.get(physicsComponent.getShape());
-        Shape shape = fixtureShapeHandler.createShape(entity, physicsComponent.getShapeData(), pixelsToMeters);
+        Shape shape = fixtureShapeHandler.createShape(entity, physicsComponent.getShapeData(), transform, pixelsToMeters);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -183,9 +185,10 @@ public class PhysicsSystem extends EntitySystem {
     }
 
     private SensorData createSensor(Entity entity, Body body, String type, String category,
+                                    Matrix4 resolvedTransform,
                                     String shapeType, ObjectMap<String, String> shapeData, String[] mask) {
         FixtureShapeHandler fixtureShapeHandler = shapeHandlers.get(shapeType);
-        Shape shape = fixtureShapeHandler.createShape(entity, shapeData, pixelsToMeters);
+        Shape shape = fixtureShapeHandler.createShape(entity, shapeData, resolvedTransform, pixelsToMeters);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

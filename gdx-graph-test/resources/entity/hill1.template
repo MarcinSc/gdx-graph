@@ -1,0 +1,74 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -300,
+        -83,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "backgroundSprite",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 1393,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 641,
+              "z": 0
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "image/MossyHill1.png",
+            "region": "image/MossyHill1.png"
+          }
+        }
+      }
+    ]
+  }
+}

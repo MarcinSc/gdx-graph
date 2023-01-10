@@ -38,7 +38,7 @@ import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 
-public class Episode19Scene implements LibgdxGraphTestScene {
+public class Episode20Scene implements LibgdxGraphTestScene {
     private final static float pixelsToMeters = 100f;
 
     private static final int INDEPENDENT_SYSTEMS = 4;
@@ -62,12 +62,12 @@ public class Episode19Scene implements LibgdxGraphTestScene {
         createSystems();
 
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
-        spawnSystem.spawnEntities("entity/episode19-setup.entities");
+        spawnSystem.spawnEntities("entity/episode20-setup.entities");
 
         world.process();
 
         // Load environment
-        spawnSystem.spawnEntities("entity/episode19-environment.entities");
+        spawnSystem.spawnEntities("entity/episode20-environment.entities");
 
         // Load player
         final Entity playerEntity = spawnSystem.spawnEntity("entity/playerBlueWizard.template");
