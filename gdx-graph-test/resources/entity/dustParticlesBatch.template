@@ -1,0 +1,6 @@
+{
+  "com.gempukku.libgdx.graph.artemis.particle.ParticleBatchComponent": {
+    "name": "dustParticles",
+    "renderTag": "Dust"
+  }
+}

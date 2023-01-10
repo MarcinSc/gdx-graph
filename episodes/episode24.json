@@ -341,13 +341,23 @@
                 {
                   "id": "03b24550882f45debd05d05e6c12fbc3",
                   "type": "Multiply",
-                  "x": 970.000244140625,
+                  "x": 970.0,
                   "y": 1078.0
+                },
+                {
+                  "id": "06786599e96d45b1bd3f8391f5771080",
+                  "type": "Property",
+                  "x": 524.0,
+                  "y": 910.0,
+                  "data": {
+                    "name": "Y movement",
+                    "type": "Float"
+                  }
                 },
                 {
                   "id": "12d983b9f09647b0b3af35f6421bcdeb",
                   "type": "Property",
-                  "x": 52.000244140625,
+                  "x": 52.0,
                   "y": 1325.0,
                   "data": {
                     "name": "Position",
@@ -357,7 +367,7 @@
                 {
                   "id": "1a82eb713a29428e9d73671fb79f951b",
                   "type": "Property",
-                  "x": 264.000244140625,
+                  "x": 264.0,
                   "y": 872.0,
                   "data": {
                     "name": "Parallax Random",
@@ -373,7 +383,7 @@
                 {
                   "id": "260cbf68cc174901b89fcfaf129ba83e",
                   "type": "Modulo",
-                  "x": 969.000244140625,
+                  "x": 969.0,
                   "y": 1195.0
                 },
                 {
@@ -387,18 +397,21 @@
                   }
                 },
                 {
-                  "id": "3690cd075af847878cb75bbf9c9220ce",
-                  "type": "ValueFloat",
-                  "x": 1514.0,
-                  "y": 836.0000610351562,
-                  "data": {
-                    "v1": 0.10000000149011612
-                  }
+                  "id": "39c20782aba44979aa4a7d94e7e53305",
+                  "type": "Merge",
+                  "x": 753.0,
+                  "y": 896.0
+                },
+                {
+                  "id": "39c4b75be1fc49479ff973d93f523918",
+                  "type": "ParticleLifePercentage",
+                  "x": 758.0,
+                  "y": 826.0
                 },
                 {
                   "id": "3a09a4401c7d434ea1b53bfe09407620",
                   "type": "EllipseShape",
-                  "x": 1532.9998779296875,
+                  "x": 1532.0,
                   "y": 185.0
                 },
                 {
@@ -411,7 +424,7 @@
                   "id": "41b5c3b0d3fe478aa3e737f5562688e1",
                   "type": "RemapValue",
                   "x": 1380.0,
-                  "y": 315.00006103515625,
+                  "y": 315.0,
                   "data": {
                     "points": [
                       "0.0,0.0",
@@ -423,12 +436,28 @@
                   }
                 },
                 {
+                  "id": "41b70369527441ccaf79b05ab2b32fc6",
+                  "type": "Multiply",
+                  "x": 984.0,
+                  "y": 961.0
+                },
+                {
                   "id": "486a467ad9134fceb2711eade0a64061",
                   "type": "ValueFloat",
-                  "x": 741.0001831054688,
+                  "x": 741.0,
                   "y": 1070.0,
                   "data": {
                     "v1": -0.5
+                  }
+                },
+                {
+                  "id": "4aa8ff2d08c349649e68bd89b87280f6",
+                  "type": "Property",
+                  "x": 1514.0,
+                  "y": 830.0,
+                  "data": {
+                    "name": "Size",
+                    "type": "Float"
                   }
                 },
                 {
@@ -450,7 +479,7 @@
                 {
                   "id": "644a17a218a141acb7b591387df9acc5",
                   "type": "Subtract",
-                  "x": 746.0001831054688,
+                  "x": 746.0,
                   "y": 1229.0
                 },
                 {
@@ -492,7 +521,7 @@
                 {
                   "id": "7959604be7404b10ae1720e5f30a9cf0",
                   "type": "Add",
-                  "x": 1224.000244140625,
+                  "x": 1224.0,
                   "y": 1032.0
                 },
                 {
@@ -508,7 +537,7 @@
                 {
                   "id": "818ea9b1b0104ed7a08f27d56f5995ba",
                   "type": "Property",
-                  "x": 742.0001831054688,
+                  "x": 742.0,
                   "y": 1139.0,
                   "data": {
                     "name": "Wrap size",
@@ -518,7 +547,7 @@
                 {
                   "id": "871ae01087d94bc295e317688e8dcfc4",
                   "type": "CameraPosition",
-                  "x": 52.000244140625,
+                  "x": 52.0,
                   "y": 1058.0
                 },
                 {
@@ -532,10 +561,20 @@
                   }
                 },
                 {
+                  "id": "983c62ab572a480eb638333ac1a161d9",
+                  "type": "Property",
+                  "x": 519.0,
+                  "y": 981.0,
+                  "data": {
+                    "name": "X movement",
+                    "type": "Float"
+                  }
+                },
+                {
                   "id": "9c7653ee35904f69b13373074a348038",
                   "type": "RemapVector",
                   "x": 1452.0,
-                  "y": 977.0000610351562,
+                  "y": 977.0,
                   "data": {
                     "x": "X",
                     "y": "Y",
@@ -546,7 +585,7 @@
                 {
                   "id": "b1f488388d1b4e1982a15416a52368d1",
                   "type": "RemapVector",
-                  "x": 262.000244140625,
+                  "x": 262.0,
                   "y": 941.0,
                   "data": {
                     "x": "X",
@@ -558,7 +597,7 @@
                 {
                   "id": "c1ea1075a25b43bc844476c6bb00f9f4",
                   "type": "RemapVector",
-                  "x": 497.00018310546875,
+                  "x": 497.0,
                   "y": 1191.0,
                   "data": {
                     "x": "X",
@@ -570,7 +609,7 @@
                 {
                   "id": "d7333d03ab1b43cc9d6b8b6a357e78ac",
                   "type": "ValueFloat",
-                  "x": 1304.9998779296875,
+                  "x": 1304.0,
                   "y": 133.0,
                   "data": {
                     "v1": 0.800000011920929
@@ -599,13 +638,13 @@
                 {
                   "id": "fd22a54a4d4947da904fadc7005a80a5",
                   "type": "Multiply",
-                  "x": 265.000244140625,
+                  "x": 265.0,
                   "y": 1297.0
                 },
                 {
                   "id": "ff65bc53559f42a5ba88460cf31dcb5a",
                   "type": "Multiply",
-                  "x": 498.00018310546875,
+                  "x": 498.0,
                   "y": 1101.0
                 }
               ],
@@ -615,6 +654,12 @@
                   "fromField": "output",
                   "toNode": "7959604be7404b10ae1720e5f30a9cf0",
                   "toField": "inputs"
+                },
+                {
+                  "fromNode": "06786599e96d45b1bd3f8391f5771080",
+                  "fromField": "value",
+                  "toNode": "39c20782aba44979aa4a7d94e7e53305",
+                  "toField": "y"
                 },
                 {
                   "fromNode": "12d983b9f09647b0b3af35f6421bcdeb",
@@ -647,10 +692,16 @@
                   "toField": "input"
                 },
                 {
-                  "fromNode": "3690cd075af847878cb75bbf9c9220ce",
-                  "fromField": "value",
-                  "toNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
-                  "toField": "size"
+                  "fromNode": "39c20782aba44979aa4a7d94e7e53305",
+                  "fromField": "v2",
+                  "toNode": "41b70369527441ccaf79b05ab2b32fc6",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "39c4b75be1fc49479ff973d93f523918",
+                  "fromField": "percentage",
+                  "toNode": "41b70369527441ccaf79b05ab2b32fc6",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "3a09a4401c7d434ea1b53bfe09407620",
@@ -671,10 +722,22 @@
                   "toField": "inputs"
                 },
                 {
+                  "fromNode": "41b70369527441ccaf79b05ab2b32fc6",
+                  "fromField": "output",
+                  "toNode": "7959604be7404b10ae1720e5f30a9cf0",
+                  "toField": "inputs"
+                },
+                {
                   "fromNode": "486a467ad9134fceb2711eade0a64061",
                   "fromField": "value",
                   "toNode": "03b24550882f45debd05d05e6c12fbc3",
                   "toField": "inputs"
+                },
+                {
+                  "fromNode": "4aa8ff2d08c349649e68bd89b87280f6",
+                  "fromField": "value",
+                  "toNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
+                  "toField": "size"
                 },
                 {
                   "fromNode": "576a8236e93145f1913361e79f975acb",
@@ -747,6 +810,12 @@
                   "fromField": "value",
                   "toNode": "7567eef74feb41da8e199c66b06c1502",
                   "toField": "input"
+                },
+                {
+                  "fromNode": "983c62ab572a480eb638333ac1a161d9",
+                  "fromField": "value",
+                  "toNode": "39c20782aba44979aa4a7d94e7e53305",
+                  "toField": "x"
                 },
                 {
                   "fromNode": "9c7653ee35904f69b13373074a348038",
@@ -830,7 +899,7 @@
                   "type": "Float",
                   "location": "Attribute",
                   "data": {
-                    "x": 500.0
+                    "x": 2000.0
                   }
                 },
                 {
@@ -839,6 +908,30 @@
                   "location": "Attribute",
                   "data": {
                     "x": 0.800000011920929
+                  }
+                },
+                {
+                  "name": "Size",
+                  "type": "Float",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.10000000149011612
+                  }
+                },
+                {
+                  "name": "X movement",
+                  "type": "Float",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0
+                  }
+                },
+                {
+                  "name": "Y movement",
+                  "type": "Float",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0
                   }
                 }
               ],
@@ -2666,6 +2759,12 @@
       "fromNode": "72be9695e45949ccb5f449dbacdfd619",
       "fromField": "value",
       "toNode": "c15b7f3a484246a89c6c773dbc5b7848",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "c83316ff0a164f4f9b074ae69a002205",
       "toField": "camera"
     },
     {
