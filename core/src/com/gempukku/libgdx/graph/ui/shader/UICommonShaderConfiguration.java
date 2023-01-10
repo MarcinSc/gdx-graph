@@ -141,6 +141,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new TimeShaderBoxProducer());
         register(new GraphBoxProducerImpl(new CameraPositionShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new CameraDirectionShaderNodeConfiguration()));
+        register(new GraphBoxProducerImpl(new CameraViewportSizeShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new FragmentCoordinateShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new SceneDepthShaderNodeConfiguration()));
         register(new SceneColorShaderBoxProducer());

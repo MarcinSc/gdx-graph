@@ -136,6 +136,7 @@ public class CommonShaderConfiguration implements GraphConfiguration {
         register(new TimeGraphShaderNodeBuilder());
         register(new CameraPositionShaderNodeBuilder());
         register(new CameraDirectionShaderNodeBuilder());
+        register(new CameraViewportSizeShaderNodeBuilder());
         register(new FragmentCoordinateShaderNodeBuilder());
         register(new SceneDepthShaderNodeBuilder());
         register(new SceneColorShaderNodeBuilder());

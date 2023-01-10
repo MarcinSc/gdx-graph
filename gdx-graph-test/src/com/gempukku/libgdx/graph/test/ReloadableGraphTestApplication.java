@@ -74,9 +74,10 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode20Scene(),
                 new Episode21Scene(),
                 new Episode22Scene(),
+                new Episode23Scene(),
                 new SpriteShaderTestScene(),
                 new ParticlesShaderTestScene(),
-                new ShadowShaderTestScene(),
+                new ShadowShaderTestScene()
         };
         loadedIndex = scenes.length - 1;
 

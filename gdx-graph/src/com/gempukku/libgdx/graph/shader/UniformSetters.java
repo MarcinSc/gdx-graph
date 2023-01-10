@@ -64,6 +64,13 @@ public class UniformSetters {
             shader.setUniform(location, camera.position.x, camera.position.y, camera.position.z);
         }
     };
+    public final static UniformRegistry.UniformSetter cameraViewportSize = new UniformRegistry.UniformSetter() {
+        @Override
+        public void set(BasicShader shader, int location, ShaderContext shaderContext) {
+            Camera camera = shaderContext.getCamera();
+            shader.setUniform(location, camera.viewportWidth, camera.viewportHeight);
+        }
+    };
     public final static UniformRegistry.UniformSetter cameraDirection = new UniformRegistry.UniformSetter() {
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
