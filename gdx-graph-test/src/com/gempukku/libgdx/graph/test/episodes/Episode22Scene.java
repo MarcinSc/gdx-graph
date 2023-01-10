@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.gempukku.libgdx.box2d.artemis.PhysicsSystem;
-import com.gempukku.libgdx.box2d.artemis.shape.BoxShapeHandler;
 import com.gempukku.libgdx.camera2d.Camera2DController;
 import com.gempukku.libgdx.camera2d.constraint.LockedToWindowCamera2DConstraint;
 import com.gempukku.libgdx.camera2d.constraint.SceneCamera2DConstraint;
@@ -21,11 +20,10 @@ import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
+import com.gempukku.libgdx.graph.test.system.ConfigurePhysicsSystem;
 import com.gempukku.libgdx.graph.test.system.OutlineSystem;
 import com.gempukku.libgdx.graph.test.system.PlayerControlSystem;
 import com.gempukku.libgdx.graph.test.system.camera.PlayerAdvanceFocus;
-import com.gempukku.libgdx.graph.test.system.sensor.FootSensorContactListener;
-import com.gempukku.libgdx.graph.test.system.sensor.InteractSensorContactListener;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
 import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraControlSystem;
@@ -92,19 +90,6 @@ public class Episode22Scene implements LibgdxGraphTestScene {
     }
 
     private void createSystems() {
-        short environmentCategory = 0b0001;
-        short characterCategory = 0b0010;
-        short sensorCategory = 0b0100;
-        short interactiveCategory = 0b1000;
-
-        PhysicsSystem physicsSystem = new PhysicsSystem(new Vector2(0, -30f), pixelsToMeters);
-        physicsSystem.addCategory("Environment", environmentCategory);
-        physicsSystem.addCategory("Character", characterCategory);
-        physicsSystem.addCategory("Sensor", sensorCategory);
-        physicsSystem.addCategory("Interactive", interactiveCategory);
-
-        physicsSystem.addShapeHandler("box", new BoxShapeHandler());
-
         TextureSystem textureSystem = new TextureSystem();
         textureSystem.setDefaultTextureHandler(new RuntimeTextureHandler());
 
@@ -120,7 +105,8 @@ public class Episode22Scene implements LibgdxGraphTestScene {
                 new CameraSystem(new OrthographicCameraController()),
                 new InputProcessorSystem(),
                 new UserInputSystem(1),
-                physicsSystem);
+                new PhysicsSystem(new Vector2(0, -30f), pixelsToMeters),
+                new ConfigurePhysicsSystem());
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
                 new PipelineRendererSystem(),
                 new OrthographicCameraControlSystem(),
@@ -132,9 +118,6 @@ public class Episode22Scene implements LibgdxGraphTestScene {
                 new OutlineSystem());
 
         world = new World(worldConfigurationBuilder.build());
-
-        physicsSystem.addSensorContactListener("foot", new FootSensorContactListener(environmentCategory));
-        physicsSystem.addSensorContactListener("interact", new InteractSensorContactListener(world.getSystem(OutlineSystem.class)));
 
         world.getSystem(InputProcessorSystem.class).setupProcessing();
     }
