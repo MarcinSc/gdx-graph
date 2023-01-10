@@ -5,13 +5,14 @@ import com.artemis.Entity;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
+import com.gempukku.libgdx.graph.test.component.OutlineComponent;
 
 public class OutlineSystem extends BaseSystem {
     private SpriteSystem spriteSystem;
 
     public void setOutline(Entity entity, boolean outline) {
-        String spriteBatchName = entity.getComponent(SpriteComponent.class).getSprites().get(0).getSpriteBatchName();
-        if (spriteBatchName.equals("animatedSprite")) {
+        OutlineComponent outlineComp = entity.getComponent(OutlineComponent.class);
+        if (outlineComp.getType().equals("asSprite")) {
             SpriteDefinition interactSprite = entity.getComponent(SpriteComponent.class).getSprites().get(1);
             interactSprite.getProperties().put("Outline Width", outline ? 3f : 0f);
 

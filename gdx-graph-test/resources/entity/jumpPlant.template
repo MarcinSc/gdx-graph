@@ -21,6 +21,9 @@
       ]
     }
   },
+  "com.gempukku.libgdx.graph.test.component.OutlineComponent": {
+    "type": "asSprite"
+  },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {
