@@ -13,6 +13,9 @@
       "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
     },
     {
+      "tpl:extends": "entity/sdf-text/spriteBatch.template"
+    },
+    {
       "tpl:extends": "entity/sdf-text/sdfTextBatch.template"
     },
     {

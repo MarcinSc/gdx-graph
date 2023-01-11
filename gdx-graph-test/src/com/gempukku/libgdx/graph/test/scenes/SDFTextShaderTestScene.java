@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
-import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraController;
+import com.gempukku.libgdx.lib.artemis.camera.topdown.TopDownCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
@@ -62,7 +62,7 @@ public class SDFTextShaderTestScene implements LibgdxGraphTestScene {
                 new EvaluatePropertySystem(),
                 new TransformSystem(),
                 textureSystem,
-                new CameraSystem(new OrthographicCameraController()),
+                new CameraSystem(new TopDownCameraController()),
                 new InputProcessorSystem(),
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()));
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,

@@ -16,10 +16,60 @@
         0,
         0,
         0,
-        -0.1,
+        0,
         1
       ]
     }
+  },
+  "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "sprite",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                -0.005,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 5,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 1,
+              "z": 0
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "image/seamless_rock_face_texture_by_hhh316.jpg",
+            "region": "image/seamless_rock_face_texture_by_hhh316.jpg"
+          }
+        }
+      }
+    ]
   },
   "com.gempukku.libgdx.graph.artemis.text.TextComponent": {
     "textBlocks": [
@@ -45,13 +95,13 @@
           ]
         },
         "rightVector": {
-          "x": 500,
+          "x": 5,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
-          "y": 100,
+          "y": 1,
           "z": 0
         },
         "width": 0.5,
