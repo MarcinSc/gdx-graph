@@ -113,13 +113,13 @@
           "a": 1
         },
         "spriteBatchName": "sdfText",
-        "targetWidth": 1000,
+        "targetWidth": 800,
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt",
-        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible.\nYou can even inline <img sprite image/MossyHill1.png:image/MossyHill1.png> sprites.\n<horAlign center>Or change horizontal alignment.</horAlign>\n<horAlign right>Like this.</horAlign>"
+        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible.\nYou can even inline <img sprite image/MossyHill1.png:image/MossyHill1.png> sprites.\n<horAlign center>Or change horizontal alignment.</horAlign>\n<horAlign justified>Or you can even justify text in line, which is generally very attractive only with a longer paragraph of text.</horAlign>\n<paddingLeft 50>Padding is also available</paddingLeft>, or <letterSpacing 5>letter spacing</letterSpacing>."
       }
     ]
   }
