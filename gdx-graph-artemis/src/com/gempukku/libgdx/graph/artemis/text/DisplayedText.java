@@ -134,7 +134,7 @@ public class DisplayedText implements Disposable {
                         float textureHeight = FontUtil.getFontAscent(bitmapFont);
                         float textureWidth = textureHeight * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
                         Vector3ValuePerVertex positionFloatArray = VectorUtil.createSideSpritePosition(
-                                startX + charX, heightInGlyph - (startY + charY) - textureHeight,
+                                startX + charX, startY - charY - textureHeight,
                                 textureWidth, textureHeight,
                                 unitRightVector, unitUpVector,
                                 resultTransform);

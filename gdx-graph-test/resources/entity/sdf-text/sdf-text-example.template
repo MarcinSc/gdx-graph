@@ -58,7 +58,7 @@
             },
             "upVector": {
               "x": 0,
-              "y": 2,
+              "y": 4,
               "z": 0
             }
           },
@@ -101,7 +101,7 @@
         },
         "upVector": {
           "x": 0,
-          "y": 2,
+          "y": 4,
           "z": 0
         },
         "width": 0.5,
@@ -113,7 +113,7 @@
           "a": 1
         },
         "spriteBatchName": "sdfText",
-        "targetWidth": 500,
+        "targetWidth": 1000,
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",
