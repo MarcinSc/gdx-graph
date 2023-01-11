@@ -1,10 +1,7 @@
-apply plugin: "java"
-
-sourceCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.main.resources.srcDirs = ["resources/"]
-sourceSets.test.java.srcDirs = ["test/"]
-
 eclipse.project.name = "gdx-graph-artemis"
+
+dependencies {
+    api project(":gdx-graph-util")
+    api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
+}

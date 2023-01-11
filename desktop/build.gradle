@@ -1,11 +1,22 @@
-apply plugin: "java"
-
-sourceCompatibility = 1.7
-sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
 project.ext.mainClassName = "com.gempukku.libgdx.graph.desktop.GraphEditorLauncher"
 project.ext.assetsDir = new File("../core/assets")
+
+dependencies {
+    implementation project(":core")
+
+    // Plugins
+    implementation project(":gdx-graph-callback-design")
+    implementation project(":gdx-graph-particles-design")
+    implementation project(":gdx-graph-screen-design")
+    implementation project(":gdx-graph-models-design")
+    implementation project(":gdx-graph-boneanimation-design")
+    implementation project(":gdx-graph-lighting3d-design")
+
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -34,7 +45,6 @@ task dist(type: Jar) {
     }
     with jar
 }
-
 
 dist.dependsOn classes
 

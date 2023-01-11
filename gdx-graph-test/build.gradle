@@ -1,9 +1,13 @@
-apply plugin: "java"
-
-sourceCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["resources/"]
-
 eclipse.project.name = "gdx-graph-test"
+
+dependencies {
+    implementation project(":gdx-graph-artemis")
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-camera2d:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-box2d-artemis:$gdxGempLibVersion"
+}

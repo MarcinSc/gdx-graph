@@ -1,10 +1,6 @@
-apply plugin: "java"
-
-sourceCompatibility = 1.7
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs = ["resources/"]
-sourceSets.test.java.srcDirs = [ "test/" ]
-
 eclipse.project.name = "gdx-graph-util"
+
+dependencies {
+    api project(":gdx-graph")
+    testImplementation "junit:junit:4.13"
+}
