@@ -147,11 +147,6 @@ public class TextSystem extends BaseEntitySystem {
 
     @Override
     public void dispose() {
-        for (Array<DisplayedText> textsArray : renderedTexts.values()) {
-            for (DisplayedText displayedText : textsArray) {
-                displayedText.dispose();
-            }
-        }
         renderedTexts.clear();
     }
 }
