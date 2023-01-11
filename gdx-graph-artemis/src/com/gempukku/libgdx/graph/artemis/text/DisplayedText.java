@@ -106,9 +106,9 @@ public class DisplayedText implements Disposable {
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(textBlock.getTransform());
 
-            final float startY = alignment.apply(offsetText.getTextHeight(), heightInGlyph) - heightInGlyph / 2;
+            final float startY = alignment.apply(offsetText.getTextHeight(), heightInGlyph) + heightInGlyph / 2;
 
-            float lineY = 0;
+            float lineY = -heightInGlyph;
             for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
                 GlyphOffsetLine line = offsetText.getLine(lineIndex);
                 float lineHeight = line.getHeight();
