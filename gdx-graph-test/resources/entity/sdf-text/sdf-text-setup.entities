@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {
+      "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
+        "pipelinePath": "test/sdf-text-shader-test.json",
+        "cameraDefinitions": [
+          {
+            "cameraProperty": "Camera",
+            "cameraName": "Main"
+          }
+        ]
+      },
+      "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
+    },
+    {
+      "tpl:extends": "entity/sdf-text/sdfTextBatch.template"
+    },
+    {
+      "tpl:extends": "entity/sdf-text/camera.template"
+    }
+  ]
+}

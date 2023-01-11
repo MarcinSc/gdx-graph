@@ -1,0 +1,24 @@
+{
+  "com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraComponent": {
+    "name": "Main",
+    "near": 0,
+    "far": 100,
+    "position": {
+      "x": 0,
+      "y": 150,
+      "z": 0
+    },
+    "direction": {
+      "x": 0,
+      "y": 0,
+      "z": -1
+    },
+    "up": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "height": 1080
+  },
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {}
+}

@@ -1,0 +1,76 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        -0.1,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.graph.artemis.text.TextComponent": {
+    "textBlocks": [
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 500,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 100,
+          "z": 0
+        },
+        "width": 0.5,
+        "edge": 0.05,
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "spriteBatchName": "sdfText",
+        "targetWidth": 500,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>"
+      }
+    ]
+  }
+}
