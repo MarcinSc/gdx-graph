@@ -260,7 +260,7 @@ public class DisplayedText implements Disposable {
         float glyphHeight = glyph.height * glyphScale;
 
         Vector3ValuePerVertex positionFloatArray = VectorUtil.createSideSpritePosition(
-                startX + glyphX + glyphXOffset, startY + glyphY - (glyphHeight + glyphYOffset),
+                startX + glyphX + glyphXOffset, startY - glyphY + glyphYOffset,
                 glyphWidth, glyphHeight,
                 unitRightVector, unitUpVector,
                 resultTransform);
@@ -278,7 +278,7 @@ public class DisplayedText implements Disposable {
 
     private Vector2ValuePerVertex createUVFloatArray(BitmapFont.Glyph glyph) {
         return new Vector2ValuePerVertex(new float[]{
-                glyph.u, glyph.v2, glyph.u2, glyph.v2, glyph.u, glyph.v, glyph.u2, glyph.v});
+                glyph.u, glyph.v, glyph.u2, glyph.v, glyph.u, glyph.v2, glyph.u2, glyph.v2});
     }
 
     private void removeText() {
