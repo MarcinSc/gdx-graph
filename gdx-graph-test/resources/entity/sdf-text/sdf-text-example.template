@@ -52,13 +52,13 @@
               ]
             },
             "rightVector": {
-              "x": 5,
+              "x": 8,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
-              "y": 1,
+              "y": 2,
               "z": 0
             }
           },
@@ -95,13 +95,13 @@
           ]
         },
         "rightVector": {
-          "x": 5,
+          "x": 8,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
-          "y": 1,
+          "y": 2,
           "z": 0
         },
         "width": 0.5,
@@ -117,9 +117,9 @@
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",
-        "horizontalAlignment": "center",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt",
-        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible."
+        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible.\nYou can even inline <img sprite image/MossyHill1.png:image/MossyHill1.png> sprites.\n<horAlign center>Or change horizontal alignment.</horAlign>\n<horAlign right>Like this.</horAlign>"
       }
     ]
   }
