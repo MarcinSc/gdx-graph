@@ -106,7 +106,7 @@ public class DisplayedText implements Disposable {
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(textBlock.getTransform());
 
-            final float startY = alignment.apply(offsetText.getTextHeight(), heightInGlyph) - heightInGlyph / 2;
+            final float startY = alignment.apply(offsetText.getTextHeight(), heightInGlyph) + heightInGlyph / 2;
 
             float lineY = 0;
             for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
@@ -124,7 +124,7 @@ public class DisplayedText implements Disposable {
                     float fontScale = getFontScale(textStyle);
 
                     float charX = line.getGlyphXAdvance(glyphIndex);
-                    float charY = lineY + line.getGlyphYAdvance(glyphIndex);
+                    float charY = line.getGlyphYAdvance(glyphIndex) - lineY;
 
                     TextureRegion textureRegion = getTextureRegion(textStyle);
                     if (textureRegion != null) {
