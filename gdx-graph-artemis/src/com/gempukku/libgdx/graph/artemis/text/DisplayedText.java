@@ -124,7 +124,7 @@ public class DisplayedText implements Disposable {
                     float fontScale = getFontScale(textStyle);
 
                     float charX = line.getGlyphXAdvance(glyphIndex);
-                    float charY = line.getGlyphYAdvance(glyphIndex) - lineY;
+                    float charY = lineY + line.getGlyphYAdvance(glyphIndex);
 
                     TextureRegion textureRegion = getTextureRegion(textStyle);
                     if (textureRegion != null) {
@@ -155,7 +155,7 @@ public class DisplayedText implements Disposable {
                                 charX, charY);
                     }
                 }
-                lineY += lineHeight;
+                lineY -= lineHeight;
             }
             offsetText.dispose();
         } finally {
