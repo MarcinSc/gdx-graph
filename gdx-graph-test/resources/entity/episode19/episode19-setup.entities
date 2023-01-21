@@ -13,13 +13,13 @@
       "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
     },
     {
-      "tpl:extends": "entity/animatedBatch.template"
+      "tpl:extends": "entity/2dscene/animatedBatch.template"
     },
     {
-      "tpl:extends": "entity/tiledBatch.template"
+      "tpl:extends": "entity/2dscene/tiledBatch.template"
     },
     {
-      "tpl:extends": "entity/camera.template"
+      "tpl:extends": "entity/2dscene/camera.template"
     }
   ]
 }

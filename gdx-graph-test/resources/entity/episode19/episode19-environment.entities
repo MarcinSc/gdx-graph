@@ -1,0 +1,7 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "entity/2dscene/ground.template"
+    }
+  ]
+}

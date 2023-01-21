@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "entity/2dscene/ground.template"
+    },
+    {
+      "tpl:extends": "entity/2dscene/jumpPlant.template"
+    },
+    {
+      "tpl:extends": "entity/2dscene/hill1.template"
+    },
+    {
+      "tpl:extends": "entity/2dscene/hill2.template"
+    },
+    {
+      "tpl:extends": "entity/2dscene/hill3.template"
+    },
+    {
+      "tpl:extends": "entity/2dscene/hill4.template"
+    }
+  ]
+}

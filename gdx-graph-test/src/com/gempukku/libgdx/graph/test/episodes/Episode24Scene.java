@@ -61,15 +61,15 @@ public class Episode24Scene implements LibgdxGraphTestScene {
         createSystems();
 
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
-        spawnSystem.spawnEntities("entity/episode24-setup.entities");
+        spawnSystem.spawnEntities("entity/episode24/episode24-setup.entities");
 
         world.process();
 
         // Load environment
-        spawnSystem.spawnEntities("entity/episode24-environment.entities");
+        spawnSystem.spawnEntities("entity/episode24/episode24-environment.entities");
 
         // Load player
-        final Entity playerEntity = spawnSystem.spawnEntity("entity/playerBlueWizard2.template");
+        final Entity playerEntity = spawnSystem.spawnEntity("entity/2dscene/playerBlueWizard2.template");
 
         // Setup camera to track player
         Camera2DController cameraController = new Camera2DController(// Try to focus on the point 200 pixels in front of player entity,
