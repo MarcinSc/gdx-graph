@@ -7,10 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
@@ -57,8 +54,6 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
 
         parentEntity = spawnSystem.spawnEntity("entity/transform/parent.template");
         childEntity = spawnSystem.spawnEntity("entity/transform/child.template");
-
-        world.getSystem(HierarchySystem.class).addHierarchy(parentEntity, childEntity);
 
         createUI();
     }
@@ -119,6 +114,18 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
                         world.getSystem(TransformSystem.class).setTransform(childEntity, tmpMatrix);
                     }
                 });
+        final CheckBox connectedCheckBox = new CheckBox("Connect entities", skin);
+        connectedCheckBox.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        if (connectedCheckBox.isChecked()) {
+                            world.getSystem(HierarchySystem.class).addHierarchy(parentEntity, childEntity);
+                        } else {
+                            world.getSystem(HierarchySystem.class).removeHierarchy(childEntity);
+                        }
+                    }
+                });
 
         Table tbl = new Table(skin);
 
@@ -129,6 +136,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
         tbl.add(parentRotationSlider).pad(0, 10f, 0, 10f).row();
         tbl.add(childTranslationLabel).pad(10f, 10f, 0, 10f).row();
         tbl.add(childTranslationSlider).pad(0f, 10f, 0, 10f).row();
+        tbl.add(connectedCheckBox).pad(10f).row();
 
         stage.addActor(tbl);
 

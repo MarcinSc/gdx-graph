@@ -21,14 +21,6 @@ allprojects {
     version = '0.6.2-SNAPSHOT'
     ext {
         appName = "Gdx Graph"
-        gdxVersion = '1.9.13'
-        roboVMVersion = '2.3.8'
-        box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.0'
-        aiVersion = '1.8.0'
-        visUiVersion = 'aa0184c'
-        artemisOdbVersion = '2.3.0'
-        gdxGempLibVersion = 'c266f33'
     }
 
     repositories {
