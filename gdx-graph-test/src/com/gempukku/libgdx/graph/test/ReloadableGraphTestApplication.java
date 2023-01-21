@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
@@ -84,7 +85,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         scenes[loadedIndex].initializeScene();
 
         uiSkin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
-        stage = new Stage();
+        stage = new Stage(new ScreenViewport());
         label = new Label("", uiSkin);
 
         Table tbl = new Table(uiSkin);
@@ -102,6 +103,8 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
     public void resize(int width, int height) {
         this.width = width;
         this.height = height;
+
+        stage.getViewport().update(width, height, true);
         scenes[loadedIndex].resizeScene(width, height);
     }
 

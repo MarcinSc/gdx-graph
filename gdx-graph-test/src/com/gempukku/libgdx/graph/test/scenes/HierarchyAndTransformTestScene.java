@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
@@ -88,7 +89,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
 
     private void createUI() {
         skin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
-        stage = new Stage();
+        stage = new Stage(new ScreenViewport());
 
         final Matrix4 tmpMatrix = new Matrix4();
 
@@ -147,6 +148,8 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
 
     @Override
     public void resizeScene(int width, int height) {
+        stage.getViewport().update(width, height, true);
+
         EventSystem eventSystem = world.getSystem(EventSystem.class);
         eventSystem.fireEvent(new ScreenResized(width, height), null);
     }
