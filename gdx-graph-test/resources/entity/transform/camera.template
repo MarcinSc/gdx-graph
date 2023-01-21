@@ -1,0 +1,34 @@
+{
+  "com.gempukku.libgdx.lib.artemis.camera.topdown.TopDownCameraComponent": {
+    "name": "Main",
+    "near": 2,
+    "far": 50,
+    "fieldOfView": 30,
+    "center": {
+      "x": 0,
+      "y": -0.2,
+      "z": 0
+    },
+    "distance": 15,
+    "xAxisAngle": 20,
+    "zAxisAngle": 90,
+    "bounds": {
+      "x": -5,
+      "y": -5,
+      "width": 10,
+      "height": 10
+    },
+    "distanceRange": {
+      "x": 8,
+      "y": 25
+    },
+    "xAxisAngleRange": {
+      "x": 5,
+      "y": 85
+    },
+    "zAxisAngleRange": {
+      "x": 0,
+      "y": 360
+    }
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "0c1b2c6eca044f26923860e98a6242b8",
+      "type": "Property",
+      "x": 50.0,
+      "y": 691.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "69d8d35a07984695977f3e2e815d5472",
+      "type": "PipelineStart",
+      "x": 478.0,
+      "y": 810.0
+    },
+    {
+      "id": "998d761dedd04cc682fdb3491fd7fc56",
+      "type": "GraphShaderRenderer",
+      "x": 372.0,
+      "y": 438.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "id": "d513e43daeb94328b377730eb4e4aeeb",
+            "tag": "Sprite",
+            "shader": {
+              "version": "0.5.0",
+              "type": "Model_Shader",
+              "nodes": [
+                {
+                  "id": "37ea37eeeacb4ed7b02a5c1cfadb8b78",
+                  "type": "Property",
+                  "x": 50.0,
+                  "y": 598.0,
+                  "data": {
+                    "name": "Texture",
+                    "type": "TextureRegion"
+                  }
+                },
+                {
+                  "id": "6c3531c0a1784936bab43151ee566efe",
+                  "type": "Sampler2D",
+                  "x": 294.0,
+                  "y": 476.0
+                },
+                {
+                  "id": "db877731806f4c548b3aae29caab13fe",
+                  "type": "Property",
+                  "x": 291.0,
+                  "y": 690.0,
+                  "data": {
+                    "name": "Position",
+                    "type": "Vector3"
+                  }
+                },
+                {
+                  "id": "end",
+                  "type": "ShaderEnd",
+                  "x": 517.0,
+                  "y": 50.0,
+                  "data": {
+                    "positionType": "Object space",
+                    "culling": "back",
+                    "blending": false,
+                    "depthTest": "less",
+                    "depthWrite": true
+                  }
+                },
+                {
+                  "id": "f47ebd4ff459422383674aeff2c28c24",
+                  "type": "Property",
+                  "x": 51.0,
+                  "y": 526.0,
+                  "data": {
+                    "name": "UV",
+                    "type": "Vector2"
+                  }
+                }
+              ],
+              "connections": [
+                {
+                  "fromNode": "37ea37eeeacb4ed7b02a5c1cfadb8b78",
+                  "fromField": "value",
+                  "toNode": "6c3531c0a1784936bab43151ee566efe",
+                  "toField": "texture"
+                },
+                {
+                  "fromNode": "6c3531c0a1784936bab43151ee566efe",
+                  "fromField": "a",
+                  "toNode": "end",
+                  "toField": "alpha"
+                },
+                {
+                  "fromNode": "6c3531c0a1784936bab43151ee566efe",
+                  "fromField": "color",
+                  "toNode": "end",
+                  "toField": "color"
+                },
+                {
+                  "fromNode": "db877731806f4c548b3aae29caab13fe",
+                  "fromField": "value",
+                  "toNode": "end",
+                  "toField": "position"
+                },
+                {
+                  "fromNode": "f47ebd4ff459422383674aeff2c28c24",
+                  "fromField": "value",
+                  "toNode": "6c3531c0a1784936bab43151ee566efe",
+                  "toField": "uv"
+                }
+              ],
+              "properties": [
+                {
+                  "name": "Position",
+                  "type": "Vector3",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                  }
+                },
+                {
+                  "name": "UV",
+                  "type": "Vector2",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 0.0,
+                    "y": 0.0
+                  }
+                },
+                {
+                  "name": "Texture",
+                  "type": "TextureRegion",
+                  "location": "Attribute",
+                  "data": {
+                    "previewPath": null
+                  }
+                }
+              ],
+              "groups": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 477.0,
+      "y": 50.0
+    },
+    {
+      "id": "f544e99c1d494e399df63fa4d723a860",
+      "type": "UIRenderer",
+      "x": 444.0,
+      "y": 227.0,
+      "data": {
+        "id": "Main"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "0c1b2c6eca044f26923860e98a6242b8",
+      "fromField": "value",
+      "toNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "69d8d35a07984695977f3e2e815d5472",
+      "fromField": "output",
+      "toNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "toField": "input"
+    },
+    {
+      "fromNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "fromField": "output",
+      "toNode": "f544e99c1d494e399df63fa4d723a860",
+      "toField": "input"
+    },
+    {
+      "fromNode": "f544e99c1d494e399df63fa4d723a860",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

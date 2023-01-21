@@ -20,10 +20,7 @@ import com.gempukku.libgdx.graph.plugin.particles.ParticlesPluginRuntimeInitiali
 import com.gempukku.libgdx.graph.plugin.screen.ScreenPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
-import com.gempukku.libgdx.graph.test.scenes.ParticlesShaderTestScene;
-import com.gempukku.libgdx.graph.test.scenes.SDFTextShaderTestScene;
-import com.gempukku.libgdx.graph.test.scenes.ShadowShaderTestScene;
-import com.gempukku.libgdx.graph.test.scenes.SpriteShaderTestScene;
+import com.gempukku.libgdx.graph.test.scenes.*;
 import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
 
 public class ReloadableGraphTestApplication extends ApplicationAdapter {
@@ -35,10 +32,9 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
 
     private boolean profile = false;
     private GLProfiler profiler;
-    private Skin profileSkin;
-    private Stage profileStage;
-    private Label profileLabel;
-
+    private Skin uiSkin;
+    private Stage stage;
+    private Label label;
 
     @Override
     public void create() {
@@ -80,11 +76,26 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new SpriteShaderTestScene(),
                 new ParticlesShaderTestScene(),
                 new ShadowShaderTestScene(),
-                new SDFTextShaderTestScene()
+                new SDFTextShaderTestScene(),
+                new HierarchyAndTransformTestScene()
         };
         loadedIndex = scenes.length - 1;
 
         scenes[loadedIndex].initializeScene();
+
+        uiSkin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
+        stage = new Stage();
+        label = new Label("", uiSkin);
+
+        Table tbl = new Table(uiSkin);
+
+        tbl.setFillParent(true);
+        tbl.align(Align.bottomRight);
+
+        tbl.add(label).pad(10f);
+        tbl.row();
+
+        stage.addActor(tbl);
     }
 
     @Override
@@ -119,20 +130,18 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         }
 
         long start = 0;
-        if (profile)
-            fpsLogger.log();
-
         if (profile) {
+            fpsLogger.log();
             profiler.reset();
             start = System.nanoTime();
         }
 
         scenes[loadedIndex].renderScene();
 
+        StringBuilder sb = new StringBuilder();
         if (profile) {
             float ms = (System.nanoTime() - start) / 1000000f;
 
-            StringBuilder sb = new StringBuilder();
             sb.append("Time: " + SimpleNumberFormatter.format(ms) + "ms\n");
             sb.append("GL Calls: " + profiler.getCalls() + "\n");
             sb.append("Draw calls: " + profiler.getDrawCalls() + "\n");
@@ -140,21 +149,22 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
             sb.append("Texture bindings: " + profiler.getTextureBindings() + "\n");
             sb.append("Vertex calls: " + profiler.getVertexCount().total + "\n");
             long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
-            sb.append("Used memory: " + memory + "MB");
-            profileLabel.setText(sb.toString());
-
-            profileStage.draw();
+            sb.append("Used memory: " + memory + "MB\n");
         }
+        sb.append("P - for previous scene\n");
+        sb.append("N - for next scene\n");
+        sb.append("O - to toggle profiling\n");
+        label.setText(sb.toString());
+
+        stage.draw();
     }
 
     @Override
     public void dispose() {
         scenes[loadedIndex].disposeScene();
 
-        if (profile) {
-            profileSkin.dispose();
-            profileStage.dispose();
-        }
+        uiSkin.dispose();
+        stage.dispose();
 
         Gdx.app.debug("Unclosed", Cubemap.getManagedStatus());
         Gdx.app.debug("Unclosed", GLFrameBuffer.getManagedStatus());
@@ -168,27 +178,10 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         profiler = new GLProfiler(Gdx.graphics);
         profiler.enable();
 
-        profileSkin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
-        profileStage = new Stage();
-        profileLabel = new Label("", profileSkin);
-
-        Table tbl = new Table(profileSkin);
-
-        tbl.setFillParent(true);
-        tbl.align(Align.topRight);
-
-        tbl.add(profileLabel).pad(10f);
-        tbl.row();
-
-        profileStage.addActor(tbl);
-
         profile = true;
     }
 
     private void disableProfiler() {
-        profileSkin.dispose();
-        profileStage.dispose();
-
         profiler.disable();
 
         profile = false;

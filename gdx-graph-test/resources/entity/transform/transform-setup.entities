@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {
+      "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
+        "pipelinePath": "test/hierarchy-transform-shader-test.json",
+        "cameraDefinitions": [
+          {
+            "cameraProperty": "Camera",
+            "cameraName": "Main"
+          }
+        ]
+      },
+      "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
+    },
+    {
+      "tpl:extends": "entity/transform/spriteBatch.template"
+    },
+    {
+      "tpl:extends": "entity/transform/camera.template"
+    }
+  ]
+}
