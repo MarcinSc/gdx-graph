@@ -10,7 +10,7 @@ public class StartPipelineNodeConfiguration extends NodeConfigurationImpl {
     public StartPipelineNodeConfiguration() {
         super("PipelineStart", "Pipeline start", "Pipeline");
         addNodeInput(
-                new GraphNodeInputImpl("background", "Background color", Color));
+                new GraphNodeInputImpl("background", "Background color", Color, Vector4));
         addNodeInput(
                 new GraphNodeInputImpl("size", "Size", Vector2));
         addNodeOutput(
