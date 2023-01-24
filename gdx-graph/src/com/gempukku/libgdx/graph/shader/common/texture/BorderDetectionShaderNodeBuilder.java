@@ -25,7 +25,7 @@ public class BorderDetectionShaderNodeBuilder extends ConfigurationCommonShaderN
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
                                                                        CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        FieldOutput textureValue = inputs.get("texture");
+        TextureFieldOutput textureValue = (TextureFieldOutput) inputs.get("texture");
         FieldOutput uvValue = inputs.get("uv");
         FieldOutput pixelSizeValue = inputs.get("pixelSize");
         FieldOutput outlineWidthValue = inputs.get("outlineWidth");

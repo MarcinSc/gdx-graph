@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
-import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.shader.node.DefaultTextureFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.PropertySource;
 
@@ -89,7 +89,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        return new DefaultFieldOutput(getName(), uvTransformVariableName, textureVariableName);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        return new DefaultFieldOutput(getName(), uvTransformVariableName, textureVariableName);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                 }, "Texture property - " + propertySource.getPropertyName());
         vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + propertySource.getPropertyName());
 
-        return new DefaultFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName);
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
             fragmentShaderBuilder.addVaryingVariable(uvTransformVariableName, "vec4");
         }
 
-        return new DefaultFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName);
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName);
     }
 
     @Override

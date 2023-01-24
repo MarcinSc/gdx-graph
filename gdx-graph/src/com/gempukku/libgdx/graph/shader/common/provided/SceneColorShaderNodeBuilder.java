@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.common.provided.SceneColorShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.shader.node.DefaultTextureFieldOutput;
 import com.gempukku.libgdx.graph.util.LibGDXCollections;
 
 public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
@@ -56,6 +56,6 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                     }
                 }, "Scene color texture UVs");
 
-        return LibGDXCollections.singletonMap("texture", new DefaultFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName));
+        return LibGDXCollections.singletonMap("texture", new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName));
     }
 }

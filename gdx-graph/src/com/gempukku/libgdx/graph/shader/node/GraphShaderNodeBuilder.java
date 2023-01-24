@@ -27,8 +27,10 @@ public interface GraphShaderNodeBuilder {
 
         String getRepresentation();
 
-        String getSamplerRepresentation();
-
         String toString();
+    }
+
+    interface TextureFieldOutput extends FieldOutput {
+        String getSamplerRepresentation();
     }
 }
