@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.node;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -32,5 +33,11 @@ public interface GraphShaderNodeBuilder {
 
     interface TextureFieldOutput extends FieldOutput {
         String getSamplerRepresentation();
+
+        String getSizeRepresentation();
+
+        Texture.TextureWrap getUWrap();
+
+        Texture.TextureWrap getVWrap();
     }
 }

@@ -13,7 +13,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.ValueOperations;
 
 public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
@@ -56,50 +56,50 @@ public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        String variableName = shaderPropertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), true,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = shaderContext.getGlobalProperty(propertySource.getPropertyName());
-                        value = propertySource.getValueToUse(value);
+                        Object value = shaderContext.getGlobalProperty(shaderPropertySource.getPropertyName());
+                        value = shaderPropertySource.getValueToUse(value);
                         shader.setUniform(location, (Vector3) value);
                     }
-                }, "Vector3 property - " + propertySource.getPropertyName());
+                }, "Vector3 property - " + shaderPropertySource.getPropertyName());
         return new DefaultFieldOutput(getName(), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        String variableName = shaderPropertySource.getUniformName();
         commonShaderBuilder.addUniformVariable(variableName, getShaderType(), false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = shaderContext.getLocalProperty(propertySource.getPropertyName());
-                        value = propertySource.getValueToUse(value);
+                        Object value = shaderContext.getLocalProperty(shaderPropertySource.getPropertyName());
+                        value = shaderPropertySource.getValueToUse(value);
                         shader.setUniform(location, (Vector3) value);
                     }
-                }, "Vector3 property - " + propertySource.getPropertyName());
+                }, "Vector3 property - " + shaderPropertySource.getPropertyName());
         return new DefaultFieldOutput(getName(), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = propertySource.getAttributeName();
+    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
+        String attributeName = shaderPropertySource.getAttributeName();
 
-        vertexShaderBuilder.addAttributeVariable(attributeName, getNumberOfComponents(), getShaderType(), "Vector3 property - " + propertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(attributeName, getNumberOfComponents(), getShaderType(), "Vector3 property - " + shaderPropertySource.getPropertyName());
 
         return new DefaultFieldOutput(getName(), attributeName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
-        String attributeName = propertySource.getAttributeName();
-        String variableName = propertySource.getVariableName();
+    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
+        String attributeName = shaderPropertySource.getAttributeName();
+        String variableName = shaderPropertySource.getVariableName();
 
-        vertexShaderBuilder.addAttributeVariable(attributeName, getNumberOfComponents(), getShaderType(), "Vector3 property - " + propertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(attributeName, getNumberOfComponents(), getShaderType(), "Vector3 property - " + shaderPropertySource.getPropertyName());
         if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {
             vertexShaderBuilder.addVaryingVariable(variableName, getShaderType());
             vertexShaderBuilder.addMainLine(variableName + " = " + attributeName + ";");

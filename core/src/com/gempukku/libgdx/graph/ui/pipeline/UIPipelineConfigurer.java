@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.config.MultiParamVectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.graph.config.VectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
+import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
 import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
 import com.gempukku.libgdx.graph.ui.graph.GraphBox;
@@ -152,11 +153,11 @@ public class UIPipelineConfigurer {
 
     private static GraphBoxPart createFieldGraphBoxPart(String fieldType, JsonValue field) {
         switch (fieldType) {
-            case "Float": {
+            case PipelineFieldType.Float: {
                 return new FloatBoxPart(field.getString("label") + " ", field.getString("property"),
                         field.getFloat("defaultValue", 0), null);
             }
-            case "Vector2": {
+            case PipelineFieldType.Vector2: {
                 JsonValue properties = field.get("properties");
                 JsonValue defaultValues = field.get("defaultValues");
                 return new Vector2BoxPart(field.getString("label") + " ",
@@ -164,7 +165,7 @@ public class UIPipelineConfigurer {
                         defaultValues.getFloat(0), defaultValues.getFloat(1),
                         null, null);
             }
-            case "Vector3": {
+            case PipelineFieldType.Vector3: {
                 JsonValue properties = field.get("properties");
                 JsonValue defaultValues = field.get("defaultValues");
                 return new Vector3BoxPart(field.getString("label") + " ",
@@ -172,11 +173,11 @@ public class UIPipelineConfigurer {
                         defaultValues.getFloat(0), defaultValues.getFloat(1), defaultValues.getFloat(2),
                         null, null, null);
             }
-            case "Color": {
+            case PipelineFieldType.Color: {
                 return new ColorBoxPart(field.getString("label") + " ", field.getString("property"),
                         Color.valueOf(field.getString("defaultValue")));
             }
-            case "Boolean": {
+            case PipelineFieldType.Boolean: {
                 return new CheckboxBoxPart(field.getString("label") + " ", field.getString("property"),
                         field.getBoolean("defaultValue"));
             }

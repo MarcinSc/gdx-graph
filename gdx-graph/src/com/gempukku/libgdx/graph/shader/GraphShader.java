@@ -10,13 +10,13 @@ import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 
 public class GraphShader extends UniformCachingShader implements GraphShaderContext {
     private final PropertyToLocationMapping propertyToLocationMapping = new PropertyToLocationMapping();
     private final Array<Disposable> disposableList = new Array<>();
-    protected ObjectMap<String, PropertySource> propertySourceMap = new ObjectMap<>();
+    protected ObjectMap<String, ShaderPropertySource> propertySourceMap = new ObjectMap<>();
     private ShaderProgram shaderProgram;
 
     public GraphShader(String tag, Texture defaultTexture) {
@@ -43,16 +43,16 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
         init(shaderProgram);
     }
 
-    public void addPropertySource(String name, PropertySource propertySource) {
-        propertySourceMap.put(name, propertySource);
+    public void addPropertySource(String name, ShaderPropertySource shaderPropertySource) {
+        propertySourceMap.put(name, shaderPropertySource);
     }
 
-    public ObjectMap<String, PropertySource> getProperties() {
+    public ObjectMap<String, ShaderPropertySource> getProperties() {
         return propertySourceMap;
     }
 
     @Override
-    public PropertySource getPropertySource(String name) {
+    public ShaderPropertySource getPropertySource(String name) {
         return propertySourceMap.get(name);
     }
 
@@ -91,16 +91,16 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
     private class PropertyToLocationMapping implements IntMapping<String> {
         @Override
         public int map(String value) {
-            PropertySource propertySource = propertySourceMap.get(value);
-            if (propertySource == null) {
+            ShaderPropertySource shaderPropertySource = propertySourceMap.get(value);
+            if (shaderPropertySource == null) {
                 int lastIndex = value.lastIndexOf('_');
                 if (lastIndex > -1) {
                     String arrayValue = value.substring(0, lastIndex);
-                    propertySource = propertySourceMap.get(arrayValue);
-                    if (propertySource == null)
+                    shaderPropertySource = propertySourceMap.get(arrayValue);
+                    if (shaderPropertySource == null)
                         return -1;
 
-                    ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
+                    ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
                     if (!(shaderFieldType instanceof ArrayShaderFieldType))
                         return -1;
 
@@ -108,13 +108,13 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
                     ArrayShaderFieldType arrayShaderFieldType = (ArrayShaderFieldType) shaderFieldType;
                     if (index >= arrayShaderFieldType.getArrayLength())
                         return -1;
-                    return attributes.get(propertySource.getAttributeName(index)).getLocation();
+                    return attributes.get(shaderPropertySource.getAttributeName(index)).getLocation();
                 }
                 return -1;
             }
-            if (propertySource.getPropertyLocation() != PropertyLocation.Attribute)
+            if (shaderPropertySource.getPropertyLocation() != PropertyLocation.Attribute)
                 return -1;
-            Attribute attribute = attributes.get(propertySource.getAttributeName());
+            Attribute attribute = attributes.get(shaderPropertySource.getAttributeName());
             if (attribute == null)
                 return -1;
             return attribute.getLocation();

@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
@@ -38,7 +38,7 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         this.tag = tag;
 
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-        ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
         delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity, 20000,
                 vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);

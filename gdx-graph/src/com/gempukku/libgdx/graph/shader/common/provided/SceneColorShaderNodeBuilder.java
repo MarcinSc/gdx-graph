@@ -30,15 +30,19 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         graphShader.setUsingColorTexture(true);
         String textureName = "u_" + nodeId;
         String transformName = "u_UV" + nodeId;
+        String sizeName = "u_size" + nodeId;
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
-        if (data != null && data.has("minFilter"))
-            textureDescriptor.minFilter = Texture.TextureFilter.valueOf(data.getString("minFilter"));
-        if (data != null && data.has("magFilter"))
-            textureDescriptor.magFilter = Texture.TextureFilter.valueOf(data.getString("magFilter"));
+        textureDescriptor.minFilter = Texture.TextureFilter.Linear;
+        textureDescriptor.magFilter = Texture.TextureFilter.Linear;
+        textureDescriptor.uWrap = Texture.TextureWrap.ClampToEdge;
+        textureDescriptor.vWrap = Texture.TextureWrap.ClampToEdge;
+
+        Texture.TextureWrap uWrap = Texture.TextureWrap.ClampToEdge;
+        Texture.TextureWrap vWrap = Texture.TextureWrap.ClampToEdge;
         if (data != null && data.has("uWrap"))
-            textureDescriptor.uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
+            uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
         if (data != null && data.has("vWrap"))
-            textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+            vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
 
         commonShaderBuilder.addUniformVariable(textureName, "sampler2D", true,
                 new UniformRegistry.UniformSetter() {
@@ -55,7 +59,17 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                         shader.setUniform(location, 0f, 0f, 1f, 1f);
                     }
                 }, "Scene color texture UVs");
+        commonShaderBuilder.addUniformVariable(sizeName, "vec2", false,
+                new UniformRegistry.UniformSetter() {
+                    @Override
+                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
+                        Texture colorTexture = shaderContext.getColorTexture();
+                        shader.setUniform(location, (float) colorTexture.getWidth(), (float) colorTexture.getHeight());
+                    }
+                }, "Scene color texture size");
 
-        return LibGDXCollections.singletonMap("texture", new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName));
+        return LibGDXCollections.singletonMap("texture",
+                new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName, sizeName,
+                        uWrap, vWrap));
     }
 }

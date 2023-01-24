@@ -16,6 +16,7 @@ import com.gempukku.libgdx.graph.pipeline.config.rendering.EndPipelineNodeConfig
 import com.gempukku.libgdx.graph.pipeline.config.rendering.PipelineRendererNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.StartPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.value.*;
+import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxPart;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
@@ -125,10 +126,10 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
         register(new DepthOfFieldBoxProducer());
         register(new GraphBoxProducerImpl(new GammaCorrectionPipelineNodeConfiguration()));
 
-        propertyProducers.put("Float", new PropertyFloatBoxProducer());
-        propertyProducers.put("Vector2", new PropertyVector2BoxProducer());
-        propertyProducers.put("Vector3", new PropertyVector3BoxProducer());
-        propertyProducers.put("Color", new PropertyColorBoxProducer());
+        propertyProducers.put(PipelineFieldType.Float, new PropertyFloatBoxProducer());
+        propertyProducers.put(PipelineFieldType.Vector2, new PropertyVector2BoxProducer());
+        propertyProducers.put(PipelineFieldType.Vector3, new PropertyVector3BoxProducer());
+        propertyProducers.put(PipelineFieldType.Color, new PropertyColorBoxProducer());
         PipelinePropertyBoxProducerImpl booleanProperty = new PipelinePropertyBoxProducerImpl("New Boolean", "Boolean");
         booleanProperty.addPropertyBoxPart(
                 new Supplier<PropertyBoxPart>() {
@@ -137,9 +138,8 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
                         return new CheckboxBoxPart("Value", "value", false);
                     }
                 });
-        propertyProducers.put("Boolean", booleanProperty);
-        propertyProducers.put("Camera", new PipelinePropertyBoxProducerImpl("New Camera", "Camera"));
-        propertyProducers.put("Callback", new PipelinePropertyBoxProducerImpl("New Callback", "Callback"));
+        propertyProducers.put(PipelineFieldType.Boolean, booleanProperty);
+        propertyProducers.put(PipelineFieldType.Camera, new PipelinePropertyBoxProducerImpl("New Camera", "Camera"));
     }
 
     @Override

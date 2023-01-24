@@ -33,6 +33,7 @@ import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapVectorShader
 import com.gempukku.libgdx.graph.ui.shader.producer.property.*;
 import com.gempukku.libgdx.graph.ui.shader.producer.provided.SceneColorShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.provided.TimeShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.texture.TextureWidthShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.texture.UVFlipbookShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
 
@@ -59,6 +60,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new PropertyShaderGraphBoxProducer());
 
         register(new GraphBoxProducerImpl(new Sampler2DShaderNodeConfiguration()));
+        register(new TextureWidthShaderBoxProducer());
         register(new UVFlipbookShaderBoxProducer());
         register(new GraphBoxProducerImpl(new UVTilingAndOffsetShaderNodeConfiguration()));
         register(new GraphBoxProducerImpl(new BorderDetectionShaderNodeConfiguration()));

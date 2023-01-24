@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class BoneWeightFieldType implements ArrayShaderFieldType {
     public static final String type = "BoneWeights";
@@ -65,67 +65,67 @@ public class BoneWeightFieldType implements ArrayShaderFieldType {
         return null;
     }
 
-    private int getBoneWeightCount(PropertySource propertySource) {
-        return ((BoneWeightFieldType) propertySource.getShaderFieldType()).getArrayLength();
+    private int getBoneWeightCount(ShaderPropertySource shaderPropertySource) {
+        return ((BoneWeightFieldType) shaderPropertySource.getShaderFieldType()).getArrayLength();
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneWeightCount = getBoneWeightCount(propertySource);
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        int boneWeightCount = getBoneWeightCount(shaderPropertySource);
+        String variableName = shaderPropertySource.getUniformName();
         for (int i = 0; i < boneWeightCount; i++) {
             final int finalI = i;
             commonShaderBuilder.addUniformVariable(variableName + "_" + i, "vec2", true,
                     new UniformRegistry.UniformSetter() {
                         @Override
                         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                            Object value = shaderContext.getGlobalProperty(propertySource.getPropertyName());
-                            Vector2 valueToUse = ((Vector2[]) propertySource.getValueToUse(value))[finalI];
+                            Object value = shaderContext.getGlobalProperty(shaderPropertySource.getPropertyName());
+                            Vector2 valueToUse = ((Vector2[]) shaderPropertySource.getValueToUse(value))[finalI];
                             shader.setUniform(location, valueToUse);
                         }
-                    }, "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+                    }, "Bone-weight property - " + shaderPropertySource.getPropertyName() + " - " + i);
         }
 
         return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneWeightCount = getBoneWeightCount(propertySource);
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        int boneWeightCount = getBoneWeightCount(shaderPropertySource);
+        String variableName = shaderPropertySource.getUniformName();
         for (int i = 0; i < boneWeightCount; i++) {
             final int finalI = i;
             commonShaderBuilder.addUniformVariable(variableName + "_" + i, "vec2", false,
                     new UniformRegistry.UniformSetter() {
                         @Override
                         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                            Object value = shaderContext.getLocalProperty(propertySource.getPropertyName());
-                            Vector2 valueToUse = ((Vector2[]) propertySource.getValueToUse(value))[finalI];
+                            Object value = shaderContext.getLocalProperty(shaderPropertySource.getPropertyName());
+                            Vector2 valueToUse = ((Vector2[]) shaderPropertySource.getValueToUse(value))[finalI];
                             shader.setUniform(location, valueToUse);
                         }
-                    }, "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+                    }, "Bone-weight property - " + shaderPropertySource.getPropertyName() + " - " + i);
         }
 
         return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
-        int boneWeightCount = getBoneWeightCount(propertySource);
+    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
+        int boneWeightCount = getBoneWeightCount(shaderPropertySource);
         for (int i = 0; i < boneWeightCount; i++) {
-            vertexShaderBuilder.addAttributeVariable(propertySource.getAttributeName(i), 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            vertexShaderBuilder.addAttributeVariable(shaderPropertySource.getAttributeName(i), 2, "vec2", "Bone-weight property - " + shaderPropertySource.getPropertyName() + " - " + i);
         }
 
-        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), propertySource.getAttributeName());
+        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), shaderPropertySource.getAttributeName());
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
-        int boneWeightCount = getBoneWeightCount(propertySource);
+    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
+        int boneWeightCount = getBoneWeightCount(shaderPropertySource);
         for (int i = 0; i < boneWeightCount; i++) {
-            String attributeName = propertySource.getAttributeName(i);
-            String variableName = propertySource.getVariableName(i);
-            vertexShaderBuilder.addAttributeVariable(attributeName, 2, "vec2", "Bone-weight property - " + propertySource.getPropertyName() + " - " + i);
+            String attributeName = shaderPropertySource.getAttributeName(i);
+            String variableName = shaderPropertySource.getVariableName(i);
+            vertexShaderBuilder.addAttributeVariable(attributeName, 2, "vec2", "Bone-weight property - " + shaderPropertySource.getPropertyName() + " - " + i);
             if (!vertexShaderBuilder.hasVaryingVariable(variableName)) {
                 vertexShaderBuilder.addVaryingVariable(variableName, "vec2");
                 vertexShaderBuilder.addMainLine(variableName + " = " + attributeName + ";");
@@ -134,7 +134,7 @@ public class BoneWeightFieldType implements ArrayShaderFieldType {
             }
         }
 
-        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), propertySource.getAttributeName());
+        return new DefaultFieldOutput(new BoneWeightFieldType(boneWeightCount), shaderPropertySource.getAttributeName());
     }
 
     @Override

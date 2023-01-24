@@ -2,7 +2,7 @@ package com.gempukku.libgdx.graph.plugin.models;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 /**
  * Main interface that is used to operate on models rendered by GraphShaders.
@@ -31,7 +31,7 @@ public interface GraphModels {
      * @param tag
      * @return
      */
-    ObjectMap<String, PropertySource> getShaderProperties(String tag);
+    ObjectMap<String, ShaderPropertySource> getShaderProperties(String tag);
 
     ObjectMap<String, BasicShader.Attribute> getShaderAttributes(String tag);
 

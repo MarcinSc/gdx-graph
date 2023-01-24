@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
@@ -79,7 +79,7 @@ public class ParticleModel implements Disposable {
 
         private final ObjectSet<ParticleSpriteRenderableModel> models = new ObjectSet<>();
         private final VertexAttributes vertexAttributes;
-        private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
+        private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
 
         public ParticlesSpriteRenderableModelManager(int spriteCapacity, int identifierCountPerPage,
                                                      SpriteModel spriteModel,

@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
@@ -94,14 +94,14 @@ public class MeshBasedRenderableModel implements RenderableModel, Disposable {
     }
 
     public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
-                            ObjectMap<String, PropertySource> propertySourceMap, PropertyContainer propertyContainer) {
+                            ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
         if (propertiesRenderableModel != null)
             propertiesRenderableModel.dispose();
 
         hierarchicalPropertyContainer.setParent(propertyContainer);
 
         VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
-        ObjectMap<VertexAttribute, PropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
+        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
 
         propertiesRenderableModel = new PropertiesRenderableModel(
                 vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);

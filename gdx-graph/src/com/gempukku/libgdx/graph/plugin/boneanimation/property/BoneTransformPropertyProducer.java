@@ -3,9 +3,10 @@ package com.gempukku.libgdx.graph.plugin.boneanimation.property;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.property.DefaultShaderPropertySource;
 import com.gempukku.libgdx.graph.shader.property.GraphShaderPropertyProducer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class BoneTransformPropertyProducer implements GraphShaderPropertyProducer {
     private final BoneTransformFieldType fieldType = new BoneTransformFieldType();
@@ -16,7 +17,7 @@ public class BoneTransformPropertyProducer implements GraphShaderPropertyProduce
     }
 
     @Override
-    public PropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
         int boneCount = data.getInt("maxBoneCount", 12);
 
         Matrix4[] defaultValue = new Matrix4[boneCount];
@@ -24,6 +25,6 @@ public class BoneTransformPropertyProducer implements GraphShaderPropertyProduce
             defaultValue[i] = new Matrix4().idt();
         }
 
-        return new PropertySource(index, name, new BoneTransformFieldType(boneCount), location, defaultValue);
+        return new DefaultShaderPropertySource(index, name, new BoneTransformFieldType(boneCount), location, defaultValue);
     }
 }

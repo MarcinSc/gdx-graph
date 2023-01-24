@@ -9,7 +9,7 @@ import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
@@ -38,7 +38,7 @@ public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
     }
 
     @Override
-    public ObjectMap<String, PropertySource> getShaderProperties(String tag) {
+    public ObjectMap<String, ShaderPropertySource> getShaderProperties(String tag) {
         GraphShader graphShader = shaderByTag.get(tag);
         if (graphShader == null)
             return null;

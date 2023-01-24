@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 
@@ -25,7 +25,7 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
     private int identifierCountPerTextures;
     private final SpriteBatchModelProducer spriteBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
-    private final Array<PropertySource> textureUniforms;
+    private final Array<ShaderPropertySource> textureUniforms;
 
     public TexturePagedSpriteBatchModel(GraphModels graphModels, String tag,
                                         SpriteBatchModelProducer spriteBatchModelProducer) {
@@ -39,16 +39,16 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
         this.spriteBatchModelProducer = spriteBatchModelProducer;
         this.propertyContainer = propertyContainer;
 
-        ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
+        ObjectMap<String, ShaderPropertySource> shaderProperties = graphModels.getShaderProperties(tag);
         if (shaderProperties == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
         textureUniforms = getTextureUniforms(shaderProperties);
     }
 
-    private static Array<PropertySource> getTextureUniforms(ObjectMap<String, PropertySource> shaderProperties) {
-        Array<PropertySource> result = new Array<>();
-        for (PropertySource value : shaderProperties.values()) {
+    private static Array<ShaderPropertySource> getTextureUniforms(ObjectMap<String, ShaderPropertySource> shaderProperties) {
+        Array<ShaderPropertySource> result = new Array<>();
+        for (ShaderPropertySource value : shaderProperties.values()) {
             if (value.getPropertyLocation() == PropertyLocation.Attribute &&
                     value.getShaderFieldType().getName().equals(ShaderFieldType.TextureRegion))
                 result.add(value);
@@ -179,7 +179,7 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
 
     private void setupTextures(SpriteBatchModel spriteBatchModel, RenderableSprite sprite) {
         WritablePropertyContainer propertyContainer = spriteBatchModel.getPropertyContainer();
-        for (PropertySource textureUniform : textureUniforms) {
+        for (ShaderPropertySource textureUniform : textureUniforms) {
             Object region = sprite.getValue(textureUniform.getPropertyName());
             region = textureUniform.getValueToUse(region);
             propertyContainer.setValue(textureUniform.getPropertyName(), new TextureRegion(((TextureRegion) region).getTexture()));
@@ -191,7 +191,7 @@ public class TexturePagedSpriteBatchModel implements SpriteBatchModel {
             return "";
 
         StringBuilder sb = new StringBuilder();
-        for (PropertySource textureUniform : textureUniforms) {
+        for (ShaderPropertySource textureUniform : textureUniforms) {
             Object region = sprite.getValue(textureUniform.getPropertyName());
             region = textureUniform.getValueToUse(region);
             sb.append(((TextureRegion) region).getTexture().getTextureObjectHandle()).append(",");

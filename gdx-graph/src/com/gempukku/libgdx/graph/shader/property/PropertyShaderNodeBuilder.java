@@ -35,15 +35,15 @@ public class PropertyShaderNodeBuilder implements GraphShaderNodeBuilder {
         final String propertyType = data.getString("type");
 
         ShaderFieldType fieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
-        PropertySource propertySource = graphShaderContext.getPropertySource(name);
+        ShaderPropertySource shaderPropertySource = graphShaderContext.getPropertySource(name);
 
-        PropertyLocation propertyLocation = propertySource.getPropertyLocation();
+        PropertyLocation propertyLocation = shaderPropertySource.getPropertyLocation();
         if (propertyLocation == PropertyLocation.Attribute) {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsVertexAttribute(vertexShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsVertexAttribute(vertexShaderBuilder, data, shaderPropertySource));
         } else if (propertyLocation == PropertyLocation.Uniform) {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsLocalUniform(vertexShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsLocalUniform(vertexShaderBuilder, data, shaderPropertySource));
         } else {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsGlobalUniform(vertexShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsGlobalUniform(vertexShaderBuilder, data, shaderPropertySource));
         }
     }
 
@@ -54,15 +54,15 @@ public class PropertyShaderNodeBuilder implements GraphShaderNodeBuilder {
         final String propertyType = data.getString("type");
 
         ShaderFieldType fieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
-        PropertySource propertySource = graphShaderContext.getPropertySource(name);
+        ShaderPropertySource shaderPropertySource = graphShaderContext.getPropertySource(name);
 
-        PropertyLocation propertyLocation = propertySource.getPropertyLocation();
+        PropertyLocation propertyLocation = shaderPropertySource.getPropertyLocation();
         if (propertyLocation == PropertyLocation.Attribute) {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsFragmentAttribute(vertexShaderBuilder, fragmentShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsFragmentAttribute(vertexShaderBuilder, fragmentShaderBuilder, data, shaderPropertySource));
         } else if (propertyLocation == PropertyLocation.Uniform) {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsLocalUniform(fragmentShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsLocalUniform(fragmentShaderBuilder, data, shaderPropertySource));
         } else {
-            return LibGDXCollections.singletonMap("value", fieldType.addAsGlobalUniform(fragmentShaderBuilder, data, propertySource));
+            return LibGDXCollections.singletonMap("value", fieldType.addAsGlobalUniform(fragmentShaderBuilder, data, shaderPropertySource));
         }
     }
 }

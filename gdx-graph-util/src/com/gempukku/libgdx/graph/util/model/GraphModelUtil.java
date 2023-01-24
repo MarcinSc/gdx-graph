@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class GraphModelUtil {
     private GraphModelUtil() {
@@ -31,23 +31,23 @@ public class GraphModelUtil {
         return getVertexAttributes(shaderAttributes);
     }
 
-    public static ObjectMap<VertexAttribute, PropertySource> getPropertySourceMap(GraphModels graphModels, String tag,
-                                                                                  VertexAttributes vertexAttributes) {
-        ObjectMap<String, PropertySource> shaderProperties = graphModels.getShaderProperties(tag);
+    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(GraphModels graphModels, String tag,
+                                                                                        VertexAttributes vertexAttributes) {
+        ObjectMap<String, ShaderPropertySource> shaderProperties = graphModels.getShaderProperties(tag);
         if (shaderProperties == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
         return getPropertySourceMap(vertexAttributes, shaderProperties);
     }
 
-    public static ObjectMap<VertexAttribute, PropertySource> getPropertySourceMap(VertexAttributes vertexAttributes,
-                                                                                  ObjectMap<String, PropertySource> shaderProperties) {
-        ObjectMap<VertexAttribute, PropertySource> result = new ObjectMap<>();
+    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(VertexAttributes vertexAttributes,
+                                                                                        ObjectMap<String, ShaderPropertySource> shaderProperties) {
+        ObjectMap<VertexAttribute, ShaderPropertySource> result = new ObjectMap<>();
 
         for (VertexAttribute vertexAttribute : vertexAttributes) {
             String alias = vertexAttribute.alias;
-            PropertySource propertySource = findPropertyByAttributeName(shaderProperties, alias);
-            result.put(vertexAttribute, propertySource);
+            ShaderPropertySource shaderPropertySource = findPropertyByAttributeName(shaderProperties, alias);
+            result.put(vertexAttribute, shaderPropertySource);
         }
         return result;
     }
@@ -60,10 +60,10 @@ public class GraphModelUtil {
         return resultArray.toArray();
     }
 
-    private static PropertySource findPropertyByAttributeName(ObjectMap<String, PropertySource> properties, String attributeName) {
-        for (PropertySource propertySource : properties.values()) {
-            if (attributeName.equals(propertySource.getAttributeName()))
-                return propertySource;
+    private static ShaderPropertySource findPropertyByAttributeName(ObjectMap<String, ShaderPropertySource> properties, String attributeName) {
+        for (ShaderPropertySource shaderPropertySource : properties.values()) {
+            if (attributeName.equals(shaderPropertySource.getAttributeName()))
+                return shaderPropertySource;
         }
         return null;
     }

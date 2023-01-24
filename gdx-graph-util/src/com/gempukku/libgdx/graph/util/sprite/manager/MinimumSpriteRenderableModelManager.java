@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
@@ -20,7 +20,7 @@ public class MinimumSpriteRenderableModelManager implements SpriteRenderableMode
     private SpriteModel spriteModel;
 
     private final VertexAttributes vertexAttributes;
-    private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
+    private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
 
     private int modelCount = 0;
 

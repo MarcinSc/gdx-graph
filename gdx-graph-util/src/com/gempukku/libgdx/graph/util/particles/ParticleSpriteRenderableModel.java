@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
@@ -33,7 +33,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     private CullingTest cullingTest;
 
     private final Mesh mesh;
-    private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
+    private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
     private final SpriteModel spriteModel;
     private final int floatCountPerVertex;
     private final VertexAttributes vertexAttributes;
@@ -43,7 +43,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
     public ParticleSpriteRenderableModel(
             int spriteCapacity, int identifierCount,
-            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer) {
         this(spriteCapacity, identifierCount, vertexAttributes, vertexPropertySources, propertyContainer,
                 new QuadSpriteModel());
@@ -51,7 +51,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
     public ParticleSpriteRenderableModel(
             int spriteCapacity, int identifierCount,
-            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.propertyContainer = propertyContainer;
         this.spriteModel = spriteModel;
@@ -143,24 +143,24 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
         for (VertexAttribute vertexAttribute : vertexAttributes) {
             int attributeOffset = vertexAttribute.offset / 4;
 
-            PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
-            if (propertySource == null) {
+            ShaderPropertySource shaderPropertySource = vertexPropertySources.get(vertexAttribute);
+            if (shaderPropertySource == null) {
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                     int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
                     sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexData, vertexOffset + attributeOffset);
                 }
             } else {
-                ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
-                Object attributeValue = sprite.getValue(propertySource.getPropertyName());
+                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
+                Object attributeValue = sprite.getValue(shaderPropertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
                     for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
 
                         Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, propertySource.getValueToUse(vertexValue));
+                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
                     }
                 } else {
-                    attributeValue = propertySource.getValueToUse(attributeValue);
+                    attributeValue = shaderPropertySource.getValueToUse(attributeValue);
                     for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
 

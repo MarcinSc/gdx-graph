@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.ValuePerVertex;
 
@@ -18,14 +18,14 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private final VertexAttributes vertexAttributes;
-    private final ObjectMap<VertexAttribute, PropertySource> vertexPropertySources;
+    private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
     private PropertyContainer propertyContainer;
     private final Mesh mesh;
     private final float[] vertexData;
     private int[] attributeLocations;
 
     public PropertiesRenderableModel(VertexAttributes vertexAttributes,
-                                     ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+                                     ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
                                      int vertexCount, short[] indices, PropertyContainer propertyContainer) {
         this.vertexAttributes = vertexAttributes;
 
@@ -40,7 +40,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
         mesh.setIndices(indices, 0, indices.length);
     }
 
-    private static float[] createVertexData(VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, PropertySource> vertexPropertySources,
+    private static float[] createVertexData(VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
                                             int vertexCount, PropertyContainer propertyContainer) {
         int floatCountPerVertex = vertexAttributes.vertexSize / 4;
         float[] vertexData = new float[floatCountPerVertex * vertexCount];
@@ -48,14 +48,14 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
         int arrayIndex = 0;
         for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
             for (VertexAttribute vertexAttribute : vertexAttributes) {
-                PropertySource propertySource = vertexPropertySources.get(vertexAttribute);
-                ShaderFieldType shaderFieldType = propertySource.getShaderFieldType();
-                Object attributeValue = propertyContainer.getValue(propertySource.getPropertyName());
+                ShaderPropertySource shaderPropertySource = vertexPropertySources.get(vertexAttribute);
+                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
+                Object attributeValue = propertyContainer.getValue(shaderPropertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
                     Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                    shaderFieldType.setValueInAttributesArray(vertexData, arrayIndex, propertySource.getValueToUse(vertexValue));
+                    shaderFieldType.setValueInAttributesArray(vertexData, arrayIndex, shaderPropertySource.getValueToUse(vertexValue));
                 } else {
-                    attributeValue = propertySource.getValueToUse(attributeValue);
+                    attributeValue = shaderPropertySource.getValueToUse(attributeValue);
                     shaderFieldType.setValueInAttributesArray(vertexData, arrayIndex, attributeValue);
                 }
                 arrayIndex += vertexAttribute.numComponents;

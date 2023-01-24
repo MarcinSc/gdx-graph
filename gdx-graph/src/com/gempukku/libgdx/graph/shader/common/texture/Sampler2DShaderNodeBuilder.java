@@ -1,11 +1,13 @@
 package com.gempukku.libgdx.graph.shader.common.texture;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
+import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.common.texture.Sampler2DShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -28,10 +30,18 @@ public class Sampler2DShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
         TextureFieldOutput textureValue = (TextureFieldOutput) inputs.get("texture");
         FieldOutput uvValue = inputs.get("uv");
 
+        commonShaderBuilder.addFunction("textureWraps", GLSLFragmentReader.getFragment("textureWrap"));
+
         commonShaderBuilder.addMainLine("// Sampler2D Node");
         ObjectMap<String, FieldOutput> result = new ObjectMap<>();
         String colorName = "color_" + nodeId;
-        commonShaderBuilder.addMainLine("vec4 " + colorName + " = texture2D(" + textureValue.getSamplerRepresentation() + ", " + textureValue.getRepresentation() + ".xy + " + uvValue.getRepresentation() + " * " + textureValue.getRepresentation() + ".zw);");
+        String uCalculatedName = "uCalculated_" + nodeId;
+        String vCalculatedName = "vCalculated_" + nodeId;
+
+        commonShaderBuilder.addMainLine("float " + uCalculatedName + " = " + getUVCalculation(textureValue.getUWrap(), uvValue.getRepresentation() + ".x") + ";");
+        commonShaderBuilder.addMainLine("float " + vCalculatedName + " = " + getUVCalculation(textureValue.getVWrap(), uvValue.getRepresentation() + ".y") + ";");
+        commonShaderBuilder.addMainLine("vec4 " + colorName + " = texture2D(" + textureValue.getSamplerRepresentation() + ", " + textureValue.getRepresentation() + ".xy + vec2(" + uCalculatedName + ", " + vCalculatedName + ") * " + textureValue.getRepresentation() + ".zw);");
+
         result.put("color", new DefaultFieldOutput(ShaderFieldType.Vector4, colorName));
         if (producedOutputs.contains("r")) {
             String name = "r_" + nodeId;
@@ -54,5 +64,20 @@ public class Sampler2DShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
             result.put("a", new DefaultFieldOutput(ShaderFieldType.Float, name));
         }
         return result;
+    }
+
+    private String getUVCalculation(Texture.TextureWrap textureWrap, String valueRepresentation) {
+        switch (textureWrap) {
+            case ClampToEdge: {
+                return "clampToEdge(" + valueRepresentation + ")";
+            }
+            case Repeat: {
+                return "repeat(" + valueRepresentation + ")";
+            }
+            case MirroredRepeat: {
+                return "mirroredRepeat(" + valueRepresentation + ")";
+            }
+        }
+        return null;
     }
 }

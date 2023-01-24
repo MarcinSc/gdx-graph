@@ -12,7 +12,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class BoneTransformFieldType implements ArrayShaderFieldType {
     public static final String type = "BoneTransforms";
@@ -67,32 +67,32 @@ public class BoneTransformFieldType implements ArrayShaderFieldType {
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getArrayLength();
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        int boneCount = ((BoneTransformFieldType) shaderPropertySource.getShaderFieldType()).getArrayLength();
+        String variableName = shaderPropertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", true,
-                new GlobalBonesUniformSetter(boneCount, propertySource), "Skeletal bones - " + propertySource.getPropertyName());
+                new GlobalBonesUniformSetter(boneCount, shaderPropertySource), "Skeletal bones - " + shaderPropertySource.getPropertyName());
 
         return new DefaultFieldOutput(new BoneTransformFieldType(boneCount), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        int boneCount = ((BoneTransformFieldType) propertySource.getShaderFieldType()).getArrayLength();
-        String variableName = propertySource.getUniformName();
+    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        int boneCount = ((BoneTransformFieldType) shaderPropertySource.getShaderFieldType()).getArrayLength();
+        String variableName = shaderPropertySource.getUniformName();
         commonShaderBuilder.addArrayUniformVariable(variableName, boneCount, "mat4", false,
-                new LocalBonesUniformSetter(boneCount, propertySource), "Skeletal bones");
+                new LocalBonesUniformSetter(boneCount, shaderPropertySource), "Skeletal bones");
 
         return new DefaultFieldOutput(new BoneTransformFieldType(boneCount), variableName);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, PropertySource propertySource) {
+    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
         throw new GdxRuntimeException("Unable to set bone transforms as attributes");
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, PropertySource propertySource) {
+    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource) {
         throw new GdxRuntimeException("Unable to set bone transforms as attributes");
     }
 
@@ -103,18 +103,18 @@ public class BoneTransformFieldType implements ArrayShaderFieldType {
 
     private static class GlobalBonesUniformSetter implements UniformRegistry.UniformSetter {
         private final Matrix4 idtMatrix = new Matrix4();
-        private final PropertySource propertySource;
+        private final ShaderPropertySource shaderPropertySource;
         private final float[] bones;
 
-        public GlobalBonesUniformSetter(int boneCount, PropertySource propertySource) {
-            this.propertySource = propertySource;
+        public GlobalBonesUniformSetter(int boneCount, ShaderPropertySource shaderPropertySource) {
+            this.shaderPropertySource = shaderPropertySource;
             this.bones = new float[boneCount * 16];
         }
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            Object value = shaderContext.getGlobalProperty(propertySource.getPropertyName());
-            Matrix4[] valueToUse = (Matrix4[]) propertySource.getValueToUse(value);
+            Object value = shaderContext.getGlobalProperty(shaderPropertySource.getPropertyName());
+            Matrix4[] valueToUse = (Matrix4[]) shaderPropertySource.getValueToUse(value);
             for (int i = 0; i < bones.length; i += 16) {
                 final int idx = i / 16;
                 if (valueToUse == null || idx >= valueToUse.length || valueToUse[idx] == null)
@@ -128,18 +128,18 @@ public class BoneTransformFieldType implements ArrayShaderFieldType {
 
     private static class LocalBonesUniformSetter implements UniformRegistry.UniformSetter {
         private final Matrix4 idtMatrix = new Matrix4();
-        private final PropertySource propertySource;
+        private final ShaderPropertySource shaderPropertySource;
         private final float[] bones;
 
-        public LocalBonesUniformSetter(int boneCount, PropertySource propertySource) {
-            this.propertySource = propertySource;
+        public LocalBonesUniformSetter(int boneCount, ShaderPropertySource shaderPropertySource) {
+            this.shaderPropertySource = shaderPropertySource;
             this.bones = new float[boneCount * 16];
         }
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            Object value = shaderContext.getLocalProperty(propertySource.getPropertyName());
-            Matrix4[] valueToUse = (Matrix4[]) propertySource.getValueToUse(value);
+            Object value = shaderContext.getLocalProperty(shaderPropertySource.getPropertyName());
+            Matrix4[] valueToUse = (Matrix4[]) shaderPropertySource.getValueToUse(value);
             for (int i = 0; i < bones.length; i += 16) {
                 final int idx = i / 16;
                 if (valueToUse == null || idx >= valueToUse.length || valueToUse[idx] == null)

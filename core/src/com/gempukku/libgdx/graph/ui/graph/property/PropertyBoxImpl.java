@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui.graph.property;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -118,7 +119,12 @@ public class PropertyBoxImpl extends VisTable implements PropertyBox {
         result.addOutputGraphPart(new ValueGraphNodeOutput(name, propertyType));
         ShaderFieldType shaderFieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
         if (shaderFieldType != null && shaderFieldType.isTexture()) {
-            result.addGraphBoxPart(new TextureSettingsGraphBoxPart());
+            EnumSelectBoxPart<Texture.TextureWrap> uWrap = new EnumSelectBoxPart<>("U wrap ", "uWrap",
+                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
+            EnumSelectBoxPart<Texture.TextureWrap> vWrap = new EnumSelectBoxPart<>("V wrap ", "vWrap",
+                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
+            result.addGraphBoxPart(uWrap);
+            result.addGraphBoxPart(vWrap);
         }
 
         return result;

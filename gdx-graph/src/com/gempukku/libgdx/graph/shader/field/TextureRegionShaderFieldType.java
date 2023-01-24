@@ -13,7 +13,8 @@ import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultTextureFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.property.PropertySource;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.shader.property.TextureShaderPropertySource;
 
 public class TextureRegionShaderFieldType implements ShaderFieldType {
     @Override
@@ -47,27 +48,32 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        final String name = propertySource.getPropertyName();
+    public GraphShaderNodeBuilder.FieldOutput addAsGlobalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        TextureShaderPropertySource textureShaderPropertySource = (TextureShaderPropertySource) shaderPropertySource;
+        final String name = shaderPropertySource.getPropertyName();
 
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
-        if (data.has("minFilter"))
-            textureDescriptor.minFilter = Texture.TextureFilter.valueOf(data.getString("minFilter"));
-        if (data.has("magFilter"))
-            textureDescriptor.magFilter = Texture.TextureFilter.valueOf(data.getString("magFilter"));
-        if (data.has("uWrap"))
-            textureDescriptor.uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
-        if (data.has("vWrap"))
-            textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+        textureDescriptor.minFilter = textureShaderPropertySource.getMinFilter();
+        textureDescriptor.magFilter = textureShaderPropertySource.getMagFilter();
+        textureDescriptor.uWrap = Texture.TextureWrap.ClampToEdge;
+        textureDescriptor.vWrap = Texture.TextureWrap.ClampToEdge;
 
-        String textureVariableName = propertySource.getUniformName();
-        String uvTransformVariableName = "u_uvTransform_" + propertySource.getPropertyIndex();
+        Texture.TextureWrap uWrap = Texture.TextureWrap.ClampToEdge;
+        Texture.TextureWrap vWrap = Texture.TextureWrap.ClampToEdge;
+        if (data.has("uWrap"))
+            uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
+        if (data.has("vWrap"))
+            vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+
+        String textureVariableName = shaderPropertySource.getUniformName();
+        String uvTransformVariableName = "u_uvTransform_" + shaderPropertySource.getPropertyIndex();
+        String sizeVariableName = "u_textureSize_" + shaderPropertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", true,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
                         Object value = shaderContext.getGlobalProperty(name);
-                        value = propertySource.getValueToUse(value);
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
@@ -79,7 +85,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
                         Object value = shaderContext.getGlobalProperty(name);
-                        value = propertySource.getValueToUse(value);
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         TextureRegion region = (TextureRegion) value;
@@ -89,31 +95,48 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName);
+        commonShaderBuilder.addUniformVariable(sizeVariableName, "vec2", true,
+                new UniformRegistry.UniformSetter() {
+                    @Override
+                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
+                        Object value = shaderContext.getGlobalProperty(name);
+                        value = shaderPropertySource.getValueToUse(value);
+                        if (value == null)
+                            value = new TextureRegion(shader.getDefaultTexture());
+                        TextureRegion region = (TextureRegion) value;
+                        shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
+                    }
+                }, "Texture property size - " + name);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final PropertySource propertySource) {
-        final String name = propertySource.getPropertyName();
+    public GraphShaderNodeBuilder.FieldOutput addAsLocalUniform(CommonShaderBuilder commonShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        TextureShaderPropertySource textureShaderPropertySource = (TextureShaderPropertySource) shaderPropertySource;
+        final String name = shaderPropertySource.getPropertyName();
 
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
-        if (data.has("minFilter"))
-            textureDescriptor.minFilter = Texture.TextureFilter.valueOf(data.getString("minFilter"));
-        if (data.has("magFilter"))
-            textureDescriptor.magFilter = Texture.TextureFilter.valueOf(data.getString("magFilter"));
-        if (data.has("uWrap"))
-            textureDescriptor.uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
-        if (data.has("vWrap"))
-            textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+        textureDescriptor.minFilter = textureShaderPropertySource.getMinFilter();
+        textureDescriptor.magFilter = textureShaderPropertySource.getMagFilter();
+        textureDescriptor.uWrap = Texture.TextureWrap.ClampToEdge;
+        textureDescriptor.vWrap = Texture.TextureWrap.ClampToEdge;
 
-        String textureVariableName = propertySource.getUniformName();
-        String uvTransformVariableName = "u_uvTransform_" + propertySource.getPropertyIndex();
+        Texture.TextureWrap uWrap = Texture.TextureWrap.ClampToEdge;
+        Texture.TextureWrap vWrap = Texture.TextureWrap.ClampToEdge;
+        if (data.has("uWrap"))
+            uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
+        if (data.has("vWrap"))
+            vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+
+        String textureVariableName = shaderPropertySource.getUniformName();
+        String uvTransformVariableName = "u_uvTransform_" + shaderPropertySource.getPropertyIndex();
+        String sizeVariableName = "u_textureSize_" + shaderPropertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
                         Object value = shaderContext.getLocalProperty(name);
-                        value = propertySource.getValueToUse(value);
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
@@ -125,7 +148,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
                         Object value = shaderContext.getLocalProperty(name);
-                        value = propertySource.getValueToUse(value);
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         TextureRegion region = (TextureRegion) value;
@@ -135,76 +158,107 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName);
+        commonShaderBuilder.addUniformVariable(sizeVariableName, "vec2", false,
+                new UniformRegistry.UniformSetter() {
+                    @Override
+                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
+                        Object value = shaderContext.getGlobalProperty(name);
+                        value = shaderPropertySource.getValueToUse(value);
+                        if (value == null)
+                            value = new TextureRegion(shader.getDefaultTexture());
+                        TextureRegion region = (TextureRegion) value;
+                        shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
+                    }
+                }, "Texture property size - " + name);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, final PropertySource propertySource) {
+    public GraphShaderNodeBuilder.FieldOutput addAsVertexAttribute(VertexShaderBuilder vertexShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        TextureShaderPropertySource textureShaderPropertySource = (TextureShaderPropertySource) shaderPropertySource;
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
-        if (data.has("minFilter"))
-            textureDescriptor.minFilter = Texture.TextureFilter.valueOf(data.getString("minFilter"));
-        if (data.has("magFilter"))
-            textureDescriptor.magFilter = Texture.TextureFilter.valueOf(data.getString("magFilter"));
-        if (data.has("uWrap"))
-            textureDescriptor.uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
-        if (data.has("vWrap"))
-            textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+        textureDescriptor.minFilter = textureShaderPropertySource.getMinFilter();
+        textureDescriptor.magFilter = textureShaderPropertySource.getMagFilter();
+        textureDescriptor.uWrap = Texture.TextureWrap.ClampToEdge;
+        textureDescriptor.vWrap = Texture.TextureWrap.ClampToEdge;
 
-        String textureVariableName = propertySource.getUniformName();
-        String uvTransformAttributeName = propertySource.getAttributeName();
+        Texture.TextureWrap uWrap = Texture.TextureWrap.ClampToEdge;
+        Texture.TextureWrap vWrap = Texture.TextureWrap.ClampToEdge;
+        if (data.has("uWrap"))
+            uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
+        if (data.has("vWrap"))
+            vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+
+        String textureVariableName = shaderPropertySource.getUniformName();
+        String uvTransformAttributeName = shaderPropertySource.getAttributeName();
+        String sizeAttributeName = "a_textureSize_" + shaderPropertySource.getPropertyIndex();
         vertexShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = propertySource.getPropertyName();
-                        value = propertySource.getValueToUse(value);
+                        Object value = shaderPropertySource.getPropertyName();
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }
-                }, "Texture property - " + propertySource.getPropertyName());
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + propertySource.getPropertyName());
+                }, "Texture property - " + shaderPropertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + shaderPropertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, sizeAttributeName), "vec2", "TextureSize property - " + shaderPropertySource.getPropertyName());
 
-        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName);
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName, sizeAttributeName, uWrap, vWrap);
     }
 
     @Override
-    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, final PropertySource propertySource) {
+    public GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, final ShaderPropertySource shaderPropertySource) {
+        TextureShaderPropertySource textureShaderPropertySource = (TextureShaderPropertySource) shaderPropertySource;
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
-        if (data.has("minFilter"))
-            textureDescriptor.minFilter = Texture.TextureFilter.valueOf(data.getString("minFilter"));
-        if (data.has("magFilter"))
-            textureDescriptor.magFilter = Texture.TextureFilter.valueOf(data.getString("magFilter"));
-        if (data.has("uWrap"))
-            textureDescriptor.uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
-        if (data.has("vWrap"))
-            textureDescriptor.vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+        textureDescriptor.minFilter = textureShaderPropertySource.getMinFilter();
+        textureDescriptor.magFilter = textureShaderPropertySource.getMagFilter();
+        textureDescriptor.uWrap = Texture.TextureWrap.ClampToEdge;
+        textureDescriptor.vWrap = Texture.TextureWrap.ClampToEdge;
 
-        String textureVariableName = propertySource.getUniformName();
-        String uvTransformAttributeName = propertySource.getAttributeName();
-        String uvTransformVariableName = propertySource.getVariableName();
+        Texture.TextureWrap uWrap = Texture.TextureWrap.ClampToEdge;
+        Texture.TextureWrap vWrap = Texture.TextureWrap.ClampToEdge;
+        if (data.has("uWrap"))
+            uWrap = Texture.TextureWrap.valueOf(data.getString("uWrap"));
+        if (data.has("vWrap"))
+            vWrap = Texture.TextureWrap.valueOf(data.getString("vWrap"));
+
+        String textureVariableName = shaderPropertySource.getUniformName();
+        String uvTransformAttributeName = shaderPropertySource.getAttributeName();
+        String uvTransformVariableName = shaderPropertySource.getVariableName();
+        String sizeAttributeName = "a_textureSize_" + shaderPropertySource.getPropertyIndex();
+        String sizeVariableName = "v_textureSize_" + shaderPropertySource.getPropertyIndex();
         fragmentShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = shaderContext.getLocalProperty(propertySource.getPropertyName());
-                        value = propertySource.getValueToUse(value);
+                        Object value = shaderContext.getLocalProperty(shaderPropertySource.getPropertyName());
+                        value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
                             value = new TextureRegion(shader.getDefaultTexture());
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }
-                }, "Texture property - " + propertySource.getPropertyName());
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + propertySource.getPropertyName());
+                }, "Texture property - " + shaderPropertySource.getPropertyName());
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + shaderPropertySource.getPropertyName());
         if (!vertexShaderBuilder.hasVaryingVariable(uvTransformVariableName)) {
             vertexShaderBuilder.addVaryingVariable(uvTransformVariableName, "vec4");
             vertexShaderBuilder.addMainLine(uvTransformVariableName + " = " + uvTransformAttributeName + ";");
 
             fragmentShaderBuilder.addVaryingVariable(uvTransformVariableName, "vec4");
         }
+        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, sizeAttributeName), "vec2", "TextureSize property - " + shaderPropertySource.getPropertyName());
+        if (!vertexShaderBuilder.hasVaryingVariable(sizeVariableName)) {
+            vertexShaderBuilder.addVaryingVariable(sizeVariableName, "vec2");
+            vertexShaderBuilder.addMainLine(sizeVariableName + " = " + sizeAttributeName + ";");
 
-        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName);
+            fragmentShaderBuilder.addVaryingVariable(sizeVariableName, "vec2");
+        }
+
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
     }
 
     @Override
