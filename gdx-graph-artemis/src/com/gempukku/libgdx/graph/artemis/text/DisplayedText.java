@@ -19,6 +19,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 
 public class DisplayedText implements Disposable {
@@ -37,8 +38,8 @@ public class DisplayedText implements Disposable {
     private TextBlock textBlock;
     private SpriteBatchSystem spriteBatchSystem;
 
-    private IntArray spriteIdentifiers = new IntArray();
-    private ObjectSet<BatchNameWithSpriteIndex> externalSprites = new ObjectSet<>();
+    private Array<SpriteReference> spriteReferences = new Array<>();
+    private ObjectSet<BatchNameWithSpriteReference> externalSprites = new ObjectSet<>();
 
     /*
      * Up-Vector (vec3) - vector defining both height and up direction
@@ -141,8 +142,8 @@ public class DisplayedText implements Disposable {
                         tempRenderableSprite.setValue("Position", positionFloatArray);
                         tempRenderableSprite.setValue("Texture", textureRegion);
 
-                        int spriteIndex = spriteBatchSystem.getSpriteBatchModel(spriteBatchName).addSprite(tempRenderableSprite);
-                        externalSprites.add(new BatchNameWithSpriteIndex(spriteBatchName, spriteIndex));
+                        SpriteReference spriteReference = spriteBatchSystem.getSpriteBatchModel(spriteBatchName).addSprite(tempRenderableSprite);
+                        externalSprites.add(new BatchNameWithSpriteReference(spriteBatchName, spriteReference));
                     } else {
                         BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
                         PropertyContainer stylePropertyContainer = obtainStylePropertyContainer(stylePropertyContainerMap, textStyle);
@@ -273,7 +274,7 @@ public class DisplayedText implements Disposable {
         tempHierarchicalRenderableSprite.setValue("UV", createUVFloatArray(glyph));
         tempHierarchicalRenderableSprite.setValue("Font-Texture", fontTexture);
 
-        spriteIdentifiers.add(spriteBatchModel.addSprite(tempHierarchicalRenderableSprite));
+        spriteReferences.add(spriteBatchModel.addSprite(tempHierarchicalRenderableSprite));
     }
 
     private Vector2ValuePerVertex createUVFloatArray(BitmapFont.Glyph glyph) {
@@ -282,13 +283,13 @@ public class DisplayedText implements Disposable {
     }
 
     private void removeText() {
-        for (int i = 0; i < spriteIdentifiers.size; i++) {
-            int spriteIdentifier = spriteIdentifiers.get(i);
-            spriteBatchModel.removeSprite(spriteIdentifier);
+        for (int i = 0; i < spriteReferences.size; i++) {
+            SpriteReference spriteReference = spriteReferences.get(i);
+            spriteBatchModel.removeSprite(spriteReference);
         }
-        spriteIdentifiers.clear();
-        for (BatchNameWithSpriteIndex externalSprite : externalSprites) {
-            spriteBatchSystem.getSpriteBatchModel(externalSprite.batchName).removeSprite(externalSprite.spriteIndex);
+        spriteReferences.clear();
+        for (BatchNameWithSpriteReference externalSprite : externalSprites) {
+            spriteBatchSystem.getSpriteBatchModel(externalSprite.batchName).removeSprite(externalSprite.spriteReference);
         }
         externalSprites.clear();
     }
@@ -298,13 +299,13 @@ public class DisplayedText implements Disposable {
         removeText();
     }
 
-    public static class BatchNameWithSpriteIndex {
+    public static class BatchNameWithSpriteReference {
         private String batchName;
-        private int spriteIndex;
+        private SpriteReference spriteReference;
 
-        public BatchNameWithSpriteIndex(String batchName, int spriteIndex) {
+        public BatchNameWithSpriteReference(String batchName, SpriteReference spriteReference) {
             this.batchName = batchName;
-            this.spriteIndex = spriteIndex;
+            this.spriteReference = spriteReference;
         }
     }
 }

@@ -18,11 +18,12 @@ import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.FloatArrayObjectStorage;
-import com.gempukku.libgdx.graph.util.sprite.storage.ToFloatArraySerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
 
 public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
     private final Matrix4 worldTransform = new Matrix4();
@@ -37,18 +38,18 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
-    private FloatArrayObjectStorage<RenderableSprite> spriteStorage;
+    private SpriteStorage<RenderableSprite> spriteStorage;
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity, int identifierCount,
+            boolean staticBatch, int spriteCapacity,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer) {
-        this(staticBatch, spriteCapacity, identifierCount, vertexAttributes, vertexPropertySources, propertyContainer,
+        this(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer,
                 new QuadSpriteModel());
     }
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity, int identifierCount,
+            boolean staticBatch, int spriteCapacity,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.propertyContainer = propertyContainer;
@@ -62,8 +63,8 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
         final int floatCountPerSprite = floatCountPerVertex * spriteModel.getVertexCount();
 
-        spriteStorage = new FloatArrayObjectStorage<>(spriteCapacity, identifierCount,
-                new ToFloatArraySerializer<RenderableSprite>() {
+        spriteStorage = new SpriteStorage<>(spriteCapacity,
+                new SpriteSerializer<RenderableSprite>() {
                     @Override
                     public int getFloatCount() {
                         return floatCountPerSprite;
@@ -88,7 +89,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public int getSpriteCount() {
-        return spriteStorage.getObjectCount();
+        return spriteStorage.getSpriteCount();
     }
 
     @Override
@@ -112,23 +113,24 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     }
 
     @Override
-    public int addSprite(RenderableSprite sprite) {
-        return spriteStorage.addObject(sprite);
+    public SpriteReference addSprite(RenderableSprite sprite) {
+        return spriteStorage.addSprite(sprite);
     }
 
     @Override
-    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
-        spriteStorage.updateObject(sprite, spriteIndex);
-        return spriteIndex;
+    public boolean containsSprite(SpriteReference spriteReference) {
+        return spriteStorage.containsSprite(spriteReference);
     }
 
     @Override
-    public void removeSprite(int spriteIndex) {
-        spriteStorage.removeObject(spriteIndex);
+    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
+        spriteStorage.updateSprite(sprite, spriteReference);
+        return spriteReference;
     }
 
-    public void removeAllSprites() {
-        spriteStorage.clear();
+    @Override
+    public void removeSprite(SpriteReference spriteReference) {
+        spriteStorage.removeSprite(spriteReference);
     }
 
     @Override
@@ -182,7 +184,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public boolean isRendered(Camera camera) {
-        return spriteStorage.getObjectCount() > 0 && !isCulled(camera);
+        return spriteStorage.getSpriteCount() > 0 && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {
@@ -209,7 +211,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-        int spriteCount = spriteStorage.getObjectCount();
+        int spriteCount = spriteStorage.getSpriteCount();
         if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
             Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
         if (attributeLocations == null)

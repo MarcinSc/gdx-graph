@@ -1,11 +1,9 @@
 package com.gempukku.libgdx.graph.util.sprite.manager;
 
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 
-public interface SpriteRenderableModelManager<T extends SpriteRenderableModel> {
-    int getIdentifierCount();
-
+public interface SpriteBatchModelManager<T extends SpriteBatchModel> {
     T createNewModel(WritablePropertyContainer propertyContainer);
 
     boolean shouldDisposeEmptyModel(T model);

@@ -40,7 +40,7 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
-        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity, 20000,
+        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity,
                 vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
         graphModels.addModel(tag, delegate);
     }
@@ -51,18 +51,23 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public int addSprite(RenderableSprite sprite) {
+    public SpriteReference addSprite(RenderableSprite sprite) {
         return delegate.addSprite(sprite);
     }
 
     @Override
-    public void removeSprite(int spriteIndex) {
-        delegate.removeSprite(spriteIndex);
+    public boolean containsSprite(SpriteReference spriteReference) {
+        return delegate.containsSprite(spriteReference);
     }
 
     @Override
-    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
-        return delegate.updateSprite(sprite, spriteIndex);
+    public void removeSprite(SpriteReference spriteReference) {
+        delegate.removeSprite(spriteReference);
+    }
+
+    @Override
+    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
+        return delegate.updateSprite(sprite, spriteReference);
     }
 
     @Override

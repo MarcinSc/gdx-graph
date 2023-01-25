@@ -12,24 +12,24 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.manager.SpriteRenderableModelManager;
+import com.gempukku.libgdx.graph.util.sprite.manager.SpriteBatchModelManager;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class ParticleModel implements Disposable {
     private final ObjectSet<ParticleGenerator> particleGenerators = new ObjectSet<>();
     private final ParticleCreateCallbackImpl callback = new ParticleCreateCallbackImpl();
-    private final ParticlesSpriteRenderableModelManager spriteModelManager;
-    private final MultiPageSpriteBatchModel spriteBatchModel;
+    private final ParticlesSpriteBatchModelManager spriteModelManager;
+    private final MultiPageSpriteBatchModel<ParticleSpriteRenderableModel> spriteBatchModel;
     private ParticleSpriteRenderableModel lastSpriteModel;
 
     public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
-        this(particlesPerPage, 20000, new QuadSpriteModel(), graphModels, tag);
+        this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
     }
 
-    public ParticleModel(int particlesPerPage, int identifierCount, SpriteModel spriteModel, GraphModels graphModels, String tag) {
-        spriteModelManager = new ParticlesSpriteRenderableModelManager(particlesPerPage, identifierCount, spriteModel, graphModels, tag);
-        spriteBatchModel = new MultiPageSpriteBatchModel(spriteModelManager);
+    public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
+        spriteModelManager = new ParticlesSpriteBatchModelManager(particlesPerPage, spriteModel, graphModels, tag);
+        spriteBatchModel = new MultiPageSpriteBatchModel<>(spriteModelManager);
     }
 
     public void addGenerator(float currentTime, ParticleGenerator generator) {
@@ -70,9 +70,8 @@ public class ParticleModel implements Disposable {
         spriteBatchModel.dispose();
     }
 
-    private class ParticlesSpriteRenderableModelManager implements SpriteRenderableModelManager<ParticleSpriteRenderableModel> {
+    private class ParticlesSpriteBatchModelManager implements SpriteBatchModelManager<ParticleSpriteRenderableModel> {
         private final int spriteCapacity;
-        private int identifierCountPerPage;
         private final SpriteModel spriteModel;
         private final GraphModels graphModels;
         private final String tag;
@@ -81,11 +80,10 @@ public class ParticleModel implements Disposable {
         private final VertexAttributes vertexAttributes;
         private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
 
-        public ParticlesSpriteRenderableModelManager(int spriteCapacity, int identifierCountPerPage,
-                                                     SpriteModel spriteModel,
-                                                     GraphModels graphModels, String tag) {
+        public ParticlesSpriteBatchModelManager(int spriteCapacity,
+                                                SpriteModel spriteModel,
+                                                GraphModels graphModels, String tag) {
             this.spriteCapacity = spriteCapacity;
-            this.identifierCountPerPage = identifierCountPerPage;
             this.spriteModel = spriteModel;
             this.graphModels = graphModels;
             this.tag = tag;
@@ -95,14 +93,9 @@ public class ParticleModel implements Disposable {
         }
 
         @Override
-        public int getIdentifierCount() {
-            return identifierCountPerPage;
-        }
-
-        @Override
         public ParticleSpriteRenderableModel createNewModel(WritablePropertyContainer propertyContainer) {
             ParticleSpriteRenderableModel model = new ParticleSpriteRenderableModel(
-                    spriteCapacity, identifierCountPerPage,
+                    spriteCapacity,
                     vertexAttributes, vertexPropertySources, propertyContainer,
                     spriteModel);
             lastSpriteModel = model;

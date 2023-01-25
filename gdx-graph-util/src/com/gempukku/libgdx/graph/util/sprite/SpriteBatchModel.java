@@ -7,11 +7,13 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public interface SpriteBatchModel extends Disposable {
-    int addSprite(RenderableSprite sprite);
+    SpriteReference addSprite(RenderableSprite sprite);
 
-    int updateSprite(RenderableSprite sprite, int spriteIndex);
+    boolean containsSprite(SpriteReference spriteReference);
 
-    void removeSprite(int spriteIndex);
+    SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference);
+
+    void removeSprite(SpriteReference spriteReference);
 
     int getSpriteCount();
 

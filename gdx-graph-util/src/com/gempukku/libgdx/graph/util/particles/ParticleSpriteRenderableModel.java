@@ -18,11 +18,12 @@ import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.FloatArrayObjectStorage;
-import com.gempukku.libgdx.graph.util.sprite.storage.ToFloatArraySerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
 
 public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     private float maxDeathTime = Float.MIN_VALUE;
@@ -39,18 +40,18 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
-    private FloatArrayObjectStorage<RenderableSprite> spriteStorage;
+    private SpriteStorage<RenderableSprite> spriteStorage;
 
     public ParticleSpriteRenderableModel(
-            int spriteCapacity, int identifierCount,
+            int spriteCapacity,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer) {
-        this(spriteCapacity, identifierCount, vertexAttributes, vertexPropertySources, propertyContainer,
+        this(spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer,
                 new QuadSpriteModel());
     }
 
     public ParticleSpriteRenderableModel(
-            int spriteCapacity, int identifierCount,
+            int spriteCapacity,
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.propertyContainer = propertyContainer;
@@ -64,8 +65,8 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
         final int floatCountPerSprite = floatCountPerVertex * spriteModel.getVertexCount();
 
-        spriteStorage = new FloatArrayObjectStorage<>(spriteCapacity, identifierCount,
-                new ToFloatArraySerializer<RenderableSprite>() {
+        spriteStorage = new SpriteStorage<>(spriteCapacity,
+                new SpriteSerializer<RenderableSprite>() {
                     @Override
                     public int getFloatCount() {
                         return floatCountPerSprite;
@@ -90,7 +91,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
     @Override
     public int getSpriteCount() {
-        return spriteStorage.getObjectCount();
+        return spriteStorage.getSpriteCount();
     }
 
     @Override
@@ -114,17 +115,22 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     }
 
     @Override
-    public int addSprite(RenderableSprite sprite) {
-        return spriteStorage.addObject(sprite);
+    public SpriteReference addSprite(RenderableSprite sprite) {
+        return spriteStorage.addSprite(sprite);
     }
 
     @Override
-    public int updateSprite(RenderableSprite sprite, int spriteIndex) {
+    public boolean containsSprite(SpriteReference spriteReference) {
+        return spriteStorage.containsSprite(spriteReference);
+    }
+
+    @Override
+    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeSprite(int spriteIndex) {
+    public void removeSprite(SpriteReference spriteReference) {
         throw new UnsupportedOperationException();
     }
 
@@ -183,7 +189,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
     @Override
     public boolean isRendered(Camera camera) {
-        return spriteStorage.getObjectCount() > 0 && !isCulled(camera);
+        return spriteStorage.getSpriteCount() > 0 && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {
@@ -210,7 +216,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-        int spriteCount = spriteStorage.getObjectCount();
+        int spriteCount = spriteStorage.getSpriteCount();
         if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
             Gdx.app.debug("Particles", "Rendering " + spriteCount + " particles(s)");
         if (attributeLocations == null)

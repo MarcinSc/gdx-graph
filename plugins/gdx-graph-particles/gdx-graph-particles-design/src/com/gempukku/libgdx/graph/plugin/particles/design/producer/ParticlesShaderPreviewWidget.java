@@ -37,6 +37,7 @@ import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
@@ -59,7 +60,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
     private LimitedCapacitySpriteRenderableModel particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
-    private ObjectMap<ParticleRenderableSprite, Integer> spriteIdentifiers = new ObjectMap<>();
+    private ObjectMap<ParticleRenderableSprite, SpriteReference> spriteIdentifiers = new ObjectMap<>();
     private DefaultParticleGenerator particleGenerator;
 
     private Camera camera;
@@ -245,7 +246,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 sprites.clear();
             }
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
-            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4, 20000,
+            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4,
                     vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
                     localPropertyContainer, new QuadSpriteModel());
 
