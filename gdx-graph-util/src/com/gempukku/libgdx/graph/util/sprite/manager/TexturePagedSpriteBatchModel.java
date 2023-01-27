@@ -165,7 +165,6 @@ public class TexturePagedSpriteBatchModel<T extends SpriteBatchModel> implements
         for (BatchModelWithTextureSignature<T> batchModelPerTextureSignature : pages) {
             spriteBatchModelProducer.dispose(batchModelPerTextureSignature.model);
         }
-        spriteBatchModelProducer.dispose();
         pages.clear();
     }
 

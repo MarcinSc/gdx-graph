@@ -132,7 +132,6 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
         for (T page : pages) {
             spriteBatchModelProducer.dispose(page);
         }
-        spriteBatchModelProducer.dispose();
         pages.clear();
     }
 

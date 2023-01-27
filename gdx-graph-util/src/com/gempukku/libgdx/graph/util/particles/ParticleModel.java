@@ -127,13 +127,5 @@ public class ParticleModel implements Disposable {
             }
 
         }
-
-        @Override
-        public void dispose() {
-            for (ParticleSpriteRenderableModel model : models) {
-                model.dispose();
-            }
-            models.clear();
-        }
     }
 }
