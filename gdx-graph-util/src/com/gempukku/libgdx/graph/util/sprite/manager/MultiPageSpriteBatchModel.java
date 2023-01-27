@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite;
+package com.gempukku.libgdx.graph.util.sprite.manager;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -8,6 +8,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 
 public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements SpriteBatchModel {
     private final DisposableProducer<T> spriteBatchModelProducer;

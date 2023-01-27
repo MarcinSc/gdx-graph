@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
-import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.manager.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
