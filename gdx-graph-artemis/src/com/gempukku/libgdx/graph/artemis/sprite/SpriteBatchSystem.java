@@ -15,13 +15,13 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.DisposableProducer;
+import com.gempukku.libgdx.graph.util.PreserveMinimumDisposableProducer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.TexturePagedSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
-import com.gempukku.libgdx.graph.util.sprite.manager.MinimumSpriteBatchModelManager;
-import com.gempukku.libgdx.graph.util.sprite.manager.SpriteBatchModelProducer;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
@@ -71,18 +71,23 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
         if (spriteSystemType == SpriteBatchComponent.SystemType.TexturePaged) {
             return new TexturePagedSpriteBatchModel<>(graphModels, tag,
-                    new MinimumSpriteBatchModelManager<>(0,
-                            new SpriteBatchModelProducer<MultiPageSpriteBatchModel<LimitedCapacitySpriteRenderableModel>>() {
-                                @Override
-                                public MultiPageSpriteBatchModel<LimitedCapacitySpriteRenderableModel> createModel(WritablePropertyContainer propertyContainer) {
-                                    return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, vertexPropertySources, graphModels, tag, spriteModel, propertyContainer);
-                                }
+                    new DisposableProducer<SpriteBatchModel>() {
+                        @Override
+                        public SpriteBatchModel create() {
+                            MapWritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
+                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, vertexPropertySources, graphModels, tag, spriteModel, propertyContainer);
+                        }
 
-                                @Override
-                                public void dispose(MultiPageSpriteBatchModel<LimitedCapacitySpriteRenderableModel> model) {
-                                    model.dispose();
-                                }
-                            }));
+                        @Override
+                        public void dispose(SpriteBatchModel disposable) {
+                            disposable.dispose();
+                        }
+
+                        @Override
+                        public void dispose() {
+
+                        }
+                    });
         } else if (spriteSystemType == SpriteBatchComponent.SystemType.MultiPaged) {
             return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, vertexPropertySources, graphModels, tag, spriteModel, new MapWritablePropertyContainer());
         } else {
@@ -96,10 +101,10 @@ public class SpriteBatchSystem extends BaseEntitySystem {
             final GraphModels graphModels, final String tag, final SpriteModel spriteModel,
             final WritablePropertyContainer propertyContainer) {
         return new MultiPageSpriteBatchModel<>(
-                new MinimumSpriteBatchModelManager<>(spriteBatch.getMinimumPages(),
-                        new SpriteBatchModelProducer<LimitedCapacitySpriteRenderableModel>() {
+                new PreserveMinimumDisposableProducer<>(spriteBatch.getMinimumPages(),
+                        new DisposableProducer<LimitedCapacitySpriteRenderableModel>() {
                             @Override
-                            public LimitedCapacitySpriteRenderableModel createModel(WritablePropertyContainer propertyContainer) {
+                            public LimitedCapacitySpriteRenderableModel create() {
                                 LimitedCapacitySpriteRenderableModel model = new LimitedCapacitySpriteRenderableModel(
                                         spriteBatch.isStaticBatch(), spriteBatch.getSpritesPerPage(),
                                         vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
@@ -111,6 +116,11 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                             public void dispose(LimitedCapacitySpriteRenderableModel model) {
                                 graphModels.removeModel(tag, model);
                                 model.dispose();
+                            }
+
+                            @Override
+                            public void dispose() {
+
                             }
                         }), propertyContainer);
     }

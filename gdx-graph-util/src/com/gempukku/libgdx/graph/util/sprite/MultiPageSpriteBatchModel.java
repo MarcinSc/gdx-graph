@@ -6,11 +6,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
-import com.gempukku.libgdx.graph.util.sprite.manager.SpriteBatchModelManager;
 
 public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements SpriteBatchModel {
-    private final SpriteBatchModelManager<T> spriteBatchModelManager;
+    private final DisposableProducer<T> spriteBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
 
     private final Array<T> pages = new Array<>();
@@ -19,13 +19,13 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageSpriteBatchModel(SpriteBatchModelManager<T> spriteBatchModelManager) {
-        this(spriteBatchModelManager, new MapWritablePropertyContainer());
+    public MultiPageSpriteBatchModel(DisposableProducer<T> spriteBatchModelProducer) {
+        this(spriteBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public MultiPageSpriteBatchModel(SpriteBatchModelManager<T> spriteBatchModelManager,
+    public MultiPageSpriteBatchModel(DisposableProducer<T> spriteBatchModelProducer,
                                      WritablePropertyContainer propertyContainer) {
-        this.spriteBatchModelManager = spriteBatchModelManager;
+        this.spriteBatchModelProducer = spriteBatchModelProducer;
         this.propertyContainer = propertyContainer;
     }
 
@@ -33,9 +33,7 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
     public int getSpriteCount() {
         int result = 0;
         for (T page : pages) {
-            if (page != null) {
-                result += page.getSpriteCount();
-            }
+            result += page.getSpriteCount();
         }
 
         return result;
@@ -63,50 +61,38 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
 
     @Override
     public SpriteReference addSprite(RenderableSprite sprite) {
-        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
-            T page = pages.get(pageIndex);
-            if (page != null && !page.isAtCapacity()) {
-                return page.addSprite(sprite);
-            }
+        return getFirstAvailablePage().addSprite(sprite);
+    }
+
+    private T getFirstAvailablePage() {
+        for (T page : pages) {
+            if (!page.isAtCapacity())
+                return page;
         }
 
-        T newPage = spriteBatchModelManager.createNewModel(propertyContainer);
+        T newPage = spriteBatchModelProducer.create();
         newPage.setCullingTest(cullingTest);
         newPage.setPosition(position);
         newPage.setWorldTransform(worldTransform);
 
-        SpriteReference spriteReference = newPage.addSprite(sprite);
-        int pageIndex = findFirstEmptyPageIndex();
-        if (pageIndex > -1) {
-            pages.set(pageIndex, newPage);
-        } else {
-            pages.add(newPage);
-        }
-        return spriteReference;
+        pages.add(newPage);
+
+        return newPage;
     }
 
     @Override
     public boolean containsSprite(SpriteReference spriteReference) {
         for (T page : pages) {
-            if (page != null && page.containsSprite(spriteReference))
+            if (page.containsSprite(spriteReference))
                 return true;
         }
         return false;
     }
 
-    private int findFirstEmptyPageIndex() {
-        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
-            T page = pages.get(pageIndex);
-            if (page == null)
-                return pageIndex;
-        }
-        return -1;
-    }
-
     @Override
     public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
         for (T page : pages) {
-            if (page != null && page.containsSprite(spriteReference)) {
+            if (page.containsSprite(spriteReference)) {
                 page.updateSprite(sprite, spriteReference);
                 return spriteReference;
             }
@@ -116,25 +102,14 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
 
     @Override
     public void removeSprite(SpriteReference spriteReference) {
-        for (int i = 0; i < pages.size; i++) {
-            T page = pages.get(i);
-            if (page != null && page.containsSprite(spriteReference)) {
+        for (T page : pages) {
+            if (page.containsSprite(spriteReference)) {
                 page.removeSprite(spriteReference);
-                if (page.getSpriteCount() == 0 && spriteBatchModelManager.shouldDisposeEmptyModel(page)) {
-                    disposePage(page);
-                    pages.set(i, null);
+                if (page.getSpriteCount() == 0) {
+                    spriteBatchModelProducer.dispose(page);
+                    pages.removeValue(page, true);
                 }
                 return;
-            }
-        }
-    }
-
-    public void disposeEmptyPages() {
-        for (int pageIndex = 0; pageIndex < pages.size; pageIndex++) {
-            T page = pages.get(pageIndex);
-            if (page != null && page.getSpriteCount() == 0) {
-                disposePage(page);
-                pages.set(pageIndex, null);
             }
         }
     }
@@ -144,17 +119,18 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
         return propertyContainer;
     }
 
+    public void disposeOfPage(T page) {
+        pages.removeValue(page, true);
+        spriteBatchModelProducer.dispose(page);
+    }
+
     @Override
     public void dispose() {
         for (T page : pages) {
-            if (page != null) {
-                disposePage(page);
-            }
+            spriteBatchModelProducer.dispose(page);
         }
+        spriteBatchModelProducer.dispose();
         pages.clear();
     }
 
-    private void disposePage(T page) {
-        spriteBatchModelManager.disposeModel(page);
-    }
 }

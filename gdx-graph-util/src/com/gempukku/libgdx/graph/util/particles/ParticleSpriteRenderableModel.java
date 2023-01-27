@@ -217,12 +217,14 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         int spriteCount = spriteStorage.getSpriteCount();
-        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-            Gdx.app.debug("Particles", "Rendering " + spriteCount + " particles(s)");
-        if (attributeLocations == null)
-            attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
+        if (spriteCount > 0) {
+            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
+                Gdx.app.debug("Particles", "Rendering " + spriteCount + " particles(s)");
+            if (attributeLocations == null)
+                attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
 
-        spriteModel.renderMesh(shaderProgram, mesh, 0, spriteCount, attributeLocations);
+            spriteModel.renderMesh(shaderProgram, mesh, 0, spriteCount, attributeLocations);
+        }
     }
 
     public void updateWithMaxDeathTime(float maxDeathTime) {

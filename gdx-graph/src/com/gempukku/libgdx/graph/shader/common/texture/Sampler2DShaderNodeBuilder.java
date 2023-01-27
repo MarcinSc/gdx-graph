@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
-import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.common.texture.Sampler2DShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -30,7 +29,7 @@ public class Sampler2DShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
         TextureFieldOutput textureValue = (TextureFieldOutput) inputs.get("texture");
         FieldOutput uvValue = inputs.get("uv");
 
-        commonShaderBuilder.addFunction("textureWraps", GLSLFragmentReader.getFragment("textureWrap"));
+        loadFragmentIfNotDefined(commonShaderBuilder, "textureWrap");
 
         commonShaderBuilder.addMainLine("// Sampler2D Node");
         ObjectMap<String, FieldOutput> result = new ObjectMap<>();
