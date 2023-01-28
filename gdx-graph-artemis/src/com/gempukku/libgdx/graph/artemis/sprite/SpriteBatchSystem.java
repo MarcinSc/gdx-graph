@@ -18,12 +18,16 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.PreserveMinimumDisposableProducer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.TexturePagedSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.shape.ShapeSystem;
 
@@ -99,9 +103,12 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                 new DisposableProducer<LimitedCapacitySpriteRenderableModel>() {
                     @Override
                     public LimitedCapacitySpriteRenderableModel create() {
+                        SpriteStorage<RenderableSprite> spriteStorage = new ContinuousSlotsSpriteStorage<>(
+                                spriteBatch.getSpritesPerPage(),
+                                new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel));
                         LimitedCapacitySpriteRenderableModel model = new LimitedCapacitySpriteRenderableModel(
-                                spriteBatch.isStaticBatch(), spriteBatch.getSpritesPerPage(),
-                                vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
+                                spriteBatch.isStaticBatch(), spriteStorage,
+                                vertexAttributes, propertyContainer, spriteModel);
                         graphModels.addModel(tag, model);
                         return model;
                     }

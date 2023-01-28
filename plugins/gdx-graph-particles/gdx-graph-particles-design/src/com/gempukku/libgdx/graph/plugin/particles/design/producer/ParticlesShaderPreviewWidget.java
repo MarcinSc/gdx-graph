@@ -31,16 +31,20 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
 
 import java.util.Iterator;
 
@@ -246,9 +250,12 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 sprites.clear();
             }
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
-            particleModel = new LimitedCapacitySpriteRenderableModel(false, (256 * 256 - 1) / 4,
-                    vertexAttributes, GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties()),
-                    localPropertyContainer, new QuadSpriteModel());
+            ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties());
+            QuadSpriteModel spriteModel = new QuadSpriteModel();
+            particleModel = new LimitedCapacitySpriteRenderableModel(false,
+                    new ContinuousSlotsSpriteStorage<RenderableSprite>((256 * 256 - 1) / 4,
+                            new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
+                    vertexAttributes, localPropertyContainer, spriteModel);
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),
                     new ParticleGenerator.ParticleCreateCallback() {

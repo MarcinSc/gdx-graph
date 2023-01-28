@@ -183,12 +183,13 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         uiSkin.dispose();
         stage.dispose();
 
-        Gdx.app.debug("Unclosed", Cubemap.getManagedStatus());
-        Gdx.app.debug("Unclosed", GLFrameBuffer.getManagedStatus());
-        Gdx.app.debug("Unclosed", Mesh.getManagedStatus());
-        Gdx.app.debug("Unclosed", Texture.getManagedStatus());
-        Gdx.app.debug("Unclosed", TextureArray.getManagedStatus());
-        Gdx.app.debug("Unclosed", ShaderProgram.getManagedStatus());
+        System.out.println("Exit status:");
+        System.out.println(Cubemap.getManagedStatus());
+        System.out.println(GLFrameBuffer.getManagedStatus());
+        System.out.println(Mesh.getManagedStatus());
+        System.out.println(Texture.getManagedStatus());
+        System.out.println(TextureArray.getManagedStatus());
+        System.out.println(ShaderProgram.getManagedStatus());
     }
 
     private void enableProfiler() {

@@ -14,6 +14,8 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
 
 public class BasicSpriteBatchModel implements SpriteBatchModel {
     private SpriteRenderableModel delegate;
@@ -40,8 +42,10 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
-        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch, spriteCapacity,
-                vertexAttributes, vertexPropertySources, propertyContainer, spriteModel);
+        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch,
+                new ContinuousSlotsSpriteStorage<>(spriteCapacity,
+                        new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
+                vertexAttributes, propertyContainer, spriteModel);
         graphModels.addModel(tag, delegate);
     }
 

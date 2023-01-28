@@ -3,18 +3,13 @@ package com.gempukku.libgdx.graph.util.sprite.manager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
-import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.IntMapping;
-import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -22,7 +17,6 @@ import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
 
 public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
@@ -32,49 +26,30 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private CullingTest cullingTest;
 
     private final Mesh mesh;
-    private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
     private final SpriteModel spriteModel;
-    private final int floatCountPerVertex;
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
     private SpriteStorage<RenderableSprite> spriteStorage;
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity,
-            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
-            WritablePropertyContainer propertyContainer) {
-        this(staticBatch, spriteCapacity, vertexAttributes, vertexPropertySources, propertyContainer,
+            boolean staticBatch, SpriteStorage<RenderableSprite> spriteStorage,
+            VertexAttributes vertexAttributes, WritablePropertyContainer propertyContainer) {
+        this(staticBatch, spriteStorage, vertexAttributes, propertyContainer,
                 new QuadSpriteModel());
     }
 
     public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, int spriteCapacity,
-            VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
+            boolean staticBatch, SpriteStorage<RenderableSprite> spriteStorage,
+            VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.propertyContainer = propertyContainer;
         this.spriteModel = spriteModel;
+        this.spriteStorage = spriteStorage;
 
         this.vertexAttributes = vertexAttributes;
 
-        this.vertexPropertySources = vertexPropertySources;
-
-        floatCountPerVertex = vertexAttributes.vertexSize / 4;
-
-        final int floatCountPerSprite = floatCountPerVertex * spriteModel.getVertexCount();
-
-        spriteStorage = new SpriteStorage<>(spriteCapacity,
-                new SpriteSerializer<RenderableSprite>() {
-                    @Override
-                    public int getFloatCount() {
-                        return floatCountPerSprite;
-                    }
-
-                    @Override
-                    public void serializeToFloatArray(RenderableSprite value, float[] floatArray, int startIndex) {
-                        updateSpriteData(value, floatArray, startIndex);
-                    }
-                });
+        int spriteCapacity = spriteStorage.getSpriteCapacity();
 
         mesh = new Mesh(staticBatch, true,
                 spriteModel.getVertexCount() * spriteCapacity,
@@ -136,40 +111,6 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     @Override
     public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
-    }
-
-    private void updateSpriteData(RenderableSprite sprite, float[] vertexData, int spriteDataStart) {
-        int vertexCount = spriteModel.getVertexCount();
-
-        for (VertexAttribute vertexAttribute : vertexAttributes) {
-            int attributeOffset = vertexAttribute.offset / 4;
-
-            ShaderPropertySource shaderPropertySource = vertexPropertySources.get(vertexAttribute);
-            if (shaderPropertySource == null) {
-                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-                    int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
-                    sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexData, vertexOffset + attributeOffset);
-                }
-            } else {
-                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
-                Object attributeValue = sprite.getValue(shaderPropertySource.getPropertyName());
-                if (attributeValue instanceof ValuePerVertex) {
-                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-                        int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
-
-                        Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
-                    }
-                } else {
-                    attributeValue = shaderPropertySource.getValueToUse(attributeValue);
-                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-                        int vertexOffset = spriteDataStart + vertexIndex * floatCountPerVertex;
-
-                        shaderFieldType.setValueInAttributesArray(vertexData, vertexOffset + attributeOffset, attributeValue);
-                    }
-                }
-            }
-        }
     }
 
     @Override

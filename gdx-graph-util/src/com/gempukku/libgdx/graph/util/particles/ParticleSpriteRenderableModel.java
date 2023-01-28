@@ -22,8 +22,8 @@ import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
-import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
 
 public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     private float maxDeathTime = Float.MIN_VALUE;
@@ -40,7 +40,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
-    private SpriteStorage<RenderableSprite> spriteStorage;
+    private ContinuousSlotsSpriteStorage<RenderableSprite> spriteStorage;
 
     public ParticleSpriteRenderableModel(
             int spriteCapacity,
@@ -65,7 +65,7 @@ public class ParticleSpriteRenderableModel implements SpriteRenderableModel {
 
         final int floatCountPerSprite = floatCountPerVertex * spriteModel.getVertexCount();
 
-        spriteStorage = new SpriteStorage<>(spriteCapacity,
+        spriteStorage = new ContinuousSlotsSpriteStorage<>(spriteCapacity,
                 new SpriteSerializer<RenderableSprite>() {
                     @Override
                     public int getFloatCount() {
