@@ -39,13 +39,20 @@ public class SpriteBatchSystem extends BaseEntitySystem {
     @Wire(failOnNull = false)
     private ShapeSystem shapeSystem;
 
-    private SpriteModel defaultSpriteModel = new QuadSpriteModel();
-
     private ComponentMapper<SpriteBatchComponent> spriteBatchComponentMapper;
+
+    private SpriteModel defaultSpriteModel = new QuadSpriteModel();
 
     private final ObjectMap<String, ObjectBatchModel<RenderableSprite, SpriteReference>> spriteBatchMap = new ObjectMap<>();
 
     private final Array<Entity> newSpriteBatchEntities = new Array<>();
+
+    private final Producer<SpriteReference> spriteReferenceProducer = new Producer<SpriteReference>() {
+        @Override
+        public SpriteReference create() {
+            return new SpriteReference();
+        }
+    };
 
     public SpriteBatchSystem() {
         super(Aspect.all(SpriteBatchComponent.class));
@@ -71,13 +78,15 @@ public class SpriteBatchSystem extends BaseEntitySystem {
         final VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
+        final SpriteSerializer spriteSerializer = new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel);
+
         if (spriteSystemType == SpriteBatchComponent.SystemType.TexturePaged) {
-            return new TexturePagedObjectBatchModel<RenderableSprite, SpriteReference, ObjectBatchModel<RenderableSprite, SpriteReference>>(graphModels, tag,
+            return new TexturePagedObjectBatchModel<>(graphModels, tag,
                     new DisposableProducer<ObjectBatchModel<RenderableSprite, SpriteReference>>() {
                         @Override
                         public ObjectBatchModel<RenderableSprite, SpriteReference> create() {
                             MapWritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
-                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, vertexPropertySources, graphModels, tag, spriteModel, propertyContainer);
+                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, propertyContainer);
                         }
 
                         @Override
@@ -86,33 +95,27 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                         }
                     });
         } else if (spriteSystemType == SpriteBatchComponent.SystemType.MultiPaged) {
-            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, vertexPropertySources, graphModels, tag, spriteModel, new MapWritablePropertyContainer());
+            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, new MapWritablePropertyContainer());
         } else {
             throw new GdxRuntimeException("Unable to create SpriteBatchModel unknown type: " + spriteSystemType);
         }
     }
 
-    private static MultiPageObjectBatchModel<RenderableSprite, SpriteReference, LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> createMultiPageSpriteBatchModel(
+    private MultiPageObjectBatchModel<RenderableSprite, SpriteReference, LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> createMultiPageSpriteBatchModel(
             final SpriteBatchComponent spriteBatch,
-            final VertexAttributes vertexAttributes, final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
+            final VertexAttributes vertexAttributes, final SpriteSerializer spriteSerializer,
             final GraphModels graphModels, final String tag, final SpriteModel spriteModel,
             final WritablePropertyContainer propertyContainer) {
-        final PreserveMinimumDisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> preserveMinimum = new PreserveMinimumDisposableProducer<>(spriteBatch.getMinimumPages(),
+        DisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> renderableProducer =
                 new DisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>() {
                     @Override
                     public LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> create() {
-                        ObjectMeshStorage<RenderableSprite, SpriteReference> objectMeshStorage = new SpriteSlotMeshStorage<>(
-                                spriteBatch.getSpritesPerPage(), spriteModel,
-                                new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
-                                new Producer<SpriteReference>() {
-                                    @Override
-                                    public SpriteReference create() {
-                                        return new SpriteReference();
-                                    }
-                                });
-                        LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> model = new LimitedCapacityObjectRenderableModel<>(
-                                spriteBatch.isStaticBatch(), objectMeshStorage,
-                                vertexAttributes, propertyContainer);
+                        ObjectMeshStorage<RenderableSprite, SpriteReference> objectMeshStorage =
+                                new SpriteSlotMeshStorage<>(
+                                        spriteBatch.getSpritesPerPage(), spriteModel, spriteSerializer, spriteReferenceProducer);
+                        LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> model =
+                                new LimitedCapacityObjectRenderableModel<>(
+                                        spriteBatch.isStaticBatch(), objectMeshStorage, vertexAttributes, propertyContainer);
                         graphModels.addModel(tag, model);
                         return model;
                     }
@@ -122,8 +125,11 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                         graphModels.removeModel(tag, model);
                         model.dispose();
                     }
-                });
-        return new MultiPageObjectBatchModel<RenderableSprite, SpriteReference, LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>(preserveMinimum, propertyContainer) {
+                };
+        final PreserveMinimumDisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> preserveMinimum =
+                new PreserveMinimumDisposableProducer<>(spriteBatch.getMinimumPages(), renderableProducer);
+        return new MultiPageObjectBatchModel<RenderableSprite, SpriteReference,
+                LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>(preserveMinimum, propertyContainer) {
             @Override
             public void dispose() {
                 super.dispose();
@@ -149,7 +155,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
     @Override
     protected void removed(int entityId) {
         SpriteBatchComponent spriteSystemComponent = spriteBatchComponentMapper.get(entityId);
-        ObjectBatchModel spritesModel = spriteBatchMap.remove(spriteSystemComponent.getName());
+        ObjectBatchModel<RenderableSprite, SpriteReference> spritesModel = spriteBatchMap.remove(spriteSystemComponent.getName());
         spritesModel.dispose();
     }
 
@@ -160,7 +166,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
             GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
             String tag = spriteSystem.getRenderTag();
-            ObjectBatchModel spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
+            ObjectBatchModel<RenderableSprite, SpriteReference> spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
 
             WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
             for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
@@ -174,7 +180,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     @Override
     public void dispose() {
-        for (ObjectBatchModel spriteModel : spriteBatchMap.values()) {
+        for (ObjectBatchModel<RenderableSprite, SpriteReference> spriteModel : spriteBatchMap.values()) {
             spriteModel.dispose();
         }
         spriteBatchMap.clear();
