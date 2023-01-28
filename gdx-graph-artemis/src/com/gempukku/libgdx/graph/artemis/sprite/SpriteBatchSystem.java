@@ -19,6 +19,7 @@ import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.PreserveMinimumDisposableProducer;
 import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
+import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
@@ -71,7 +72,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
         newSpriteBatchEntities.add(world.getEntity(entityId));
     }
 
-    private ObjectBatchModel<RenderableSprite, SpriteReference> createSpriteBatchModel(final SpriteBatchComponent spriteBatch, final GraphModels graphModels, final String tag) {
+    private ObjectBatchModel<RenderableSprite, SpriteReference> createSpriteBatchModel(
+            final SpriteBatchComponent spriteBatch, final GraphModels graphModels, final String tag,
+            final WritablePropertyContainer propertyContainer) {
         final SpriteModel spriteModel = getSpriteModel(spriteBatch);
         SpriteBatchComponent.SystemType spriteSystemType = spriteBatch.getType();
 
@@ -85,8 +88,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                     new DisposableProducer<ObjectBatchModel<RenderableSprite, SpriteReference>>() {
                         @Override
                         public ObjectBatchModel<RenderableSprite, SpriteReference> create() {
-                            MapWritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
-                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, propertyContainer);
+                            HierarchicalPropertyContainer texturePropertyContainer = new HierarchicalPropertyContainer(propertyContainer);
+                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel,
+                                    texturePropertyContainer);
                         }
 
                         @Override
@@ -95,7 +99,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                         }
                     });
         } else if (spriteSystemType == SpriteBatchComponent.SystemType.MultiPaged) {
-            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, new MapWritablePropertyContainer());
+            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, propertyContainer);
         } else {
             throw new GdxRuntimeException("Unable to create SpriteBatchModel unknown type: " + spriteSystemType);
         }
@@ -165,9 +169,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
             GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
             String tag = spriteSystem.getRenderTag();
-            ObjectBatchModel<RenderableSprite, SpriteReference> spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
+            WritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
+            ObjectBatchModel<RenderableSprite, SpriteReference> spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag, propertyContainer);
 
-            WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
             for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
                 propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(newSpriteEntity, property.value, Object.class));
             }
