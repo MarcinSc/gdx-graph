@@ -24,6 +24,11 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private BasicSpriteBatchModel spriteBatch;
 
     @Override
+    public String getName() {
+        return "Sprites Test";
+    }
+
+    @Override
     public void initializeScene() {
         camera = new OrthographicCamera();
         pipelineRenderer = loadPipelineRenderer();

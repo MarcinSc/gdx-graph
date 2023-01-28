@@ -56,6 +56,11 @@ public class Episode22Scene implements LibgdxGraphTestScene {
     private final Vector3 tmpVector3 = new Vector3();
 
     @Override
+    public String getName() {
+        return "YouTube Episode 22";
+    }
+
+    @Override
     public void initializeScene() {
         Box2D.init();
 

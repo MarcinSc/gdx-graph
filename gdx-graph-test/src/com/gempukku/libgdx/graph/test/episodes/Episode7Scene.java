@@ -48,6 +48,11 @@ public class Episode7Scene implements LibgdxGraphTestScene {
     private MaterialModelInstanceModelAdapter modelAdapter;
 
     @Override
+    public String getName() {
+        return "YouTube Episode 7";
+    }
+
+    @Override
     public void initializeScene() {
         WhitePixel.initialize();
 

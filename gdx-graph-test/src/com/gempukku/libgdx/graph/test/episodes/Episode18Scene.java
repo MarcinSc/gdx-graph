@@ -53,6 +53,11 @@ public class Episode18Scene implements LibgdxGraphTestScene {
     private ParticleModel particleModel;
 
     @Override
+    public String getName() {
+        return "YouTube Episode 18";
+    }
+
+    @Override
     public void initializeScene() {
         WhitePixel.initialize();
 

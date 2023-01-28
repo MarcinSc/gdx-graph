@@ -35,7 +35,8 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
     private GLProfiler profiler;
     private Skin uiSkin;
     private Stage stage;
-    private Label label;
+    private Label sceneLabel;
+    private Label profilingLabel;
 
     @Override
     public void create() {
@@ -86,17 +87,25 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
 
         uiSkin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
         stage = new Stage(new ScreenViewport());
-        label = new Label("", uiSkin);
+        sceneLabel = new Label("", uiSkin);
+        profilingLabel = new Label("", uiSkin);
 
-        Table tbl = new Table(uiSkin);
+        Table tbl1 = new Table(uiSkin);
 
-        tbl.setFillParent(true);
-        tbl.align(Align.bottomRight);
+        tbl1.setFillParent(true);
+        tbl1.align(Align.bottomRight);
 
-        tbl.add(label).pad(10f);
-        tbl.row();
+        tbl1.add(sceneLabel).width(250).pad(10f);
+        tbl1.row();
 
-        stage.addActor(tbl);
+        Table tbl2 = new Table(uiSkin);
+        tbl2.setFillParent(true);
+        tbl2.align(Align.topRight);
+        tbl2.add(profilingLabel).width(200).pad(10f);
+        tbl2.row();
+
+        stage.addActor(tbl1);
+        stage.addActor(tbl2);
     }
 
     @Override
@@ -154,10 +163,15 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
             long memory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
             sb.append("Used memory: " + memory + "MB\n");
         }
+        profilingLabel.setText(sb.toString());
+
+        sb.setLength(0);
+        sb.append("Scene:\n");
+        sb.append(scenes[loadedIndex].getName() + "\n");
         sb.append("P - for previous scene\n");
         sb.append("N - for next scene\n");
         sb.append("O - to toggle profiling\n");
-        label.setText(sb.toString());
+        sceneLabel.setText(sb.toString());
 
         stage.draw();
     }

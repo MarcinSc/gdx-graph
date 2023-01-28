@@ -45,6 +45,11 @@ public class Episode4Scene implements LibgdxGraphTestScene {
     private ModelBatch modelBatch;
 
     @Override
+    public String getName() {
+        return "YouTube Episode 4";
+    }
+
+    @Override
     public void initializeScene() {
         WhitePixel.initialize();
         skin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));

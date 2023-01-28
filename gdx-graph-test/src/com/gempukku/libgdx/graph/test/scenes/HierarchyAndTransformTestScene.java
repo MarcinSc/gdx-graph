@@ -45,6 +45,11 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
     private Stage stage;
 
     @Override
+    public String getName() {
+        return "Hierarchy and Transform Systems";
+    }
+
+    @Override
     public void initializeScene() {
         createSystems();
 
@@ -131,7 +136,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
         Table tbl = new Table(skin);
 
         tbl.setFillParent(true);
-        tbl.align(Align.topRight);
+        tbl.align(Align.topLeft);
 
         tbl.add(parentRotationLabel).pad(10f, 10f, 0f, 10f).row();
         tbl.add(parentRotationSlider).pad(0, 10f, 0, 10f).row();

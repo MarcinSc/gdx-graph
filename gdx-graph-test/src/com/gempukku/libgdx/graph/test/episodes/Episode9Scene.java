@@ -52,6 +52,11 @@ public class Episode9Scene implements LibgdxGraphTestScene {
     private ModelInstance robot1Instance;
 
     @Override
+    public String getName() {
+        return "YouTube Episode 9";
+    }
+
+    @Override
     public void initializeScene() {
         WhitePixel.initialize();
 

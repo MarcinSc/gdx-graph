@@ -48,6 +48,11 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
     private ModelInstance sphereInstance;
 
     @Override
+    public String getName() {
+        return "Shadow Test";
+    }
+
+    @Override
     public void initializeScene() {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;

@@ -38,6 +38,11 @@ public class SDFTextShaderTestScene implements LibgdxGraphTestScene {
     private World world;
 
     @Override
+    public String getName() {
+        return "SDF Text Test";
+    }
+
+    @Override
     public void initializeScene() {
         createSystems();
 

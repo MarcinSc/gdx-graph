@@ -45,6 +45,11 @@ public class Episode13Scene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
 
     @Override
+    public String getName() {
+        return "YouTube Episode 13";
+    }
+
+    @Override
     public void initializeScene() {
         WhitePixel.initialize();
 

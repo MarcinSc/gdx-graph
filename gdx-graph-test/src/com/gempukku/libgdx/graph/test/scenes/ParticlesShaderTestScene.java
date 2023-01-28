@@ -27,6 +27,11 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     private ParticleModel particleModel;
 
     @Override
+    public String getName() {
+        return "Particles Test";
+    }
+
+    @Override
     public void initializeScene() {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
