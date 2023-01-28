@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 
-public class DefaultSpriteSerializer implements MeshSerializer<RenderableSprite> {
+public class SpriteSerializer implements MeshSerializer<RenderableSprite> {
     private final VertexAttributes vertexAttributes;
     private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
 
@@ -19,7 +19,7 @@ public class DefaultSpriteSerializer implements MeshSerializer<RenderableSprite>
     private final int vertexCount;
     private final int indexCount;
 
-    public DefaultSpriteSerializer(
+    public SpriteSerializer(
             VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
             SpriteModel spriteModel) {
         this.vertexAttributes = vertexAttributes;
@@ -28,6 +28,11 @@ public class DefaultSpriteSerializer implements MeshSerializer<RenderableSprite>
         floatCountPerVertex = vertexAttributes.vertexSize / 4;
         vertexCount = spriteModel.getVertexCount();
         indexCount = spriteModel.getIndexCount();
+    }
+
+    @Override
+    public int getFloatsPerVertex() {
+        return floatCountPerVertex;
     }
 
     @Override

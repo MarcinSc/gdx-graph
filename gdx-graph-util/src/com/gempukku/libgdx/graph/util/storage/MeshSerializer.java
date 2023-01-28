@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.util.storage;
 
 public interface MeshSerializer<T> {
+    int getFloatsPerVertex();
+
     int getIndexCount(T object);
 
     int getFloatCount(T object);

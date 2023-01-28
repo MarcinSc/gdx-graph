@@ -23,8 +23,8 @@ import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
-import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
 import com.gempukku.libgdx.graph.util.storage.*;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.shape.ShapeSystem;
@@ -101,10 +101,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                 new DisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>() {
                     @Override
                     public LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> create() {
-                        ObjectMeshStorage<RenderableSprite, SpriteReference> objectMeshStorage = new ContinuousSlotsObjectMeshStorage<>(
-                                spriteBatch.getSpritesPerPage(), vertexAttributes.vertexSize / 4,
-                                spriteModel,
-                                new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                        ObjectMeshStorage<RenderableSprite, SpriteReference> objectMeshStorage = new SpriteSlotMeshStorage<>(
+                                spriteBatch.getSpritesPerPage(), spriteModel,
+                                new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
                                 new Producer<SpriteReference>() {
                                     @Override
                                     public SpriteReference create() {

@@ -8,7 +8,7 @@ import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 import com.gempukku.libgdx.graph.util.storage.ObjectMeshStorage;
 
-public class ContinuousSlotsObjectMeshStorage<T, U> implements ObjectMeshStorage<T, U> {
+public class SpriteSlotMeshStorage<T, U> implements ObjectMeshStorage<T, U> {
     private final int spriteCapacity;
     private final Producer<U> referenceProducer;
     private final int spriteSize;
@@ -22,12 +22,12 @@ public class ContinuousSlotsObjectMeshStorage<T, U> implements ObjectMeshStorage
     private int minUpdatedIndex = Integer.MAX_VALUE;
     private int maxUpdatedIndex = -1;
 
-    public ContinuousSlotsObjectMeshStorage(int spriteCapacity, int floatsPerVertex,
-                                            SpriteModel spriteModel, MeshSerializer<T> serializer,
-                                            Producer<U> referenceProducer) {
+    public SpriteSlotMeshStorage(int spriteCapacity,
+                                 SpriteModel spriteModel, MeshSerializer<T> serializer,
+                                 Producer<U> referenceProducer) {
         this.spriteCapacity = spriteCapacity;
         this.referenceProducer = referenceProducer;
-        this.spriteSize = spriteModel.getVertexCount() * floatsPerVertex;
+        this.spriteSize = spriteModel.getVertexCount() * serializer.getFloatsPerVertex();
         this.indexCountPerSprite = spriteModel.getIndexCount();
         this.floatArray = new float[spriteCapacity * spriteSize];
         this.shortArray = new short[spriteCapacity * indexCountPerSprite];
@@ -36,6 +36,11 @@ public class ContinuousSlotsObjectMeshStorage<T, U> implements ObjectMeshStorage
         spriteModel.initializeIndexBuffer(shortArray, spriteCapacity);
 
         this.sprites = new Array<>();
+    }
+
+    @Override
+    public int getMaxVertexCount() {
+        return spriteCapacity * spriteSize;
     }
 
     @Override

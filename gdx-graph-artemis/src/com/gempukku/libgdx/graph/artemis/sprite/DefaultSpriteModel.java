@@ -1,9 +1,5 @@
 package com.gempukku.libgdx.graph.artemis.sprite;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 
 public class DefaultSpriteModel implements SpriteModel {
@@ -37,13 +33,5 @@ public class DefaultSpriteModel implements SpriteModel {
             ++vertexIndex;
         }
 
-    }
-
-    @Override
-    public void renderMesh(ShaderProgram shader, Mesh mesh, int indexStart, int indexCount, int[] locations) {
-        int indexCountPerSprite = indices.length;
-        mesh.bind(shader, locations);
-        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCountPerSprite * indexCount, GL20.GL_UNSIGNED_SHORT, indexCountPerSprite * indexStart);
-        mesh.unbind(shader, locations);
     }
 }

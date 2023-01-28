@@ -43,8 +43,8 @@ import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
-import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
 import com.gempukku.libgdx.graph.util.storage.LimitedCapacityObjectRenderableModel;
 
 import java.util.Iterator;
@@ -254,9 +254,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties());
             QuadSpriteModel spriteModel = new QuadSpriteModel();
             particleModel = new LimitedCapacityObjectRenderableModel<>(false,
-                    new ContinuousSlotsObjectMeshStorage<>((256 * 256 - 1) / 4,
-                            vertexAttributes.vertexSize / 4, spriteModel,
-                            new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                    new SpriteSlotMeshStorage<>((256 * 256 - 1) / 4,
+                            spriteModel,
+                            new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
                             new Producer<SpriteReference>() {
                                 @Override
                                 public SpriteReference create() {

@@ -14,16 +14,16 @@ import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
-import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
 import com.gempukku.libgdx.graph.util.storage.LimitedCapacityObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
 import com.gempukku.libgdx.graph.util.storage.ObjectRenderableModel;
 
 public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite, SpriteReference> {
-    private ObjectRenderableModel<RenderableSprite, SpriteReference> delegate;
-    private GraphModels graphModels;
-    private String tag;
+    private final ObjectRenderableModel<RenderableSprite, SpriteReference> delegate;
+    private final GraphModels graphModels;
+    private final String tag;
 
     public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag) {
@@ -46,9 +46,8 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
         delegate = new LimitedCapacityObjectRenderableModel<>(staticBatch,
-                new ContinuousSlotsObjectMeshStorage<>(spriteCapacity,
-                        vertexAttributes.vertexSize / 4, spriteModel,
-                        new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                new SpriteSlotMeshStorage<>(spriteCapacity, spriteModel,
+                        new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
                         new Producer<SpriteReference>() {
                             @Override
                             public SpriteReference create() {

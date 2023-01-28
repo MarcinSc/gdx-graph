@@ -26,7 +26,7 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
     private final MeshRenderer meshRenderer;
     private int[] attributeLocations;
 
-    private ObjectMeshStorage<T, U> objectMeshStorage;
+    private final ObjectMeshStorage<T, U> objectMeshStorage;
 
     public LimitedCapacityObjectRenderableModel(
             boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
@@ -45,11 +45,9 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
         this.vertexAttributes = vertexAttributes;
         this.meshRenderer = meshRenderer;
 
-        int floatPerVertex = vertexAttributes.vertexSize / 4;
-        int maxVertices = objectMeshStorage.getVertexArray().length / floatPerVertex;
         mesh = new Mesh(staticBatch, true,
-                maxVertices,
-                objectMeshStorage.getVertexArray().length, vertexAttributes);
+                objectMeshStorage.getMaxVertexCount(),
+                objectMeshStorage.getIndexArray().length, vertexAttributes);
         mesh.setVertices(objectMeshStorage.getVertexArray());
         mesh.setIndices(objectMeshStorage.getIndexArray());
     }

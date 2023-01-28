@@ -5,6 +5,8 @@ public interface ObjectMeshStorage<T, U> {
 
     short[] getIndexArray();
 
+    int getMaxVertexCount();
+
     U addObject(T object);
 
     boolean containsObject(U objectReference);

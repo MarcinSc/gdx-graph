@@ -1,10 +1,5 @@
 package com.gempukku.libgdx.graph.util.sprite.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-
 public class QuadSpriteModel implements SpriteModel {
     private static final int VERTEX_COUNT = 4;
     private static final int INDEX_COUNT = 6;
@@ -31,12 +26,5 @@ public class QuadSpriteModel implements SpriteModel {
             indexBuffer[i + 5] = (short) (vertexIndex * 4 + 3);
             vertexIndex++;
         }
-    }
-
-    @Override
-    public void renderMesh(ShaderProgram shader, Mesh mesh, int indexStart, int indexCount, int[] locations) {
-        mesh.bind(shader, locations);
-        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCount, GL20.GL_UNSIGNED_SHORT, indexStart);
-        mesh.unbind(shader, locations);
     }
 }
