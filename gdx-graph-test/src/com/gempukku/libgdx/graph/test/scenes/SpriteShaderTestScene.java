@@ -28,6 +28,7 @@ import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
+import com.gempukku.libgdx.graph.util.storage.DefaultMultiPartRenderableModel;
 import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 import com.gempukku.libgdx.graph.util.storage.MultiPartRenderableModel;
@@ -65,9 +66,12 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         MeshSerializer<RenderableSprite> spriteSerializer = new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel);
 
-        spriteBatch = new GdxMeshRenderableModel<>(true,
-                new SpriteSlotMemoryMesh<>(2, spriteModel, spriteSerializer, spriteReferenceProducer),
-                vertexAttributes, new MapWritablePropertyContainer());
+        SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> sprites = new SpriteSlotMemoryMesh<>(
+                2, spriteModel, spriteSerializer, spriteReferenceProducer);
+
+        GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(true, sprites, vertexAttributes, new MapWritablePropertyContainer());
+
+        spriteBatch = new DefaultMultiPartRenderableModel<>(sprites, gdxMesh);
 
         graphModels.addModel(tag, spriteBatch);
 

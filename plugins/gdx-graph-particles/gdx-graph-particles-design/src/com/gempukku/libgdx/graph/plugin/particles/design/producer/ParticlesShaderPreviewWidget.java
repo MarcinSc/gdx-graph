@@ -50,6 +50,9 @@ import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
 import java.util.Iterator;
 
 public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
+
+    private SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> spriteMesh;
+
     public enum ShaderPreviewModel {
         Point, SphereSurface, Sphere, Line
     }
@@ -63,7 +66,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private GraphShader graphShader;
     private OpenGLContext renderContext;
 
-    private GdxMeshRenderableModel<RenderableSprite, SpriteReference> particleModel;
+    private GdxMeshRenderableModel particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
     private ObjectMap<ParticleRenderableSprite, SpriteReference> spriteIdentifiers = new ObjectMap<>();
     private DefaultParticleGenerator particleGenerator;
@@ -253,17 +256,16 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
             ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties());
             QuadSpriteModel spriteModel = new QuadSpriteModel();
-            particleModel = new GdxMeshRenderableModel<>(false,
-                    new SpriteSlotMemoryMesh<>((256 * 256 - 1) / 4,
-                            spriteModel,
-                            new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
-                            new Producer<SpriteReference>() {
-                                @Override
-                                public SpriteReference create() {
-                                    return new SpriteReference();
-                                }
-                            }),
-                    vertexAttributes, localPropertyContainer);
+            spriteMesh = new SpriteSlotMemoryMesh<>((256 * 256 - 1) / 4,
+                    spriteModel,
+                    new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                    new Producer<SpriteReference>() {
+                        @Override
+                        public SpriteReference create() {
+                            return new SpriteReference();
+                        }
+                    });
+            particleModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, localPropertyContainer);
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),
                     new ParticleGenerator.ParticleCreateCallback() {
@@ -271,7 +273,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                         public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                             ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                             sprites.add(sprite);
-                            spriteIdentifiers.put(sprite, particleModel.addPart(sprite));
+                            spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
                         }
                     });
         }
@@ -312,7 +314,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 while (spriteIterator.hasNext()) {
                     ParticleRenderableSprite sprite = spriteIterator.next();
                     if (sprite.getParticleDeath() < currentTime) {
-                        particleModel.removePart(spriteIdentifiers.remove(sprite));
+                        spriteMesh.removePart(spriteIdentifiers.remove(sprite));
                         spriteIterator.remove();
                     }
                 }
@@ -323,7 +325,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                             public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                                 ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                                 sprites.add(sprite);
-                                spriteIdentifiers.put(sprite, particleModel.addPart(sprite));
+                                spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
                             }
                         });
 

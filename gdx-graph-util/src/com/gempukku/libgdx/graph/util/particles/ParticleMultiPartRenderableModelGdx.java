@@ -1,25 +1,14 @@
 package com.gempukku.libgdx.graph.util.particles;
 
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
-import com.gempukku.libgdx.graph.util.renderer.TrianglesMeshRenderer;
-import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
-import com.gempukku.libgdx.graph.util.storage.MultiPartMemoryMesh;
+import com.gempukku.libgdx.graph.util.model.WritableRenderableModel;
+import com.gempukku.libgdx.graph.util.storage.DefaultMultiPartRenderableModel;
+import com.gempukku.libgdx.graph.util.storage.MultiPartMesh;
 
-public class ParticleMultiPartRenderableModelGdx<T, U> extends GdxMeshRenderableModel<T, U> {
+public class ParticleMultiPartRenderableModelGdx<T, U> extends DefaultMultiPartRenderableModel<T, U> {
     private float maxDeathTime = Float.MIN_VALUE;
 
-    public ParticleMultiPartRenderableModelGdx(
-            MultiPartMemoryMesh<T, U> multiPartMemoryMesh, VertexAttributes vertexAttributes,
-            WritablePropertyContainer propertyContainer) {
-        this(multiPartMemoryMesh, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
-    }
-
-    public ParticleMultiPartRenderableModelGdx(
-            MultiPartMemoryMesh<T, U> multiPartMemoryMesh, VertexAttributes vertexAttributes,
-            WritablePropertyContainer propertyContainer, MeshRenderer meshRenderer) {
-        super(false, multiPartMemoryMesh, vertexAttributes, propertyContainer, meshRenderer);
+    public ParticleMultiPartRenderableModelGdx(MultiPartMesh<T, U> multiPartMemoryMesh, WritableRenderableModel renderableModel) {
+        super(multiPartMemoryMesh, renderableModel);
     }
 
     public void updateWithMaxDeathTime(float maxDeathTime) {

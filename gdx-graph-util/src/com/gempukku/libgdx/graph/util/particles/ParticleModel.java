@@ -21,6 +21,7 @@ import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
+import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
 import com.gempukku.libgdx.graph.util.storage.PagedMultiPartBatchModel;
 
 public class ParticleModel implements Disposable {
@@ -87,7 +88,6 @@ public class ParticleModel implements Disposable {
 
         private final ObjectSet<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> models = new ObjectSet<>();
         private final VertexAttributes vertexAttributes;
-        private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
         private final SpriteSerializer spriteSerializer;
 
         public ParticlesSpriteBatchProducer(int spriteCapacity,
@@ -99,7 +99,7 @@ public class ParticleModel implements Disposable {
             this.tag = tag;
 
             vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-            vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+            ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
             spriteSerializer = new SpriteSerializer(
                     vertexAttributes, vertexPropertySources, spriteModel);
@@ -107,7 +107,7 @@ public class ParticleModel implements Disposable {
 
         @Override
         public ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> create() {
-            ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model = new ParticleMultiPartRenderableModelGdx<>(
+            SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> meshModel =
                     new SpriteSlotMemoryMesh<>(spriteCapacity,
                             spriteModel, spriteSerializer,
                             new Producer<SpriteReference>() {
@@ -115,7 +115,11 @@ public class ParticleModel implements Disposable {
                                 public SpriteReference create() {
                                     return new SpriteReference();
                                 }
-                            }), vertexAttributes, propertyContainer);
+                            });
+            GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(false, meshModel,
+                    vertexAttributes, propertyContainer);
+            ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model =
+                    new ParticleMultiPartRenderableModelGdx<>(meshModel, gdxMesh);
             lastSpriteModel = model;
             models.add(model);
             graphModels.addModel(tag, model);

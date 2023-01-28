@@ -9,10 +9,11 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.storage.MemoryMesh;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
-import com.gempukku.libgdx.graph.util.storage.MultiPartMemoryMesh;
+import com.gempukku.libgdx.graph.util.storage.MultiPartMesh;
 
-public class SpriteSlotMemoryMesh<T, U> implements MultiPartMemoryMesh<T, U> {
+public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMesh {
     private final int spriteCapacity;
     private final Producer<U> referenceProducer;
     private final int spriteSize;

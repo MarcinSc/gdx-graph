@@ -114,12 +114,14 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                 new DisposableProducer<MultiPartRenderableModel<RenderableSprite, SpriteReference>>() {
                     @Override
                     public MultiPartRenderableModel<RenderableSprite, SpriteReference> create() {
-                        MultiPartMemoryMesh<RenderableSprite, SpriteReference> multiPartMemoryMesh =
+                        SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> multiPartMemoryMesh =
                                 new SpriteSlotMemoryMesh<>(
                                         spriteBatch.getSpritesPerPage(), spriteModel, spriteSerializer, spriteReferenceProducer);
-                        GdxMeshRenderableModel<RenderableSprite, SpriteReference> model =
-                                new GdxMeshRenderableModel<>(
+                        GdxMeshRenderableModel meshModel =
+                                new GdxMeshRenderableModel(
                                         spriteBatch.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer);
+                        DefaultMultiPartRenderableModel<RenderableSprite, SpriteReference> model =
+                                new DefaultMultiPartRenderableModel<>(multiPartMemoryMesh, meshModel);
                         graphModels.addModel(tag, model);
                         return model;
                     }

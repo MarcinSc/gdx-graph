@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.util.storage;
 
-public interface MultiPartMemoryMesh<T, U> extends MemoryMesh {
+public interface MultiPartMesh<T, U> {
     U addPart(T part);
 
     boolean containsPart(U partReference);
@@ -10,4 +10,6 @@ public interface MultiPartMemoryMesh<T, U> extends MemoryMesh {
     void removePart(U partReference);
 
     boolean canStore(T part);
+
+    boolean isEmpty();
 }
