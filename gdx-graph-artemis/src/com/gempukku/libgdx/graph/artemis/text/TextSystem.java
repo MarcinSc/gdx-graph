@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.layout.GlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.graph.artemis.text.parser.DefaultTextParser;
-import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;

@@ -9,16 +9,19 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
-import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacityObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
 import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.storage.LimitedCapacityObjectRenderableModel;
+import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.storage.ObjectRenderableModel;
 
-public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite, ObjectReference> {
-    private ObjectRenderableModel<RenderableSprite, ObjectReference> delegate;
+public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite, SpriteReference> {
+    private ObjectRenderableModel<RenderableSprite, SpriteReference> delegate;
     private GraphModels graphModels;
     private String tag;
 
@@ -45,8 +48,14 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
         delegate = new LimitedCapacityObjectRenderableModel<>(staticBatch,
                 new ContinuousSlotsObjectMeshStorage<>(spriteCapacity,
                         vertexAttributes.vertexSize / 4, spriteModel,
-                        new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
-                vertexAttributes, propertyContainer, spriteModel);
+                        new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                        new Producer<SpriteReference>() {
+                            @Override
+                            public SpriteReference create() {
+                                return new SpriteReference();
+                            }
+                        }),
+                vertexAttributes, propertyContainer);
         graphModels.addModel(tag, delegate);
     }
 
@@ -66,22 +75,22 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
     }
 
     @Override
-    public ObjectReference addObject(RenderableSprite sprite) {
+    public SpriteReference addObject(RenderableSprite sprite) {
         return delegate.addObject(sprite);
     }
 
     @Override
-    public boolean containsObject(ObjectReference objectReference) {
+    public boolean containsObject(SpriteReference objectReference) {
         return delegate.containsObject(objectReference);
     }
 
     @Override
-    public void removeObject(ObjectReference objectReference) {
+    public void removeObject(SpriteReference objectReference) {
         delegate.removeObject(objectReference);
     }
 
     @Override
-    public ObjectReference updateObject(RenderableSprite sprite, ObjectReference objectReference) {
+    public SpriteReference updateObject(RenderableSprite sprite, SpriteReference objectReference) {
         return delegate.updateObject(sprite, objectReference);
     }
 

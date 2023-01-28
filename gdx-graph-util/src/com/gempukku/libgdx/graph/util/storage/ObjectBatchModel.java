@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite;
+package com.gempukku.libgdx.graph.util.storage;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;

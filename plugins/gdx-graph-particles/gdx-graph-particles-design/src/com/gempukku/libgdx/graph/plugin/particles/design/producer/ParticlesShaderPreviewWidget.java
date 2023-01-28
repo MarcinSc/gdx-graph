@@ -34,17 +34,18 @@ import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
-import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
-import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacityObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
 import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
+import com.gempukku.libgdx.graph.util.storage.LimitedCapacityObjectRenderableModel;
 
 import java.util.Iterator;
 
@@ -62,9 +63,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private GraphShader graphShader;
     private OpenGLContext renderContext;
 
-    private LimitedCapacityObjectRenderableModel<RenderableSprite, ObjectReference> particleModel;
+    private LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
-    private ObjectMap<ParticleRenderableSprite, ObjectReference> spriteIdentifiers = new ObjectMap<>();
+    private ObjectMap<ParticleRenderableSprite, SpriteReference> spriteIdentifiers = new ObjectMap<>();
     private DefaultParticleGenerator particleGenerator;
 
     private Camera camera;
@@ -255,8 +256,14 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             particleModel = new LimitedCapacityObjectRenderableModel<>(false,
                     new ContinuousSlotsObjectMeshStorage<>((256 * 256 - 1) / 4,
                             vertexAttributes.vertexSize / 4, spriteModel,
-                            new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
-                    vertexAttributes, localPropertyContainer, spriteModel);
+                            new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
+                            new Producer<SpriteReference>() {
+                                @Override
+                                public SpriteReference create() {
+                                    return new SpriteReference();
+                                }
+                            }),
+                    vertexAttributes, localPropertyContainer);
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),
                     new ParticleGenerator.ParticleCreateCallback() {

@@ -3,25 +3,30 @@ package com.gempukku.libgdx.graph.util.sprite.storage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
+import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
+import com.gempukku.libgdx.graph.util.storage.ObjectMeshStorage;
 
-public class ContinuousSlotsObjectMeshStorage<T> implements ObjectMeshStorage<T, ObjectReference> {
+public class ContinuousSlotsObjectMeshStorage<T, U> implements ObjectMeshStorage<T, U> {
     private final int spriteCapacity;
+    private final Producer<U> referenceProducer;
     private final int spriteSize;
     private final MeshSerializer<T> serializer;
     private final short[] shortArray;
     private final float[] floatArray;
-    private final Array<ObjectReference> sprites;
-    private final ObjectSet<ObjectReference> spriteSet = new ObjectSet<>();
+    private final Array<U> sprites;
+    private final ObjectSet<U> spriteSet = new ObjectSet<>();
     private final int indexCountPerSprite;
 
     private int minUpdatedIndex = Integer.MAX_VALUE;
     private int maxUpdatedIndex = -1;
 
     public ContinuousSlotsObjectMeshStorage(int spriteCapacity, int floatsPerVertex,
-                                            SpriteModel spriteModel, MeshSerializer<T> serializer) {
+                                            SpriteModel spriteModel, MeshSerializer<T> serializer,
+                                            Producer<U> referenceProducer) {
         this.spriteCapacity = spriteCapacity;
+        this.referenceProducer = referenceProducer;
         this.spriteSize = spriteModel.getVertexCount() * floatsPerVertex;
         this.indexCountPerSprite = spriteModel.getIndexCount();
         this.floatArray = new float[spriteCapacity * spriteSize];
@@ -49,7 +54,7 @@ public class ContinuousSlotsObjectMeshStorage<T> implements ObjectMeshStorage<T,
     }
 
     @Override
-    public ObjectReference addObject(T object) {
+    public U addObject(T object) {
         if (canStore())
             throw new GdxRuntimeException("Should not attempt to add more sprites, already at capacity");
 
@@ -57,7 +62,7 @@ public class ContinuousSlotsObjectMeshStorage<T> implements ObjectMeshStorage<T,
 
         serializer.serializeVertices(object, floatArray, objectIndex * spriteSize);
 
-        ObjectReference result = new ObjectReferenceImpl();
+        U result = referenceProducer.create();
         sprites.add(result);
         spriteSet.add(result);
 
@@ -67,12 +72,12 @@ public class ContinuousSlotsObjectMeshStorage<T> implements ObjectMeshStorage<T,
     }
 
     @Override
-    public boolean containsObject(ObjectReference objectReference) {
+    public boolean containsObject(U objectReference) {
         return spriteSet.contains(objectReference);
     }
 
     @Override
-    public ObjectReference updateObject(T object, ObjectReference objectReference) {
+    public U updateObject(T object, U objectReference) {
         int spriteIndex = getSpriteIndex(objectReference);
         serializer.serializeVertices(object, floatArray, spriteIndex * spriteSize);
 
@@ -81,12 +86,12 @@ public class ContinuousSlotsObjectMeshStorage<T> implements ObjectMeshStorage<T,
         return objectReference;
     }
 
-    private int getSpriteIndex(ObjectReference objectReference) {
+    private int getSpriteIndex(U objectReference) {
         return sprites.indexOf(objectReference, true);
     }
 
     @Override
-    public boolean removeObject(ObjectReference objectReference) {
+    public boolean removeObject(U objectReference) {
         int spriteIndex = getSpriteIndex(objectReference);
         int spriteCount = sprites.size;
 

@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite.manager;
+package com.gempukku.libgdx.graph.util.storage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -12,10 +12,8 @@ import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
-import com.gempukku.libgdx.graph.util.sprite.ObjectRenderableModel;
-import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ObjectMeshStorage;
+import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
+import com.gempukku.libgdx.graph.util.renderer.TrianglesMeshRenderer;
 
 public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRenderableModel<T, U> {
     private final Matrix4 worldTransform = new Matrix4();
@@ -24,28 +22,28 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
     private CullingTest cullingTest;
 
     private final Mesh mesh;
-    private final SpriteModel spriteModel;
     private final VertexAttributes vertexAttributes;
+    private final MeshRenderer meshRenderer;
     private int[] attributeLocations;
 
     private ObjectMeshStorage<T, U> objectMeshStorage;
 
     public LimitedCapacityObjectRenderableModel(
             boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
-            VertexAttributes vertexAttributes, WritablePropertyContainer propertyContainer) {
-        this(staticBatch, objectMeshStorage, vertexAttributes, propertyContainer,
-                new QuadSpriteModel());
+            VertexAttributes vertexAttributes,
+            WritablePropertyContainer propertyContainer) {
+        this(staticBatch, objectMeshStorage, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
     }
 
     public LimitedCapacityObjectRenderableModel(
             boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
             VertexAttributes vertexAttributes,
-            WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
+            WritablePropertyContainer propertyContainer, MeshRenderer meshRenderer) {
         this.propertyContainer = propertyContainer;
-        this.spriteModel = spriteModel;
         this.objectMeshStorage = objectMeshStorage;
 
         this.vertexAttributes = vertexAttributes;
+        this.meshRenderer = meshRenderer;
 
         int floatPerVertex = vertexAttributes.vertexSize / 4;
         int maxVertices = objectMeshStorage.getVertexArray().length / floatPerVertex;
@@ -137,7 +135,7 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
 
         if (minUpdatedIndex < maxUpdatedIndex) {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("Sprite", "Updating index array - short count: " + objectMeshStorage.getIndexArray().length);
+                Gdx.app.debug("MeshRendering", "Updating index array - short count: " + objectMeshStorage.getIndexArray().length);
             mesh.setIndices(objectMeshStorage.getIndexArray());
         }
 
@@ -145,7 +143,7 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
         int maxUpdatedVertexValueIndex = objectMeshStorage.getMaxUpdatedVertexArrayIndex();
         if (minUpdatedVertexValueIndex < maxUpdatedVertexValueIndex) {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex));
+                Gdx.app.debug("MeshRendering", "Updating vertex array - float count: " + (maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex));
             mesh.updateVertices(minUpdatedVertexValueIndex, objectMeshStorage.getVertexArray(), minUpdatedVertexValueIndex, maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex);
         }
 
@@ -157,10 +155,10 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
         int indexStart = objectMeshStorage.getUsedIndexStart();
         int indexCount = objectMeshStorage.getUsedIndexCount();
         if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-            Gdx.app.debug("Sprite", "Rendering " + indexCount + " indexes(s)");
+            Gdx.app.debug("MeshRendering", "Rendering " + indexCount + " indexes(s)");
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
 
-        spriteModel.renderMesh(shaderProgram, mesh, indexStart, indexCount, attributeLocations);
+        meshRenderer.renderMesh(shaderProgram, mesh, indexStart, indexCount, attributeLocations);
     }
 }

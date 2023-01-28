@@ -9,6 +9,7 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
+import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 
 public class DefaultSpriteSerializer implements MeshSerializer<RenderableSprite> {
     private final VertexAttributes vertexAttributes;

@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite.storage;
+package com.gempukku.libgdx.graph.util.storage;
 
 public interface MeshSerializer<T> {
     int getIndexCount(T object);

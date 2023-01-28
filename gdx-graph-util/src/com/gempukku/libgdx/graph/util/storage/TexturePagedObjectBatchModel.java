@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite.manager;
+package com.gempukku.libgdx.graph.util.storage;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
@@ -15,7 +15,6 @@ import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
-import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
 
 public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V extends ObjectBatchModel<T, U>> implements ObjectBatchModel<T, U> {
     private final Vector3 position = new Vector3();

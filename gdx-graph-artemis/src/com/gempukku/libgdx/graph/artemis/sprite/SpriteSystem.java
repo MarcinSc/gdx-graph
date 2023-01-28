@@ -14,9 +14,9 @@ import com.gempukku.libgdx.graph.artemis.VectorUtil;
 import com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty;
 import com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
+import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.evaluate.PropertyEvaluator;
@@ -70,19 +70,19 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         if (sprites != null) {
             BatchNameWithSpriteReference batchNameWithSpriteIndex = sprites.get(spriteDefinitionIndex);
 
-            ObjectReference newObjectReference = updateSprite(spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName),
+            SpriteReference newObjectReference = updateSprite(spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName),
                     spriteEntity, sprite.getSprites().get(spriteDefinitionIndex),
                     batchNameWithSpriteIndex.objectReference);
             batchNameWithSpriteIndex.objectReference = newObjectReference;
         }
     }
 
-    private ObjectReference addSprite(ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
+    private SpriteReference addSprite(ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
         return objectBatchModel.addObject(renderableSprite);
     }
 
-    private ObjectReference updateSprite(ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition, ObjectReference objectReference) {
+    private SpriteReference updateSprite(ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition, SpriteReference objectReference) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
         return objectBatchModel.updateObject(renderableSprite, objectReference);
     }
@@ -148,8 +148,8 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         Array<BatchNameWithSpriteReference> spriteComponentAdapters = new Array<>();
         for (SpriteDefinition spriteDefinition : sprite.getSprites()) {
             String batchName = spriteDefinition.getSpriteBatchName();
-            ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
-            ObjectReference objectReference = addSprite(objectBatchModel, spriteEntity, spriteDefinition);
+            ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
+            SpriteReference objectReference = addSprite(objectBatchModel, spriteEntity, spriteDefinition);
             spriteComponentAdapters.add(new BatchNameWithSpriteReference(batchName, objectReference));
         }
 
@@ -181,9 +181,9 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
 
     public static class BatchNameWithSpriteReference {
         private String batchName;
-        private ObjectReference objectReference;
+        private SpriteReference objectReference;
 
-        public BatchNameWithSpriteReference(String batchName, ObjectReference objectReference) {
+        public BatchNameWithSpriteReference(String batchName, SpriteReference objectReference) {
             this.batchName = batchName;
             this.objectReference = objectReference;
         }

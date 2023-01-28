@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite;
+package com.gempukku.libgdx.graph.util.storage;
 
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 

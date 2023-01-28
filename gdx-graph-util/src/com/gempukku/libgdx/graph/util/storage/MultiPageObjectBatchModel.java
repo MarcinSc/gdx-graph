@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite.manager;
+package com.gempukku.libgdx.graph.util.storage;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -8,10 +8,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
-import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
 
 public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> implements ObjectBatchModel<T, U> {
-    private final DisposableProducer<V> spriteBatchModelProducer;
+    private final DisposableProducer<V> objectBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
 
     private final Array<V> pages = new Array<>();
@@ -20,13 +19,13 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageObjectBatchModel(DisposableProducer<V> spriteBatchModelProducer) {
-        this(spriteBatchModelProducer, new MapWritablePropertyContainer());
+    public MultiPageObjectBatchModel(DisposableProducer<V> objectBatchModelProducer) {
+        this(objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public MultiPageObjectBatchModel(DisposableProducer<V> spriteBatchModelProducer,
+    public MultiPageObjectBatchModel(DisposableProducer<V> objectBatchModelProducer,
                                      WritablePropertyContainer propertyContainer) {
-        this.spriteBatchModelProducer = spriteBatchModelProducer;
+        this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
     }
 
@@ -64,13 +63,13 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
         return getFirstAvailablePage(object).addObject(object);
     }
 
-    private V getFirstAvailablePage(T sprite) {
+    private V getFirstAvailablePage(T object) {
         for (V page : pages) {
-            if (page.canStore(sprite))
+            if (page.canStore(object))
                 return page;
         }
 
-        V newPage = spriteBatchModelProducer.create();
+        V newPage = objectBatchModelProducer.create();
         newPage.setCullingTest(cullingTest);
         newPage.setPosition(position);
         newPage.setWorldTransform(worldTransform);
@@ -97,7 +96,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
                 return objectReference;
             }
         }
-        throw new GdxRuntimeException("Sprite not found in any of the pages");
+        throw new GdxRuntimeException("Object not found in any of the pages");
     }
 
     @Override
@@ -106,7 +105,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
             if (page.containsObject(objectReference)) {
                 page.removeObject(objectReference);
                 if (page.isEmpty()) {
-                    spriteBatchModelProducer.dispose(page);
+                    objectBatchModelProducer.dispose(page);
                     pages.removeValue(page, true);
                 }
                 return;
@@ -121,13 +120,13 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
 
     public void disposeOfPage(V page) {
         pages.removeValue(page, true);
-        spriteBatchModelProducer.dispose(page);
+        objectBatchModelProducer.dispose(page);
     }
 
     @Override
     public void dispose() {
         for (V page : pages) {
-            spriteBatchModelProducer.dispose(page);
+            objectBatchModelProducer.dispose(page);
         }
         pages.clear();
     }

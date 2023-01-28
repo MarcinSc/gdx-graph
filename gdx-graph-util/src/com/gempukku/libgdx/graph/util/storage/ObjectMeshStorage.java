@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.util.sprite.storage;
+package com.gempukku.libgdx.graph.util.storage;
 
 public interface ObjectMeshStorage<T, U> {
     float[] getVertexArray();
