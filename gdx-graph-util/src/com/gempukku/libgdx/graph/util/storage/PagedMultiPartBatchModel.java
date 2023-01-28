@@ -9,7 +9,7 @@ import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public class MultiPageMultiPartBatchModel<T, U> implements MultiPartBatchModel<T, U> {
+public class PagedMultiPartBatchModel<T, U> implements MultiPartBatchModel<T, U> {
     private final DisposableProducer objectBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
 
@@ -19,12 +19,12 @@ public class MultiPageMultiPartBatchModel<T, U> implements MultiPartBatchModel<T
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageMultiPartBatchModel(DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer) {
+    public PagedMultiPartBatchModel(DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer) {
         this(objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public MultiPageMultiPartBatchModel(DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer,
-                                        WritablePropertyContainer propertyContainer) {
+    public PagedMultiPartBatchModel(DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer,
+                                    WritablePropertyContainer propertyContainer) {
         this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
     }

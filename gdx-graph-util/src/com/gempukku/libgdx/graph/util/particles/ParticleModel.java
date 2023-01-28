@@ -21,13 +21,13 @@ import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
-import com.gempukku.libgdx.graph.util.storage.MultiPageMultiPartBatchModel;
+import com.gempukku.libgdx.graph.util.storage.PagedMultiPartBatchModel;
 
 public class ParticleModel implements Disposable {
     private final ObjectSet<ParticleGenerator> particleGenerators = new ObjectSet<>();
     private final ParticleCreateCallbackImpl callback = new ParticleCreateCallbackImpl();
     private final ParticlesSpriteBatchProducer spriteModelManager;
-    private final MultiPageMultiPartBatchModel<RenderableSprite, SpriteReference> spriteBatchModel;
+    private final PagedMultiPartBatchModel<RenderableSprite, SpriteReference> spriteBatchModel;
     private final MapWritablePropertyContainer propertyContainer;
 
     private ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> lastSpriteModel;
@@ -39,7 +39,7 @@ public class ParticleModel implements Disposable {
     public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
         propertyContainer = new MapWritablePropertyContainer();
         spriteModelManager = new ParticlesSpriteBatchProducer(particlesPerPage, spriteModel, graphModels, tag);
-        spriteBatchModel = new MultiPageMultiPartBatchModel<>(spriteModelManager);
+        spriteBatchModel = new PagedMultiPartBatchModel<>(spriteModelManager);
     }
 
     public void addGenerator(float currentTime, ParticleGenerator generator) {
