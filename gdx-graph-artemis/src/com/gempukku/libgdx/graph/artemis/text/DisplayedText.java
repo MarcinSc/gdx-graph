@@ -18,8 +18,9 @@ import com.gempukku.libgdx.graph.artemis.text.parser.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
+import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 
 public class DisplayedText implements Disposable {
@@ -32,13 +33,13 @@ public class DisplayedText implements Disposable {
 
     private GlyphOffseter glyphOffseter;
     private CharacterTextParser textParser;
-    private SpriteBatchModel spriteBatchModel;
+    private ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel;
     private BitmapFontSystem bitmapFontSystem;
     private Matrix4 transform;
     private TextBlock textBlock;
     private SpriteBatchSystem spriteBatchSystem;
 
-    private Array<SpriteReference> spriteReferences = new Array<>();
+    private Array<ObjectReference> spriteReferences = new Array<>();
     private ObjectSet<BatchNameWithSpriteReference> externalSprites = new ObjectSet<>();
 
     /*
@@ -52,12 +53,12 @@ public class DisplayedText implements Disposable {
      * Color - character color
      */
 
-    public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, SpriteBatchModel spriteBatchModel,
+    public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, ObjectBatchModel objectBatchModel,
                          BitmapFontSystem bitmapFontSystem, SpriteBatchSystem spriteBatchSystem,
                          Matrix4 transform, TextBlock textBlock) {
         this.glyphOffseter = glyphOffseter;
         this.textParser = textParser;
-        this.spriteBatchModel = spriteBatchModel;
+        this.objectBatchModel = objectBatchModel;
         this.bitmapFontSystem = bitmapFontSystem;
         this.spriteBatchSystem = spriteBatchSystem;
         this.transform = transform;
@@ -142,8 +143,8 @@ public class DisplayedText implements Disposable {
                         tempRenderableSprite.setValue("Position", positionFloatArray);
                         tempRenderableSprite.setValue("Texture", textureRegion);
 
-                        SpriteReference spriteReference = spriteBatchSystem.getSpriteBatchModel(spriteBatchName).addSprite(tempRenderableSprite);
-                        externalSprites.add(new BatchNameWithSpriteReference(spriteBatchName, spriteReference));
+                        ObjectReference objectReference = spriteBatchSystem.getSpriteBatchModel(spriteBatchName).addObject(tempRenderableSprite);
+                        externalSprites.add(new BatchNameWithSpriteReference(spriteBatchName, objectReference));
                     } else {
                         BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
                         PropertyContainer stylePropertyContainer = obtainStylePropertyContainer(stylePropertyContainerMap, textStyle);
@@ -274,7 +275,7 @@ public class DisplayedText implements Disposable {
         tempHierarchicalRenderableSprite.setValue("UV", createUVFloatArray(glyph));
         tempHierarchicalRenderableSprite.setValue("Font-Texture", fontTexture);
 
-        spriteReferences.add(spriteBatchModel.addSprite(tempHierarchicalRenderableSprite));
+        spriteReferences.add(objectBatchModel.addObject(tempHierarchicalRenderableSprite));
     }
 
     private Vector2ValuePerVertex createUVFloatArray(BitmapFont.Glyph glyph) {
@@ -284,12 +285,12 @@ public class DisplayedText implements Disposable {
 
     private void removeText() {
         for (int i = 0; i < spriteReferences.size; i++) {
-            SpriteReference spriteReference = spriteReferences.get(i);
-            spriteBatchModel.removeSprite(spriteReference);
+            ObjectReference objectReference = spriteReferences.get(i);
+            objectBatchModel.removeObject(objectReference);
         }
         spriteReferences.clear();
         for (BatchNameWithSpriteReference externalSprite : externalSprites) {
-            spriteBatchSystem.getSpriteBatchModel(externalSprite.batchName).removeSprite(externalSprite.spriteReference);
+            spriteBatchSystem.getSpriteBatchModel(externalSprite.batchName).removeObject(externalSprite.objectReference);
         }
         externalSprites.clear();
     }
@@ -301,11 +302,11 @@ public class DisplayedText implements Disposable {
 
     public static class BatchNameWithSpriteReference {
         private String batchName;
-        private SpriteReference spriteReference;
+        private ObjectReference objectReference;
 
-        public BatchNameWithSpriteReference(String batchName, SpriteReference spriteReference) {
+        public BatchNameWithSpriteReference(String batchName, ObjectReference objectReference) {
             this.batchName = batchName;
-            this.spriteReference = spriteReference;
+            this.objectReference = objectReference;
         }
     }
 }

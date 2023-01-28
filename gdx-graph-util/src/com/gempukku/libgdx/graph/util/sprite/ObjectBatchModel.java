@@ -6,18 +6,18 @@ import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public interface SpriteBatchModel extends Disposable {
-    SpriteReference addSprite(RenderableSprite sprite);
+public interface ObjectBatchModel<T, U> extends Disposable {
+    U addObject(T object);
 
-    boolean containsSprite(SpriteReference spriteReference);
+    boolean containsObject(U objectReference);
 
-    SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference);
+    U updateObject(T object, U objectReference);
 
-    void removeSprite(SpriteReference spriteReference);
+    void removeObject(U objectReference);
 
-    int getSpriteCount();
+    boolean canStore(T object);
 
-    boolean isAtCapacity();
+    boolean isEmpty();
 
     WritablePropertyContainer getPropertyContainer();
 

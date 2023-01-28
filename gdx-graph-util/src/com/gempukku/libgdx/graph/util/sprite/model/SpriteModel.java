@@ -11,6 +11,6 @@ public interface SpriteModel {
     void initializeIndexBuffer(short[] indexBuffer, int numberOfSprites);
 
     void renderMesh(ShaderProgram shader, Mesh mesh,
-                    int startSpriteIndex, int spriteCount,
+                    int indexStart, int indexCount,
                     int[] locations);
 }

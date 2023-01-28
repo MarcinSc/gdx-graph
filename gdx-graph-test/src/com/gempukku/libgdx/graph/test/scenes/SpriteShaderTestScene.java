@@ -13,7 +13,7 @@ import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.sprite.BasicSpriteBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.BasicObjectBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
 
@@ -21,7 +21,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
-    private BasicSpriteBatchModel spriteBatch;
+    private BasicObjectBatchModel spriteBatch;
 
     @Override
     public String getName() {
@@ -35,7 +35,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         GraphModels graphModels = pipelineRenderer.getPluginData(GraphModels.class);
 
-        spriteBatch = new BasicSpriteBatchModel(true, 2, graphModels, "Test");
+        spriteBatch = new BasicObjectBatchModel(true, 2, graphModels, "Test");
 
         DefaultRenderableSprite sprite1 = new DefaultRenderableSprite();
         sprite1.setValue("Position", new Vector3(0, 0, -10));
@@ -48,8 +48,8 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         sprite2.setValue("Position", new Vector3(150, 0, -10));
         sprite2.setValue("UV", SpriteUtil.QUAD_UVS);
 
-        spriteBatch.addSprite(sprite1);
-        spriteBatch.addSprite(sprite2);
+        spriteBatch.addObject(sprite1);
+        spriteBatch.addObject(sprite2);
 
         graphModels.setGlobalProperty("Test", "Color", new Vector2(1f, 1f));
     }

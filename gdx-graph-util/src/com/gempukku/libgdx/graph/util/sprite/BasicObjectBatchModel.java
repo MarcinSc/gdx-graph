@@ -11,29 +11,29 @@ import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
-import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacityObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
 import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
 
-public class BasicSpriteBatchModel implements SpriteBatchModel {
-    private SpriteRenderableModel delegate;
+public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite, ObjectReference> {
+    private ObjectRenderableModel<RenderableSprite, ObjectReference> delegate;
     private GraphModels graphModels;
     private String tag;
 
-    public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
+    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag) {
         this(staticBatch, spriteCapacity, graphModels, tag, new MapWritablePropertyContainer());
     }
 
-    public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
+    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag,
                                  WritablePropertyContainer propertyContainer) {
         this(staticBatch, spriteCapacity, graphModels, tag, propertyContainer, new QuadSpriteModel());
     }
 
-    public BasicSpriteBatchModel(boolean staticBatch, int spriteCapacity,
+    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
                                  GraphModels graphModels, String tag,
                                  WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.graphModels = graphModels;
@@ -42,11 +42,22 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
-        delegate = new LimitedCapacitySpriteRenderableModel(staticBatch,
-                new ContinuousSlotsSpriteStorage<>(spriteCapacity,
+        delegate = new LimitedCapacityObjectRenderableModel<>(staticBatch,
+                new ContinuousSlotsObjectMeshStorage<>(spriteCapacity,
+                        vertexAttributes.vertexSize / 4, spriteModel,
                         new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
                 vertexAttributes, propertyContainer, spriteModel);
         graphModels.addModel(tag, delegate);
+    }
+
+    @Override
+    public boolean canStore(RenderableSprite sprite) {
+        return delegate.canStore(sprite);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return delegate.isEmpty();
     }
 
     @Override
@@ -55,33 +66,23 @@ public class BasicSpriteBatchModel implements SpriteBatchModel {
     }
 
     @Override
-    public SpriteReference addSprite(RenderableSprite sprite) {
-        return delegate.addSprite(sprite);
+    public ObjectReference addObject(RenderableSprite sprite) {
+        return delegate.addObject(sprite);
     }
 
     @Override
-    public boolean containsSprite(SpriteReference spriteReference) {
-        return delegate.containsSprite(spriteReference);
+    public boolean containsObject(ObjectReference objectReference) {
+        return delegate.containsObject(objectReference);
     }
 
     @Override
-    public void removeSprite(SpriteReference spriteReference) {
-        delegate.removeSprite(spriteReference);
+    public void removeObject(ObjectReference objectReference) {
+        delegate.removeObject(objectReference);
     }
 
     @Override
-    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
-        return delegate.updateSprite(sprite, spriteReference);
-    }
-
-    @Override
-    public int getSpriteCount() {
-        return delegate.getSpriteCount();
-    }
-
-    @Override
-    public boolean isAtCapacity() {
-        return delegate.isAtCapacity();
+    public ObjectReference updateObject(RenderableSprite sprite, ObjectReference objectReference) {
+        return delegate.updateObject(sprite, objectReference);
     }
 
     @Override

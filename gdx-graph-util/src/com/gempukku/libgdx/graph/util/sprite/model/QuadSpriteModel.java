@@ -34,9 +34,9 @@ public class QuadSpriteModel implements SpriteModel {
     }
 
     @Override
-    public void renderMesh(ShaderProgram shader, Mesh mesh, int spriteStartIndex, int spriteCount, int[] locations) {
+    public void renderMesh(ShaderProgram shader, Mesh mesh, int indexStart, int indexCount, int[] locations) {
         mesh.bind(shader, locations);
-        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, INDEX_COUNT * spriteCount, GL20.GL_UNSIGNED_SHORT, INDEX_COUNT * spriteStartIndex);
+        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCount, GL20.GL_UNSIGNED_SHORT, indexStart);
         mesh.unbind(shader, locations);
     }
 }

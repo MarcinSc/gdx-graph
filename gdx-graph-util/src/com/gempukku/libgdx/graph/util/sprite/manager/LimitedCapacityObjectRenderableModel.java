@@ -12,14 +12,12 @@ import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.IntMapping;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
-import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
-import com.gempukku.libgdx.graph.util.sprite.SpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.ObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.SpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.ObjectMeshStorage;
 
-public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableModel {
+public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRenderableModel<T, U> {
     private final Matrix4 worldTransform = new Matrix4();
     private final Vector3 position = new Vector3();
     private final WritablePropertyContainer propertyContainer;
@@ -30,46 +28,42 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     private final VertexAttributes vertexAttributes;
     private int[] attributeLocations;
 
-    private SpriteStorage<RenderableSprite> spriteStorage;
+    private ObjectMeshStorage<T, U> objectMeshStorage;
 
-    public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, SpriteStorage<RenderableSprite> spriteStorage,
+    public LimitedCapacityObjectRenderableModel(
+            boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
             VertexAttributes vertexAttributes, WritablePropertyContainer propertyContainer) {
-        this(staticBatch, spriteStorage, vertexAttributes, propertyContainer,
+        this(staticBatch, objectMeshStorage, vertexAttributes, propertyContainer,
                 new QuadSpriteModel());
     }
 
-    public LimitedCapacitySpriteRenderableModel(
-            boolean staticBatch, SpriteStorage<RenderableSprite> spriteStorage,
+    public LimitedCapacityObjectRenderableModel(
+            boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
             VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.propertyContainer = propertyContainer;
         this.spriteModel = spriteModel;
-        this.spriteStorage = spriteStorage;
+        this.objectMeshStorage = objectMeshStorage;
 
         this.vertexAttributes = vertexAttributes;
 
-        int spriteCapacity = spriteStorage.getSpriteCapacity();
-
+        int floatPerVertex = vertexAttributes.vertexSize / 4;
+        int maxVertices = objectMeshStorage.getVertexArray().length / floatPerVertex;
         mesh = new Mesh(staticBatch, true,
-                spriteModel.getVertexCount() * spriteCapacity,
-                spriteModel.getIndexCount() * spriteCapacity, vertexAttributes);
-        mesh.setVertices(spriteStorage.getFloatArray());
-
-        short[] indices = new short[spriteModel.getIndexCount() * spriteCapacity];
-        spriteModel.initializeIndexBuffer(indices, spriteCapacity);
-
-        mesh.setIndices(indices, 0, indices.length);
+                maxVertices,
+                objectMeshStorage.getVertexArray().length, vertexAttributes);
+        mesh.setVertices(objectMeshStorage.getVertexArray());
+        mesh.setIndices(objectMeshStorage.getIndexArray());
     }
 
     @Override
-    public int getSpriteCount() {
-        return spriteStorage.getSpriteCount();
+    public boolean isEmpty() {
+        return objectMeshStorage.getUsedIndexCount() == 0;
     }
 
     @Override
-    public boolean isAtCapacity() {
-        return spriteStorage.isAtCapacity();
+    public boolean canStore(T object) {
+        return objectMeshStorage.canStore(object);
     }
 
     @Override
@@ -88,24 +82,23 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
     }
 
     @Override
-    public SpriteReference addSprite(RenderableSprite sprite) {
-        return spriteStorage.addSprite(sprite);
+    public U addObject(T object) {
+        return objectMeshStorage.addObject(object);
     }
 
     @Override
-    public boolean containsSprite(SpriteReference spriteReference) {
-        return spriteStorage.containsSprite(spriteReference);
+    public boolean containsObject(U objectReference) {
+        return objectMeshStorage.containsObject(objectReference);
     }
 
     @Override
-    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
-        spriteStorage.updateSprite(sprite, spriteReference);
-        return spriteReference;
+    public U updateObject(T object, U objectReference) {
+        return objectMeshStorage.updateObject(object, objectReference);
     }
 
     @Override
-    public void removeSprite(SpriteReference spriteReference) {
-        spriteStorage.removeSprite(spriteReference);
+    public void removeObject(U objectReference) {
+        objectMeshStorage.removeObject(objectReference);
     }
 
     @Override
@@ -125,7 +118,7 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public boolean isRendered(Camera camera) {
-        return spriteStorage.getSpriteCount() > 0 && !isCulled(camera);
+        return objectMeshStorage.getUsedIndexCount() > 0 && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {
@@ -139,25 +132,35 @@ public class LimitedCapacitySpriteRenderableModel implements SpriteRenderableMod
 
     @Override
     public void prepareToRender(ShaderContext shaderContext) {
-        int minUpdatedIndex = spriteStorage.getMinUpdatedIndex();
-        int maxUpdatedIndex = spriteStorage.getMaxUpdatedIndex();
+        int minUpdatedIndex = objectMeshStorage.getMinUpdatedIndexArrayIndex();
+        int maxUpdatedIndex = objectMeshStorage.getMaxUpdatedIndexArrayIndex();
 
         if (minUpdatedIndex < maxUpdatedIndex) {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedIndex - minUpdatedIndex));
-            mesh.updateVertices(minUpdatedIndex, spriteStorage.getFloatArray(), minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
-            spriteStorage.resetUpdates();
+                Gdx.app.debug("Sprite", "Updating index array - short count: " + objectMeshStorage.getIndexArray().length);
+            mesh.setIndices(objectMeshStorage.getIndexArray());
         }
+
+        int minUpdatedVertexValueIndex = objectMeshStorage.getMinUpdatedVertexArrayIndex();
+        int maxUpdatedVertexValueIndex = objectMeshStorage.getMaxUpdatedVertexArrayIndex();
+        if (minUpdatedVertexValueIndex < maxUpdatedVertexValueIndex) {
+            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
+                Gdx.app.debug("Sprite", "Updating vertex array - float count: " + (maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex));
+            mesh.updateVertices(minUpdatedVertexValueIndex, objectMeshStorage.getVertexArray(), minUpdatedVertexValueIndex, maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex);
+        }
+
+        objectMeshStorage.resetUpdates();
     }
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-        int spriteCount = spriteStorage.getSpriteCount();
+        int indexStart = objectMeshStorage.getUsedIndexStart();
+        int indexCount = objectMeshStorage.getUsedIndexCount();
         if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-            Gdx.app.debug("Sprite", "Rendering " + spriteCount + " sprite(s)");
+            Gdx.app.debug("Sprite", "Rendering " + indexCount + " indexes(s)");
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
 
-        spriteModel.renderMesh(shaderProgram, mesh, 0, spriteCount, attributeLocations);
+        spriteModel.renderMesh(shaderProgram, mesh, indexStart, indexCount, attributeLocations);
     }
 }

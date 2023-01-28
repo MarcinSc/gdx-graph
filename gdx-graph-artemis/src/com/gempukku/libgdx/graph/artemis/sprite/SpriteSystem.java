@@ -14,9 +14,9 @@ import com.gempukku.libgdx.graph.artemis.VectorUtil;
 import com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty;
 import com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.evaluate.PropertyEvaluator;
@@ -57,7 +57,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
 
         for (BatchNameWithSpriteReference batchNameWithSpriteIndex : spriteMap.remove(entityId)) {
-            spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName).removeSprite(batchNameWithSpriteIndex.spriteReference);
+            spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName).removeObject(batchNameWithSpriteIndex.objectReference);
         }
 
         addSprites(entityId, spriteEntity, sprite);
@@ -70,21 +70,21 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         if (sprites != null) {
             BatchNameWithSpriteReference batchNameWithSpriteIndex = sprites.get(spriteDefinitionIndex);
 
-            SpriteReference newSpriteReference = updateSprite(spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName),
+            ObjectReference newObjectReference = updateSprite(spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName),
                     spriteEntity, sprite.getSprites().get(spriteDefinitionIndex),
-                    batchNameWithSpriteIndex.spriteReference);
-            batchNameWithSpriteIndex.spriteReference = newSpriteReference;
+                    batchNameWithSpriteIndex.objectReference);
+            batchNameWithSpriteIndex.objectReference = newObjectReference;
         }
     }
 
-    private SpriteReference addSprite(SpriteBatchModel spriteBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
+    private ObjectReference addSprite(ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
-        return spriteBatchModel.addSprite(renderableSprite);
+        return objectBatchModel.addObject(renderableSprite);
     }
 
-    private SpriteReference updateSprite(SpriteBatchModel spriteBatchModel, Entity entity, SpriteDefinition spriteDefinition, SpriteReference spriteReference) {
+    private ObjectReference updateSprite(ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition, ObjectReference objectReference) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
-        return spriteBatchModel.updateSprite(renderableSprite, spriteReference);
+        return objectBatchModel.updateObject(renderableSprite, objectReference);
     }
 
     private RenderableSprite obtainRenderableSprite(Entity entity, SpriteDefinition spriteDefinition) {
@@ -148,9 +148,9 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         Array<BatchNameWithSpriteReference> spriteComponentAdapters = new Array<>();
         for (SpriteDefinition spriteDefinition : sprite.getSprites()) {
             String batchName = spriteDefinition.getSpriteBatchName();
-            SpriteBatchModel spriteBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
-            SpriteReference spriteReference = addSprite(spriteBatchModel, spriteEntity, spriteDefinition);
-            spriteComponentAdapters.add(new BatchNameWithSpriteReference(batchName, spriteReference));
+            ObjectBatchModel<RenderableSprite, ObjectReference> objectBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
+            ObjectReference objectReference = addSprite(objectBatchModel, spriteEntity, spriteDefinition);
+            spriteComponentAdapters.add(new BatchNameWithSpriteReference(batchName, objectReference));
         }
 
         spriteMap.put(entityId, spriteComponentAdapters);
@@ -160,7 +160,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
     protected void removed(int entityId) {
         Array<BatchNameWithSpriteReference> sprites = spriteMap.remove(entityId);
         for (BatchNameWithSpriteReference sprite : sprites) {
-            spriteBatchSystem.getSpriteBatchModel(sprite.batchName).removeSprite(sprite.spriteReference);
+            spriteBatchSystem.getSpriteBatchModel(sprite.batchName).removeObject(sprite.objectReference);
         }
     }
 
@@ -181,11 +181,11 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
 
     public static class BatchNameWithSpriteReference {
         private String batchName;
-        private SpriteReference spriteReference;
+        private ObjectReference objectReference;
 
-        public BatchNameWithSpriteReference(String batchName, SpriteReference spriteReference) {
+        public BatchNameWithSpriteReference(String batchName, ObjectReference objectReference) {
             this.batchName = batchName;
-            this.spriteReference = spriteReference;
+            this.objectReference = objectReference;
         }
     }
 }

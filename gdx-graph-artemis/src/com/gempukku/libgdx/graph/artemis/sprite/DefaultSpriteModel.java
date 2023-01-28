@@ -40,10 +40,10 @@ public class DefaultSpriteModel implements SpriteModel {
     }
 
     @Override
-    public void renderMesh(ShaderProgram shader, Mesh mesh, int spriteStartIndex, int spriteCount, int[] locations) {
+    public void renderMesh(ShaderProgram shader, Mesh mesh, int indexStart, int indexCount, int[] locations) {
         int indexCountPerSprite = indices.length;
         mesh.bind(shader, locations);
-        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCountPerSprite * spriteCount, GL20.GL_UNSIGNED_SHORT, indexCountPerSprite * spriteStartIndex);
+        Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCountPerSprite * indexCount, GL20.GL_UNSIGNED_SHORT, indexCountPerSprite * indexStart);
         mesh.unbind(shader, locations);
     }
 }

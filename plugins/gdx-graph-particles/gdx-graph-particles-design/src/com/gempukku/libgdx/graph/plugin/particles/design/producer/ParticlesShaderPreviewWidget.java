@@ -38,12 +38,12 @@ import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
+import com.gempukku.libgdx.graph.util.sprite.ObjectReference;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.SpriteUtil;
-import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacitySpriteRenderableModel;
+import com.gempukku.libgdx.graph.util.sprite.manager.LimitedCapacityObjectRenderableModel;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
-import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsSpriteStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.ContinuousSlotsObjectMeshStorage;
 import com.gempukku.libgdx.graph.util.sprite.storage.DefaultSpriteSerializer;
 
 import java.util.Iterator;
@@ -62,9 +62,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private GraphShader graphShader;
     private OpenGLContext renderContext;
 
-    private LimitedCapacitySpriteRenderableModel particleModel;
+    private LimitedCapacityObjectRenderableModel<RenderableSprite, ObjectReference> particleModel;
     private Array<ParticleRenderableSprite> sprites = new Array<>();
-    private ObjectMap<ParticleRenderableSprite, SpriteReference> spriteIdentifiers = new ObjectMap<>();
+    private ObjectMap<ParticleRenderableSprite, ObjectReference> spriteIdentifiers = new ObjectMap<>();
     private DefaultParticleGenerator particleGenerator;
 
     private Camera camera;
@@ -252,8 +252,9 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
             ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, graphShader.getProperties());
             QuadSpriteModel spriteModel = new QuadSpriteModel();
-            particleModel = new LimitedCapacitySpriteRenderableModel(false,
-                    new ContinuousSlotsSpriteStorage<RenderableSprite>((256 * 256 - 1) / 4,
+            particleModel = new LimitedCapacityObjectRenderableModel<>(false,
+                    new ContinuousSlotsObjectMeshStorage<>((256 * 256 - 1) / 4,
+                            vertexAttributes.vertexSize / 4, spriteModel,
                             new DefaultSpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel)),
                     vertexAttributes, localPropertyContainer, spriteModel);
 
@@ -263,7 +264,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                         public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                             ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                             sprites.add(sprite);
-                            spriteIdentifiers.put(sprite, particleModel.addSprite(sprite));
+                            spriteIdentifiers.put(sprite, particleModel.addObject(sprite));
                         }
                     });
         }
@@ -304,7 +305,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                 while (spriteIterator.hasNext()) {
                     ParticleRenderableSprite sprite = spriteIterator.next();
                     if (sprite.getParticleDeath() < currentTime) {
-                        particleModel.removeSprite(spriteIdentifiers.remove(sprite));
+                        particleModel.removeObject(spriteIdentifiers.remove(sprite));
                         spriteIterator.remove();
                     }
                 }
@@ -315,7 +316,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
                             public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
                                 ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
                                 sprites.add(sprite);
-                                spriteIdentifiers.put(sprite, particleModel.addSprite(sprite));
+                                spriteIdentifiers.put(sprite, particleModel.addObject(sprite));
                             }
                         });
 

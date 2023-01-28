@@ -8,43 +8,40 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePr
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
-import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
-import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
+import com.gempukku.libgdx.graph.util.sprite.ObjectBatchModel;
 
-public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements SpriteBatchModel {
-    private final DisposableProducer<T> spriteBatchModelProducer;
+public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> implements ObjectBatchModel<T, U> {
+    private final DisposableProducer<V> spriteBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
 
-    private final Array<T> pages = new Array<>();
+    private final Array<V> pages = new Array<>();
 
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageSpriteBatchModel(DisposableProducer<T> spriteBatchModelProducer) {
+    public MultiPageObjectBatchModel(DisposableProducer<V> spriteBatchModelProducer) {
         this(spriteBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public MultiPageSpriteBatchModel(DisposableProducer<T> spriteBatchModelProducer,
+    public MultiPageObjectBatchModel(DisposableProducer<V> spriteBatchModelProducer,
                                      WritablePropertyContainer propertyContainer) {
         this.spriteBatchModelProducer = spriteBatchModelProducer;
         this.propertyContainer = propertyContainer;
     }
 
     @Override
-    public int getSpriteCount() {
-        int result = 0;
-        for (T page : pages) {
-            result += page.getSpriteCount();
+    public boolean isEmpty() {
+        for (V page : pages) {
+            if (!page.isEmpty())
+                return false;
         }
-
-        return result;
+        return true;
     }
 
     @Override
-    public boolean isAtCapacity() {
-        return false;
+    public boolean canStore(T object) {
+        return true;
     }
 
     @Override
@@ -63,17 +60,17 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
     }
 
     @Override
-    public SpriteReference addSprite(RenderableSprite sprite) {
-        return getFirstAvailablePage().addSprite(sprite);
+    public U addObject(T object) {
+        return getFirstAvailablePage(object).addObject(object);
     }
 
-    private T getFirstAvailablePage() {
-        for (T page : pages) {
-            if (!page.isAtCapacity())
+    private V getFirstAvailablePage(T sprite) {
+        for (V page : pages) {
+            if (page.canStore(sprite))
                 return page;
         }
 
-        T newPage = spriteBatchModelProducer.create();
+        V newPage = spriteBatchModelProducer.create();
         newPage.setCullingTest(cullingTest);
         newPage.setPosition(position);
         newPage.setWorldTransform(worldTransform);
@@ -84,31 +81,31 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
     }
 
     @Override
-    public boolean containsSprite(SpriteReference spriteReference) {
-        for (T page : pages) {
-            if (page.containsSprite(spriteReference))
+    public boolean containsObject(U objectReference) {
+        for (V page : pages) {
+            if (page.containsObject(objectReference))
                 return true;
         }
         return false;
     }
 
     @Override
-    public SpriteReference updateSprite(RenderableSprite sprite, SpriteReference spriteReference) {
-        for (T page : pages) {
-            if (page.containsSprite(spriteReference)) {
-                page.updateSprite(sprite, spriteReference);
-                return spriteReference;
+    public U updateObject(T object, U objectReference) {
+        for (V page : pages) {
+            if (page.containsObject(objectReference)) {
+                page.updateObject(object, objectReference);
+                return objectReference;
             }
         }
         throw new GdxRuntimeException("Sprite not found in any of the pages");
     }
 
     @Override
-    public void removeSprite(SpriteReference spriteReference) {
-        for (T page : pages) {
-            if (page.containsSprite(spriteReference)) {
-                page.removeSprite(spriteReference);
-                if (page.getSpriteCount() == 0) {
+    public void removeObject(U objectReference) {
+        for (V page : pages) {
+            if (page.containsObject(objectReference)) {
+                page.removeObject(objectReference);
+                if (page.isEmpty()) {
                     spriteBatchModelProducer.dispose(page);
                     pages.removeValue(page, true);
                 }
@@ -122,17 +119,16 @@ public class MultiPageSpriteBatchModel<T extends SpriteBatchModel> implements Sp
         return propertyContainer;
     }
 
-    public void disposeOfPage(T page) {
+    public void disposeOfPage(V page) {
         pages.removeValue(page, true);
         spriteBatchModelProducer.dispose(page);
     }
 
     @Override
     public void dispose() {
-        for (T page : pages) {
+        for (V page : pages) {
             spriteBatchModelProducer.dispose(page);
         }
         pages.clear();
     }
-
 }

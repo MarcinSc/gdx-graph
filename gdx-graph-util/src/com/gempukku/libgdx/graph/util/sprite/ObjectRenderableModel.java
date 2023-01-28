@@ -2,5 +2,5 @@ package com.gempukku.libgdx.graph.util.sprite;
 
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 
-public interface SpriteRenderableModel extends RenderableModel, SpriteBatchModel {
+public interface ObjectRenderableModel<T, U> extends RenderableModel, ObjectBatchModel<T, U> {
 }
