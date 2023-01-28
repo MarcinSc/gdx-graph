@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
-import com.gempukku.libgdx.graph.util.storage.LimitedCapacityObjectRenderableModel;
+import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
 import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
 import com.gempukku.libgdx.graph.util.storage.ObjectRenderableModel;
 
@@ -45,7 +45,7 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
         VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
-        delegate = new LimitedCapacityObjectRenderableModel<>(staticBatch,
+        delegate = new GdxMeshRenderableModel<>(staticBatch,
                 new SpriteSlotMeshStorage<>(spriteCapacity, spriteModel,
                         new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
                         new Producer<SpriteReference>() {

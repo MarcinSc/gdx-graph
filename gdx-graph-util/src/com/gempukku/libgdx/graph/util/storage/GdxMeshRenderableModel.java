@@ -15,7 +15,7 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
 import com.gempukku.libgdx.graph.util.renderer.TrianglesMeshRenderer;
 
-public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRenderableModel<T, U> {
+public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U> {
     private final Matrix4 worldTransform = new Matrix4();
     private final Vector3 position = new Vector3();
     private final WritablePropertyContainer propertyContainer;
@@ -28,14 +28,14 @@ public class LimitedCapacityObjectRenderableModel<T, U> implements ObjectRendera
 
     private final ObjectMeshStorage<T, U> objectMeshStorage;
 
-    public LimitedCapacityObjectRenderableModel(
+    public GdxMeshRenderableModel(
             boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
             VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer) {
         this(staticBatch, objectMeshStorage, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
     }
 
-    public LimitedCapacityObjectRenderableModel(
+    public GdxMeshRenderableModel(
             boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
             VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer, MeshRenderer meshRenderer) {

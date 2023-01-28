@@ -110,27 +110,27 @@ public class SpriteBatchSystem extends BaseEntitySystem {
             final VertexAttributes vertexAttributes, final SpriteSerializer spriteSerializer,
             final GraphModels graphModels, final String tag, final SpriteModel spriteModel,
             final WritablePropertyContainer propertyContainer) {
-        DisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> renderableProducer =
-                new DisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>() {
+        DisposableProducer<GdxMeshRenderableModel<RenderableSprite, SpriteReference>> renderableProducer =
+                new DisposableProducer<GdxMeshRenderableModel<RenderableSprite, SpriteReference>>() {
                     @Override
-                    public LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> create() {
+                    public GdxMeshRenderableModel<RenderableSprite, SpriteReference> create() {
                         ObjectMeshStorage<RenderableSprite, SpriteReference> objectMeshStorage =
                                 new SpriteSlotMeshStorage<>(
                                         spriteBatch.getSpritesPerPage(), spriteModel, spriteSerializer, spriteReferenceProducer);
-                        LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> model =
-                                new LimitedCapacityObjectRenderableModel<>(
+                        GdxMeshRenderableModel<RenderableSprite, SpriteReference> model =
+                                new GdxMeshRenderableModel<>(
                                         spriteBatch.isStaticBatch(), objectMeshStorage, vertexAttributes, propertyContainer);
                         graphModels.addModel(tag, model);
                         return model;
                     }
 
                     @Override
-                    public void dispose(LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference> model) {
+                    public void dispose(GdxMeshRenderableModel<RenderableSprite, SpriteReference> model) {
                         graphModels.removeModel(tag, model);
                         model.dispose();
                     }
                 };
-        final PreserveMinimumDisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> preserveMinimum =
+        final PreserveMinimumDisposableProducer<GdxMeshRenderableModel<RenderableSprite, SpriteReference>> preserveMinimum =
                 new PreserveMinimumDisposableProducer<>(spriteBatch.getMinimumPages(), renderableProducer);
         return new MultiPageObjectBatchModel<RenderableSprite, SpriteReference>(preserveMinimum, propertyContainer) {
             @Override
