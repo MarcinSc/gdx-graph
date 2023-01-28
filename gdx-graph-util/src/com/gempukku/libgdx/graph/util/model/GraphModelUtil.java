@@ -62,7 +62,7 @@ public class GraphModelUtil {
 
     private static ShaderPropertySource findPropertyByAttributeName(ObjectMap<String, ShaderPropertySource> properties, String attributeName) {
         for (ShaderPropertySource shaderPropertySource : properties.values()) {
-            if (attributeName.equals(shaderPropertySource.getAttributeName()))
+            if (shaderPropertySource.isDefiningAttribute(attributeName))
                 return shaderPropertySource;
         }
         return null;

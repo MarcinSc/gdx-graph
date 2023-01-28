@@ -64,6 +64,11 @@ public class DefaultShaderPropertySource implements ShaderPropertySource {
     }
 
     @Override
+    public ShaderFieldType getShaderFieldTypeForAttribute(String attributeName) {
+        return shaderFieldType;
+    }
+
+    @Override
     public PropertyLocation getPropertyLocation() {
         return location;
     }
@@ -74,5 +79,15 @@ public class DefaultShaderPropertySource implements ShaderPropertySource {
             return defaultValue;
         else
             return shaderFieldType.convert(givenValue);
+    }
+
+    @Override
+    public Object getValueToUseForAttribute(String attributeName, Object givenValue) {
+        return getValueToUse(givenValue);
+    }
+
+    @Override
+    public boolean isDefiningAttribute(String attributeName) {
+        return attributeName.equals(getAttributeName());
     }
 }

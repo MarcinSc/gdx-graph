@@ -41,12 +41,12 @@ public class SpriteSerializer implements MeshSerializer<RenderableSprite> {
     }
 
     @Override
-    public int getFloatCount(RenderableSprite object) {
-        return floatCountPerVertex * vertexCount;
+    public int getVertexCount(RenderableSprite object) {
+        return vertexCount;
     }
 
     @Override
-    public void serializeIndices(RenderableSprite object, short[] indices, int indexStart) {
+    public void serializeIndices(RenderableSprite object, short[] indices, int indexStart, int vertexStart) {
         throw new GdxRuntimeException("Unable to serialize indexes for sprites");
     }
 

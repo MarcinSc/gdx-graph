@@ -18,7 +18,6 @@ import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -57,17 +56,10 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         SpriteModel spriteModel = new QuadSpriteModel();
 
-        Producer<SpriteReference> spriteReferenceProducer = new Producer<SpriteReference>() {
-            @Override
-            public SpriteReference create() {
-                return new SpriteReference();
-            }
-        };
-
         MeshSerializer<RenderableSprite> spriteSerializer = new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel);
 
-        SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> sprites = new SpriteSlotMemoryMesh<>(
-                2, spriteModel, spriteSerializer, spriteReferenceProducer);
+        SpriteSlotMemoryMesh<RenderableSprite> sprites = new SpriteSlotMemoryMesh<>(
+                2, spriteModel, spriteSerializer);
 
         GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(true, sprites, vertexAttributes, new MapWritablePropertyContainer());
 

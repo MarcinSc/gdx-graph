@@ -154,8 +154,8 @@
                   "x": 52.0,
                   "y": 261.0,
                   "data": {
-                    "minFilter": "Linear",
-                    "magFilter": "Linear",
+                    "uWrap": "ClampToEdge",
+                    "vWrap": "ClampToEdge",
                     "name": "Font-Texture",
                     "type": "TextureRegion"
                   }
@@ -360,6 +360,8 @@
                   "type": "TextureRegion",
                   "location": "Attribute",
                   "data": {
+                    "minFilter": "Linear",
+                    "magFilter": "Linear",
                     "previewPath": "C:/Users/marci/Desktop/sdf-test.png"
                   }
                 },

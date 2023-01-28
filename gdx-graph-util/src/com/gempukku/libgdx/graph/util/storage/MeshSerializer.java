@@ -5,9 +5,9 @@ public interface MeshSerializer<T> {
 
     int getIndexCount(T object);
 
-    int getFloatCount(T object);
+    int getVertexCount(T object);
 
-    void serializeIndices(T object, short[] indices, int indexStart);
+    void serializeIndices(T object, short[] indices, int indexStart, int vertexStart);
 
     void serializeVertices(T object, float[] vertexValues, int vertexStart);
 }

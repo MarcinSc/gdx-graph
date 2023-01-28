@@ -19,7 +19,13 @@ public interface ShaderPropertySource {
 
     ShaderFieldType getShaderFieldType();
 
+    ShaderFieldType getShaderFieldTypeForAttribute(String attributeName);
+
     PropertyLocation getPropertyLocation();
 
     Object getValueToUse(Object givenValue);
+
+    Object getValueToUseForAttribute(String attributeName, Object givenValue);
+
+    boolean isDefiningAttribute(String attributeName);
 }

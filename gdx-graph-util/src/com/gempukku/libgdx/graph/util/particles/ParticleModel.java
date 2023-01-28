@@ -12,7 +12,6 @@ import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
-import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -107,15 +106,9 @@ public class ParticleModel implements Disposable {
 
         @Override
         public ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> create() {
-            SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> meshModel =
+            SpriteSlotMemoryMesh<RenderableSprite> meshModel =
                     new SpriteSlotMemoryMesh<>(spriteCapacity,
-                            spriteModel, spriteSerializer,
-                            new Producer<SpriteReference>() {
-                                @Override
-                                public SpriteReference create() {
-                                    return new SpriteReference();
-                                }
-                            });
+                            spriteModel, spriteSerializer);
             GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(false, meshModel,
                     vertexAttributes, propertyContainer);
             ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model =

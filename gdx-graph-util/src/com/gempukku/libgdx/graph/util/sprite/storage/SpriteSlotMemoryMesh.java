@@ -6,32 +6,29 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.storage.MemoryMesh;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 import com.gempukku.libgdx.graph.util.storage.MultiPartMesh;
 
-public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMesh {
+public class SpriteSlotMemoryMesh<T> implements MultiPartMesh<T, SpriteReference>, MemoryMesh {
     private final int spriteCapacity;
-    private final Producer<U> referenceProducer;
     private final int spriteSize;
     private final MeshSerializer<T> serializer;
     private final short[] indexArray;
     private final float[] vertexValueArray;
-    private final Array<U> sprites;
-    private final ObjectSet<U> spriteSet = new ObjectSet<>();
+    private final Array<SpriteReference> sprites;
+    private final ObjectSet<SpriteReference> spriteSet = new ObjectSet<>();
     private final int indexCountPerSprite;
 
     private int minUpdatedIndex = Integer.MAX_VALUE;
     private int maxUpdatedIndex = -1;
 
     public SpriteSlotMemoryMesh(int spriteCapacity,
-                                SpriteModel spriteModel, MeshSerializer<T> serializer,
-                                Producer<U> referenceProducer) {
+                                SpriteModel spriteModel, MeshSerializer<T> serializer) {
         this.spriteCapacity = spriteCapacity;
-        this.referenceProducer = referenceProducer;
         this.spriteSize = spriteModel.getVertexCount() * serializer.getFloatsPerVertex();
         this.indexCountPerSprite = spriteModel.getIndexCount();
         this.vertexValueArray = new float[spriteCapacity * spriteSize];
@@ -70,7 +67,7 @@ public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMe
     }
 
     @Override
-    public U addPart(T sprite) {
+    public SpriteReference addPart(T sprite) {
         if (canStore())
             throw new GdxRuntimeException("Should not attempt to add more sprites, already at capacity");
 
@@ -78,7 +75,7 @@ public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMe
 
         serializer.serializeVertices(sprite, vertexValueArray, spriteIndex * spriteSize);
 
-        U result = referenceProducer.create();
+        SpriteReference result = new SpriteReference();
         sprites.add(result);
         spriteSet.add(result);
 
@@ -88,12 +85,12 @@ public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMe
     }
 
     @Override
-    public boolean containsPart(U spriteReference) {
+    public boolean containsPart(SpriteReference spriteReference) {
         return spriteSet.contains(spriteReference);
     }
 
     @Override
-    public U updatePart(T sprite, U spriteReference) {
+    public SpriteReference updatePart(T sprite, SpriteReference spriteReference) {
         int spriteIndex = getSpriteIndex(spriteReference);
         serializer.serializeVertices(sprite, vertexValueArray, spriteIndex * spriteSize);
 
@@ -102,12 +99,12 @@ public class SpriteSlotMemoryMesh<T, U> implements MultiPartMesh<T, U>, MemoryMe
         return spriteReference;
     }
 
-    private int getSpriteIndex(U spriteReference) {
+    private int getSpriteIndex(SpriteReference spriteReference) {
         return sprites.indexOf(spriteReference, true);
     }
 
     @Override
-    public void removePart(U spriteReference) {
+    public void removePart(SpriteReference spriteReference) {
         int spriteIndex = getSpriteIndex(spriteReference);
         int spriteCount = sprites.size;
 

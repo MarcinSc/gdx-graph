@@ -17,7 +17,6 @@ import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.PreserveMinimumDisposableProducer;
-import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -47,13 +46,6 @@ public class SpriteBatchSystem extends BaseEntitySystem {
     private final ObjectMap<String, MultiPartBatchModel<RenderableSprite, SpriteReference>> spriteBatchMap = new ObjectMap<>();
 
     private final Array<Entity> newSpriteBatchEntities = new Array<>();
-
-    private final Producer<SpriteReference> spriteReferenceProducer = new Producer<SpriteReference>() {
-        @Override
-        public SpriteReference create() {
-            return new SpriteReference();
-        }
-    };
 
     public SpriteBatchSystem() {
         super(Aspect.all(SpriteBatchComponent.class));
@@ -114,9 +106,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                 new DisposableProducer<MultiPartRenderableModel<RenderableSprite, SpriteReference>>() {
                     @Override
                     public MultiPartRenderableModel<RenderableSprite, SpriteReference> create() {
-                        SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> multiPartMemoryMesh =
+                        SpriteSlotMemoryMesh<RenderableSprite> multiPartMemoryMesh =
                                 new SpriteSlotMemoryMesh<>(
-                                        spriteBatch.getSpritesPerPage(), spriteModel, spriteSerializer, spriteReferenceProducer);
+                                        spriteBatch.getSpritesPerPage(), spriteModel, spriteSerializer);
                         GdxMeshRenderableModel meshModel =
                                 new GdxMeshRenderableModel(
                                         spriteBatch.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer);

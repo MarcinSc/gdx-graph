@@ -34,7 +34,6 @@ import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.Producer;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
@@ -51,7 +50,7 @@ import java.util.Iterator;
 
 public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
-    private SpriteSlotMemoryMesh<RenderableSprite, SpriteReference> spriteMesh;
+    private SpriteSlotMemoryMesh<RenderableSprite> spriteMesh;
 
     public enum ShaderPreviewModel {
         Point, SphereSurface, Sphere, Line
@@ -258,13 +257,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             QuadSpriteModel spriteModel = new QuadSpriteModel();
             spriteMesh = new SpriteSlotMemoryMesh<>((256 * 256 - 1) / 4,
                     spriteModel,
-                    new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
-                    new Producer<SpriteReference>() {
-                        @Override
-                        public SpriteReference create() {
-                            return new SpriteReference();
-                        }
-                    });
+                    new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel));
             particleModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, localPropertyContainer);
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),
