@@ -15,30 +15,30 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
-import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
 import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
-import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
-import com.gempukku.libgdx.graph.util.storage.ObjectRenderableModel;
+import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
+import com.gempukku.libgdx.graph.util.storage.MultiPartRenderableModel;
 
-public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite, SpriteReference> {
-    private final ObjectRenderableModel<RenderableSprite, SpriteReference> delegate;
+public class BasicMultiPartBatchModel implements MultiPartBatchModel<RenderableSprite, SpriteReference> {
+    private final MultiPartRenderableModel<RenderableSprite, SpriteReference> delegate;
     private final GraphModels graphModels;
     private final String tag;
 
-    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
-                                 GraphModels graphModels, String tag) {
+    public BasicMultiPartBatchModel(boolean staticBatch, int spriteCapacity,
+                                    GraphModels graphModels, String tag) {
         this(staticBatch, spriteCapacity, graphModels, tag, new MapWritablePropertyContainer());
     }
 
-    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
-                                 GraphModels graphModels, String tag,
-                                 WritablePropertyContainer propertyContainer) {
+    public BasicMultiPartBatchModel(boolean staticBatch, int spriteCapacity,
+                                    GraphModels graphModels, String tag,
+                                    WritablePropertyContainer propertyContainer) {
         this(staticBatch, spriteCapacity, graphModels, tag, propertyContainer, new QuadSpriteModel());
     }
 
-    public BasicObjectBatchModel(boolean staticBatch, int spriteCapacity,
-                                 GraphModels graphModels, String tag,
-                                 WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
+    public BasicMultiPartBatchModel(boolean staticBatch, int spriteCapacity,
+                                    GraphModels graphModels, String tag,
+                                    WritablePropertyContainer propertyContainer, SpriteModel spriteModel) {
         this.graphModels = graphModels;
         this.tag = tag;
 
@@ -46,7 +46,7 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
         ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
 
         delegate = new GdxMeshRenderableModel<>(staticBatch,
-                new SpriteSlotMeshStorage<>(spriteCapacity, spriteModel,
+                new SpriteSlotMemoryMesh<>(spriteCapacity, spriteModel,
                         new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel),
                         new Producer<SpriteReference>() {
                             @Override
@@ -59,8 +59,8 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
     }
 
     @Override
-    public boolean canStore(RenderableSprite sprite) {
-        return delegate.canStore(sprite);
+    public boolean canStore(RenderableSprite part) {
+        return delegate.canStore(part);
     }
 
     @Override
@@ -74,23 +74,23 @@ public class BasicObjectBatchModel implements ObjectBatchModel<RenderableSprite,
     }
 
     @Override
-    public SpriteReference addObject(RenderableSprite sprite) {
-        return delegate.addObject(sprite);
+    public SpriteReference addPart(RenderableSprite sprite) {
+        return delegate.addPart(sprite);
     }
 
     @Override
-    public boolean containsObject(SpriteReference objectReference) {
-        return delegate.containsObject(objectReference);
+    public boolean containsPart(SpriteReference partReference) {
+        return delegate.containsPart(partReference);
     }
 
     @Override
-    public void removeObject(SpriteReference objectReference) {
-        delegate.removeObject(objectReference);
+    public void removePart(SpriteReference partReference) {
+        delegate.removePart(partReference);
     }
 
     @Override
-    public SpriteReference updateObject(RenderableSprite sprite, SpriteReference objectReference) {
-        return delegate.updateObject(sprite, objectReference);
+    public SpriteReference updatePart(RenderableSprite part, SpriteReference partReference) {
+        return delegate.updatePart(part, partReference);
     }
 
     @Override

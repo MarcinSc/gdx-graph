@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
-import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.evaluate.PropertyEvaluator;
@@ -57,7 +57,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
 
         for (BatchNameWithSpriteReference batchNameWithSpriteIndex : spriteMap.remove(entityId)) {
-            spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName).removeObject(batchNameWithSpriteIndex.objectReference);
+            spriteBatchSystem.getSpriteBatchModel(batchNameWithSpriteIndex.batchName).removePart(batchNameWithSpriteIndex.objectReference);
         }
 
         addSprites(entityId, spriteEntity, sprite);
@@ -77,14 +77,14 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         }
     }
 
-    private SpriteReference addSprite(ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
+    private SpriteReference addSprite(MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel, Entity entity, SpriteDefinition spriteDefinition) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
-        return objectBatchModel.addObject(renderableSprite);
+        return multiPartBatchModel.addPart(renderableSprite);
     }
 
-    private SpriteReference updateSprite(ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel, Entity entity, SpriteDefinition spriteDefinition, SpriteReference objectReference) {
+    private SpriteReference updateSprite(MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel, Entity entity, SpriteDefinition spriteDefinition, SpriteReference objectReference) {
         RenderableSprite renderableSprite = obtainRenderableSprite(entity, spriteDefinition);
-        return objectBatchModel.updateObject(renderableSprite, objectReference);
+        return multiPartBatchModel.updatePart(renderableSprite, objectReference);
     }
 
     private RenderableSprite obtainRenderableSprite(Entity entity, SpriteDefinition spriteDefinition) {
@@ -148,8 +148,8 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         Array<BatchNameWithSpriteReference> spriteComponentAdapters = new Array<>();
         for (SpriteDefinition spriteDefinition : sprite.getSprites()) {
             String batchName = spriteDefinition.getSpriteBatchName();
-            ObjectBatchModel<RenderableSprite, SpriteReference> objectBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
-            SpriteReference objectReference = addSprite(objectBatchModel, spriteEntity, spriteDefinition);
+            MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel = spriteBatchSystem.getSpriteBatchModel(batchName);
+            SpriteReference objectReference = addSprite(multiPartBatchModel, spriteEntity, spriteDefinition);
             spriteComponentAdapters.add(new BatchNameWithSpriteReference(batchName, objectReference));
         }
 
@@ -160,7 +160,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
     protected void removed(int entityId) {
         Array<BatchNameWithSpriteReference> sprites = spriteMap.remove(entityId);
         for (BatchNameWithSpriteReference sprite : sprites) {
-            spriteBatchSystem.getSpriteBatchModel(sprite.batchName).removeObject(sprite.objectReference);
+            spriteBatchSystem.getSpriteBatchModel(sprite.batchName).removePart(sprite.objectReference);
         }
     }
 

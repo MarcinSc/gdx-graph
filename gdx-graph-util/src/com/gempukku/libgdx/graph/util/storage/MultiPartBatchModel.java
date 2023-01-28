@@ -6,16 +6,16 @@ import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public interface ObjectBatchModel<T, U> extends Disposable {
-    U addObject(T object);
+public interface MultiPartBatchModel<T, U> extends Disposable {
+    U addPart(T object);
 
-    boolean containsObject(U objectReference);
+    boolean containsPart(U partReference);
 
-    U updateObject(T object, U objectReference);
+    U updatePart(T part, U partReference);
 
-    void removeObject(U objectReference);
+    void removePart(U partReference);
 
-    boolean canStore(T object);
+    boolean canStore(T part);
 
     boolean isEmpty();
 

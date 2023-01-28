@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implements ObjectBatchModel<T, U> {
+public class TexturePagedMultiPartBatchModel<T extends PropertyContainer, U> implements MultiPartBatchModel<T, U> {
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
@@ -27,14 +27,14 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
     private final WritablePropertyContainer propertyContainer;
     private final Array<ShaderPropertySource> textureUniforms;
 
-    public TexturePagedObjectBatchModel(GraphModels graphModels, String tag,
-                                        DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer) {
+    public TexturePagedMultiPartBatchModel(GraphModels graphModels, String tag,
+                                           DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer) {
         this(graphModels, tag, objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public TexturePagedObjectBatchModel(GraphModels graphModels, String tag,
-                                        DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer,
-                                        WritablePropertyContainer propertyContainer) {
+    public TexturePagedMultiPartBatchModel(GraphModels graphModels, String tag,
+                                           DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer,
+                                           WritablePropertyContainer propertyContainer) {
         this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
 
@@ -56,7 +56,7 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
     }
 
     @Override
-    public boolean canStore(PropertyContainer object) {
+    public boolean canStore(PropertyContainer part) {
         return true;
     }
 
@@ -71,11 +71,11 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
     }
 
     @Override
-    public U addObject(T object) {
+    public U addPart(T object) {
         String textureSignature = getTextureSignature(object);
         BatchModelWithTextureSignature batchWithSignature = getBatchWithSignature(textureSignature, object);
 
-        return batchWithSignature.model.addObject(object);
+        return batchWithSignature.model.addPart(object);
     }
 
     private BatchModelWithTextureSignature getBatchWithSignature(String textureSignature, PropertyContainer object) {
@@ -84,36 +84,36 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
                 return page;
         }
 
-        ObjectBatchModel<T, U> objectBatchModel = createNewObjectBatchModel();
-        BatchModelWithTextureSignature newModel = new BatchModelWithTextureSignature(objectBatchModel, textureSignature);
-        setupTextures(objectBatchModel, object);
+        MultiPartBatchModel<T, U> multiPartBatchModel = createNewObjectBatchModel();
+        BatchModelWithTextureSignature newModel = new BatchModelWithTextureSignature(multiPartBatchModel, textureSignature);
+        setupTextures(multiPartBatchModel, object);
         pages.add(newModel);
         return newModel;
     }
 
     @Override
-    public boolean containsObject(U objectReference) {
+    public boolean containsPart(U partReference) {
         for (BatchModelWithTextureSignature page : pages) {
-            if (page.model.containsObject(objectReference))
+            if (page.model.containsPart(partReference))
                 return true;
         }
         return false;
     }
 
-    private ObjectBatchModel<T, U> createNewObjectBatchModel() {
-        ObjectBatchModel<T, U> objectBatchModel = (ObjectBatchModel<T, U>) objectBatchModelProducer.create();
-        objectBatchModel.setCullingTest(cullingTest);
-        objectBatchModel.setPosition(position);
-        objectBatchModel.setWorldTransform(worldTransform);
-        return objectBatchModel;
+    private MultiPartBatchModel<T, U> createNewObjectBatchModel() {
+        MultiPartBatchModel<T, U> multiPartBatchModel = (MultiPartBatchModel<T, U>) objectBatchModelProducer.create();
+        multiPartBatchModel.setCullingTest(cullingTest);
+        multiPartBatchModel.setPosition(position);
+        multiPartBatchModel.setWorldTransform(worldTransform);
+        return multiPartBatchModel;
     }
 
     @Override
-    public void removeObject(U objectReference) {
+    public void removePart(U partReference) {
         for (BatchModelWithTextureSignature page : pages) {
-            ObjectBatchModel<T, U> model = page.model;
-            if (model.containsObject(objectReference)) {
-                model.removeObject(objectReference);
+            MultiPartBatchModel<T, U> model = page.model;
+            if (model.containsPart(partReference)) {
+                model.removePart(partReference);
                 if (model.isEmpty()) {
                     objectBatchModelProducer.dispose(model);
                     pages.removeValue(page, true);
@@ -124,9 +124,9 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
     }
 
     @Override
-    public U updateObject(T object, U objectReference) {
-        removeObject(objectReference);
-        return addObject(object);
+    public U updatePart(T part, U partReference) {
+        removePart(partReference);
+        return addPart(part);
     }
 
     @Override
@@ -167,8 +167,8 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
         pages.clear();
     }
 
-    private void setupTextures(ObjectBatchModel<T, U> objectBatchModel, PropertyContainer object) {
-        WritablePropertyContainer propertyContainer = objectBatchModel.getPropertyContainer();
+    private void setupTextures(MultiPartBatchModel<T, U> multiPartBatchModel, PropertyContainer object) {
+        WritablePropertyContainer propertyContainer = multiPartBatchModel.getPropertyContainer();
         for (ShaderPropertySource textureUniform : textureUniforms) {
             Object region = object.getValue(textureUniform.getPropertyName());
             region = textureUniform.getValueToUse(region);
@@ -192,10 +192,10 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implem
     }
 
     private class BatchModelWithTextureSignature {
-        private final ObjectBatchModel<T, U> model;
+        private final MultiPartBatchModel<T, U> model;
         private final String textureSignature;
 
-        public BatchModelWithTextureSignature(ObjectBatchModel<T, U> model, String textureSignature) {
+        public BatchModelWithTextureSignature(MultiPartBatchModel<T, U> model, String textureSignature) {
             this.model = model;
             this.textureSignature = textureSignature;
         }

@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.util.storage;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -15,7 +14,7 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
 import com.gempukku.libgdx.graph.util.renderer.TrianglesMeshRenderer;
 
-public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U> {
+public class GdxMeshRenderableModel<T, U> implements MultiPartRenderableModel<T, U> {
     private final Matrix4 worldTransform = new Matrix4();
     private final Vector3 position = new Vector3();
     private final WritablePropertyContainer propertyContainer;
@@ -26,40 +25,39 @@ public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U>
     private final MeshRenderer meshRenderer;
     private int[] attributeLocations;
 
-    private final ObjectMeshStorage<T, U> objectMeshStorage;
+    private final MultiPartMemoryMesh<T, U> multiPartMemoryMesh;
 
     public GdxMeshRenderableModel(
-            boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
+            boolean staticBatch, MultiPartMemoryMesh<T, U> multiPartMemoryMesh,
             VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer) {
-        this(staticBatch, objectMeshStorage, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
+        this(staticBatch, multiPartMemoryMesh, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
     }
 
     public GdxMeshRenderableModel(
-            boolean staticBatch, ObjectMeshStorage<T, U> objectMeshStorage,
+            boolean staticBatch, MultiPartMemoryMesh<T, U> multiPartMemoryMesh,
             VertexAttributes vertexAttributes,
             WritablePropertyContainer propertyContainer, MeshRenderer meshRenderer) {
         this.propertyContainer = propertyContainer;
-        this.objectMeshStorage = objectMeshStorage;
+        this.multiPartMemoryMesh = multiPartMemoryMesh;
 
         this.vertexAttributes = vertexAttributes;
         this.meshRenderer = meshRenderer;
 
         mesh = new Mesh(staticBatch, true,
-                objectMeshStorage.getMaxVertexCount(),
-                objectMeshStorage.getIndexArray().length, vertexAttributes);
-        mesh.setVertices(objectMeshStorage.getVertexArray());
-        mesh.setIndices(objectMeshStorage.getIndexArray());
+                multiPartMemoryMesh.getMaxVertexCount(),
+                multiPartMemoryMesh.getMaxIndexCount(), vertexAttributes);
+        multiPartMemoryMesh.setupGdxMesh(mesh);
     }
 
     @Override
     public boolean isEmpty() {
-        return objectMeshStorage.getUsedIndexCount() == 0;
+        return multiPartMemoryMesh.isEmpty();
     }
 
     @Override
-    public boolean canStore(T object) {
-        return objectMeshStorage.canStore(object);
+    public boolean canStore(T part) {
+        return multiPartMemoryMesh.canStore(part);
     }
 
     @Override
@@ -78,23 +76,23 @@ public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U>
     }
 
     @Override
-    public U addObject(T object) {
-        return objectMeshStorage.addObject(object);
+    public U addPart(T object) {
+        return multiPartMemoryMesh.addPart(object);
     }
 
     @Override
-    public boolean containsObject(U objectReference) {
-        return objectMeshStorage.containsObject(objectReference);
+    public boolean containsPart(U partReference) {
+        return multiPartMemoryMesh.containsPart(partReference);
     }
 
     @Override
-    public U updateObject(T object, U objectReference) {
-        return objectMeshStorage.updateObject(object, objectReference);
+    public U updatePart(T part, U partReference) {
+        return multiPartMemoryMesh.updatePart(part, partReference);
     }
 
     @Override
-    public void removeObject(U objectReference) {
-        objectMeshStorage.removeObject(objectReference);
+    public void removePart(U partReference) {
+        multiPartMemoryMesh.removePart(partReference);
     }
 
     @Override
@@ -114,7 +112,7 @@ public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U>
 
     @Override
     public boolean isRendered(Camera camera) {
-        return objectMeshStorage.getUsedIndexCount() > 0 && !isCulled(camera);
+        return !multiPartMemoryMesh.isEmpty() && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {
@@ -128,35 +126,13 @@ public class GdxMeshRenderableModel<T, U> implements ObjectRenderableModel<T, U>
 
     @Override
     public void prepareToRender(ShaderContext shaderContext) {
-        int minUpdatedIndex = objectMeshStorage.getMinUpdatedIndexArrayIndex();
-        int maxUpdatedIndex = objectMeshStorage.getMaxUpdatedIndexArrayIndex();
-
-        if (minUpdatedIndex < maxUpdatedIndex) {
-            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("MeshRendering", "Updating index array - short count: " + objectMeshStorage.getIndexArray().length);
-            mesh.setIndices(objectMeshStorage.getIndexArray());
-        }
-
-        int minUpdatedVertexValueIndex = objectMeshStorage.getMinUpdatedVertexArrayIndex();
-        int maxUpdatedVertexValueIndex = objectMeshStorage.getMaxUpdatedVertexArrayIndex();
-        if (minUpdatedVertexValueIndex < maxUpdatedVertexValueIndex) {
-            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-                Gdx.app.debug("MeshRendering", "Updating vertex array - float count: " + (maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex));
-            mesh.updateVertices(minUpdatedVertexValueIndex, objectMeshStorage.getVertexArray(), minUpdatedVertexValueIndex, maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex);
-        }
-
-        objectMeshStorage.resetUpdates();
+        multiPartMemoryMesh.updateGdxMesh(mesh);
     }
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
-        int indexStart = objectMeshStorage.getUsedIndexStart();
-        int indexCount = objectMeshStorage.getUsedIndexCount();
-        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-            Gdx.app.debug("MeshRendering", "Rendering " + indexCount + " indexes(s)");
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
-
-        meshRenderer.renderMesh(shaderProgram, mesh, indexStart, indexCount, attributeLocations);
+        multiPartMemoryMesh.renderGdxMesh(shaderProgram, mesh, attributeLocations, meshRenderer);
     }
 }

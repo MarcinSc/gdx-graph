@@ -20,17 +20,17 @@ import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
-import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMeshStorage;
-import com.gempukku.libgdx.graph.util.storage.MultiPageObjectBatchModel;
+import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
+import com.gempukku.libgdx.graph.util.storage.MultiPageMultiPartBatchModel;
 
 public class ParticleModel implements Disposable {
     private final ObjectSet<ParticleGenerator> particleGenerators = new ObjectSet<>();
     private final ParticleCreateCallbackImpl callback = new ParticleCreateCallbackImpl();
     private final ParticlesSpriteBatchProducer spriteModelManager;
-    private final MultiPageObjectBatchModel<RenderableSprite, SpriteReference> spriteBatchModel;
+    private final MultiPageMultiPartBatchModel<RenderableSprite, SpriteReference> spriteBatchModel;
     private final MapWritablePropertyContainer propertyContainer;
 
-    private ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> lastSpriteModel;
+    private ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> lastSpriteModel;
 
     public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
         this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
@@ -39,7 +39,7 @@ public class ParticleModel implements Disposable {
     public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
         propertyContainer = new MapWritablePropertyContainer();
         spriteModelManager = new ParticlesSpriteBatchProducer(particlesPerPage, spriteModel, graphModels, tag);
-        spriteBatchModel = new MultiPageObjectBatchModel<>(spriteModelManager);
+        spriteBatchModel = new MultiPageMultiPartBatchModel<>(spriteModelManager);
     }
 
     public void addGenerator(float currentTime, ParticleGenerator generator) {
@@ -63,7 +63,7 @@ public class ParticleModel implements Disposable {
     }
 
     private void createParticleImpl(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
-        spriteBatchModel.addObject(new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer));
+        spriteBatchModel.addPart(new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer));
         lastSpriteModel.updateWithMaxDeathTime(particleBirth + lifeLength);
     }
 
@@ -79,13 +79,13 @@ public class ParticleModel implements Disposable {
         spriteBatchModel.dispose();
     }
 
-    private class ParticlesSpriteBatchProducer implements DisposableProducer<ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference>> {
+    private class ParticlesSpriteBatchProducer implements DisposableProducer<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> {
         private final int spriteCapacity;
         private final SpriteModel spriteModel;
         private final GraphModels graphModels;
         private final String tag;
 
-        private final ObjectSet<ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference>> models = new ObjectSet<>();
+        private final ObjectSet<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> models = new ObjectSet<>();
         private final VertexAttributes vertexAttributes;
         private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
         private final SpriteSerializer spriteSerializer;
@@ -106,9 +106,9 @@ public class ParticleModel implements Disposable {
         }
 
         @Override
-        public ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> create() {
-            ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> model = new ParticleObjectRenderableModelGdx<>(
-                    new SpriteSlotMeshStorage<>(spriteCapacity,
+        public ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> create() {
+            ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model = new ParticleMultiPartRenderableModelGdx<>(
+                    new SpriteSlotMemoryMesh<>(spriteCapacity,
                             spriteModel, spriteSerializer,
                             new Producer<SpriteReference>() {
                                 @Override
@@ -123,21 +123,21 @@ public class ParticleModel implements Disposable {
         }
 
         @Override
-        public void dispose(ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> model) {
+        public void dispose(ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model) {
             graphModels.removeModel(tag, model);
             model.dispose();
             models.remove(model);
         }
 
         public void removeSpritesFromOldPages(float currentTime) {
-            Array<ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference>> modelsToDispose = new Array<>();
-            for (ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> model : models) {
+            Array<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> modelsToDispose = new Array<>();
+            for (ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model : models) {
                 if (model.getMaxDeathTime() < currentTime) {
                     modelsToDispose.add(model);
                 }
             }
 
-            for (ParticleObjectRenderableModelGdx<RenderableSprite, SpriteReference> particleSpriteRenderableModel : modelsToDispose) {
+            for (ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> particleSpriteRenderableModel : modelsToDispose) {
                 spriteBatchModel.disposeOfPage(particleSpriteRenderableModel);
             }
         }

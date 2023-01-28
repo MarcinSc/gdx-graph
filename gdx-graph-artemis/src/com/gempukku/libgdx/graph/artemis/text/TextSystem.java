@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.layout.GlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.graph.artemis.text.parser.DefaultTextParser;
-import com.gempukku.libgdx.graph.util.storage.ObjectBatchModel;
+import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
@@ -77,9 +77,9 @@ public class TextSystem extends BaseEntitySystem {
             String spriteBatchName = determineSpriteBatchName(textBlock);
             CharacterTextParser textParser = determineTextParser(textBlock);
 
-            ObjectBatchModel objectBatchModel = spriteBatchSystem.getSpriteBatchModel(spriteBatchName);
+            MultiPartBatchModel multiPartBatchModel = spriteBatchSystem.getSpriteBatchModel(spriteBatchName);
 
-            DisplayedText text = new DisplayedText(glyphOffseter, textParser, objectBatchModel, bitmapFontSystem,
+            DisplayedText text = new DisplayedText(glyphOffseter, textParser, multiPartBatchModel, bitmapFontSystem,
                     spriteBatchSystem, resolvedTransform, textBlock);
             texts.add(text);
         }
