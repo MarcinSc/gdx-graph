@@ -9,21 +9,21 @@ import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> implements ObjectBatchModel<T, U> {
-    private final DisposableProducer<V> objectBatchModelProducer;
+public class MultiPageObjectBatchModel<T, U> implements ObjectBatchModel<T, U> {
+    private final DisposableProducer objectBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
 
-    private final Array<V> pages = new Array<>();
+    private final Array<ObjectBatchModel<T, U>> pages = new Array<>();
 
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    public MultiPageObjectBatchModel(DisposableProducer<V> objectBatchModelProducer) {
+    public MultiPageObjectBatchModel(DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer) {
         this(objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public MultiPageObjectBatchModel(DisposableProducer<V> objectBatchModelProducer,
+    public MultiPageObjectBatchModel(DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer,
                                      WritablePropertyContainer propertyContainer) {
         this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
@@ -31,7 +31,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
 
     @Override
     public boolean isEmpty() {
-        for (V page : pages) {
+        for (ObjectBatchModel<T, U> page : pages) {
             if (!page.isEmpty())
                 return false;
         }
@@ -63,13 +63,13 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
         return getFirstAvailablePage(object).addObject(object);
     }
 
-    private V getFirstAvailablePage(T object) {
-        for (V page : pages) {
+    private ObjectBatchModel<T, U> getFirstAvailablePage(T object) {
+        for (ObjectBatchModel<T, U> page : pages) {
             if (page.canStore(object))
                 return page;
         }
 
-        V newPage = objectBatchModelProducer.create();
+        ObjectBatchModel<T, U> newPage = (ObjectBatchModel<T, U>) objectBatchModelProducer.create();
         newPage.setCullingTest(cullingTest);
         newPage.setPosition(position);
         newPage.setWorldTransform(worldTransform);
@@ -81,7 +81,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
 
     @Override
     public boolean containsObject(U objectReference) {
-        for (V page : pages) {
+        for (ObjectBatchModel<T, U> page : pages) {
             if (page.containsObject(objectReference))
                 return true;
         }
@@ -90,7 +90,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
 
     @Override
     public U updateObject(T object, U objectReference) {
-        for (V page : pages) {
+        for (ObjectBatchModel<T, U> page : pages) {
             if (page.containsObject(objectReference)) {
                 page.updateObject(object, objectReference);
                 return objectReference;
@@ -101,7 +101,7 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
 
     @Override
     public void removeObject(U objectReference) {
-        for (V page : pages) {
+        for (ObjectBatchModel<T, U> page : pages) {
             if (page.containsObject(objectReference)) {
                 page.removeObject(objectReference);
                 if (page.isEmpty()) {
@@ -118,14 +118,14 @@ public class MultiPageObjectBatchModel<T, U, V extends ObjectBatchModel<T, U>> i
         return propertyContainer;
     }
 
-    public void disposeOfPage(V page) {
+    public void disposeOfPage(ObjectBatchModel<T, U> page) {
         pages.removeValue(page, true);
         objectBatchModelProducer.dispose(page);
     }
 
     @Override
     public void dispose() {
-        for (V page : pages) {
+        for (ObjectBatchModel<T, U> page : pages) {
             objectBatchModelProducer.dispose(page);
         }
         pages.clear();

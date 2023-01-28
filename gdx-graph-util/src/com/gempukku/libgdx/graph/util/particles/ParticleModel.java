@@ -27,7 +27,7 @@ public class ParticleModel implements Disposable {
     private final ObjectSet<ParticleGenerator> particleGenerators = new ObjectSet<>();
     private final ParticleCreateCallbackImpl callback = new ParticleCreateCallbackImpl();
     private final ParticlesSpriteBatchProducer spriteModelManager;
-    private final MultiPageObjectBatchModel<RenderableSprite, SpriteReference, ParticleObjectRenderableModel<RenderableSprite, SpriteReference>> spriteBatchModel;
+    private final MultiPageObjectBatchModel<RenderableSprite, SpriteReference> spriteBatchModel;
     private final MapWritablePropertyContainer propertyContainer;
 
     private ParticleObjectRenderableModel<RenderableSprite, SpriteReference> lastSpriteModel;

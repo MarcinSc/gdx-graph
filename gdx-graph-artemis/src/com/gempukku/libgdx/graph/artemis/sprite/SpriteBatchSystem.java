@@ -101,7 +101,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
         }
     }
 
-    private MultiPageObjectBatchModel<RenderableSprite, SpriteReference, LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> createMultiPageSpriteBatchModel(
+    private MultiPageObjectBatchModel<RenderableSprite, SpriteReference> createMultiPageSpriteBatchModel(
             final SpriteBatchComponent spriteBatch,
             final VertexAttributes vertexAttributes, final SpriteSerializer spriteSerializer,
             final GraphModels graphModels, final String tag, final SpriteModel spriteModel,
@@ -128,8 +128,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                 };
         final PreserveMinimumDisposableProducer<LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>> preserveMinimum =
                 new PreserveMinimumDisposableProducer<>(spriteBatch.getMinimumPages(), renderableProducer);
-        return new MultiPageObjectBatchModel<RenderableSprite, SpriteReference,
-                LimitedCapacityObjectRenderableModel<RenderableSprite, SpriteReference>>(preserveMinimum, propertyContainer) {
+        return new MultiPageObjectBatchModel<RenderableSprite, SpriteReference>(preserveMinimum, propertyContainer) {
             @Override
             public void dispose() {
                 super.dispose();

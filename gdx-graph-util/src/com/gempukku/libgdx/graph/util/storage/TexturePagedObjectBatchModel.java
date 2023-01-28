@@ -16,24 +16,24 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
-public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V extends ObjectBatchModel<T, U>> implements ObjectBatchModel<T, U> {
+public class TexturePagedObjectBatchModel<T extends PropertyContainer, U> implements ObjectBatchModel<T, U> {
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private CullingTest cullingTest;
 
-    private final Array<BatchModelWithTextureSignature<V>> pages = new Array<>();
+    private final Array<BatchModelWithTextureSignature> pages = new Array<>();
 
-    private final DisposableProducer<V> objectBatchModelProducer;
+    private final DisposableProducer objectBatchModelProducer;
     private final WritablePropertyContainer propertyContainer;
     private final Array<ShaderPropertySource> textureUniforms;
 
     public TexturePagedObjectBatchModel(GraphModels graphModels, String tag,
-                                        DisposableProducer<V> objectBatchModelProducer) {
+                                        DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer) {
         this(graphModels, tag, objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
     public TexturePagedObjectBatchModel(GraphModels graphModels, String tag,
-                                        DisposableProducer<V> objectBatchModelProducer,
+                                        DisposableProducer<? extends ObjectBatchModel<T, U>> objectBatchModelProducer,
                                         WritablePropertyContainer propertyContainer) {
         this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
@@ -62,7 +62,7 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
 
     @Override
     public boolean isEmpty() {
-        for (BatchModelWithTextureSignature<V> page : pages) {
+        for (BatchModelWithTextureSignature page : pages) {
             if (!page.model.isEmpty())
                 return false;
         }
@@ -73,19 +73,19 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
     @Override
     public U addObject(T object) {
         String textureSignature = getTextureSignature(object);
-        BatchModelWithTextureSignature<V> batchWithSignature = getBatchWithSignature(textureSignature, object);
+        BatchModelWithTextureSignature batchWithSignature = getBatchWithSignature(textureSignature, object);
 
         return batchWithSignature.model.addObject(object);
     }
 
-    private BatchModelWithTextureSignature<V> getBatchWithSignature(String textureSignature, PropertyContainer object) {
-        for (BatchModelWithTextureSignature<V> page : pages) {
+    private BatchModelWithTextureSignature getBatchWithSignature(String textureSignature, PropertyContainer object) {
+        for (BatchModelWithTextureSignature page : pages) {
             if (page.textureSignature.equals(textureSignature))
                 return page;
         }
 
-        V objectBatchModel = createNewObjectBatchModel();
-        BatchModelWithTextureSignature<V> newModel = new BatchModelWithTextureSignature<>(objectBatchModel, textureSignature);
+        ObjectBatchModel<T, U> objectBatchModel = createNewObjectBatchModel();
+        BatchModelWithTextureSignature newModel = new BatchModelWithTextureSignature(objectBatchModel, textureSignature);
         setupTextures(objectBatchModel, object);
         pages.add(newModel);
         return newModel;
@@ -93,15 +93,15 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
 
     @Override
     public boolean containsObject(U objectReference) {
-        for (BatchModelWithTextureSignature<V> batchModelPerTextureSignature : pages) {
-            if (batchModelPerTextureSignature.model.containsObject(objectReference))
+        for (BatchModelWithTextureSignature page : pages) {
+            if (page.model.containsObject(objectReference))
                 return true;
         }
         return false;
     }
 
-    private V createNewObjectBatchModel() {
-        V objectBatchModel = objectBatchModelProducer.create();
+    private ObjectBatchModel<T, U> createNewObjectBatchModel() {
+        ObjectBatchModel<T, U> objectBatchModel = (ObjectBatchModel<T, U>) objectBatchModelProducer.create();
         objectBatchModel.setCullingTest(cullingTest);
         objectBatchModel.setPosition(position);
         objectBatchModel.setWorldTransform(worldTransform);
@@ -110,8 +110,8 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
 
     @Override
     public void removeObject(U objectReference) {
-        for (BatchModelWithTextureSignature<V> page : pages) {
-            V model = page.model;
+        for (BatchModelWithTextureSignature page : pages) {
+            ObjectBatchModel<T, U> model = page.model;
             if (model.containsObject(objectReference)) {
                 model.removeObject(objectReference);
                 if (model.isEmpty()) {
@@ -137,32 +137,32 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
     @Override
     public void setCullingTest(CullingTest cullingTest) {
         this.cullingTest = cullingTest;
-        for (BatchModelWithTextureSignature<V> batchModelPerTextureSignature : pages) {
-            batchModelPerTextureSignature.model.setCullingTest(cullingTest);
+        for (BatchModelWithTextureSignature page : pages) {
+            page.model.setCullingTest(cullingTest);
         }
     }
 
     @Override
     public void setPosition(Vector3 position) {
         this.position.set(position);
-        for (BatchModelWithTextureSignature<V> batchModelPerTextureSignature : pages) {
-            batchModelPerTextureSignature.model.setPosition(position);
+        for (BatchModelWithTextureSignature page : pages) {
+            page.model.setPosition(position);
         }
     }
 
     @Override
     public void setWorldTransform(Matrix4 worldTransform) {
         this.worldTransform.set(worldTransform);
-        for (BatchModelWithTextureSignature<V> batchModelPerTextureSignature : pages) {
-            batchModelPerTextureSignature.model.setWorldTransform(worldTransform);
+        for (BatchModelWithTextureSignature page : pages) {
+            page.model.setWorldTransform(worldTransform);
         }
 
     }
 
     @Override
     public void dispose() {
-        for (BatchModelWithTextureSignature<V> batchModelPerTextureSignature : pages) {
-            objectBatchModelProducer.dispose(batchModelPerTextureSignature.model);
+        for (BatchModelWithTextureSignature page : pages) {
+            objectBatchModelProducer.dispose(page.model);
         }
         pages.clear();
     }
@@ -191,11 +191,11 @@ public class TexturePagedObjectBatchModel<T extends PropertyContainer, U, V exte
         return sb.toString();
     }
 
-    private class BatchModelWithTextureSignature<V> {
-        private final V model;
+    private class BatchModelWithTextureSignature {
+        private final ObjectBatchModel<T, U> model;
         private final String textureSignature;
 
-        public BatchModelWithTextureSignature(V model, String textureSignature) {
+        public BatchModelWithTextureSignature(ObjectBatchModel<T, U> model, String textureSignature) {
             this.model = model;
             this.textureSignature = textureSignature;
         }
