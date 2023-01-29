@@ -1,19 +1,19 @@
 package com.gempukku.libgdx.graph.test.scenes;
 
-import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.gempukku.libgdx.graph.artemis.lighting.LightingSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.PatchGeneratorSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.PatchworkSystem;
+import com.gempukku.libgdx.graph.artemis.patchwork.generator.ArrowGenerator;
+import com.gempukku.libgdx.graph.artemis.patchwork.generator.ConeGenerator;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
@@ -40,8 +40,6 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     private static final int LAST_PROCESSING = 0;
 
     private World world;
-    private Entity parentEntity;
-    private Entity childEntity;
 
     private Skin skin;
     private Stage stage;
@@ -55,7 +53,10 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     public void initializeScene() {
         createSystems();
 
-        world.getSystem(PatchGeneratorSystem.class).registerPatchGenerator("sphere", new SphereGenerator());
+        PatchGeneratorSystem patchGeneratorSystem = world.getSystem(PatchGeneratorSystem.class);
+        patchGeneratorSystem.registerPatchGenerator("sphere", new SphereGenerator());
+        patchGeneratorSystem.registerPatchGenerator("cone", new ConeGenerator());
+        patchGeneratorSystem.registerPatchGenerator("arrow", new ArrowGenerator());
 
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
@@ -63,6 +64,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         world.process();
 
         spawnSystem.spawnEntity("entity/shading/sphere.template");
+        spawnSystem.spawnEntity("entity/shading/cone.template");
+        spawnSystem.spawnEntity("entity/shading/arrow.template");
 
         createUI();
     }
@@ -90,7 +93,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
                 new PipelineRendererSystem());
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
-                new PatchworkSystem());
+                new PatchworkSystem(),
+                new LightingSystem());
         worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
                 new PatchGeneratorSystem());
 
@@ -103,53 +107,10 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         skin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
         stage = new Stage(new ScreenViewport());
 
-        final Matrix4 tmpMatrix = new Matrix4();
-
-        Label parentRotationLabel = new Label("Parent rotation", skin);
-        final Slider parentRotationSlider = new Slider(-85, 85, 1, false, skin);
-        parentRotationSlider.setValue(0f);
-        parentRotationSlider.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        tmpMatrix.idt().setToRotation(0, 1, 0, parentRotationSlider.getValue());
-                        world.getSystem(TransformSystem.class).setTransform(parentEntity, tmpMatrix);
-                    }
-                });
-        Label childTranslationLabel = new Label("Child translation", skin);
-        final Slider childTranslationSlider = new Slider(-2, 2, 0.01f, false, skin);
-        childTranslationSlider.setValue(0f);
-        childTranslationSlider.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        tmpMatrix.idt().setToTranslation(childTranslationSlider.getValue(), 0, 0);
-                        world.getSystem(TransformSystem.class).setTransform(childEntity, tmpMatrix);
-                    }
-                });
-        final CheckBox connectedCheckBox = new CheckBox("Connect entities", skin);
-        connectedCheckBox.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        if (connectedCheckBox.isChecked()) {
-                            world.getSystem(HierarchySystem.class).addHierarchy(parentEntity, childEntity);
-                        } else {
-                            world.getSystem(HierarchySystem.class).removeHierarchy(childEntity);
-                        }
-                    }
-                });
-
         Table tbl = new Table(skin);
 
         tbl.setFillParent(true);
         tbl.align(Align.topLeft);
-
-        tbl.add(parentRotationLabel).pad(10f, 10f, 0f, 10f).row();
-        tbl.add(parentRotationSlider).pad(0, 10f, 0, 10f).row();
-        tbl.add(childTranslationLabel).pad(10f, 10f, 0, 10f).row();
-        tbl.add(childTranslationSlider).pad(0f, 10f, 0, 10f).row();
-        tbl.add(connectedCheckBox).pad(10f).row();
 
         stage.addActor(tbl);
 

@@ -1,0 +1,51 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -2,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.graph.artemis.patchwork.PatchComponent": {
+    "patchworkName": "patchwork",
+    "generator": "arrow",
+    "generatorData": {
+      "fromX": 0,
+      "fromY": -1,
+      "fromZ": 0,
+      "toX": 0,
+      "toY": 1,
+      "toZ": 0,
+      "capLength": 0.2,
+      "stemThickness": 0.3,
+      "divisions": 12,
+      "positionProperty": "Position",
+      "normalProperty": "Normal",
+      "uvProperty": "UV"
+    },
+    "properties": {
+      "Color": {
+        "class": "com.badlogic.gdx.graphics.Color",
+        "r": 0.3,
+        "g": 1.0,
+        "b": 0.3,
+        "a": 1.0
+      }
+    }
+  }
+}

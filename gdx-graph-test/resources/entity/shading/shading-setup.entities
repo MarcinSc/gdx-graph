@@ -16,6 +16,12 @@
       "tpl:extends": "entity/shading/patchwork.template"
     },
     {
+      "tpl:extends": "entity/shading/lighting.template"
+    },
+    {
+      "tpl:extends": "entity/shading/directionalLight.template"
+    },
+    {
       "tpl:extends": "entity/shading/camera.template"
     }
   ]

@@ -6,11 +6,11 @@
     "fieldOfView": 30,
     "center": {
       "x": 0,
-      "y": -0.2,
+      "y": 0,
       "z": 0
     },
     "distance": 15,
-    "xAxisAngle": 20,
+    "xAxisAngle": -20,
     "zAxisAngle": 90,
     "bounds": {
       "x": -5,
