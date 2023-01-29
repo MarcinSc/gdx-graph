@@ -4,8 +4,6 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.SphereShapeBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,18 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.gempukku.libgdx.graph.artemis.Vector2ValuePerVertex;
-import com.gempukku.libgdx.graph.artemis.Vector3ValuePerVertex;
+import com.gempukku.libgdx.graph.artemis.patchwork.PatchGeneratorSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.PatchworkSystem;
+import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.util.model.GeometryMeshCapture;
-import com.gempukku.libgdx.graph.util.patchwork.GeometryRenderablePatch;
-import com.gempukku.libgdx.graph.util.patchwork.PatchReference;
-import com.gempukku.libgdx.graph.util.patchwork.RenderablePatch;
-import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
 import com.gempukku.libgdx.lib.artemis.camera.topdown.TopDownCameraController;
@@ -62,25 +55,14 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     public void initializeScene() {
         createSystems();
 
+        world.getSystem(PatchGeneratorSystem.class).registerPatchGenerator("sphere", new SphereGenerator());
+
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
 
         world.process();
 
-        PatchworkSystem patchworkSystem = world.getSystem(PatchworkSystem.class);
-        MultiPartBatchModel<RenderablePatch, PatchReference> patchwork = patchworkSystem.getPatchworkModel("patchwork");
-
-        GeometryMeshCapture sphereCapture = new GeometryMeshCapture();
-        SphereShapeBuilder.build(sphereCapture, 4, 4, 4, 20, 20);
-
-        GeometryRenderablePatch spherePatch = new GeometryRenderablePatch(
-                sphereCapture.getIndicesArray().toArray(), sphereCapture.getVertexCount());
-
-        spherePatch.setValue("Position", new Vector3ValuePerVertex(sphereCapture.getPositionArray().toArray()));
-        spherePatch.setValue("UV", new Vector2ValuePerVertex(sphereCapture.getUvArray().toArray()));
-        spherePatch.setValue("Color", new Color(0.3f, 0.3f, 1.0f, 1.0f));
-
-        PatchReference spherePatchReference = patchwork.addPart(spherePatch);
+        spawnSystem.spawnEntity("entity/shading/sphere.template");
 
         createUI();
     }
@@ -109,6 +91,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                 new PipelineRendererSystem());
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new PatchworkSystem());
+        worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
+                new PatchGeneratorSystem());
 
         world = new World(worldConfigurationBuilder.build());
 

@@ -44,6 +44,13 @@ public class PatchworkSystem extends BaseEntitySystem {
         newPatchworkEntities.add(world.getEntity(entityId));
     }
 
+    @Override
+    protected void removed(int entityId) {
+        PatchworkComponent spriteSystemComponent = patchworkComponentMapper.get(entityId);
+        MultiPartBatchModel<RenderablePatch, PatchReference> spritesModel = patchworkMap.remove(spriteSystemComponent.getName());
+        spritesModel.dispose();
+    }
+
     public MultiPartBatchModel<RenderablePatch, PatchReference> getPatchworkModel(String patchworkName) {
         return patchworkMap.get(patchworkName);
     }

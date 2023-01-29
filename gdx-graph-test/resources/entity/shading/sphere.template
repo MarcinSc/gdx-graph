@@ -1,0 +1,24 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {},
+  "com.gempukku.libgdx.graph.artemis.patchwork.PatchComponent": {
+    "patchworkName": "patchwork",
+    "generator": "sphere",
+    "generatorData": {
+      "width": 4,
+      "height": 4,
+      "depth": 4,
+      "divisionsU": 20,
+      "divisionsV": 20,
+      "positionProperty": "Position"
+    },
+    "properties": {
+      "Color": {
+        "class": "com.badlogic.gdx.graphics.Color",
+        "r": 0.3,
+        "g": 0.3,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
+}
