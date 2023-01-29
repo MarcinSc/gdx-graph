@@ -1,0 +1,9 @@
+{
+  "com.gempukku.libgdx.graph.artemis.patchwork.PatchworkComponent": {
+    "type": "TexturePaged",
+    "name": "patchwork",
+    "renderTag": "Stylized",
+    "minimumPages": 1,
+    "staticBatch": true
+  }
+}

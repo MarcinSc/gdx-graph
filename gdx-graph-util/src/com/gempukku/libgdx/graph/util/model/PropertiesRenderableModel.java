@@ -18,8 +18,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private final VertexAttributes vertexAttributes;
-    private final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources;
-    private PropertyContainer propertyContainer;
+    private final PropertyContainer propertyContainer;
     private final Mesh mesh;
     private final float[] vertexData;
     private int[] attributeLocations;
@@ -28,8 +27,6 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
                                      ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
                                      int vertexCount, short[] indices, PropertyContainer propertyContainer) {
         this.vertexAttributes = vertexAttributes;
-
-        this.vertexPropertySources = vertexPropertySources;
         this.propertyContainer = propertyContainer;
 
         vertexData = createVertexData(vertexAttributes, vertexPropertySources, vertexCount, propertyContainer);

@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {
+      "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
+        "pipelinePath": "test/stylized-shading-shader-test.json",
+        "cameraDefinitions": [
+          {
+            "cameraProperty": "Camera",
+            "cameraName": "Main"
+          }
+        ]
+      },
+      "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
+    },
+    {
+      "tpl:extends": "entity/shading/patchwork.template"
+    },
+    {
+      "tpl:extends": "entity/shading/camera.template"
+    }
+  ]
+}
