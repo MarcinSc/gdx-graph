@@ -114,7 +114,7 @@ public class Matrix4FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         ValueOperations.copyMatrix4IntoArray((Matrix4) value, vertices, startIndex);
     }
 

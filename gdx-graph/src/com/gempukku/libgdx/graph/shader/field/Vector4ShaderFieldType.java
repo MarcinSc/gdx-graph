@@ -101,7 +101,7 @@ public class Vector4ShaderFieldType implements ShaderFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         ValueOperations.copyColorIntoArray((Color) value, vertices, startIndex);
     }
 

@@ -107,7 +107,7 @@ public class FloatFieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         vertices[startIndex + 0] = ((Number) value).floatValue();
     }
 

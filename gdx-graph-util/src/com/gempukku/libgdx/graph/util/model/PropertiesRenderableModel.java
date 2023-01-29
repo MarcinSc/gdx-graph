@@ -49,14 +49,15 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
         for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
             for (VertexAttribute vertexAttribute : vertexAttributes) {
                 ShaderPropertySource shaderPropertySource = vertexPropertySources.get(vertexAttribute);
-                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldTypeForAttribute(vertexAttribute.alias);
+                String attributeName = vertexAttribute.alias;
+                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
                 Object attributeValue = propertyContainer.getValue(shaderPropertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
                     Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                    shaderFieldType.setValueInAttributesArray(vertexData, arrayIndex, shaderPropertySource.getValueToUse(vertexValue));
+                    shaderFieldType.setValueInAttributesArray(attributeName, vertexData, arrayIndex, shaderPropertySource.getValueToUse(vertexValue));
                 } else {
-                    attributeValue = shaderPropertySource.getValueToUseForAttribute(vertexAttribute.alias, attributeValue);
-                    shaderFieldType.setValueInAttributesArray(vertexData, arrayIndex, attributeValue);
+                    attributeValue = shaderPropertySource.getValueToUse(attributeValue);
+                    shaderFieldType.setValueInAttributesArray(attributeName, vertexData, arrayIndex, attributeValue);
                 }
                 arrayIndex += vertexAttribute.numComponents;
             }

@@ -110,7 +110,7 @@ public class Vector2FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         ValueOperations.copyVector2IntoArray((Vector2) value, vertices, startIndex);
     }
 

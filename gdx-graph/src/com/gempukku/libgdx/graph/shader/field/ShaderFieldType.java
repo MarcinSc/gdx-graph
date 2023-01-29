@@ -31,5 +31,5 @@ public interface ShaderFieldType extends FieldType {
 
     GraphShaderNodeBuilder.FieldOutput addAsFragmentAttribute(VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, JsonValue data, ShaderPropertySource shaderPropertySource);
 
-    void setValueInAttributesArray(float[] vertices, int startIndex, Object value);
+    void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value);
 }

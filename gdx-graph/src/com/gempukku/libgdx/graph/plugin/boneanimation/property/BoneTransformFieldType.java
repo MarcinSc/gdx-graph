@@ -97,7 +97,7 @@ public class BoneTransformFieldType implements ArrayShaderFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         throw new GdxRuntimeException("Unable to set bone transforms as attributes");
     }
 

@@ -62,6 +62,7 @@ public class SpriteSerializer implements MeshSerializer<RenderableSprite> {
                     sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexValues, vertexOffset + attributeOffset);
                 }
             } else {
+                String attributeName = vertexAttribute.alias;
                 ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
                 Object attributeValue = sprite.getValue(shaderPropertySource.getPropertyName());
                 if (attributeValue instanceof ValuePerVertex) {
@@ -69,14 +70,14 @@ public class SpriteSerializer implements MeshSerializer<RenderableSprite> {
                         int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
 
                         Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                        shaderFieldType.setValueInAttributesArray(vertexValues, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
+                        shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
                     }
                 } else {
                     attributeValue = shaderPropertySource.getValueToUse(attributeValue);
                     for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                         int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
 
-                        shaderFieldType.setValueInAttributesArray(vertexValues, vertexOffset + attributeOffset, attributeValue);
+                        shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, attributeValue);
                     }
                 }
             }

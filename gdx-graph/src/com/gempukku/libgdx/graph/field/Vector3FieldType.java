@@ -111,7 +111,7 @@ public class Vector3FieldType implements ShaderFieldType, PipelineFieldType {
     }
 
     @Override
-    public void setValueInAttributesArray(float[] vertices, int startIndex, Object value) {
+    public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
         ValueOperations.copyVector3IntoArray((Vector3) value, vertices, startIndex);
     }
 
