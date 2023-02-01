@@ -34,8 +34,6 @@ public interface GraphShaderNodeBuilder {
     interface TextureFieldOutput extends FieldOutput {
         String getSamplerRepresentation();
 
-        String getSizeRepresentation();
-
         Texture.TextureWrap getUWrap();
 
         Texture.TextureWrap getVWrap();

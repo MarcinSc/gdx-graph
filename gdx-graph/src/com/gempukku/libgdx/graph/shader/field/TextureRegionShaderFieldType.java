@@ -67,7 +67,6 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
 
         String textureVariableName = shaderPropertySource.getUniformName();
         String uvTransformVariableName = "u_uvTransform_" + shaderPropertySource.getPropertyIndex();
-        String sizeVariableName = "u_textureSize_" + shaderPropertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", true,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -95,19 +94,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        commonShaderBuilder.addUniformVariable(sizeVariableName, "vec2", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = shaderContext.getGlobalProperty(name);
-                        value = shaderPropertySource.getValueToUse(value);
-                        if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
-                        TextureRegion region = (TextureRegion) value;
-                        shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
-                    }
-                }, "Texture property size - " + name);
-        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, uWrap, vWrap);
     }
 
     @Override
@@ -130,7 +117,6 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
 
         String textureVariableName = shaderPropertySource.getUniformName();
         String uvTransformVariableName = "u_uvTransform_" + shaderPropertySource.getPropertyIndex();
-        String sizeVariableName = "u_textureSize_" + shaderPropertySource.getPropertyIndex();
         commonShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -158,19 +144,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                                 region.getV2() - region.getV());
                     }
                 }, "Texture UV property - " + name);
-        commonShaderBuilder.addUniformVariable(sizeVariableName, "vec2", false,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Object value = shaderContext.getGlobalProperty(name);
-                        value = shaderPropertySource.getValueToUse(value);
-                        if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
-                        TextureRegion region = (TextureRegion) value;
-                        shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
-                    }
-                }, "Texture property size - " + name);
-        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
+        return new DefaultTextureFieldOutput(getName(), uvTransformVariableName, textureVariableName, uWrap, vWrap);
     }
 
     @Override
@@ -191,7 +165,6 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
 
         String textureVariableName = shaderPropertySource.getUniformName();
         String uvTransformAttributeName = shaderPropertySource.getAttributeName();
-        String sizeAttributeName = "a_textureSize_" + shaderPropertySource.getPropertyIndex();
         vertexShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -205,9 +178,8 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                     }
                 }, "Texture property - " + shaderPropertySource.getPropertyName());
         vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 4, uvTransformAttributeName), "vec4", "TextureUV property - " + shaderPropertySource.getPropertyName());
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, sizeAttributeName), "vec2", "TextureSize property - " + shaderPropertySource.getPropertyName());
 
-        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName, sizeAttributeName, uWrap, vWrap);
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformAttributeName, textureVariableName, uWrap, vWrap);
     }
 
     @Override
@@ -229,8 +201,6 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
         String textureVariableName = shaderPropertySource.getUniformName();
         String uvTransformAttributeName = shaderPropertySource.getAttributeName();
         String uvTransformVariableName = shaderPropertySource.getVariableName();
-        String sizeAttributeName = "a_textureSize_" + shaderPropertySource.getPropertyIndex();
-        String sizeVariableName = "v_textureSize_" + shaderPropertySource.getPropertyIndex();
         fragmentShaderBuilder.addUniformVariable(textureVariableName, "sampler2D", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
@@ -250,15 +220,8 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
 
             fragmentShaderBuilder.addVaryingVariable(uvTransformVariableName, "vec4");
         }
-        vertexShaderBuilder.addAttributeVariable(new VertexAttribute(1024, 2, sizeAttributeName), "vec2", "TextureSize property - " + shaderPropertySource.getPropertyName());
-        if (!vertexShaderBuilder.hasVaryingVariable(sizeVariableName)) {
-            vertexShaderBuilder.addVaryingVariable(sizeVariableName, "vec2");
-            vertexShaderBuilder.addMainLine(sizeVariableName + " = " + sizeAttributeName + ";");
 
-            fragmentShaderBuilder.addVaryingVariable(sizeVariableName, "vec2");
-        }
-
-        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName, sizeVariableName, uWrap, vWrap);
+        return new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, uvTransformVariableName, textureVariableName, uWrap, vWrap);
     }
 
     @Override

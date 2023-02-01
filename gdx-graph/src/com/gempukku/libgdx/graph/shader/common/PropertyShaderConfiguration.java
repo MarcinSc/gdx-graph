@@ -6,6 +6,7 @@ import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.GraphShaderPropertyProducer;
 import com.gempukku.libgdx.graph.shader.property.PropertyShaderNodeBuilder;
+import com.gempukku.libgdx.graph.shader.property.TexturePropertyShaderCustomization;
 
 public class PropertyShaderConfiguration implements GraphConfiguration {
     public static ObjectMap<String, GraphShaderNodeBuilder> graphShaderNodeBuilders = new ObjectMap<>();
@@ -13,7 +14,9 @@ public class PropertyShaderConfiguration implements GraphConfiguration {
 
     static {
         // Property
-        addGraphShaderNodeBuilder(new PropertyShaderNodeBuilder());
+        PropertyShaderNodeBuilder propertyShaderNodeBuilder = new PropertyShaderNodeBuilder();
+        propertyShaderNodeBuilder.addPropertyShaderCustomization(new TexturePropertyShaderCustomization());
+        addGraphShaderNodeBuilder(propertyShaderNodeBuilder);
     }
 
     private static void addGraphShaderNodeBuilder(GraphShaderNodeBuilder builder) {

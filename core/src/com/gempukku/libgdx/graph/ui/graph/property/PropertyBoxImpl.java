@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.graph.ui.graph.property;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -19,16 +19,14 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
-import java.util.LinkedList;
-import java.util.List;
-
 
 public class PropertyBoxImpl extends VisTable implements PropertyBox {
     private String propertyType;
-    private List<PropertyBoxPart> propertyBoxParts = new LinkedList<>();
+    private Array<PropertyBoxPart> propertyBoxParts = new Array<>();
     private VisTextField nameField;
     private PropertyLocation[] propertyLocations;
     private EnumSelectBoxPart locationPart;
+    private Array<PropertyGraphBoxCustomization> customizations = new Array<>();
 
     public PropertyBoxImpl(String name, String propertyType,
                            PropertyLocation selectedLocation,
@@ -56,6 +54,10 @@ public class PropertyBoxImpl extends VisTable implements PropertyBox {
 
         if (propertyLocations.length > 1)
             add(locationPart).growX().row();
+    }
+
+    public void addPropertyGraphBoxCustomization(PropertyGraphBoxCustomization customization) {
+        customizations.add(customization);
     }
 
     @Override
@@ -107,7 +109,8 @@ public class PropertyBoxImpl extends VisTable implements PropertyBox {
     @Override
     public GraphBox createPropertyBox(Skin skin, String id, float x, float y) {
         final String name = getName();
-        GraphBoxImpl result = new GraphBoxImpl(id, new PropertyNodeConfiguration(name, propertyType)) {
+        PropertyNodeConfiguration configuration = new PropertyNodeConfiguration(name, propertyType);
+        GraphBoxImpl result = new GraphBoxImpl(id, configuration) {
             @Override
             public JsonValue getData() {
                 JsonValue result = new JsonValue(JsonValue.ValueType.object);
@@ -118,16 +121,16 @@ public class PropertyBoxImpl extends VisTable implements PropertyBox {
         };
         result.addOutputGraphPart(new ValueGraphNodeOutput(name, propertyType));
         ShaderFieldType shaderFieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
-        if (shaderFieldType != null && shaderFieldType.isTexture()) {
-            EnumSelectBoxPart<Texture.TextureWrap> uWrap = new EnumSelectBoxPart<>("U wrap ", "uWrap",
-                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
-            EnumSelectBoxPart<Texture.TextureWrap> vWrap = new EnumSelectBoxPart<>("V wrap ", "vWrap",
-                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
-            result.addGraphBoxPart(uWrap);
-            result.addGraphBoxPart(vWrap);
-        }
+
+        processCustomizations(shaderFieldType, configuration, result);
 
         return result;
+    }
+
+    private void processCustomizations(ShaderFieldType shaderFieldType, PropertyNodeConfiguration configuration, GraphBoxImpl result) {
+        for (PropertyGraphBoxCustomization customization : customizations) {
+            customization.process(shaderFieldType, configuration, result, null);
+        }
     }
 
     @Override

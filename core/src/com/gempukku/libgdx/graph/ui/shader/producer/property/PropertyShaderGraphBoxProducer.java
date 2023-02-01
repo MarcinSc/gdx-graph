@@ -1,19 +1,21 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.property;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.GraphBox;
 import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.part.EnumSelectBoxPart;
-import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.ValueGraphNodeOutput;
 
 
 public class PropertyShaderGraphBoxProducer implements GraphBoxProducer {
+    private Array<PropertyGraphBoxCustomization> customizations = new Array<>();
+
     @Override
     public String getType() {
         return "Property";
@@ -34,11 +36,16 @@ public class PropertyShaderGraphBoxProducer implements GraphBoxProducer {
         return null;
     }
 
+    public void addPropertyGraphBoxCustomization(PropertyGraphBoxCustomization customization) {
+        customizations.add(customization);
+    }
+
     @Override
     public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
         final String name = data.getString("name");
         final String propertyType = data.getString("type");
-        GraphBoxImpl result = new GraphBoxImpl(id, new PropertyNodeConfiguration(name, propertyType)) {
+        PropertyNodeConfiguration configuration = new PropertyNodeConfiguration(name, propertyType);
+        GraphBoxImpl result = new GraphBoxImpl(id, configuration) {
             @Override
             public JsonValue getData() {
                 JsonValue result = super.getData();
@@ -50,16 +57,10 @@ public class PropertyShaderGraphBoxProducer implements GraphBoxProducer {
             }
         };
         result.addOutputGraphPart(new ValueGraphNodeOutput(name, propertyType));
-        if (ShaderFieldTypeRegistry.findShaderFieldType(propertyType).isTexture()) {
-            EnumSelectBoxPart<Texture.TextureWrap> uWrapBox = new EnumSelectBoxPart<>("U Wrap ", "uWrap",
-                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
-            EnumSelectBoxPart<Texture.TextureWrap> vWrapBox = new EnumSelectBoxPart<>("V Wrap ", "vWrap",
-                    new StringifyEnum<Texture.TextureWrap>(), Texture.TextureWrap.values());
-            result.addGraphBoxPart(uWrapBox);
-            result.addGraphBoxPart(vWrapBox);
 
-            uWrapBox.initialize(data);
-            vWrapBox.initialize(data);
+        ShaderFieldType shaderFieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
+        for (PropertyGraphBoxCustomization customization : customizations) {
+            customization.process(shaderFieldType, configuration, result, data);
         }
 
         return result;

@@ -17,6 +17,7 @@ import com.gempukku.libgdx.graph.artemis.patchwork.generator.ConeGenerator;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
+import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
@@ -62,6 +63,11 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
 
         world.process();
+
+        PipelineRendererSystem pipelineRenderSystem = world.getSystem(PipelineRendererSystem.class);
+        pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
+                "Shading Texture",
+                world.getSystem(TextureSystem.class).getTextureRegion("image/circle-tiling-export.png", "image/circle-tiling-export.png"));
 
         spawnSystem.spawnEntity("entity/shading/sphere.template");
         spawnSystem.spawnEntity("entity/shading/cone.template");

@@ -34,28 +34,61 @@
               "type": "Model_Shader",
               "nodes": [
                 {
+                  "id": "00280a665a214c7687152aae535c6628",
+                  "type": "ValueColor",
+                  "x": 1235.0,
+                  "y": 640.0,
+                  "data": {
+                    "color": "000000ff"
+                  }
+                },
+                {
                   "id": "0963aeea5fc64fbf93ca840af317f4bd",
                   "type": "Maximum",
-                  "x": 1068.0,
-                  "y": 317.0000305175781
+                  "x": 1034.0,
+                  "y": 366.0
+                },
+                {
+                  "id": "09671d5e3e4f41a19a7bb25bc62c841f",
+                  "type": "Multiply",
+                  "x": 688.0,
+                  "y": 75.0
                 },
                 {
                   "id": "0d673e8aec4448e6b30daf26394eb0be",
                   "type": "Split",
                   "x": 833.0,
-                  "y": 290.0
+                  "y": 325.0
+                },
+                {
+                  "id": "102dc1198c064db48fce83eb29b0cf10",
+                  "type": "Divide",
+                  "x": 891.0,
+                  "y": 123.0
+                },
+                {
+                  "id": "2a59f8d8b367473fac3df8e062463c91",
+                  "type": "ScreenPosition",
+                  "x": 685.0,
+                  "y": 154.0
+                },
+                {
+                  "id": "2d2e45d1271c4f769acacfe52d74055f",
+                  "type": "PixelSize",
+                  "x": 457.0,
+                  "y": 50.0
                 },
                 {
                   "id": "5102fc26e946405db6d47823d8d1619a",
                   "type": "ObjectNormalToWorld",
                   "x": 275.0,
-                  "y": 495.0
+                  "y": 530.0
                 },
                 {
                   "id": "519c44058a1741b88962236482fe2cde",
                   "type": "BlinnPhongLighting",
-                  "x": 574.9999389648438,
-                  "y": 258.0,
+                  "x": 574.0,
+                  "y": 293.0,
                   "data": {
                     "id": "Lighting"
                   }
@@ -63,8 +96,8 @@
                 {
                   "id": "59543a1e56964b73b9c7730fa790c167",
                   "type": "Property",
-                  "x": 691.0,
-                  "y": 530.0,
+                  "x": 1210.0,
+                  "y": 531.0,
                   "data": {
                     "name": "Color",
                     "type": "Vector4"
@@ -73,29 +106,62 @@
                 {
                   "id": "8fb6a451080842f7bdabd57db211595c",
                   "type": "ValueFloat",
-                  "x": 858.0,
-                  "y": 194.0,
+                  "x": 834.0,
+                  "y": 255.0,
                   "data": {
                     "v1": 0.10000000149011612
+                  }
+                },
+                {
+                  "id": "a5352debf39f4c6ca813bbaf353e22d9",
+                  "type": "Sampler2D",
+                  "x": 1098.0,
+                  "y": 115.0
+                },
+                {
+                  "id": "a79cc50cf0fc418785590beb5c5150ae",
+                  "type": "Property",
+                  "x": 408.0,
+                  "y": 159.0,
+                  "data": {
+                    "uWrap": "Repeat",
+                    "vWrap": "Repeat",
+                    "name": "Shading Texture",
+                    "type": "TextureRegion"
                   }
                 },
                 {
                   "id": "b7ad4f33dd4041db9de44859246445ff",
                   "type": "WorldPosition",
                   "x": 315.0,
-                  "y": 658.0
+                  "y": 693.0
                 },
                 {
-                  "id": "b9b967e0404a4d01b037cd807e59fb3b",
-                  "type": "Multiply",
-                  "x": 1241.0,
-                  "y": 530.0
+                  "id": "bd349b97f7ba449fbeeb2cd219b17003",
+                  "type": "Mix",
+                  "x": 1551.0,
+                  "y": 543.0
+                },
+                {
+                  "id": "cc36dc82119a497e97e2c96fff09ca45",
+                  "type": "ValueColor",
+                  "x": 337.0,
+                  "y": 445.0,
+                  "data": {
+                    "color": "ffffffff"
+                  }
+                },
+                {
+                  "id": "d710bf46e2d941839399da3562e4fd5c",
+                  "type": "Step",
+                  "x": 1337.0,
+                  "y": 405.0
                 },
                 {
                   "id": "db877731806f4c548b3aae29caab13fe",
                   "type": "Property",
-                  "x": 709.0,
-                  "y": 620.0,
+                  "x": 820.0,
+                  "y": 771.0,
                   "data": {
                     "name": "Position",
                     "type": "Vector3"
@@ -105,7 +171,7 @@
                   "id": "dced9110e8304338a262d91eb2239bcc",
                   "type": "Property",
                   "x": 50.0,
-                  "y": 550.0,
+                  "y": 585.0,
                   "data": {
                     "name": "Normal",
                     "type": "Vector3"
@@ -114,8 +180,8 @@
                 {
                   "id": "end",
                   "type": "ShaderEnd",
-                  "x": 1422.0,
-                  "y": 50.0,
+                  "x": 1745.0,
+                  "y": 97.0,
                   "data": {
                     "positionType": "Object space",
                     "culling": "back",
@@ -127,16 +193,46 @@
               ],
               "connections": [
                 {
+                  "fromNode": "00280a665a214c7687152aae535c6628",
+                  "fromField": "value",
+                  "toNode": "bd349b97f7ba449fbeeb2cd219b17003",
+                  "toField": "a"
+                },
+                {
                   "fromNode": "0963aeea5fc64fbf93ca840af317f4bd",
                   "fromField": "output",
-                  "toNode": "b9b967e0404a4d01b037cd807e59fb3b",
-                  "toField": "inputs"
+                  "toNode": "d710bf46e2d941839399da3562e4fd5c",
+                  "toField": "input"
+                },
+                {
+                  "fromNode": "09671d5e3e4f41a19a7bb25bc62c841f",
+                  "fromField": "output",
+                  "toNode": "102dc1198c064db48fce83eb29b0cf10",
+                  "toField": "b"
                 },
                 {
                   "fromNode": "0d673e8aec4448e6b30daf26394eb0be",
                   "fromField": "x",
                   "toNode": "0963aeea5fc64fbf93ca840af317f4bd",
                   "toField": "a"
+                },
+                {
+                  "fromNode": "102dc1198c064db48fce83eb29b0cf10",
+                  "fromField": "output",
+                  "toNode": "a5352debf39f4c6ca813bbaf353e22d9",
+                  "toField": "uv"
+                },
+                {
+                  "fromNode": "2a59f8d8b367473fac3df8e062463c91",
+                  "fromField": "output",
+                  "toNode": "102dc1198c064db48fce83eb29b0cf10",
+                  "toField": "a"
+                },
+                {
+                  "fromNode": "2d2e45d1271c4f769acacfe52d74055f",
+                  "fromField": "size",
+                  "toNode": "09671d5e3e4f41a19a7bb25bc62c841f",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "5102fc26e946405db6d47823d8d1619a",
@@ -153,8 +249,8 @@
                 {
                   "fromNode": "59543a1e56964b73b9c7730fa790c167",
                   "fromField": "value",
-                  "toNode": "b9b967e0404a4d01b037cd807e59fb3b",
-                  "toField": "inputs"
+                  "toNode": "bd349b97f7ba449fbeeb2cd219b17003",
+                  "toField": "b"
                 },
                 {
                   "fromNode": "8fb6a451080842f7bdabd57db211595c",
@@ -163,16 +259,46 @@
                   "toField": "b"
                 },
                 {
+                  "fromNode": "a5352debf39f4c6ca813bbaf353e22d9",
+                  "fromField": "r",
+                  "toNode": "d710bf46e2d941839399da3562e4fd5c",
+                  "toField": "edge"
+                },
+                {
+                  "fromNode": "a79cc50cf0fc418785590beb5c5150ae",
+                  "fromField": "textureSize",
+                  "toNode": "09671d5e3e4f41a19a7bb25bc62c841f",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "a79cc50cf0fc418785590beb5c5150ae",
+                  "fromField": "value",
+                  "toNode": "a5352debf39f4c6ca813bbaf353e22d9",
+                  "toField": "texture"
+                },
+                {
                   "fromNode": "b7ad4f33dd4041db9de44859246445ff",
                   "fromField": "output",
                   "toNode": "519c44058a1741b88962236482fe2cde",
                   "toField": "position"
                 },
                 {
-                  "fromNode": "b9b967e0404a4d01b037cd807e59fb3b",
+                  "fromNode": "bd349b97f7ba449fbeeb2cd219b17003",
                   "fromField": "output",
                   "toNode": "end",
                   "toField": "color"
+                },
+                {
+                  "fromNode": "cc36dc82119a497e97e2c96fff09ca45",
+                  "fromField": "value",
+                  "toNode": "519c44058a1741b88962236482fe2cde",
+                  "toField": "albedo"
+                },
+                {
+                  "fromNode": "d710bf46e2d941839399da3562e4fd5c",
+                  "fromField": "output",
+                  "toNode": "bd349b97f7ba449fbeeb2cd219b17003",
+                  "toField": "t"
                 },
                 {
                   "fromNode": "db877731806f4c548b3aae29caab13fe",
@@ -223,6 +349,16 @@
                     "x": 0.0,
                     "y": 0.0,
                     "z": 0.0
+                  }
+                },
+                {
+                  "name": "Shading Texture",
+                  "type": "TextureRegion",
+                  "location": "Global_Uniform",
+                  "data": {
+                    "minFilter": "Linear",
+                    "magFilter": "Linear",
+                    "previewPath": "D:/dev/gdx-graph/gdx-graph-test/resources/image/circle-tiling-export.png"
                   }
                 }
               ],

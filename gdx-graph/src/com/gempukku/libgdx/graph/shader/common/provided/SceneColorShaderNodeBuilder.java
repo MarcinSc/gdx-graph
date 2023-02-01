@@ -30,7 +30,6 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         graphShader.setUsingColorTexture(true);
         String textureName = "u_" + nodeId;
         String transformName = "u_UV" + nodeId;
-        String sizeName = "u_size" + nodeId;
         final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>();
         textureDescriptor.minFilter = Texture.TextureFilter.Linear;
         textureDescriptor.magFilter = Texture.TextureFilter.Linear;
@@ -59,17 +58,8 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                         shader.setUniform(location, 0f, 0f, 1f, 1f);
                     }
                 }, "Scene color texture UVs");
-        commonShaderBuilder.addUniformVariable(sizeName, "vec2", false,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Texture colorTexture = shaderContext.getColorTexture();
-                        shader.setUniform(location, (float) colorTexture.getWidth(), (float) colorTexture.getHeight());
-                    }
-                }, "Scene color texture size");
 
         return LibGDXCollections.singletonMap("texture",
-                new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName, sizeName,
-                        uWrap, vWrap));
+                new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName, uWrap, vWrap));
     }
 }

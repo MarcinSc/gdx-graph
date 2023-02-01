@@ -16,7 +16,10 @@ import com.gempukku.libgdx.graph.shader.common.provided.*;
 import com.gempukku.libgdx.graph.shader.common.shape.*;
 import com.gempukku.libgdx.graph.shader.common.sprite.BillboardSpriteShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.common.sprite.ScreenSpriteShaderNodeBuilder;
-import com.gempukku.libgdx.graph.shader.common.texture.*;
+import com.gempukku.libgdx.graph.shader.common.texture.BorderDetectionShaderNodeBuilder;
+import com.gempukku.libgdx.graph.shader.common.texture.Sampler2DShaderNodeBuilder;
+import com.gempukku.libgdx.graph.shader.common.texture.UVFlipbookShaderNodeBuilder;
+import com.gempukku.libgdx.graph.shader.common.texture.UVTilingAndOffsetShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.common.value.*;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
@@ -108,7 +111,6 @@ public class CommonShaderConfiguration implements GraphConfiguration {
 
         // Texture
         register(new Sampler2DShaderNodeBuilder());
-        register(new TextureSizeShaderNodeBuilder());
         register(new UVFlipbookShaderNodeBuilder());
         register(new UVTilingAndOffsetShaderNodeBuilder());
         register(new BorderDetectionShaderNodeBuilder());

@@ -28,6 +28,8 @@ public class PropertyTextureBoxProducer implements PropertyBoxProducer {
         result.addPropertyBoxPart(new FileSelectorBoxPart("Preview texture ", "previewPath"));
         result.initialize(jsonObject);
 
+        result.addPropertyGraphBoxCustomization(new TextureCustomization());
+
         return result;
     }
 
