@@ -16,6 +16,9 @@
       "tpl:extends": "entity/shading/patchwork.template"
     },
     {
+      "tpl:extends": "entity/shading/shadowMap.template"
+    },
+    {
       "tpl:extends": "entity/shading/lighting.template"
     },
     {

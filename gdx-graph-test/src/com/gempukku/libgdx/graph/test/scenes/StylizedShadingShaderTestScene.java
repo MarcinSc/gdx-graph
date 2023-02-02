@@ -67,9 +67,11 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
 
+        PipelineRendererSystem pipelineRenderSystem = world.getSystem(PipelineRendererSystem.class);
+        pipelineRenderSystem.setRenderingEnabled(false);
+
         world.process();
 
-        PipelineRendererSystem pipelineRenderSystem = world.getSystem(PipelineRendererSystem.class);
         pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
                 "Shading Texture",
                 world.getSystem(TextureSystem.class).getTextureRegion("image/circle-tiling-export.png", "image/circle-tiling-export.png"));
@@ -80,6 +82,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         spawnSystem.spawnEntity("entity/shading/box.template");
 
         createUI();
+
+        pipelineRenderSystem.setRenderingEnabled(true);
     }
 
     private void createSystems() {
@@ -133,6 +137,21 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                 });
         tbl.add(cameraPositionLabel).width(300).row();
         tbl.add(cameraPositionAngle).width(300).row();
+
+        Label textureScaleLabel = new Label("Texture scale", skin);
+        final Slider textureScale = new Slider(0.2f, 3.0f, 0.1f, false, skin);
+        textureScale.setValue(1f);
+        textureScale.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        GraphModels graphModels = world.getSystem(PipelineRendererSystem.class).getPluginData(GraphModels.class);
+                        graphModels.setGlobalProperty("Stylized",
+                                "Texture Scale", textureScale.getValue());
+                    }
+                });
+        tbl.add(textureScaleLabel).width(300).row();
+        tbl.add(textureScale).width(300).row();
 
         stage.addActor(tbl);
 

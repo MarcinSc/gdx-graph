@@ -12,6 +12,7 @@
       "b": 1,
       "a": 1
     },
-    "intensity": 1.2
+    "intensity": 1.2,
+    "shadowEnabled": true
   }
 }

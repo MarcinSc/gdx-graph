@@ -2,7 +2,8 @@
   "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {},
   "com.gempukku.libgdx.graph.artemis.patchwork.PatchComponent": {
     "patchworkName": [
-      "patchwork"
+      "patchwork",
+      "shadowMap"
     ],
     "generator": "sphere",
     "generatorData": {

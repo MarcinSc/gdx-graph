@@ -1,0 +1,9 @@
+{
+  "com.gempukku.libgdx.graph.artemis.patchwork.PatchworkComponent": {
+    "type": "MultiPaged",
+    "name": "shadowMap",
+    "renderTag": "Shadow Casting",
+    "minimumPages": 1,
+    "staticBatch": true
+  }
+}
