@@ -1,0 +1,16 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "entity/shading/arrow.template"
+    },
+    {
+      "tpl:extends": "entity/shading/box.template"
+    },
+    {
+      "tpl:extends": "entity/shading/cone.template"
+    },
+    {
+      "tpl:extends": "entity/shading/sphere.template"
+    }
+  ]
+}

@@ -93,10 +93,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         String texture = ShadingTexture.Circles.getTexture();
         setShadingTexture(pipelineRenderSystem, texture);
 
-        spawnSystem.spawnEntity("entity/shading/sphere.template");
-        spawnSystem.spawnEntity("entity/shading/cone.template");
-        spawnSystem.spawnEntity("entity/shading/arrow.template");
-        spawnSystem.spawnEntity("entity/shading/box.template");
+        spawnSystem.spawnEntities("entity/shading/shading-environment.entities");
 
         createUI();
 
