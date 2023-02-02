@@ -28,9 +28,9 @@ public class PatchGeneratorSystem extends BaseEntitySystem {
 
     private ComponentMapper<PatchComponent> patchComponentMapper;
 
-    private ObjectMap<String, PatchGenerator> patchGeneratorMap = new ObjectMap<>();
-    private IntMap<PatchworkNameWithPatchReference> patchMap = new IntMap<>();
-    private Array<Entity> newPatchEntities = new Array<>();
+    private final ObjectMap<String, PatchGenerator> patchGeneratorMap = new ObjectMap<>();
+    private final IntMap<ObjectMap<String, PatchReference>> patchMap = new IntMap<>();
+    private final Array<Entity> newPatchEntities = new Array<>();
 
     public PatchGeneratorSystem() {
         super(Aspect.all(PatchComponent.class));
@@ -52,23 +52,38 @@ public class PatchGeneratorSystem extends BaseEntitySystem {
     }
 
     private void removePatch(int entityId) {
-        PatchworkNameWithPatchReference patch = patchMap.remove(entityId);
-        patchworkSystem.getPatchworkModel(patch.patchworkName).removePart(patch.patchReference);
+        ObjectMap<String, PatchReference> patches = patchMap.remove(entityId);
+        for (ObjectMap.Entry<String, PatchReference> patch : patches) {
+            patchworkSystem.getPatchworkModel(patch.key).removePart(patch.value);
+        }
     }
 
     public void updatePatch(int entityId) {
         Entity patchEntity = world.getEntity(entityId);
         PatchComponent patch = patchComponentMapper.get(entityId);
 
-        PatchworkNameWithPatchReference oldPatch = patchMap.get(entityId);
-        if (!oldPatch.patchworkName.equals(patch.getPatchworkName())) {
+        ObjectMap<String, PatchReference> oldPatches = patchMap.get(entityId);
+        if (!hasSamePatches(oldPatches, patch.getPatchworkName())) {
             removePatch(entityId);
             addPatch(entityId, patchEntity, patch);
         } else {
             RenderablePatch renderablePatch = createRenderablePatch(patchEntity, patch);
-            MultiPartBatchModel<RenderablePatch, PatchReference> multiPartBatchModel = patchworkSystem.getPatchworkModel(patch.getPatchworkName());
-            oldPatch.patchReference = multiPartBatchModel.updatePart(renderablePatch, oldPatch.patchReference);
+            Array<String> patchworkNames = patch.getPatchworkName();
+            for (String patchworkName : patchworkNames) {
+                MultiPartBatchModel<RenderablePatch, PatchReference> multiPartBatchModel = patchworkSystem.getPatchworkModel(patchworkName);
+                oldPatches.put(patchworkName, multiPartBatchModel.updatePart(renderablePatch, oldPatches.get(patchworkName)));
+            }
         }
+    }
+
+    private boolean hasSamePatches(ObjectMap<String, PatchReference> oldPatches, Array<String> patchworkNames) {
+        if (oldPatches.size != patchworkNames.size)
+            return false;
+        for (String patchworkName : patchworkNames) {
+            if (!oldPatches.containsKey(patchworkName))
+                return false;
+        }
+        return true;
     }
 
     @EventListener
@@ -90,14 +105,18 @@ public class PatchGeneratorSystem extends BaseEntitySystem {
     }
 
     private void addPatch(int entityId, Entity patchEntity, PatchComponent patch) {
-        String patchworkName = patch.getPatchworkName();
-        MultiPartBatchModel<RenderablePatch, PatchReference> multiPartBatchModel = patchworkSystem.getPatchworkModel(patchworkName);
+        Array<String> patchworkNames = patch.getPatchworkName();
+        ObjectMap<String, PatchReference> patchReferenceMap = new ObjectMap<>();
+        for (String patchworkName : patchworkNames) {
+            MultiPartBatchModel<RenderablePatch, PatchReference> multiPartBatchModel = patchworkSystem.getPatchworkModel(patchworkName);
 
-        RenderablePatch renderablePatch = createRenderablePatch(patchEntity, patch);
+            RenderablePatch renderablePatch = createRenderablePatch(patchEntity, patch);
 
-        PatchReference patchReference = multiPartBatchModel.addPart(renderablePatch);
+            PatchReference patchReference = multiPartBatchModel.addPart(renderablePatch);
+            patchReferenceMap.put(patchworkName, patchReference);
+        }
 
-        patchMap.put(entityId, new PatchworkNameWithPatchReference(patchworkName, patchReference));
+        patchMap.put(entityId, patchReferenceMap);
     }
 
     private RenderablePatch createRenderablePatch(Entity patchEntity, PatchComponent patch) {
@@ -117,15 +136,5 @@ public class PatchGeneratorSystem extends BaseEntitySystem {
             renderablePatch.setValue(property.key, evaluatePropertySystem.evaluateProperty(patchEntity, property.value, Object.class));
         }
         return renderablePatch;
-    }
-
-    public static class PatchworkNameWithPatchReference {
-        private final String patchworkName;
-        private PatchReference patchReference;
-
-        public PatchworkNameWithPatchReference(String patchworkName, PatchReference patchReference) {
-            this.patchworkName = patchworkName;
-            this.patchReference = patchReference;
-        }
     }
 }

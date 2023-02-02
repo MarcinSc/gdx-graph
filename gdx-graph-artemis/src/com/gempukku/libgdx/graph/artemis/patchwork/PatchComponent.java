@@ -1,16 +1,17 @@
 package com.gempukku.libgdx.graph.artemis.patchwork;
 
 import com.artemis.Component;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class PatchComponent extends Component {
-    private String patchworkName;
+    private Array<String> patchworkName = new Array<>();
     private String generator;
     private JsonValue generatorData;
     private ObjectMap<String, Object> properties = new ObjectMap<>();
 
-    public String getPatchworkName() {
+    public Array<String> getPatchworkName() {
         return patchworkName;
     }
 

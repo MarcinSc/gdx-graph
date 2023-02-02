@@ -22,7 +22,9 @@
     }
   },
   "com.gempukku.libgdx.graph.artemis.patchwork.PatchComponent": {
-    "patchworkName": "patchwork",
+    "patchworkName": [
+      "patchwork"
+    ],
     "generator": "cone",
     "generatorData": {
       "width": 2,
