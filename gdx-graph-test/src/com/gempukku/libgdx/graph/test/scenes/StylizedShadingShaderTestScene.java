@@ -3,16 +3,20 @@ package com.gempukku.libgdx.graph.test.scenes;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.artemis.lighting.LightingSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.PatchGeneratorSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.PatchworkSystem;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.ArrowGenerator;
+import com.gempukku.libgdx.graph.artemis.patchwork.generator.BoxGenerator;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.ConeGenerator;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
@@ -58,6 +62,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         patchGeneratorSystem.registerPatchGenerator("sphere", new SphereGenerator());
         patchGeneratorSystem.registerPatchGenerator("cone", new ConeGenerator());
         patchGeneratorSystem.registerPatchGenerator("arrow", new ArrowGenerator());
+        patchGeneratorSystem.registerPatchGenerator("box", new BoxGenerator());
 
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
@@ -72,12 +77,9 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         spawnSystem.spawnEntity("entity/shading/sphere.template");
         spawnSystem.spawnEntity("entity/shading/cone.template");
         spawnSystem.spawnEntity("entity/shading/arrow.template");
+        spawnSystem.spawnEntity("entity/shading/box.template");
 
         createUI();
-    }
-
-    private void appendPosition(StringBuilder result, FloatArray positionArray, short index) {
-        result.append(positionArray.get(index * 3) + ", " + positionArray.get(index * 3 + 1) + ", " + positionArray.get(index * 3 + 2));
     }
 
     private void createSystems() {
@@ -117,6 +119,20 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
 
         tbl.setFillParent(true);
         tbl.align(Align.topLeft);
+
+        Label cameraPositionLabel = new Label("Camera position", skin);
+        final Slider cameraPositionAngle = new Slider(0, 360f, 0.1f, false, skin);
+        cameraPositionAngle.setValue(0);
+        cameraPositionAngle.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
+                        cameraController.setYAxisAngle("Main", cameraPositionAngle.getValue());
+                    }
+                });
+        tbl.add(cameraPositionLabel).width(300).row();
+        tbl.add(cameraPositionAngle).width(300).row();
 
         stage.addActor(tbl);
 

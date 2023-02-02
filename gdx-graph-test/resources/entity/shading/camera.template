@@ -10,8 +10,8 @@
       "z": 0
     },
     "distance": 15,
-    "xAxisAngle": -20,
-    "zAxisAngle": 90,
+    "xAxisAngle": 0,
+    "yAxisAngle": 0,
     "bounds": {
       "x": -5,
       "y": -5,
@@ -26,7 +26,7 @@
       "x": 5,
       "y": 85
     },
-    "zAxisAngleRange": {
+    "yAxisAngleRange": {
       "x": 0,
       "y": 360
     }

@@ -45,20 +45,14 @@
                 {
                   "id": "0963aeea5fc64fbf93ca840af317f4bd",
                   "type": "Maximum",
-                  "x": 1034.0,
-                  "y": 366.0
+                  "x": 1100.0,
+                  "y": 384.0
                 },
                 {
                   "id": "09671d5e3e4f41a19a7bb25bc62c841f",
                   "type": "Multiply",
                   "x": 688.0,
                   "y": 75.0
-                },
-                {
-                  "id": "0d673e8aec4448e6b30daf26394eb0be",
-                  "type": "Split",
-                  "x": 833.0,
-                  "y": 325.0
                 },
                 {
                   "id": "102dc1198c064db48fce83eb29b0cf10",
@@ -87,8 +81,8 @@
                 {
                   "id": "519c44058a1741b88962236482fe2cde",
                   "type": "BlinnPhongLighting",
-                  "x": 574.0,
-                  "y": 293.0,
+                  "x": 562.0,
+                  "y": 363.0,
                   "data": {
                     "id": "Lighting"
                   }
@@ -106,10 +100,10 @@
                 {
                   "id": "8fb6a451080842f7bdabd57db211595c",
                   "type": "ValueFloat",
-                  "x": 834.0,
-                  "y": 255.0,
+                  "x": 848.0,
+                  "y": 285.0,
                   "data": {
-                    "v1": 0.10000000149011612
+                    "v1": 0.05000000074505806
                   }
                 },
                 {
@@ -129,6 +123,12 @@
                     "name": "Shading Texture",
                     "type": "TextureRegion"
                   }
+                },
+                {
+                  "id": "b4c76f40402c4967a5f866c989c6aed4",
+                  "type": "Intensity",
+                  "x": 862.0,
+                  "y": 438.0
                 },
                 {
                   "id": "b7ad4f33dd4041db9de44859246445ff",
@@ -211,12 +211,6 @@
                   "toField": "b"
                 },
                 {
-                  "fromNode": "0d673e8aec4448e6b30daf26394eb0be",
-                  "fromField": "x",
-                  "toNode": "0963aeea5fc64fbf93ca840af317f4bd",
-                  "toField": "a"
-                },
-                {
                   "fromNode": "102dc1198c064db48fce83eb29b0cf10",
                   "fromField": "output",
                   "toNode": "a5352debf39f4c6ca813bbaf353e22d9",
@@ -242,9 +236,9 @@
                 },
                 {
                   "fromNode": "519c44058a1741b88962236482fe2cde",
-                  "fromField": "diffuse",
-                  "toNode": "0d673e8aec4448e6b30daf26394eb0be",
-                  "toField": "input"
+                  "fromField": "output",
+                  "toNode": "b4c76f40402c4967a5f866c989c6aed4",
+                  "toField": "color"
                 },
                 {
                   "fromNode": "59543a1e56964b73b9c7730fa790c167",
@@ -275,6 +269,12 @@
                   "fromField": "value",
                   "toNode": "a5352debf39f4c6ca813bbaf353e22d9",
                   "toField": "texture"
+                },
+                {
+                  "fromNode": "b4c76f40402c4967a5f866c989c6aed4",
+                  "fromField": "output",
+                  "toNode": "0963aeea5fc64fbf93ca840af317f4bd",
+                  "toField": "a"
                 },
                 {
                   "fromNode": "b7ad4f33dd4041db9de44859246445ff",

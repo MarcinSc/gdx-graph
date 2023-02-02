@@ -1,0 +1,25 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {},
+  "com.gempukku.libgdx.graph.artemis.patchwork.PatchComponent": {
+    "patchworkName": "patchwork",
+    "generator": "box",
+    "generatorData": {
+      "width": 15,
+      "height": 5,
+      "depth": 15,
+      "inside": true,
+      "positionProperty": "Position",
+      "normalProperty": "Normal",
+      "uvProperty": "UV"
+    },
+    "properties": {
+      "Color": {
+        "class": "com.badlogic.gdx.graphics.Color",
+        "r": 0.8,
+        "g": 0.8,
+        "b": 0.8,
+        "a": 1.0
+      }
+    }
+  }
+}
