@@ -5,10 +5,7 @@ import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -49,6 +46,27 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     private Skin skin;
     private Stage stage;
 
+    private enum ShadingTexture {
+        Circles("Circles", "image/circle-tiling.png"),
+        CrossHatch("Crosshatch", "image/cross-hatch.png");
+
+        private String text;
+        private String texture;
+
+        ShadingTexture(String text, String texture) {
+            this.text = text;
+            this.texture = texture;
+        }
+
+        public String getTexture() {
+            return texture;
+        }
+
+        public String toString() {
+            return text;
+        }
+    }
+
     @Override
     public String getName() {
         return "Stylized Shading";
@@ -72,9 +90,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
 
         world.process();
 
-        pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
-                "Shading Texture",
-                world.getSystem(TextureSystem.class).getTextureRegion("image/circle-tiling-export.png", "image/circle-tiling-export.png"));
+        String texture = ShadingTexture.Circles.getTexture();
+        setShadingTexture(pipelineRenderSystem, texture);
 
         spawnSystem.spawnEntity("entity/shading/sphere.template");
         spawnSystem.spawnEntity("entity/shading/cone.template");
@@ -84,6 +101,12 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         createUI();
 
         pipelineRenderSystem.setRenderingEnabled(true);
+    }
+
+    private void setShadingTexture(PipelineRendererSystem pipelineRenderSystem, String texture) {
+        pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
+                "Shading Texture",
+                world.getSystem(TextureSystem.class).getTextureRegion(texture, texture));
     }
 
     private void createSystems() {
@@ -135,8 +158,21 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                         cameraController.setYAxisAngle("Main", cameraPositionAngle.getValue());
                     }
                 });
-        tbl.add(cameraPositionLabel).width(300).row();
-        tbl.add(cameraPositionAngle).width(300).row();
+        tbl.add(cameraPositionLabel).width(300).pad(10, 10, 0, 10).row();
+        tbl.add(cameraPositionAngle).width(300).pad(0, 10, 0, 10).row();
+
+        Label shadingTextureLabel = new Label("Shading texture", skin);
+        final SelectBox<ShadingTexture> shadingTexture = new SelectBox<ShadingTexture>(skin);
+        shadingTexture.setItems(ShadingTexture.values());
+        shadingTexture.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        setShadingTexture(world.getSystem(PipelineRendererSystem.class), shadingTexture.getSelected().getTexture());
+                    }
+                });
+        tbl.add(shadingTextureLabel).width(300).pad(10, 10, 0, 10).row();
+        tbl.add(shadingTexture).width(300).pad(0, 10, 0, 10).row();
 
         Label textureScaleLabel = new Label("Texture scale", skin);
         final Slider textureScale = new Slider(0.2f, 3.0f, 0.1f, false, skin);
@@ -150,8 +186,8 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                                 "Texture Scale", textureScale.getValue());
                     }
                 });
-        tbl.add(textureScaleLabel).width(300).row();
-        tbl.add(textureScale).width(300).row();
+        tbl.add(textureScaleLabel).width(300).pad(10, 10, 0, 10).row();
+        tbl.add(textureScale).width(300).pad(0, 10, 0, 10).row();
 
         stage.addActor(tbl);
 
