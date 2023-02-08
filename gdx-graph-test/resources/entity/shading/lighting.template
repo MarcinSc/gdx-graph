@@ -1,6 +1,6 @@
 {
   "com.gempukku.libgdx.graph.artemis.lighting.LightingEnvironmentComponent": {
-    "id": "Lighting",
+    "id": "",
     "name": "lighting",
     "center": {
       "x": 0,
