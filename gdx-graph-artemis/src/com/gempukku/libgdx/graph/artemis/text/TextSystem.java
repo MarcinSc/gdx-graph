@@ -14,6 +14,8 @@ import com.gempukku.libgdx.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.layout.GlyphOffseter;
 import com.gempukku.libgdx.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.graph.artemis.text.parser.DefaultTextParser;
+import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
+import com.gempukku.libgdx.graph.util.sprite.SpriteReference;
 import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
@@ -27,7 +29,7 @@ public class TextSystem extends BaseEntitySystem {
     private PipelineRendererSystem pipelineRendererSystem;
     private ComponentMapper<TextComponent> textComponentMapper;
 
-    private final IntMap<Array<DisplayedText>> renderedTexts = new IntMap<>();
+    private final IntMap<DisplayedText> renderedTexts = new IntMap<>();
 
     private final GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
     private CharacterTextParser defaultTextParser;
@@ -71,30 +73,26 @@ public class TextSystem extends BaseEntitySystem {
     private void addSprites(Entity textEntity) {
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
 
-        Array<DisplayedText> texts = new Array<>();
-        TextComponent textComponent = textComponentMapper.get(textEntity);
-        for (TextBlock textBlock : textComponent.getTextBlocks()) {
-            String spriteBatchName = determineSpriteBatchName(textBlock);
-            CharacterTextParser textParser = determineTextParser(textBlock);
+        TextComponent textBlock = textComponentMapper.get(textEntity);
+        String spriteBatchName = determineSpriteBatchName(textBlock);
+        CharacterTextParser textParser = determineTextParser(textBlock);
 
-            MultiPartBatchModel multiPartBatchModel = spriteBatchSystem.getSpriteBatchModel(spriteBatchName);
+        MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel = spriteBatchSystem.getSpriteBatchModel(spriteBatchName);
 
-            DisplayedText text = new DisplayedText(glyphOffseter, textParser, multiPartBatchModel, bitmapFontSystem,
-                    spriteBatchSystem, resolvedTransform, textBlock);
-            texts.add(text);
-        }
+        DisplayedText text = new DisplayedText(glyphOffseter, textParser, multiPartBatchModel, bitmapFontSystem,
+                spriteBatchSystem, resolvedTransform, textBlock);
 
-        renderedTexts.put(textEntity.getId(), texts);
+        renderedTexts.put(textEntity.getId(), text);
     }
 
-    private String determineSpriteBatchName(TextBlock textBlock) {
+    private String determineSpriteBatchName(TextComponent textBlock) {
         String spriteBatchName = textBlock.getSpriteBatchName();
         if (spriteBatchName == null)
             spriteBatchName = defaultSpriteBatchName;
         return spriteBatchName;
     }
 
-    private CharacterTextParser determineTextParser(TextBlock textBlock) {
+    private CharacterTextParser determineTextParser(TextComponent textBlock) {
         CharacterTextParser textParser;
         String textParserName = textBlock.getTextParser();
         if (textParserName != null)
@@ -105,32 +103,22 @@ public class TextSystem extends BaseEntitySystem {
     }
 
     private void removeSprites(Entity textEntity) {
-        Array<DisplayedText> texts = renderedTexts.remove(textEntity.getId());
-        for (DisplayedText text : texts) {
-            text.dispose();
-        }
+        DisplayedText text = renderedTexts.remove(textEntity.getId());
+        text.dispose();
     }
 
     @EventListener
     public void transformChanged(TransformUpdated transformUpdated, Entity entity) {
-        Array<DisplayedText> texts = renderedTexts.get(entity.getId());
-        if (texts != null) {
-            for (DisplayedText text : texts) {
-                text.updateSprites();
-            }
+        DisplayedText text = renderedTexts.get(entity.getId());
+        if (text != null) {
+            text.updateSprites();
         }
     }
 
-    public void updateTexts(int entityId) {
+    public void updateText(int entityId) {
         Entity textEntity = world.getEntity(entityId);
         removeSprites(textEntity);
         addSprites(textEntity);
-    }
-
-    public void updateText(int entityId, int textIndex) {
-        Array<DisplayedText> texts = renderedTexts.get(entityId);
-        if (texts != null)
-            texts.get(textIndex).updateSprites();
     }
 
     @Override

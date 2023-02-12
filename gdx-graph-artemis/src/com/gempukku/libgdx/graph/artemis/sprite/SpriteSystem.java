@@ -40,6 +40,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
     public static final Vector2ValuePerVertex uvAttributeInvertedBoth = new Vector2ValuePerVertex(new float[]{1, 0, 0, 0, 1, 1, 0, 1});
 
     private final Matrix4 tempMatrix = new Matrix4();
+    private final Vector3 tempVector3 = new Vector3();
 
     private Array<Entity> newSpriteEntities = new Array<>();
 
@@ -111,6 +112,8 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
             Matrix4 resultTransform = tempMatrix.set(transform);
             Vector3 rightVector = spritePositionProperty.getRightVector();
             Vector3 upVector = spritePositionProperty.getUpVector();
+            Vector3 zVector = tempVector3.set(rightVector).crs(upVector).nor().scl(spritePositionProperty.getZDistance());
+            resultTransform.translate(zVector);
 
             return VectorUtil.createCenterSpritePosition(1f, 1f, rightVector, upVector, resultTransform);
         } else if (value instanceof SpriteUVProperty) {

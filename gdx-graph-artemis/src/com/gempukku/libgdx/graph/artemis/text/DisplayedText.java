@@ -24,23 +24,22 @@ import com.gempukku.libgdx.graph.util.storage.MultiPartBatchModel;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 
 public class DisplayedText implements Disposable {
-    private static Matrix4 tempMatrix = new Matrix4();
-    private static Vector3 tempVector1 = new Vector3();
-    private static Vector3 tempVector2 = new Vector3();
-    private static Vector3 tempVector3 = new Vector3();
-    private static DefaultRenderableSprite tempRenderableSprite = new DefaultRenderableSprite();
-    private static HierarchicalRenderableSprite tempHierarchicalRenderableSprite = new HierarchicalRenderableSprite();
+    private static final Matrix4 tempMatrix = new Matrix4();
+    private static final Vector3 tempVector1 = new Vector3();
+    private static final Vector3 tempVector2 = new Vector3();
+    private static final DefaultRenderableSprite tempRenderableSprite = new DefaultRenderableSprite();
+    private static final HierarchicalRenderableSprite tempHierarchicalRenderableSprite = new HierarchicalRenderableSprite();
 
-    private GlyphOffseter glyphOffseter;
-    private CharacterTextParser textParser;
-    private MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel;
-    private BitmapFontSystem bitmapFontSystem;
-    private Matrix4 transform;
-    private TextBlock textBlock;
-    private SpriteBatchSystem spriteBatchSystem;
+    private final GlyphOffseter glyphOffseter;
+    private final CharacterTextParser textParser;
+    private final MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel;
+    private final BitmapFontSystem bitmapFontSystem;
+    private final Matrix4 transform;
+    private final TextComponent textBlock;
+    private final SpriteBatchSystem spriteBatchSystem;
 
-    private Array<SpriteReference> spriteReferences = new Array<>();
-    private ObjectSet<BatchNameWithSpriteReference> externalSprites = new ObjectSet<>();
+    private final Array<SpriteReference> spriteReferences = new Array<>();
+    private final ObjectSet<BatchNameWithSpriteReference> externalSprites = new ObjectSet<>();
 
     /*
      * Up-Vector (vec3) - vector defining both height and up direction
@@ -53,9 +52,9 @@ public class DisplayedText implements Disposable {
      * Color - character color
      */
 
-    public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, MultiPartBatchModel multiPartBatchModel,
+    public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, MultiPartBatchModel<RenderableSprite, SpriteReference> multiPartBatchModel,
                          BitmapFontSystem bitmapFontSystem, SpriteBatchSystem spriteBatchSystem,
-                         Matrix4 transform, TextBlock textBlock) {
+                         Matrix4 transform, TextComponent textBlock) {
         this.glyphOffseter = glyphOffseter;
         this.textParser = textParser;
         this.multiPartBatchModel = multiPartBatchModel;
@@ -106,7 +105,7 @@ public class DisplayedText implements Disposable {
 
             TextVerticalAlignment alignment = getVerticalAlignment(offsetText.getTextStyle());
 
-            Matrix4 resultTransform = tempMatrix.set(transform).mul(textBlock.getTransform());
+            Matrix4 resultTransform = tempMatrix.set(transform);
 
             final float startY = heightInGlyph / 2 - alignment.apply(offsetText.getTextHeight(), heightInGlyph);
 

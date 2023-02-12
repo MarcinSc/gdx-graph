@@ -31,6 +31,7 @@
       },
       "Position": {
         "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "zDistance": -0.005,
         "rightVector": {
           "x": 8,
           "y": 0,
@@ -50,55 +51,31 @@
     }
   },
   "com.gempukku.libgdx.graph.artemis.text.TextComponent": {
-    "textBlocks": [
-      {
-        "transform": {
-          "val": [
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0.005,
-            1
-          ]
-        },
-        "rightVector": {
-          "x": 8,
-          "y": 0,
-          "z": 0
-        },
-        "upVector": {
-          "x": 0,
-          "y": 4,
-          "z": 0
-        },
-        "width": 0.5,
-        "edge": 0.05,
-        "color": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "spriteBatchName": "sdfText",
-        "targetWidth": 800,
-        "kerning": true,
-        "scaleDownToFit": true,
-        "verticalAlignment": "center",
-        "horizontalAlignment": "left",
-        "bitmapFontPath": "font/arial.fnt",
-        "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible.\nYou can even inline <img sprite image/MossyHill1.png:image/MossyHill1.png> sprites.\n<horAlign center>Or change horizontal alignment.</horAlign>\n<horAlign justified>Or you can even justify text in line, which is generally very attractive only with a longer paragraph of text.</horAlign>\n<paddingLeft 50>Padding is also available</paddingLeft>, or <letterSpacing 5>letter spacing</letterSpacing>."
-      }
-    ]
+    "rightVector": {
+      "x": 8,
+      "y": 0,
+      "z": 0
+    },
+    "upVector": {
+      "x": 0,
+      "y": 4,
+      "z": 0
+    },
+    "width": 0.5,
+    "edge": 0.05,
+    "color": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    },
+    "spriteBatchName": "sdfText",
+    "targetWidth": 800,
+    "kerning": true,
+    "scaleDownToFit": true,
+    "verticalAlignment": "center",
+    "horizontalAlignment": "left",
+    "bitmapFontPath": "font/arial.fnt",
+    "text": "Here is a test text in <width 0.55>bold</width>, or even a bit <scale 0.8>smaller</scale>, or <scale 1.2>bigger</scale>. You can also change <color ffff00ff>colors</color>.\nMixing <font font/arial-italic.fnt>fonts</font> is also possible.\nYou can even inline <img sprite image/MossyHill1.png:image/MossyHill1.png> sprites.\n<horAlign center>Or change horizontal alignment.</horAlign>\n<horAlign justified>Or you can even justify text in line, which is generally very attractive only with a longer paragraph of text.</horAlign>\n<paddingLeft 50>Padding is also available</paddingLeft>, or <letterSpacing 5>letter spacing</letterSpacing>."
   }
 }
