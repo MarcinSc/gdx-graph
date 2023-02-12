@@ -22,54 +22,32 @@
     }
   },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
-    "sprites": [
-      {
-        "spriteBatchName": "sprite",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                -0.005,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 8,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 4,
-              "z": 0
-            }
-          },
-          "Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/seamless_rock_face_texture_by_hhh316.jpg",
-            "region": "image/seamless_rock_face_texture_by_hhh316.jpg"
-          }
+    "spriteBatchName": [
+      "sprite"
+    ],
+    "properties": {
+      "UV": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+      },
+      "Position": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "rightVector": {
+          "x": 8,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 4,
+          "z": 0
         }
+      },
+      "Texture": {
+        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+        "atlas": "image/seamless_rock_face_texture_by_hhh316.jpg",
+        "region": "image/seamless_rock_face_texture_by_hhh316.jpg"
       }
-    ]
+    }
   },
   "com.gempukku.libgdx.graph.artemis.text.TextComponent": {
     "textBlocks": [
@@ -90,7 +68,7 @@
             0,
             0,
             0,
-            0,
+            0.005,
             1
           ]
         },

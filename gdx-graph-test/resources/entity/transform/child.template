@@ -1,53 +1,52 @@
 {
-  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {},
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0.005,
+        1
+      ]
+    }
+  },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
-    "sprites": [
-      {
-        "spriteBatchName": "sprite",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0.005,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 4,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 2,
-              "z": 0
-            }
-          },
-          "Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/MossyHill1.png",
-            "region": "image/MossyHill1.png"
-          }
+    "spriteBatchName": [
+      "sprite"
+    ],
+    "properties": {
+      "UV": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+      },
+      "Position": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "rightVector": {
+          "x": 4,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 2,
+          "z": 0
         }
+      },
+      "Texture": {
+        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+        "atlas": "image/MossyHill1.png",
+        "region": "image/MossyHill1.png"
       }
-    ]
+    }
   }
 }

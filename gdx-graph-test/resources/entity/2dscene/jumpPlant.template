@@ -25,135 +25,49 @@
     "type": "asSprite"
   },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
-    "sprites": [
-      {
-        "spriteBatchName": "animatedSprite",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 256,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 256,
-              "z": 0
-            }
-          },
-          "Animated Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/JumpPlant2.png",
-            "region": "image/JumpPlant2.png"
-          },
-          "Sprite Count": {
-            "class": "com.badlogic.gdx.math.Vector2",
-            "x": 5,
-            "y": 4
-          },
-          "Animation Speed": {
-            "class": "java.lang.Float",
-            "value": 20
-          },
-          "Animation Looping": {
-            "class": "java.lang.Float",
-            "value": 1
-          }
+    "spriteBatchName": [
+      "animatedSprite"
+    ],
+    "properties": {
+      "UV": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+      },
+      "Position": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "rightVector": {
+          "x": 256,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 256,
+          "z": 0
         }
       },
-      {
-        "spriteBatchName": "spriteOutline",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 256,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 256,
-              "z": 0
-            }
-          },
-          "Animated Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/JumpPlant2.png",
-            "region": "image/JumpPlant2.png"
-          },
-          "Sprite Count": {
-            "class": "com.badlogic.gdx.math.Vector2",
-            "x": 5,
-            "y": 4
-          },
-          "Animation Speed": {
-            "class": "java.lang.Float",
-            "value": 20
-          },
-          "Animation Looping": {
-            "class": "java.lang.Float",
-            "value": 1
-          },
-          "Sprite Size": {
-            "class": "com.badlogic.gdx.math.Vector2",
-            "x": 256,
-            "y": 256
-          },
-          "Outline Width": {
-            "class": "java.lang.Float",
-            "value": 0
-          }
-        }
+      "Animated Texture": {
+        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+        "atlas": "image/JumpPlant2.png",
+        "region": "image/JumpPlant2.png"
+      },
+      "Sprite Count": {
+        "class": "com.badlogic.gdx.math.Vector2",
+        "x": 5,
+        "y": 4
+      },
+      "Animation Speed": {
+        "class": "java.lang.Float",
+        "value": 20
+      },
+      "Animation Looping": {
+        "class": "java.lang.Float",
+        "value": 1
+      },
+      "Outline Width": {
+        "class": "java.lang.Float",
+        "value": 3
       }
-    ]
+    }
   },
   "com.gempukku.libgdx.box2d.artemis.PhysicsComponent": {
     "type": "Dynamic",

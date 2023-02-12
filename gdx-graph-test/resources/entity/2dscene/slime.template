@@ -25,71 +25,49 @@
     "type": "asProperty"
   },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
-    "sprites": [
-      {
-        "spriteBatchName": "animatedOutlineSprite",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 256,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 256,
-              "z": 0
-            }
-          },
-          "Animated Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/SlimeOrange-outline.png",
-            "region": "image/SlimeOrange-outline.png"
-          },
-          "Sprite Count": {
-            "class": "com.badlogic.gdx.math.Vector2",
-            "x": 6,
-            "y": 5
-          },
-          "Animation Speed": {
-            "class": "java.lang.Float",
-            "value": 20
-          },
-          "Animation Looping": {
-            "class": "java.lang.Float",
-            "value": 1
-          },
-          "Outline": {
-            "class": "java.lang.Float",
-            "value": 0
-          }
+    "spriteBatchName": [
+      "animatedOutlineSprite"
+    ],
+    "properties": {
+      "UV": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+      },
+      "Position": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "rightVector": {
+          "x": 256,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 256,
+          "z": 0
         }
+      },
+      "Animated Texture": {
+        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+        "atlas": "image/SlimeOrange-outline.png",
+        "region": "image/SlimeOrange-outline.png"
+      },
+      "Sprite Count": {
+        "class": "com.badlogic.gdx.math.Vector2",
+        "x": 6,
+        "y": 5
+      },
+      "Animation Speed": {
+        "class": "java.lang.Float",
+        "value": 20
+      },
+      "Animation Looping": {
+        "class": "java.lang.Float",
+        "value": 1
+      },
+      "Outline": {
+        "class": "java.lang.Float",
+        "value": 0
       }
-    ]
+    }
   },
   "com.gempukku.libgdx.box2d.artemis.PhysicsComponent": {
     "type": "Dynamic",

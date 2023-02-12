@@ -69,10 +69,10 @@ public class PlayerControlSystem extends EntitySystem {
 
     private void setFaceRight(Entity playerEntity, PlayerInputControlledComponent playerInputControlled, boolean faceRight) {
         if (playerInputControlled.isCurrentlyFacingRight() != faceRight) {
-            ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getSprites().get(0).getProperties();
+            ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getProperties();
             SpriteUVProperty spriteUVProperty = (SpriteUVProperty) properties.get("UV");
             spriteUVProperty.setInvertedX(!faceRight);
-            spriteSystem.updateSprite(playerEntity.getId(), 0);
+            spriteSystem.updateSprite(playerEntity.getId());
 
             playerInputControlled.setCurrentlyFacingRight(faceRight);
         }
@@ -80,13 +80,13 @@ public class PlayerControlSystem extends EntitySystem {
 
     private void updateSpriteState(Entity playerEntity, PlayerInputControlledComponent playerInputControlled, StateBasedSpriteComponent stateBasedSprite, String state) {
         if (!state.equals(playerInputControlled.getCurrentState())) {
-            ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getSprites().get(0).getProperties();
+            ObjectMap<String, Object> properties = playerEntity.getComponent(SpriteComponent.class).getProperties();
             ObjectMap<String, Object> stateProperties = stateBasedSprite.getStateProperties().get(state);
             for (ObjectMap.Entry<String, Object> stateProperty : stateProperties) {
                 properties.put(stateProperty.key, stateProperty.value);
             }
             properties.put("Animation Start", pipelineRendererSystem.getCurrentTime());
-            spriteSystem.updateSprite(playerEntity.getId(), 0);
+            spriteSystem.updateSprite(playerEntity.getId());
 
             playerInputControlled.setCurrentState(state);
         }

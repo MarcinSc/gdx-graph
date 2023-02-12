@@ -22,59 +22,37 @@
     }
   },
   "com.gempukku.libgdx.graph.artemis.sprite.SpriteComponent": {
-    "sprites": [
-      {
-        "spriteBatchName": "tiledSprite",
-        "properties": {
-          "UV": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
-          },
-          "Position": {
-            "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-            "transform": {
-              "val": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
-              ]
-            },
-            "rightVector": {
-              "x": 5120,
-              "y": 0,
-              "z": 0
-            },
-            "upVector": {
-              "x": 0,
-              "y": 128,
-              "z": 0
-            }
-          },
-          "Tile Texture": {
-            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "atlas": "image/MossyGround.png",
-            "region": "image/MossyGround.png"
-          },
-          "Tile Repeat": {
-            "class": "com.badlogic.gdx.math.Vector2",
-            "x": 10,
-            "y": 1
-          }
+    "spriteBatchName": [
+      "tiledSprite"
+    ],
+    "properties": {
+      "UV": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpriteUVProperty"
+      },
+      "Position": {
+        "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
+        "rightVector": {
+          "x": 5120,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 128,
+          "z": 0
         }
+      },
+      "Tile Texture": {
+        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+        "atlas": "image/MossyGround.png",
+        "region": "image/MossyGround.png"
+      },
+      "Tile Repeat": {
+        "class": "com.badlogic.gdx.math.Vector2",
+        "x": 10,
+        "y": 1
       }
-    ]
+    }
   },
   "com.gempukku.libgdx.box2d.artemis.PhysicsComponent": {
     "type": "Static",

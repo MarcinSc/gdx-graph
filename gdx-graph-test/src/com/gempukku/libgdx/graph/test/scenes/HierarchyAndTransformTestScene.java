@@ -116,7 +116,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        tmpMatrix.idt().setToTranslation(childTranslationSlider.getValue(), 0, 0);
+                        tmpMatrix.idt().setToTranslation(childTranslationSlider.getValue(), 0, 0.005f);
                         world.getSystem(TransformSystem.class).setTransform(childEntity, tmpMatrix);
                     }
                 });
