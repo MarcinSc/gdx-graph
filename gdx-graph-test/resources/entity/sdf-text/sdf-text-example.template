@@ -31,7 +31,6 @@
       },
       "Position": {
         "class": "com.gempukku.libgdx.graph.artemis.sprite.property.SpritePositionProperty",
-        "zDistance": -0.005,
         "rightVector": {
           "x": 8,
           "y": 0,
@@ -51,6 +50,7 @@
     }
   },
   "com.gempukku.libgdx.graph.artemis.text.TextComponent": {
+    "zDistance": 0.005,
     "rightVector": {
       "x": 8,
       "y": 0,

@@ -27,6 +27,7 @@ public class DisplayedText implements Disposable {
     private static final Matrix4 tempMatrix = new Matrix4();
     private static final Vector3 tempVector1 = new Vector3();
     private static final Vector3 tempVector2 = new Vector3();
+    private static final Vector3 tempVector3 = new Vector3();
     private static final DefaultRenderableSprite tempRenderableSprite = new DefaultRenderableSprite();
     private static final HierarchicalRenderableSprite tempHierarchicalRenderableSprite = new HierarchicalRenderableSprite();
 
@@ -97,6 +98,7 @@ public class DisplayedText implements Disposable {
 
             Vector3 unitRightVector = tempVector1.set(textBlock.getRightVector()).nor().scl(scale);
             Vector3 unitUpVector = tempVector2.set(textBlock.getUpVector()).nor().scl(scale);
+            Vector3 zVector = tempVector3.set(unitRightVector).crs(unitUpVector).nor().scl(textBlock.getZDistance());
 
             float widthInGlyph = widthInWorld / scale;
             float heightInGlyph = heightInWorld / scale;
@@ -105,7 +107,7 @@ public class DisplayedText implements Disposable {
 
             TextVerticalAlignment alignment = getVerticalAlignment(offsetText.getTextStyle());
 
-            Matrix4 resultTransform = tempMatrix.set(transform);
+            Matrix4 resultTransform = tempMatrix.set(transform).translate(zVector);
 
             final float startY = heightInGlyph / 2 - alignment.apply(offsetText.getTextHeight(), heightInGlyph);
 

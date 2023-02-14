@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 public class TextComponent extends Component {
     private String textParser = null;
     private String spriteBatchName = null;
+    private float zDistance;
     private Vector3 rightVector = new Vector3(1, 0, 0);
     private Vector3 upVector = new Vector3(0, 1, 0);
     private Color color = new Color(1, 1, 1, 1);
@@ -39,6 +40,10 @@ public class TextComponent extends Component {
 
     public void setSpriteBatchName(String spriteBatchName) {
         this.spriteBatchName = spriteBatchName;
+    }
+
+    public float getZDistance() {
+        return zDistance;
     }
 
     public Vector3 getRightVector() {
