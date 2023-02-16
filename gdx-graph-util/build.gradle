@@ -3,4 +3,5 @@ eclipse.project.name = "gdx-graph-util"
 dependencies {
     api project(":gdx-graph")
     testImplementation "junit:junit:4.13"
+    testImplementation "org.mockito:mockito-all:$mockitoVersion"
 }

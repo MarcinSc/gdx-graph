@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.util.model.WritableRenderableModel;
 import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
 import com.gempukku.libgdx.graph.util.renderer.TrianglesMeshRenderer;
 
-public class GdxMeshRenderableModel implements WritableRenderableModel, Disposable {
+public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpdater, IndexedMeshRenderer, Disposable {
     private final Matrix4 worldTransform = new Matrix4();
     private final Vector3 position = new Vector3();
     private final WritablePropertyContainer propertyContainer;
@@ -25,6 +25,8 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, Disposab
     private final Mesh mesh;
     private final VertexAttributes vertexAttributes;
     private final MeshRenderer meshRenderer;
+
+    private ShaderProgram shaderProgram;
     private int[] attributeLocations;
 
     private final MemoryMesh memoryMesh;
@@ -98,13 +100,29 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, Disposab
 
     @Override
     public void prepareToRender(ShaderContext shaderContext) {
-        memoryMesh.updateGdxMesh(mesh);
+        memoryMesh.updateGdxMesh(this);
+    }
+
+    @Override
+    public void updateIndices(short[] indexValues, int startIndex, int count) {
+        mesh.setIndices(indexValues);
+    }
+
+    @Override
+    public void updateMeshValues(float[] values, int startIndex, int count) {
+        mesh.updateVertices(startIndex, values, startIndex, count);
     }
 
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
+        this.shaderProgram = shaderProgram;
+        memoryMesh.renderGdxMesh(this);
+    }
+
+    @Override
+    public void renderMesh(int startIndex, int indexCount) {
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
-        memoryMesh.renderGdxMesh(shaderProgram, mesh, attributeLocations, meshRenderer);
+        meshRenderer.renderMesh(shaderProgram, mesh, startIndex, indexCount, attributeLocations);
     }
 }

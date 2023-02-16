@@ -2,14 +2,10 @@ package com.gempukku.libgdx.graph.util.patchwork.storage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.libgdx.graph.util.patchwork.PatchReference;
-import com.gempukku.libgdx.graph.util.renderer.MeshRenderer;
-import com.gempukku.libgdx.graph.util.storage.MemoryMesh;
-import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
-import com.gempukku.libgdx.graph.util.storage.MultiPartMesh;
+import com.gempukku.libgdx.graph.util.storage.*;
 
 public class PatchMemoryMesh<T> implements MultiPartMesh<T, PatchReference>, MemoryMesh {
     private final int indexCapacity;
@@ -169,13 +165,13 @@ public class PatchMemoryMesh<T> implements MultiPartMesh<T, PatchReference>, Mem
     }
 
     @Override
-    public void updateGdxMesh(Mesh mesh) {
+    public void updateGdxMesh(MeshUpdater meshUpdater) {
         int minUpdatedIndex = this.minUpdatedIndex;
         int maxUpdatedIndex = Math.min(this.maxUpdatedIndex, nextIndex);
         if (minUpdatedIndex < maxUpdatedIndex) {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
                 Gdx.app.debug("MeshRendering", "Updating index array - short count: " + (indexValues.length));
-            mesh.setIndices(indexValues);
+            meshUpdater.updateIndices(indexValues, minUpdatedIndex, maxUpdatedIndex - minUpdatedIndex);
         }
 
         int minUpdatedVertexValueIndex = this.minUpdatedVertexValueIndex;
@@ -183,19 +179,20 @@ public class PatchMemoryMesh<T> implements MultiPartMesh<T, PatchReference>, Mem
         if (minUpdatedVertexValueIndex < maxUpdatedVertexValueIndex) {
             if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
                 Gdx.app.debug("MeshRendering", "Updating vertex array - float count: " + (maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex));
-            mesh.updateVertices(minUpdatedVertexValueIndex, vertexValues, minUpdatedVertexValueIndex, maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex);
+            meshUpdater.updateMeshValues(vertexValues, minUpdatedVertexValueIndex, maxUpdatedVertexValueIndex - minUpdatedVertexValueIndex);
         }
 
         resetUpdates();
     }
 
     @Override
-    public void renderGdxMesh(ShaderProgram shaderProgram, Mesh mesh, int[] attributeLocations, MeshRenderer meshRenderer) {
+    public void renderGdxMesh(IndexedMeshRenderer meshRenderer) {
         int indexStart = 0;
         int indexCount = nextIndex;
-        if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
-            Gdx.app.debug("MeshRendering", "Rendering " + indexCount + " indexes(s)");
-
-        meshRenderer.renderMesh(shaderProgram, mesh, indexStart, indexCount, attributeLocations);
+        if (indexCount > 0) {
+            if (Gdx.app.getLogLevel() >= Gdx.app.LOG_DEBUG)
+                Gdx.app.debug("MeshRendering", "Rendering " + indexCount + " indexes(s)");
+            meshRenderer.renderMesh(indexStart, indexCount);
+        }
     }
 }
