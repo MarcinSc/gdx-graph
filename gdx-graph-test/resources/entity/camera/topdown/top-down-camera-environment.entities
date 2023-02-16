@@ -1,0 +1,7 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "entity/camera/topdown/sprite.template"
+    }
+  ]
+}

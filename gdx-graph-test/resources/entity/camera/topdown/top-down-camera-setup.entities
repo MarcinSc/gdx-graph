@@ -1,0 +1,22 @@
+{
+  "entities": [
+    {
+      "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
+        "pipelinePath": "test/top-down-camera-test.json",
+        "cameraDefinitions": [
+          {
+            "cameraProperty": "Camera",
+            "cameraName": "Main"
+          }
+        ]
+      },
+      "com.gempukku.libgdx.graph.artemis.time.TimeComponent": {}
+    },
+    {
+      "tpl:extends": "entity/camera/topdown/spriteBatch.template"
+    },
+    {
+      "tpl:extends": "entity/camera/topdown/camera.template"
+    }
+  ]
+}

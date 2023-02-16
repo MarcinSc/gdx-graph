@@ -2,9 +2,9 @@
   "com.gempukku.libgdx.graph.artemis.lighting.DirectionalLightComponent": {
     "environmentName": "lighting",
     "direction": {
-      "x": -0.3,
-      "y": -0.4,
-      "z": -0.2
+      "x": 0.3,
+      "y": -0.2,
+      "z": -0.4
     },
     "color": {
       "r": 1,

@@ -80,7 +80,8 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new ShadowShaderTestScene(),
                 new SDFTextShaderTestScene(),
                 new HierarchyAndTransformTestScene(),
-                new StylizedShadingShaderTestScene()
+                new StylizedShadingShaderTestScene(),
+                new TopDownCameraTestScene()
         };
         loadedIndex = scenes.length - 1;
 

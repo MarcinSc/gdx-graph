@@ -7,8 +7,8 @@
     "generator": "box",
     "generatorData": {
       "width": 15,
-      "height": 3,
-      "depth": 15,
+      "height": 15,
+      "depth": 3,
       "inside": true,
       "positionProperty": "Position",
       "normalProperty": "Normal",

@@ -7,27 +7,23 @@
     "focus": {
       "x": 0,
       "y": 0,
-      "z": -1
+      "z": 0
     },
     "distance": 15,
     "rotation": 0,
-    "angle": 15,
+    "angle": 35,
     "bounds": {
       "x": -5,
       "y": -5,
       "width": 10,
       "height": 10
     },
-    "distanceRange": {
-      "x": 8,
-      "y": 25
-    },
     "rotationRange": {
       "x": 0,
       "y": 360
     },
     "angleRange": {
-      "x": -90,
+      "x": 0,
       "y": 90
     }
   }

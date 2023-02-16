@@ -6,20 +6,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.gempukku.libgdx.graph.artemis.lighting.LightingSystem;
-import com.gempukku.libgdx.graph.artemis.patchwork.PatchGeneratorSystem;
-import com.gempukku.libgdx.graph.artemis.patchwork.PatchworkSystem;
-import com.gempukku.libgdx.graph.artemis.patchwork.generator.ArrowGenerator;
-import com.gempukku.libgdx.graph.artemis.patchwork.generator.BoxGenerator;
-import com.gempukku.libgdx.graph.artemis.patchwork.generator.ConeGenerator;
-import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
+import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
+import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
@@ -35,9 +32,7 @@ import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 
-import java.util.Arrays;
-
-public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
+public class TopDownCameraTestScene implements LibgdxGraphTestScene {
     private static final int INDEPENDENT_SYSTEMS = 4;
     private static final int DEPEND_ON_CAMERA_SYSTEMS = 3;
     private static final int DEPEND_ON_RENDERER_SYSTEMS = 2;
@@ -49,64 +44,23 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     private Skin skin;
     private Stage stage;
 
-    private enum ShadingTexture {
-        Circles("Circles", "image/circle-tiling.png"),
-        CrossHatch("Crosshatch", "image/cross-hatch.png");
-
-        private String text;
-        private String texture;
-
-        ShadingTexture(String text, String texture) {
-            this.text = text;
-            this.texture = texture;
-        }
-
-        public String getTexture() {
-            return texture;
-        }
-
-        public String toString() {
-            return text;
-        }
-    }
-
     @Override
     public String getName() {
-        return "Stylized Shading";
+        return "Top Down Camera";
     }
 
     @Override
     public void initializeScene() {
         createSystems();
 
-        PatchGeneratorSystem patchGeneratorSystem = world.getSystem(PatchGeneratorSystem.class);
-        patchGeneratorSystem.registerPatchGenerator("sphere", new SphereGenerator());
-        patchGeneratorSystem.registerPatchGenerator("cone", new ConeGenerator());
-        patchGeneratorSystem.registerPatchGenerator("arrow", new ArrowGenerator());
-        patchGeneratorSystem.registerPatchGenerator("box", new BoxGenerator());
-
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
-        spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
-
-        PipelineRendererSystem pipelineRenderSystem = world.getSystem(PipelineRendererSystem.class);
-        pipelineRenderSystem.setRenderingEnabled(false);
+        spawnSystem.spawnEntities("entity/camera/topdown/top-down-camera-setup.entities");
 
         world.process();
 
-        String texture = ShadingTexture.Circles.getTexture();
-        setShadingTexture(pipelineRenderSystem, texture);
-
-        spawnSystem.spawnEntities("entity/shading/shading-environment.entities");
+        spawnSystem.spawnEntities("entity/camera/topdown/top-down-camera-environment.entities");
 
         createUI();
-
-        pipelineRenderSystem.setRenderingEnabled(true);
-    }
-
-    private void setShadingTexture(PipelineRendererSystem pipelineRenderSystem, String texture) {
-        pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
-                "Shading Texture",
-                world.getSystem(TextureSystem.class).getTextureRegion(texture, texture));
     }
 
     private void createSystems() {
@@ -128,10 +82,9 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
                 new PipelineRendererSystem());
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
-                new PatchworkSystem(),
-                new LightingSystem());
+                new SpriteBatchSystem());
         worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
-                new PatchGeneratorSystem());
+                new SpriteSystem());
 
         world = new World(worldConfigurationBuilder.build());
 
@@ -142,52 +95,44 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         skin = new Skin(Gdx.files.classpath("skin/default/uiskin.json"));
         stage = new Stage(new ScreenViewport());
 
+        final Matrix4 tmpMatrix = new Matrix4();
+
+        final Label rotationLabel = new Label("Rotation: 0", skin);
+        final Slider rotationSlider = new Slider(0, 360, 1, false, skin);
+        rotationSlider.setValue(0f);
+        rotationSlider.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
+                        float rotation = rotationSlider.getValue();
+                        cameraController.setRotation("Main", rotation);
+                        rotationLabel.setText("Rotation: " + rotation);
+                    }
+                });
+        final Label angleLabel = new Label("Angle: 35", skin);
+        final Slider angleSlider = new Slider(-89, 89, 1f, false, skin);
+        angleSlider.setValue(35f);
+        angleSlider.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
+                        float angle = angleSlider.getValue();
+                        cameraController.setAngle("Main", angle);
+                        angleLabel.setText("Angle: " + angle);
+                    }
+                });
+
         Table tbl = new Table(skin);
 
         tbl.setFillParent(true);
         tbl.align(Align.topLeft);
 
-        Label cameraPositionLabel = new Label("Camera position", skin);
-        final Slider cameraPositionAngle = new Slider(0, 360f, 0.1f, false, skin);
-        cameraPositionAngle.setValue(0);
-        cameraPositionAngle.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
-                        cameraController.setRotation("Main", cameraPositionAngle.getValue());
-                    }
-                });
-        tbl.add(cameraPositionLabel).width(300).pad(10, 10, 0, 10).row();
-        tbl.add(cameraPositionAngle).width(300).pad(0, 10, 0, 10).row();
-
-        Label shadingTextureLabel = new Label("Shading texture", skin);
-        final SelectBox<ShadingTexture> shadingTexture = new SelectBox<ShadingTexture>(skin);
-        shadingTexture.setItems(ShadingTexture.values());
-        shadingTexture.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        setShadingTexture(world.getSystem(PipelineRendererSystem.class), shadingTexture.getSelected().getTexture());
-                    }
-                });
-        tbl.add(shadingTextureLabel).width(300).pad(10, 10, 0, 10).row();
-        tbl.add(shadingTexture).width(300).pad(0, 10, 0, 10).row();
-
-        Label textureScaleLabel = new Label("Texture scale", skin);
-        final Slider textureScale = new Slider(0.2f, 3.0f, 0.1f, false, skin);
-        textureScale.setValue(1f);
-        textureScale.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        GraphModels graphModels = world.getSystem(PipelineRendererSystem.class).getPluginData(GraphModels.class);
-                        graphModels.setGlobalProperty("Stylized",
-                                "Texture Scale", textureScale.getValue());
-                    }
-                });
-        tbl.add(textureScaleLabel).width(300).pad(10, 10, 0, 10).row();
-        tbl.add(textureScale).width(300).pad(0, 10, 0, 10).row();
+        tbl.add(rotationLabel).pad(10f, 10f, 0f, 10f).row();
+        tbl.add(rotationSlider).pad(0, 10f, 0, 10f).row();
+        tbl.add(angleLabel).pad(10f, 10f, 0, 10f).row();
+        tbl.add(angleSlider).pad(0f, 10f, 0, 10f).row();
 
         stage.addActor(tbl);
 
@@ -219,12 +164,5 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         world.dispose();
         skin.dispose();
         stage.dispose();
-    }
-
-    public static void main(String[] args) {
-        Matrix4 m = new Matrix4();
-        m.translate(-2, 0, 0);
-        m.rotate(1, 0, 0, 90);
-        System.out.println(Arrays.toString(m.val));
     }
 }
