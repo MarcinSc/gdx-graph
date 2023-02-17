@@ -97,7 +97,7 @@ public class TopDownCameraTestScene implements LibgdxGraphTestScene {
 
         final Matrix4 tmpMatrix = new Matrix4();
 
-        final Label rotationLabel = new Label("Rotation: 0", skin);
+        final Label rotationLabel = new Label("Rotation: 0deg", skin);
         final Slider rotationSlider = new Slider(0, 360, 1, false, skin);
         rotationSlider.setValue(0f);
         rotationSlider.addListener(
@@ -107,10 +107,10 @@ public class TopDownCameraTestScene implements LibgdxGraphTestScene {
                         TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
                         float rotation = rotationSlider.getValue();
                         cameraController.setRotation("Main", rotation);
-                        rotationLabel.setText("Rotation: " + rotation);
+                        rotationLabel.setText("Rotation: " + rotation + "deg");
                     }
                 });
-        final Label angleLabel = new Label("Angle: 35", skin);
+        final Label angleLabel = new Label("Angle: 35deg", skin);
         final Slider angleSlider = new Slider(-89, 89, 1f, false, skin);
         angleSlider.setValue(35f);
         angleSlider.addListener(
@@ -120,7 +120,20 @@ public class TopDownCameraTestScene implements LibgdxGraphTestScene {
                         TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
                         float angle = angleSlider.getValue();
                         cameraController.setAngle("Main", angle);
-                        angleLabel.setText("Angle: " + angle);
+                        angleLabel.setText("Angle: " + angle + "deg");
+                    }
+                });
+        final Label tiltLabel = new Label("Tilt: 0deg", skin);
+        final Slider tiltSlider = new Slider(-89, 89, 1f, false, skin);
+        tiltSlider.setValue(0f);
+        tiltSlider.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        TopDownCameraController cameraController = (TopDownCameraController) world.getSystem(CameraSystem.class).getCameraController("Main");
+                        float angle = tiltSlider.getValue();
+                        cameraController.setTilt("Main", angle);
+                        tiltLabel.setText("Tilt: " + angle + "deg");
                     }
                 });
 
@@ -131,8 +144,10 @@ public class TopDownCameraTestScene implements LibgdxGraphTestScene {
 
         tbl.add(rotationLabel).pad(10f, 10f, 0f, 10f).row();
         tbl.add(rotationSlider).pad(0, 10f, 0, 10f).row();
-        tbl.add(angleLabel).pad(10f, 10f, 0, 10f).row();
-        tbl.add(angleSlider).pad(0f, 10f, 0, 10f).row();
+        tbl.add(angleLabel).pad(10f, 10f, 0f, 10f).row();
+        tbl.add(angleSlider).pad(0, 10f, 0, 10f).row();
+        tbl.add(tiltLabel).pad(10f, 10f, 0, 10f).row();
+        tbl.add(tiltSlider).pad(0f, 10f, 0, 10f).row();
 
         stage.addActor(tbl);
 

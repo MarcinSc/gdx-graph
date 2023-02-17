@@ -12,6 +12,7 @@
     "distance": 15,
     "rotation": 0,
     "angle": 35,
+    "tilt": 0,
     "bounds": {
       "x": -5,
       "y": -5,
@@ -25,6 +26,10 @@
     "angleRange": {
       "x": 0,
       "y": 90
+    },
+    "tiltRange": {
+      "x": -45,
+      "y": 45
     }
   }
 }
