@@ -139,10 +139,9 @@ public class BoneWeightFieldType implements ArrayShaderFieldType {
 
     @Override
     public void setValueInAttributesArray(String attributeName, float[] vertices, int startIndex, Object value) {
+        int boneWeightIndex = Integer.parseInt(attributeName.substring(attributeName.lastIndexOf('_') + 1));
         com.badlogic.gdx.math.Vector2[] result = (Vector2[]) value;
-        for (int i = 0; i < maxBoneWeightCount; i++) {
-            vertices[startIndex + i * 2 + 0] = result[i].x;
-            vertices[startIndex + i * 2 + 1] = result[i].y;
-        }
+        vertices[startIndex + 0] = result[boneWeightIndex].x;
+        vertices[startIndex + 1] = result[boneWeightIndex].y;
     }
 }

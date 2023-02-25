@@ -78,6 +78,7 @@ public class DefaultShaderPropertySource implements ShaderPropertySource {
 
     @Override
     public boolean isDefiningAttribute(String attributeName) {
-        return attributeName.equals(getAttributeName());
+        String thisName = getAttributeName();
+        return attributeName.equals(thisName) || attributeName.startsWith(thisName + "_");
     }
 }
