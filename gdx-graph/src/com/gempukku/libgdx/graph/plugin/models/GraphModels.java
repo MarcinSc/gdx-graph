@@ -13,7 +13,6 @@ public interface GraphModels {
      *
      * @param tag
      * @param model
-     * @return
      */
     void addModel(String tag, RenderableModel model);
 

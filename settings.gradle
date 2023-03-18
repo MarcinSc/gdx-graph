@@ -1,4 +1,4 @@
-include 'desktop', 'core', 'gdx-graph', 'gdx-graph-util', 'gdx-graph-artemis', 'gdx-graph-test'
+include 'desktop', 'core', 'gdx-graph', 'gdx-graph-util', 'gdx-graph-artemis', 'gdx-graph-test', 'gdx-graph-assistant'
 
 new File(rootDir, "plugins").listFiles().each {plugin->
     if (plugin.directory) {

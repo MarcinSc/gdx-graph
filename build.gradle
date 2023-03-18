@@ -13,8 +13,9 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "maven"
     apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "java"
     apply plugin: "maven-publish"
 
     group = "com.gempukku.libgdx.graph"
