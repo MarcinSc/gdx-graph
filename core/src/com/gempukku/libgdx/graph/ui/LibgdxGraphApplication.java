@@ -13,8 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.gempukku.gdx.plugins.PluginRegistration;
+import com.gempukku.gdx.plugins.PluginsProvider;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
-import com.gempukku.libgdx.graph.ui.plugin.PluginRegistry;
+import com.gempukku.libgdx.graph.ui.plugin.GdxGraphApplication;
+import com.gempukku.libgdx.graph.ui.plugin.GdxGraphPlugin;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
@@ -26,14 +29,22 @@ public class LibgdxGraphApplication extends ApplicationAdapter {
     private LibgdxGraphScreen libgdxGraphScreen;
     private ScreenViewport viewport;
     private float scale = 1f;
+    private PluginsProvider<GdxGraphApplication, GdxGraphPlugin> pluginsProvider;
+
+    public LibgdxGraphApplication(PluginsProvider<GdxGraphApplication, GdxGraphPlugin> pluginsProvider) {
+        this.pluginsProvider = pluginsProvider;
+    }
 
     @Override
     public void create() {
         //Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
         try {
-            // Initialize design plugins
-            PluginRegistry.initializePlugins();
+            PluginRegistration<GdxGraphApplication, GdxGraphPlugin> pluginRegistration = new PluginRegistration<>();
+            pluginRegistration.registerPlugins(pluginsProvider,
+                    new GdxGraphApplication() {
+                    });
+
             // Initialize runtime plugins
             PluginRegistryImpl.initializePlugins();
         } catch (ReflectionException exp) {

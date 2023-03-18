@@ -1,7 +1,10 @@
 eclipse.project.name = appName + "-core"
 
+sourceCompatibility = 1.8
+
 dependencies {
     api project(":gdx-graph")
     api project(":gdx-graph-util")
     api "com.github.kotcrab:vis-ui:$visUiVersion"
+    api "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
 }

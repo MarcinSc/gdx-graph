@@ -3,6 +3,8 @@ sourceSets.main.resources.srcDirs = ["../core/assets"]
 project.ext.mainClassName = "com.gempukku.libgdx.graph.desktop.GraphEditorLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
+sourceCompatibility = 1.8
+
 dependencies {
     implementation project(":core")
 

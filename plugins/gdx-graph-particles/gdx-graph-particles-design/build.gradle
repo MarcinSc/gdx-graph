@@ -1,5 +1,7 @@
 eclipse.project.name = "gdx-graph-particles-design"
 
+sourceCompatibility = 1.8
+
 dependencies {
     implementation project(":core")
 }

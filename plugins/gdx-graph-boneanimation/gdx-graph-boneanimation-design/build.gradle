@@ -1,5 +1,7 @@
 eclipse.project.name = "gdx-graph-boneanimation-design"
 
+sourceCompatibility = 1.8
+
 dependencies {
     implementation project(":core")
     implementation project(":gdx-graph-models-design")
