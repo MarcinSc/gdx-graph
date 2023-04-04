@@ -21,7 +21,7 @@ dependencies {
 jar {
     manifest {
         attributes(
-                'Gdx-Assistant-Plugin': "com.gempukku.gdx.graph.assistant.GdxGraphAssistantPlugin",
+                'Gdx-Assistant-Plugin': "com.gempukku.libgdx.graph.assistant.GdxGraphAssistantPlugin",
         )
     }
 }
