@@ -14,12 +14,11 @@ import com.gempukku.libgdx.graph.ui.graph.GraphBoxPartImpl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
 import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
+import com.gempukku.libgdx.ui.gradient.DefaultGradientDefinition;
+import com.gempukku.libgdx.ui.gradient.GGradientEditor;
+import com.gempukku.libgdx.ui.gradient.GradientDefinition;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.color.ColorPicker;
-import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
-import com.talosvfx.talos.editor.widgets.GradientWidget;
-import com.talosvfx.talos.runtime.values.ColorPoint;
 
 public class GradientShaderBoxProducer extends GraphBoxProducerImpl {
     public GradientShaderBoxProducer() {
@@ -31,62 +30,39 @@ public class GradientShaderBoxProducer extends GraphBoxProducerImpl {
         final GraphBoxImpl result = createGraphBox(id);
         addConfigurationInputsAndOutputs(result);
 
-        final GradientWidget gradientWidget = new GradientWidget();
-        gradientWidget.setSize(300, 40);
-
+        DefaultGradientDefinition gradientDefinition = new DefaultGradientDefinition();
         if (data != null) {
             JsonValue points = data.get("points");
             for (String point : points.asStringArray()) {
                 String[] split = point.split(",");
-                gradientWidget.createPoint(Color.valueOf(split[0]), Float.parseFloat(split[1]));
+                gradientDefinition.addColor(Float.parseFloat(split[1]), Color.valueOf(split[0]));
             }
         } else {
-            gradientWidget.createPoint(Color.WHITE, 0);
+            gradientDefinition.addColor(0, Color.WHITE);
         }
 
-        gradientWidget.addListener(
+        final GGradientEditor gradientEditor = new GGradientEditor(gradientDefinition, "gdx-graph");
+        gradientEditor.setPrefWidth(300);
+        gradientEditor.setPrefHeight(40);
+
+        gradientEditor.addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        gradientWidget.fire(new GraphChangedEvent(false, true));
-                    }
-                });
-
-        gradientWidget.setListener(
-                new GradientWidget.GradientWidgetListener() {
-                    @Override
-                    public void colorPickerShow(final ColorPoint point, final Runnable onSuccess) {
-                        final ColorPicker picker = new ColorPicker();
-                        picker.setColor(point.color);
-                        picker.setListener(new ColorPickerAdapter() {
-                            @Override
-                            public void finished(Color newColor) {
-                                point.color.set(newColor);
-                                picker.dispose();
-                                onSuccess.run();
-                                result.getActor().fire(new GraphChangedEvent(false, true));
-                            }
-
-                            @Override
-                            public void canceled(Color oldColor) {
-                                picker.dispose();
-                            }
-                        });
-
-                        gradientWidget.getStage().addActor(picker.fadeIn());
+                        gradientEditor.fire(new GraphChangedEvent(false, true));
                     }
                 });
 
         result.addGraphBoxPart(
                 new GraphBoxPartImpl(
-                        gradientWidget,
+                        gradientEditor,
                         new GraphBoxPartImpl.Callback() {
                             @Override
                             public void serialize(JsonValue object) {
-                                Array<ColorPoint> points = gradientWidget.getPoints();
+                                Array<GradientDefinition.ColorPosition> points = gradientEditor.getGradientDefinition().getColorPositions();
                                 JsonValue pointsValue = new JsonValue(JsonValue.ValueType.array);
-                                for (ColorPoint point : points) {
-                                    pointsValue.addChild(new JsonValue(point.color.toString() + "," + SimpleNumberFormatter.format(point.pos)));
+                                for (GradientDefinition.ColorPosition point : points) {
+                                    pointsValue.addChild(new JsonValue(point.color.toString() + "," + SimpleNumberFormatter.format(point.position)));
                                 }
                                 object.addChild("points", pointsValue);
                             }

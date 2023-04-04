@@ -14,9 +14,10 @@ import com.gempukku.libgdx.graph.ui.graph.GraphBoxPartImpl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
 import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
+import com.gempukku.libgdx.ui.curve.DefaultCurveDefinition;
+import com.gempukku.libgdx.ui.curve.GCurveEditor;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.talosvfx.talos.editor.widgets.CurveWidget;
 
 public class RemapValueShaderBoxProducer extends GraphBoxProducerImpl {
     public RemapValueShaderBoxProducer() {
@@ -28,33 +29,37 @@ public class RemapValueShaderBoxProducer extends GraphBoxProducerImpl {
         GraphBoxImpl result = createGraphBox(id);
         addConfigurationInputsAndOutputs(result);
 
-        final CurveWidget curveWidget = new CurveWidget(skin);
+        DefaultCurveDefinition curveDefinition = new DefaultCurveDefinition();
 
         if (data != null) {
             JsonValue points = data.get("points");
             for (String point : points.asStringArray()) {
                 String[] split = point.split(",");
-                curveWidget.createPoint(Float.parseFloat(split[0]), Float.parseFloat(split[1]));
+                curveDefinition.addPoint(Float.parseFloat(split[0]), Float.parseFloat(split[1]));
             }
         } else {
-            curveWidget.createPoint(0, 0);
+            curveDefinition.addPoint(0, 0);
         }
-        curveWidget.addListener(
+
+        final GCurveEditor curveEditor = new GCurveEditor(curveDefinition, "gdx-graph");
+        curveEditor.setPrefWidth(300);
+        curveEditor.setPrefHeight(200);
+
+        curveEditor.addListener(
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        curveWidget.fire(new GraphChangedEvent(false, true));
+                        curveEditor.fire(new GraphChangedEvent(false, true));
                     }
                 });
 
-        curveWidget.setSize(300, 200);
         result.addGraphBoxPart(
                 new GraphBoxPartImpl(
-                        curveWidget,
+                        curveEditor,
                         new GraphBoxPartImpl.Callback() {
                             @Override
                             public void serialize(JsonValue object) {
-                                Array<Vector2> points = curveWidget.getPoints();
+                                Array<Vector2> points = curveEditor.getCurveDefinition().getPoints();
                                 JsonValue pointsValue = new JsonValue(JsonValue.ValueType.array);
                                 for (Vector2 point : points) {
                                     pointsValue.addChild(new JsonValue(SimpleNumberFormatter.format(point.x) + "," + SimpleNumberFormatter.format(point.y)));

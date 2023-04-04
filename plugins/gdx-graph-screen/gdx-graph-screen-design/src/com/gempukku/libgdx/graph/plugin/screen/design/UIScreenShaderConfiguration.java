@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.plugin.screen.design;
 
 import com.gempukku.libgdx.graph.plugin.screen.design.producer.EndScreenShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 
@@ -20,6 +21,8 @@ public class UIScreenShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
+        GraphTypeRegistry.registerType(ScreenShaderGraphType.instance);
+
         register(new EndScreenShaderBoxProducer());
     }
 

@@ -1,10 +1,18 @@
-archivesBaseName = "gdx-graph-assistant"
 eclipse.project.name = "gdx-graph-assistant"
 
 sourceCompatibility = 1.8
 
 dependencies {
     api project(":core")
+
+    // Plugins
+    implementation project(":gdx-graph-callback-design")
+    implementation project(":gdx-graph-particles-design")
+    implementation project(":gdx-graph-screen-design")
+    implementation project(":gdx-graph-models-design")
+    implementation project(":gdx-graph-boneanimation-design")
+    implementation project(":gdx-graph-lighting3d-design")
+
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
     api "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
     api "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"

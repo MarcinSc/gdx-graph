@@ -1,50 +1,52 @@
 {
   "version": "0.5.0",
+  "type": "Render_Pipeline",
   "nodes": [
     {
-      "x": 407.0,
-      "y": 306.0,
-      "id": "end",
-      "type": "PipelineEnd"
-    },
-    {
-      "x": 407.0,
-      "y": 460.0,
-      "id": "d214ec4a440d476aa2efc0560ad67ef9",
-      "type": "PipelineStart"
-    },
-    {
+      "id": "aabbec2d317c4b9da9339de61c084b74",
+      "type": "Property",
+      "x": 50.0,
+      "y": 208.0,
       "data": {
         "name": "Background Color",
-        "type": "Color"
-      },
-      "x": 139.0,
-      "y": 464.0,
-      "id": "aabbec2d317c4b9da9339de61c084b74",
-      "type": "Property"
+        "type": "Vector4"
+      }
+    },
+    {
+      "id": "d214ec4a440d476aa2efc0560ad67ef9",
+      "type": "PipelineStart",
+      "x": 319.0,
+      "y": 195.0
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 318.0,
+      "y": 50.0
     }
   ],
   "connections": [
     {
-      "fromNode": "d214ec4a440d476aa2efc0560ad67ef9",
-      "toField": "input",
-      "fromField": "output",
-      "toNode": "end"
+      "fromNode": "aabbec2d317c4b9da9339de61c084b74",
+      "fromField": "value",
+      "toNode": "d214ec4a440d476aa2efc0560ad67ef9",
+      "toField": "background"
     },
     {
-      "fromNode": "aabbec2d317c4b9da9339de61c084b74",
-      "toField": "background",
-      "fromField": "value",
-      "toNode": "d214ec4a440d476aa2efc0560ad67ef9"
+      "fromNode": "d214ec4a440d476aa2efc0560ad67ef9",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
     }
   ],
   "properties": [
     {
+      "name": "Background Color",
+      "type": "Vector4",
       "data": {
         "color": "ffffffff"
-      },
-      "name": "Background Color",
-      "type": "Color"
+      }
     }
-  ]
+  ],
+  "groups": []
 }

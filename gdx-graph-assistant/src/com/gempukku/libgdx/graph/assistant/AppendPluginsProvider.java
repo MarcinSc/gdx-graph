@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.desktop;
+package com.gempukku.libgdx.graph.assistant;
 
 import com.gempukku.gdx.plugins.Plugin;
 import com.gempukku.gdx.plugins.PluginsProvider;
@@ -26,6 +26,7 @@ public class AppendPluginsProvider<T, U extends Plugin<T>> implements PluginsPro
             for (U sourcePlugin : sourcePlugins.getPlugins()) {
                 plugins.add(sourcePlugin);
             }
+            addedFromSource = true;
         }
 
         return plugins;

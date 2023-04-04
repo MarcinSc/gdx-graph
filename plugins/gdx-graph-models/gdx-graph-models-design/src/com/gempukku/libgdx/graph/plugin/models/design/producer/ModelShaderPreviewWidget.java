@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.data.Graph;
@@ -33,8 +31,9 @@ import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
+import com.gempukku.libgdx.ui.DisposableWidget;
 
-public class ModelShaderPreviewWidget extends Widget implements Disposable {
+public class ModelShaderPreviewWidget extends DisposableWidget implements Disposable {
     public enum ShaderPreviewModel {
         Sphere, Rectangle;
     }
@@ -129,13 +128,14 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     }
 
     @Override
-    protected void setStage(Stage stage) {
-        super.setStage(stage);
-        if (stage == null && shaderInitialized) {
-            destroyShader();
-        } else if (stage != null && !shaderInitialized && graph != null) {
+    protected void initializeWidget() {
+        if (graph != null)
             createShader(graph);
-        }
+    }
+
+    @Override
+    protected void disposeWidget() {
+        destroyShader();
     }
 
     @Override
@@ -213,10 +213,12 @@ public class ModelShaderPreviewWidget extends Widget implements Disposable {
     }
 
     private void destroyShader() {
-        frameBuffer.dispose();
-        frameBuffer = null;
-        graphShader.dispose();
-        shaderInitialized = false;
+        if (shaderInitialized) {
+            frameBuffer.dispose();
+            frameBuffer = null;
+            graphShader.dispose();
+            shaderInitialized = false;
+        }
     }
 
     @Override

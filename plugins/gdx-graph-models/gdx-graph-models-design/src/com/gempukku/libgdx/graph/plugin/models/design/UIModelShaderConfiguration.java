@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.plugin.models.design;
 import com.gempukku.libgdx.graph.plugin.models.config.provided.*;
 import com.gempukku.libgdx.graph.plugin.models.design.producer.EndModelShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
@@ -23,6 +24,8 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
+        GraphTypeRegistry.registerType(ModelShaderGraphType.instance);
+
         register(new EndModelShaderBoxProducer());
 
         register(new GraphBoxProducerImpl(new WorldPositionShaderNodeConfiguration()));

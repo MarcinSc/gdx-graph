@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.FileGraphShaderTemplate;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.GraphShaderTemplate;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.LoadFileGraphShaderTemplate;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.PasteGraphShaderTemplate;
 
 public class ParticlesTemplateRegistry {
     private static Array<GraphShaderTemplate> templates = new Array<>();
@@ -20,8 +19,6 @@ public class ParticlesTemplateRegistry {
         register(null);
         register(
                 new LoadFileGraphShaderTemplate("From file..."));
-        register(
-                new PasteGraphShaderTemplate(ParticleEffectGraphType.instance));
     }
 
     public static Iterable<GraphShaderTemplate> getTemplates() {

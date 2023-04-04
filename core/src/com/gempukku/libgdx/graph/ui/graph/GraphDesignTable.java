@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.Graph;
 import com.gempukku.libgdx.graph.data.GraphConnection;
@@ -21,48 +22,37 @@ import com.gempukku.libgdx.graph.data.GraphValidator;
 import com.gempukku.libgdx.graph.data.NodeGroup;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
+import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
 import com.gempukku.libgdx.graph.ui.preview.PreviewWidget;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 
 import java.util.*;
 
-public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnection, PropertyBox> {
+public class GraphDesignTable extends VisTable implements Graph<GraphBox, GraphConnection, PropertyBox>, Disposable {
     private List<PropertyBox> propertyBoxes = new LinkedList<>();
     private final GraphContainer graphContainer;
 
+    private GraphType type;
     private Skin skin;
     private UIGraphConfiguration[] uiGraphConfigurations;
-    private SaveCallback saveCallback;
-
-    private GraphType type;
-    private String id;
-    private String title;
 
     private final VerticalGroup pipelineProperties;
-    private VisTable contentTable;
     private VisLabel validationLabel;
 
     private GraphValidator<GraphBox, GraphConnection, PropertyBox> graphValidator = new GraphValidator<>();
 
     private boolean finishedLoading = false;
 
-    public GraphDesignTab(boolean closeable, GraphType type, String id, String title, Skin skin,
-                          SaveCallback saveCallback, UIGraphConfiguration... uiGraphConfiguration) {
-        super(true, closeable);
+    public GraphDesignTable(GraphType type, Skin skin, DirtyHierarchy dirtyHierarchy, UIGraphConfiguration... uiGraphConfiguration) {
         this.type = type;
-        this.id = id;
-        this.title = title;
 
-        contentTable = new VisTable();
         pipelineProperties = createPropertiesUI(skin);
         this.skin = skin;
         this.uiGraphConfigurations = uiGraphConfiguration;
-        this.saveCallback = saveCallback;
 
         graphContainer = new GraphContainer(skin,
                 new PopupMenuProducer() {
@@ -71,18 +61,15 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
                         return createGraphPopupMenu(x, y);
                     }
                 });
-        contentTable.addListener(
+        this.addListener(
                 new GraphChangedListener() {
                     @Override
                     protected boolean graphChanged(GraphChangedEvent event) {
                         if (finishedLoading) {
-                            setDirty(true);
+                            dirtyHierarchy.setDirty();
                             if (event.isStructure())
                                 updatePipelineValidation();
-                            for (GraphBox graphBox : graphContainer.getGraphBoxes()) {
-                                graphBox.graphChanged(event, graphContainer.getValidationResult().hasErrors(),
-                                        GraphDesignTab.this);
-                            }
+                            notifyGraphBoxes(event);
                         }
 
                         event.stop();
@@ -121,15 +108,14 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
         splitPane.setMaxSplitAmount(0.2f);
         splitPane.setSplitAmount(0.2f);
 
-        contentTable.add(splitPane).grow().row();
+        this.add(splitPane).grow().row();
     }
 
-    public UIGraphConfiguration[] getUiGraphConfigurations() {
-        return uiGraphConfigurations;
-    }
-
-    public GraphType getType() {
-        return type;
+    private void notifyGraphBoxes(GraphChangedEvent event) {
+        for (GraphBox graphBox : graphContainer.getGraphBoxes()) {
+            graphBox.graphChanged(event, graphContainer.getValidationResult().hasErrors(),
+                    GraphDesignTable.this);
+        }
     }
 
     @Override
@@ -153,19 +139,8 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
 
     public void finishedLoading() {
         finishedLoading = true;
-        contentTable.fire(new GraphChangedEvent(true, false));
+        notifyGraphBoxes(new GraphChangedEvent(true, true));
         graphContainer.adjustCanvas();
-    }
-
-    @Override
-    public boolean save() {
-        super.save();
-
-        if (saveCallback != null)
-            saveCallback.save(this);
-        setDirty(false);
-
-        return true;
     }
 
     private PopupMenu createGraphPopupMenu(final float popupX, final float popupY) {
@@ -270,10 +245,6 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
         return menu;
     }
 
-    public String getId() {
-        return id;
-    }
-
     @Override
     public GraphBox getNodeById(String id) {
         return graphContainer.getGraphBoxById(id);
@@ -353,7 +324,7 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
         table.row();
         pipelineProperties.addActor(table);
 
-        contentTable.fire(new GraphChangedEvent(true, false));
+        this.fire(new GraphChangedEvent(true, false));
     }
 
     private void removePropertyBox(PropertyBox propertyBox) {
@@ -362,7 +333,7 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
         pipelineProperties.removeActor(actor.getParent());
         propertyBox.dispose();
 
-        contentTable.fire(new GraphChangedEvent(true, false));
+        this.fire(new GraphChangedEvent(true, false));
     }
 
     @Override
@@ -371,16 +342,6 @@ public class GraphDesignTab extends Tab implements Graph<GraphBox, GraphConnecti
         for (PropertyBox propertyBox : propertyBoxes) {
             propertyBox.dispose();
         }
-    }
-
-    @Override
-    public String getTabTitle() {
-        return title;
-    }
-
-    @Override
-    public VisTable getContentTable() {
-        return contentTable;
     }
 
     public JsonValue serializeGraph() {

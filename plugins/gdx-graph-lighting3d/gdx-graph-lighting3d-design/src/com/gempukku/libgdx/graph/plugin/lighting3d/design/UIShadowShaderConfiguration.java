@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.producer.EndShadowShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
 import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
 
@@ -20,6 +21,8 @@ public class UIShadowShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
+        GraphTypeRegistry.registerType(ShadowShaderGraphType.instance);
+
         register(new EndShadowShaderBoxProducer());
     }
 

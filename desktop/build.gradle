@@ -7,17 +7,12 @@ sourceCompatibility = 1.8
 
 dependencies {
     implementation project(":core")
-
-    // Plugins
-    implementation project(":gdx-graph-callback-design")
-    implementation project(":gdx-graph-particles-design")
-    implementation project(":gdx-graph-screen-design")
-    implementation project(":gdx-graph-models-design")
-    implementation project(":gdx-graph-boneanimation-design")
-    implementation project(":gdx-graph-lighting3d-design")
+    implementation project(":gdx-graph-assistant")
 
     api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
+    api "com.github.MarcinSc.gdx-assistant:gdx-assistant-desktop:$gdxAssistantVersion"
 }
 
 task run(dependsOn: classes, type: JavaExec) {
