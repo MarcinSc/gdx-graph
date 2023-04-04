@@ -1,6 +1,6 @@
 eclipse.project.name = "gdx-graph-assistant"
 
-sourceSets.main.resources.srcDirs = ["../core/assets"]
+sourceSets.main.resources.srcDirs = ["../core/assets", "../gdx-graph/resources"]
 
 sourceCompatibility = 1.8
 

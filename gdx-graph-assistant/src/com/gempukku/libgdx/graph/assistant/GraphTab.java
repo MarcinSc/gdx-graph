@@ -54,6 +54,7 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                                 subGraphTab.setAssistantTab(subAssistantTab);
                                 subGraphTabs.put(graphId, subGraphTab);
                                 subGraphDesignTables.put(graphId, subGraphDesignTable);
+                                tabControl.switchToTab(subGraphTab);
                             }
                             return true;
                         } else if (event instanceof GetSerializedGraph) {
