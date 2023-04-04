@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.desktop;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +29,16 @@ public class GraphEditorLauncher {
         public LegacyGraphPluginProvider() {
             plugins.add(new WarningPlugin());
             plugins.add(new GdxGraphAssistantPlugin());
+        }
+
+        @Override
+        public void loadPlugins() {
+
+        }
+
+        @Override
+        public Files getPluginFiles() {
+            return Gdx.files;
         }
 
         @Override

@@ -14,6 +14,7 @@ dependencies {
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-desktop:$gdxAssistantVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
 }
 
 task run(dependsOn: classes, type: JavaExec) {
