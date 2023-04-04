@@ -4,6 +4,9 @@ sourceCompatibility = 1.7
 
 dependencies {
     api project(":gdx-graph")
+
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-all:$mockitoVersion"
 }
