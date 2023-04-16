@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.shader.config.common.noise;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class VoronoiBorder2DNodeConfiguration extends NodeConfigurationImpl {
+public class VoronoiBorder2DNodeConfiguration extends DefaultMenuNodeConfiguration {
     public VoronoiBorder2DNodeConfiguration() {
         super("VoronoiBorder2D", "Voronoi Border 2D", "Noise");
         addNodeInput(
-                new GraphNodeInputImpl("uv", "UV", true, ShaderFieldType.Vector2, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("uv", "UV", true, ShaderFieldType.Vector2, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("scale", "Scale", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("scale", "Scale", false, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("progress", "Progress", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("progress", "Progress", false, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Result", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("output", "Result", ShaderFieldType.Float));
     }
 }

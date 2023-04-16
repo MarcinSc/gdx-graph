@@ -1,13 +1,13 @@
 package com.gempukku.libgdx.graph.pipeline.config.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class ValueBooleanPipelineNodeConfiguration extends NodeConfigurationImpl {
+public class ValueBooleanPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public ValueBooleanPipelineNodeConfiguration() {
         super("ValueBoolean", "Boolean", "Constant");
         addNodeOutput(
-                new GraphNodeOutputImpl("value", "Value", PipelineFieldType.Boolean));
+                new DefaultGraphNodeOutput("value", "Value", PipelineFieldType.Boolean));
     }
 }

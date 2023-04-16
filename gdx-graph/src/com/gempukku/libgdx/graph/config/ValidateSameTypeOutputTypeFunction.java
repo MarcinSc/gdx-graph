@@ -2,8 +2,7 @@ package com.gempukku.libgdx.graph.config;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-
-import java.util.function.Function;
+import com.gempukku.libgdx.common.Function;
 
 public class ValidateSameTypeOutputTypeFunction implements Function<ObjectMap<String, Array<String>>, String> {
     private final String fieldType;
@@ -15,7 +14,7 @@ public class ValidateSameTypeOutputTypeFunction implements Function<ObjectMap<St
     }
 
     @Override
-    public String apply(ObjectMap<String, Array<String>> map) {
+    public String evaluate(ObjectMap<String, Array<String>> map) {
         String resolvedType = null;
         for (String input : inputs) {
             Array<String> type = map.get(input);

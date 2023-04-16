@@ -1,19 +1,19 @@
 package com.gempukku.libgdx.graph.shader.config.common.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class TimeShaderNodeConfiguration extends NodeConfigurationImpl {
+public class TimeShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public TimeShaderNodeConfiguration() {
         super("Time", "Time", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("time", "Time", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("time", "Time", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("sinTime", "sin(Time)", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("sinTime", "sin(Time)", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("cosTime", "cos(Time)", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("cosTime", "cos(Time)", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("deltaTime", "deltaTime", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("deltaTime", "deltaTime", ShaderFieldType.Float));
     }
 }

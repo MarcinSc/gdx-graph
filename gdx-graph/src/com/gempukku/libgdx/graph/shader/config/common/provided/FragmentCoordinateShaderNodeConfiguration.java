@@ -1,13 +1,13 @@
 package com.gempukku.libgdx.graph.shader.config.common.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class FragmentCoordinateShaderNodeConfiguration extends NodeConfigurationImpl {
+public class FragmentCoordinateShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public FragmentCoordinateShaderNodeConfiguration() {
         super("FragmentCoordinate", "Fragment coordinate", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", ShaderFieldType.Vector4));
+                new DefaultGraphNodeOutput("output", "Output", ShaderFieldType.Vector4));
     }
 }

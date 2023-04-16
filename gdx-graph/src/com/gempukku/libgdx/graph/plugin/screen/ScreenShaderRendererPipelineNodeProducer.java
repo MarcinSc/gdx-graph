@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
@@ -16,14 +15,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
-    private static final GraphConfiguration[] configurations = new GraphConfiguration[]{new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ScreenShaderConfiguration()};
     private final PluginPrivateDataSource pluginPrivateDataSource;
 
     public ScreenShaderRendererPipelineNodeProducer(PluginPrivateDataSource pluginPrivateDataSource) {
@@ -57,7 +51,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                     JsonValue shaderGraph = shaderDefinition.get("shader");
                     String tag = shaderDefinition.getString("tag");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final ScreenGraphShader shader = GraphLoader.loadGraph(shaderGraph, new ScreenShaderLoaderCallback(tag, pipelineDataProvider.getWhitePixel().texture, configurations), PropertyLocation.Global_Uniform);
+                    final ScreenGraphShader shader = ScreenShaderLoader.loadShader(shaderGraph, tag, pipelineDataProvider.getWhitePixel().texture);
                     shaderArray.add(shader);
                 }
 

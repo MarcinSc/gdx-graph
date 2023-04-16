@@ -2,7 +2,7 @@ package com.gempukku.libgdx.graph.ui.producer;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.data.GraphNodeOutput;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
 
 public class ValueGraphNodeOutput implements GraphNodeOutput {
     private String fieldName;

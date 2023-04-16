@@ -20,10 +20,10 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.BorderDetectionSha
 import com.gempukku.libgdx.graph.shader.config.common.texture.Sampler2DShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.GradientShaderBoxProducer;
@@ -32,7 +32,7 @@ import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapValueShaderB
 import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapVectorShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.property.*;
 import com.gempukku.libgdx.graph.ui.shader.producer.provided.SceneColorShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.provided.TimeShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.provided.TimeShaderBoxProducerDefault;
 import com.gempukku.libgdx.graph.ui.shader.producer.texture.UVFlipbookShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
 
@@ -41,140 +41,136 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class UICommonShaderConfiguration implements UIGraphConfiguration {
-    private static Map<String, GraphBoxProducer> graphBoxProducers = new TreeMap<>();
-    private static Map<String, PropertyBoxProducer> propertyProducers = new LinkedHashMap<>();
+    private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
+    private static Map<String, PropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
 
-    public static void register(GraphBoxProducer producer) {
+    public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)
             menuLocation = "Dummy";
         graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
     }
 
-    public static void registerPropertyType(PropertyBoxProducer propertyBoxProducer) {
-        propertyProducers.put(propertyBoxProducer.getType(), propertyBoxProducer);
+    public static void registerPropertyType(PropertyEditorDefinition propertyEditorDefinition) {
+        propertyProducers.put(propertyEditorDefinition.getType(), propertyEditorDefinition);
     }
 
     static {
-        PropertyShaderGraphBoxProducer propertyProducer = new PropertyShaderGraphBoxProducer();
-        propertyProducer.addPropertyGraphBoxCustomization(new TextureCustomization());
-        register(propertyProducer);
-
-        register(new GraphBoxProducerImpl(new Sampler2DShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration()));
         register(new UVFlipbookShaderBoxProducer());
-        register(new GraphBoxProducerImpl(new UVTilingAndOffsetShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new BorderDetectionShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new AddShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SubtractShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new OneMinusShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new MultiplyShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new DivideShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ReciprocalShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new AddShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SubtractShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DivideShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new PowerShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ExponentialShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ExponentialBase2ShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new NaturalLogarithmShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new LogarithmBase2ShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SquareRootShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new InverseSquareRootShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new PowerShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new SinShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CosShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new TanShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ArcsinShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ArccosShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ArctanShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new Arctan2ShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new RadiansShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new DegreesShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SinShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CosShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new TanShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ArccosShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ArctanShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new RadiansShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DegreesShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new AbsShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SignShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new FloorShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CeilingShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new FractionalPartShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ModuloShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new MinimumShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new MaximumShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ClampShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SaturateShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new LerpShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new AbsShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SignShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new FloorShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CeilingShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ModuloShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new MinimumShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new MaximumShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ClampShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SaturateShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new LerpShaderNodeConfiguration()));
         register(new ConditionalShaderBoxProducer());
-        register(new GraphBoxProducerImpl(new StepShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SmoothstepShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new StepShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new LengthShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new DistanceShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new DotProductShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CrossProductShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new NormalizeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new LengthShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DistanceShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DotProductShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new DistanceFromPlaneShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new SplitShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new MergeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new RemapShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new MergeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new RemapShaderNodeConfiguration()));
         register(new RemapVectorShaderBoxProducer());
         register(new RemapValueShaderBoxProducer());
 
         register(new DitherShaderBoxProducer());
         register(new DitherColorShaderBoxProducer());
-        register(new GraphBoxProducerImpl(new IntensityShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new FresnelEffectShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new IntensityShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
         register(new GradientShaderBoxProducer());
 
-        register(new GraphBoxProducerImpl(new SimplexNoise2DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SimplexNoise3DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new PerlinNoise2DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new PerlinNoise3DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new VoronoiDistance2DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new VoronoiDistance3DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new VoronoiBorder2DNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new VoronoiBorder3DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new DotShapeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CheckerboardShapeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new EllipseShapeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new RectangleShapeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new StarShapeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration()));
 
-        register(new TimeShaderBoxProducer());
-        register(new GraphBoxProducerImpl(new CameraPositionShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CameraDirectionShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new CameraViewportSizeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new FragmentCoordinateShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new SceneDepthShaderNodeConfiguration()));
+        register(new TimeShaderBoxProducerDefault());
+        register(new DefaultMenuGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CameraDirectionShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new CameraViewportSizeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new FragmentCoordinateShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new SceneDepthShaderNodeConfiguration()));
         register(new SceneColorShaderBoxProducer());
-        register(new GraphBoxProducerImpl(new ScreenPositionShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new PixelSizeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ViewportSizeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ScreenPositionShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new PixelSizeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ViewportSizeShaderNodeConfiguration()));
 
-        register(new GraphBoxProducerImpl(new BillboardSpriteShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ScreenSpriteShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new BillboardSpriteShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ScreenSpriteShaderNodeConfiguration()));
 
-        register(new ValueColorBoxProducer(new ValueColorShaderNodeConfiguration()));
-        register(new ValueFloatBoxProducer(new ValueFloatShaderNodeConfiguration()));
-        register(new ValueVector2BoxProducer(new ValueVector2ShaderNodeConfiguration()));
-        register(new ValueVector3BoxProducer(new ValueVector3ShaderNodeConfiguration()));
-        register(new ValueBooleanBoxProducer(new ValueBooleanShaderNodeConfiguration()));
+        register(new ValueColorBoxProducerDefault(new ValueColorShaderNodeConfiguration()));
+        register(new ValueFloatBoxProducerDefault(new ValueFloatShaderNodeConfiguration()));
+        register(new ValueVector2BoxProducerDefault(new ValueVector2ShaderNodeConfiguration()));
+        register(new ValueVector3BoxProducerDefault(new ValueVector3ShaderNodeConfiguration()));
+        register(new ValueBooleanBoxProducerDefault(new ValueBooleanShaderNodeConfiguration()));
 
-        registerPropertyType(new PropertyFloatBoxProducer());
-        registerPropertyType(new PropertyVector2BoxProducer());
-        registerPropertyType(new PropertyVector3BoxProducer());
-        registerPropertyType(new PropertyColorBoxProducer());
-        registerPropertyType(new PropertyMatrix4BoxProducer());
-        registerPropertyType(new PropertyTextureBoxProducer());
+        registerPropertyType(new PropertyFloatEditorDefinition());
+        registerPropertyType(new PropertyVector2EditorDefinition());
+        registerPropertyType(new PropertyVector3EditorDefinition());
+        registerPropertyType(new PropertyColorEditorDefinition());
+        registerPropertyType(new PropertyMatrix4EditorDefinition());
+        registerPropertyType(new PropertyTextureEditorDefinition());
     }
 
     @Override
-    public Iterable<GraphBoxProducer> getGraphBoxProducers() {
+    public Iterable<MenuGraphNodeEditorProducer> getGraphNodeEditorProducers() {
         return graphBoxProducers.values();
     }
 
     @Override
-    public Map<String, PropertyBoxProducer> getPropertyBoxProducers() {
+    public Map<String, PropertyEditorDefinition> getPropertyEditorDefinitions() {
         return propertyProducers;
     }
 }

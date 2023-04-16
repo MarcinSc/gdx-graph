@@ -1,21 +1,18 @@
 package com.gempukku.libgdx.graph.plugin.screen.design.producer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.graph.data.Graph;
-import com.gempukku.libgdx.graph.data.GraphConnection;
-import com.gempukku.libgdx.graph.data.GraphNode;
-import com.gempukku.libgdx.graph.data.GraphProperty;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.plugin.screen.config.EndScreenShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.screen.design.ScreenShaderPreviewBoxPart;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
 import com.gempukku.libgdx.graph.ui.part.BlendingBoxPart;
-import com.gempukku.libgdx.graph.ui.part.SectionBoxPart;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.SectionEditorPart;
 
-public class EndScreenShaderBoxProducer extends GraphBoxProducerImpl {
+public class EndScreenShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public EndScreenShaderBoxProducer() {
         super(new EndScreenShaderNodeConfiguration());
     }
@@ -26,30 +23,33 @@ public class EndScreenShaderBoxProducer extends GraphBoxProducerImpl {
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         final ScreenShaderPreviewBoxPart previewBoxPart = new ScreenShaderPreviewBoxPart();
-        previewBoxPart.initialize(data);
 
-        GraphBoxImpl result = new GraphBoxImpl(id, getConfiguration()) {
-            @Override
-            public void graphChanged(GraphChangedEvent event, boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
-                if (event.isData() || event.isStructure()) {
-                    previewBoxPart.graphChanged(hasErrors, graph);
-                }
-            }
-        };
-
-        addConfigurationInputsAndOutputs(result);
-
-        result.addGraphBoxPart(new SectionBoxPart("Rendering config"));
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
 
         BlendingBoxPart blendingBox = new BlendingBoxPart();
-        blendingBox.initialize(data);
-        result.addGraphBoxPart(blendingBox);
+        graphNodeEditor.addGraphBoxPart(blendingBox);
 
-        result.addGraphBoxPart(new SectionBoxPart("Preview"));
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Preview"));
 
-        result.addGraphBoxPart(previewBoxPart);
-        return result;
+        graphNodeEditor.addGraphBoxPart(previewBoxPart);
+    }
+
+
+    private class GraphChangedAwareEditor extends DefaultGraphNodeEditor implements GraphChangedAware {
+        private ScreenShaderPreviewBoxPart previewBoxPart;
+
+        public GraphChangedAwareEditor(NodeConfiguration configuration, ScreenShaderPreviewBoxPart previewBoxPart) {
+            super(configuration);
+            this.previewBoxPart = previewBoxPart;
+        }
+
+        @Override
+        public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+            if (event.isData() || event.isStructure()) {
+                previewBoxPart.graphChanged(hasErrors, graph);
+            }
+        }
     }
 }

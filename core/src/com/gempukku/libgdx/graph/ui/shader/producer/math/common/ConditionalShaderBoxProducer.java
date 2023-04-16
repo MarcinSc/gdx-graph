@@ -1,31 +1,24 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.math.common;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.config.common.math.common.ConditionalShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.part.SelectBoxPart;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.SelectEditorPart;
 
-public class ConditionalShaderBoxProducer extends GraphBoxProducerImpl {
+public class ConditionalShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public ConditionalShaderBoxProducer() {
         super(new ConditionalShaderNodeConfiguration());
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-        GraphBoxImpl result = createGraphBox(id);
-        addConfigurationInputsAndOutputs(result);
-        SelectBoxPart operationType = new SelectBoxPart("Operation", "operation",
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+        SelectEditorPart operationType = new SelectEditorPart("Operation", "operation",
                 ">", ">=", "==", "<=", "<", "!=");
-        operationType.initialize(data);
-        result.addGraphBoxPart(operationType);
-        SelectBoxPart aggregationType = new SelectBoxPart("Aggregate", "aggregate",
+        graphNodeEditor.addGraphBoxPart(operationType);
+        SelectEditorPart aggregationType = new SelectEditorPart("Aggregate", "aggregate",
                 "any", "all");
-        aggregationType.initialize(data);
-        result.addGraphBoxPart(aggregationType);
-
-        return result;
+        graphNodeEditor.addGraphBoxPart(aggregationType);
     }
 }

@@ -1,17 +1,17 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.config;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
 
-public class EndShadowShaderNodeConfiguration extends NodeConfigurationImpl {
+public class EndShadowShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public EndShadowShaderNodeConfiguration() {
         super("ShadowShaderEnd", "Shader output", null);
         addNodeInput(
-                new GraphNodeInputImpl("position", "Position", true, false, ShaderFieldType.Vector3));
+                new DefaultGraphNodeInput("position", "Position", true, false, ShaderFieldType.Vector3));
         addNodeInput(
-                new GraphNodeInputImpl("alpha", "Alpha", false, false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("alpha", "Alpha", false, false, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("alphaClip", "Alpha clip", false, false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("alphaClip", "Alpha clip", false, false, ShaderFieldType.Float));
     }
 }

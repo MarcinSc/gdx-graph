@@ -7,5 +7,4 @@ dependencies {
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
 }

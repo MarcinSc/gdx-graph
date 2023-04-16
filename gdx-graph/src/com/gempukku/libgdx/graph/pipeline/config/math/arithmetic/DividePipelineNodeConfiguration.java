@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.pipeline.config.math.arithmetic;
 
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.VectorArithmeticOutputTypeFunction;
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class DividePipelineNodeConfiguration extends NodeConfigurationImpl {
+public class DividePipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public DividePipelineNodeConfiguration() {
         super("Divide", "Divide", "Math/Arithmetic");
         addNodeInput(
-                new GraphNodeInputImpl("a", "A", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
+                new DefaultGraphNodeInput("a", "A", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("b", "B", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
+                new DefaultGraphNodeInput("b", "B", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Result",
+                new DefaultGraphNodeOutput("output", "Result",
                         new VectorArithmeticOutputTypeFunction(PipelineFieldType.Float, "a", "b"),
                         PipelineFieldType.Float, PipelineFieldType.Vector2, PipelineFieldType.Vector3, PipelineFieldType.Color));
     }

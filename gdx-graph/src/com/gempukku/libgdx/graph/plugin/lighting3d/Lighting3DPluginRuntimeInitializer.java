@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d;
 
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
@@ -20,6 +21,8 @@ public class Lighting3DPluginRuntimeInitializer implements PluginRuntimeInitiali
 
     public static void register(int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights,
                                 float shadowAcneValue, int shadowSoftness) {
+        GraphTypeRegistry.registerType(new ShadowShaderGraphType());
+
         Lighting3DPluginRuntimeInitializer.maxNumberOfDirectionalLights = maxNumberOfDirectionalLights;
         Lighting3DPluginRuntimeInitializer.maxNumberOfPointLights = maxNumberOfPointLights;
         Lighting3DPluginRuntimeInitializer.maxNumberOfSpotlights = maxNumberOfSpotlights;

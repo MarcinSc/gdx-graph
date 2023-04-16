@@ -1,35 +1,27 @@
 package com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.pipeline.config.postprocessor.DepthOfFieldPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.part.CheckboxBoxPart;
-import com.gempukku.libgdx.graph.ui.part.FloatBoxPart;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.FloatEditorPart;
 import com.kotcrab.vis.ui.util.Validators;
 
-public class DepthOfFieldBoxProducer extends GraphBoxProducerImpl {
+public class DepthOfFieldBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public DepthOfFieldBoxProducer() {
         super(new DepthOfFieldPipelineNodeConfiguration());
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-        GraphBoxImpl result = createGraphBox(id);
-
-        FloatBoxPart maxBlurPart = new FloatBoxPart("Max blur", "maxBlur", 10, new Validators.GreaterThanValidator(0, false));
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+        FloatEditorPart maxBlurPart = new FloatEditorPart("Max blur", "maxBlur", 10, new Validators.GreaterThanValidator(0, false));
         maxBlurPart.setValue(10f);
-        maxBlurPart.initialize(data);
-        result.addGraphBoxPart(maxBlurPart);
+        graphNodeEditor.addGraphBoxPart(maxBlurPart);
 
-        CheckboxBoxPart blurBackground = new CheckboxBoxPart("Blur background", "blurBackground");
+        CheckboxEditorPart blurBackground = new CheckboxEditorPart("Blur background", "blurBackground");
         blurBackground.setValue(false);
-        blurBackground.initialize(data);
-        result.addGraphBoxPart(blurBackground);
-
-        addConfigurationInputsAndOutputs(result);
-        return result;
+        graphNodeEditor.addGraphBoxPart(blurBackground);
     }
 }

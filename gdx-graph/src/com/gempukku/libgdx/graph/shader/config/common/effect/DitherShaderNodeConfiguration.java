@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.shader.config.common.effect;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class DitherShaderNodeConfiguration extends NodeConfigurationImpl {
+public class DitherShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public DitherShaderNodeConfiguration() {
         super("Dither", "Dither", "Effect");
         addNodeInput(
-                new GraphNodeInputImpl("position", "Position", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("position", "Position", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("pixelSize", "Pixel size", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("pixelSize", "Pixel size", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("input", "Input", true, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("output", "Output", ShaderFieldType.Float));
     }
 }

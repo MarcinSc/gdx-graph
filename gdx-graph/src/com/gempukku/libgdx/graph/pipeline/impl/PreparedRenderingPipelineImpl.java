@@ -2,17 +2,22 @@ package com.gempukku.libgdx.graph.pipeline.impl;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.data.*;
+import com.gempukku.libgdx.common.Function;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.pipeline.PreparedRenderingPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.ui.graph.data.GraphConnection;
+import com.gempukku.libgdx.ui.graph.data.GraphNode;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 import java.util.LinkedList;
 
 public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline {
-    private Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph;
+    private GraphWithProperties graph;
     private PipelineRequirements pipelineRequirements = new PipelineRequirements();
 
     private Iterable<PipelineNode> executionNodes;
@@ -21,10 +26,19 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
 
     private ObjectMap<PipelineNode, PipelineNode.PipelineRequirementsCallback> requirementsCallbacks;
 
-    public PreparedRenderingPipelineImpl(Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph,
+    private final Function<GraphNode, NodeConfiguration> nodeConfigurationResolver;
+
+    public PreparedRenderingPipelineImpl(GraphWithProperties graph,
                                          String endNodeId) {
         this.graph = graph;
         this.endNodeId = endNodeId;
+
+        nodeConfigurationResolver = new Function<GraphNode, NodeConfiguration>() {
+            @Override
+            public NodeConfiguration evaluate(GraphNode value) {
+                return RendererPipelineConfiguration.findProducer(value.getType()).getConfiguration(value.getData());
+            }
+        };
     }
 
     @Override
@@ -110,7 +124,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
             String nodeId = node.key;
             GraphNode graphNode = graph.getNodeById(nodeId);
             ObjectMap<String, Array<PipelineNode.FieldOutput<?>>> inputs = new ObjectMap<>();
-            for (String key : graphNode.getConfiguration().getNodeInputs().keys()) {
+            for (String key : nodeConfigurationResolver.evaluate(graphNode).getNodeInputs().keys()) {
                 Array<GraphConnection> inputConnections = findInputConnections(nodeId, key);
                 if (inputConnections.size > 0) {
                     Array<PipelineNode.FieldOutput<?>> inputValues = new Array<>();
@@ -160,7 +174,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
             return;
 
         GraphNode nodeInfo = graph.getNodeById(nodeId);
-        String nodeInfoType = nodeInfo.getConfiguration().getType();
+        String nodeInfoType = nodeInfo.getType();
         PipelineNodeProducer nodeProducer = RendererPipelineConfiguration.findProducer(nodeInfoType);
         if (nodeProducer == null)
             throw new IllegalStateException("Unable to find node producer for type: " + nodeInfoType);
@@ -178,7 +192,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
                 String fieldType = outputTypes.get(graphConnection.getFieldFrom());
                 fieldTypes.add(fieldType);
             }
-            if (!nodeInput.acceptsInputTypes(fieldTypes))
+            if (!acceptsInputTypes(nodeInput.getAcceptedPropertyTypes(), fieldTypes))
                 throw new IllegalStateException("Producer produces a field of value not compatible with consumer");
             inputTypes.put(inputName, fieldTypes);
         }
@@ -191,6 +205,14 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
         }
 
         nodeOutputTypes.put(nodeId, outputTypes);
+    }
+
+    private boolean acceptsInputTypes(Array<String> acceptedPropertyTypes, Array<String> fieldTypes) {
+        for (String fieldType : fieldTypes) {
+            if (!acceptedPropertyTypes.contains(fieldType, false))
+                return false;
+        }
+        return true;
     }
 
     private boolean isConnectionUsed(String nodeId, String outputField) {
@@ -208,7 +230,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
             return;
 
         GraphNode nodeInfo = graph.getNodeById(nodeId);
-        String nodeInfoType = nodeInfo.getConfiguration().getType();
+        String nodeInfoType = nodeInfo.getType();
         PipelineNodeProducer nodeProducer = RendererPipelineConfiguration.findProducer(nodeInfoType);
         if (nodeProducer == null)
             throw new IllegalStateException("Unable to find node producer for type: " + nodeInfoType);
@@ -226,7 +248,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
                 String fieldType = outputTypes.get(graphConnection.getFieldFrom());
                 fieldTypes.add(fieldType);
             }
-            if (!nodeInput.acceptsInputTypes(fieldTypes))
+            if (!acceptsInputTypes(nodeInput.getAcceptedPropertyTypes(), fieldTypes))
                 throw new IllegalStateException("Producer produces a field of value not compatible with consumer");
             inputTypes.put(inputName, fieldTypes);
         }
@@ -235,7 +257,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
     }
 
     private GraphConnection getMainInputConnection(String nodeId) {
-        for (GraphNodeInput value : graph.getNodeById(nodeId).getConfiguration().getNodeInputs().values()) {
+        for (GraphNodeInput value : nodeConfigurationResolver.evaluate(graph.getNodeById(nodeId)).getNodeInputs().values()) {
             if (value.isMainConnection())
                 return findInputConnections(nodeId, value.getFieldId()).get(0);
         }
@@ -243,7 +265,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
     }
 
     private Iterable<GraphConnection> getNonMainInputConnections(String nodeId) {
-        ObjectMap<String, GraphNodeInput> inputs = graph.getNodeById(nodeId).getConfiguration().getNodeInputs();
+        ObjectMap<String, GraphNodeInput> inputs = nodeConfigurationResolver.evaluate(graph.getNodeById(nodeId)).getNodeInputs();
         Array<GraphConnection> result = new Array<>();
         for (GraphConnection vertex : graph.getConnections()) {
             if (vertex.getNodeTo().equals(nodeId) && !inputs.get(vertex.getFieldTo()).isMainConnection())

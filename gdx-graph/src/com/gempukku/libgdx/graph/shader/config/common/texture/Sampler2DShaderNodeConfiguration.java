@@ -1,26 +1,26 @@
 package com.gempukku.libgdx.graph.shader.config.common.texture;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class Sampler2DShaderNodeConfiguration extends NodeConfigurationImpl {
+public class Sampler2DShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public Sampler2DShaderNodeConfiguration() {
         super("Sampler2D", "Sampler 2D", "Texture");
         addNodeInput(
-                new GraphNodeInputImpl("texture", "Texture", true, ShaderFieldType.TextureRegion));
+                new DefaultGraphNodeInput("texture", "Texture", true, ShaderFieldType.TextureRegion));
         addNodeInput(
-                new GraphNodeInputImpl("uv", "UV", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("uv", "UV", true, ShaderFieldType.Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("color", "Color", ShaderFieldType.Vector4));
+                new DefaultGraphNodeOutput("color", "Color", ShaderFieldType.Vector4));
         addNodeOutput(
-                new GraphNodeOutputImpl("r", "R", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("r", "R", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("g", "G", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("g", "G", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("b", "B", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("b", "B", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("a", "A", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("a", "A", ShaderFieldType.Float));
     }
 }

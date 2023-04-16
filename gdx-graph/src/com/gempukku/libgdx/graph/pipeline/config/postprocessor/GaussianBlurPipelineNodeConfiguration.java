@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.pipeline.config.postprocessor;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class GaussianBlurPipelineNodeConfiguration extends NodeConfigurationImpl {
+public class GaussianBlurPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public GaussianBlurPipelineNodeConfiguration() {
         super("GaussianBlur", "Gaussian blur", "Post-processing");
         addNodeInput(
-                new GraphNodeInputImpl("enabled", "Enabled", false, PipelineFieldType.Boolean));
+                new DefaultGraphNodeInput("enabled", "Enabled", false, PipelineFieldType.Boolean));
         addNodeInput(
-                new GraphNodeInputImpl("blurRadius", "Radius", PipelineFieldType.Float));
+                new DefaultGraphNodeInput("blurRadius", "Radius", PipelineFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, true, PipelineFieldType.RenderPipeline));
+                new DefaultGraphNodeInput("input", "Input", true, true, PipelineFieldType.RenderPipeline));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", true, PipelineFieldType.RenderPipeline));
+                new DefaultGraphNodeOutput("output", "Output", true, PipelineFieldType.RenderPipeline));
     }
 }

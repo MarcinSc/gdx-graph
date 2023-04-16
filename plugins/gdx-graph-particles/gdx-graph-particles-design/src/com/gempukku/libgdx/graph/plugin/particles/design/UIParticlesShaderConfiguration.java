@@ -3,20 +3,19 @@ package com.gempukku.libgdx.graph.plugin.particles.design;
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifePercentageShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifetimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class UIParticlesShaderConfiguration implements UIGraphConfiguration {
-    private static Map<String, GraphBoxProducer> graphBoxProducers = new TreeMap();
+    private static final Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
 
-    public static void register(GraphBoxProducer producer) {
+    public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)
             menuLocation = "Dummy";
@@ -24,21 +23,19 @@ public class UIParticlesShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        GraphTypeRegistry.registerType(ParticleEffectGraphType.instance);
-
         register(new EndParticlesShaderBoxProducer());
 
-        register(new GraphBoxProducerImpl(new ParticleLifetimeShaderNodeConfiguration()));
-        register(new GraphBoxProducerImpl(new ParticleLifePercentageShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
+        register(new DefaultMenuGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
     }
 
     @Override
-    public Iterable<GraphBoxProducer> getGraphBoxProducers() {
+    public Iterable<? extends MenuGraphNodeEditorProducer> getGraphNodeEditorProducers() {
         return graphBoxProducers.values();
     }
 
     @Override
-    public Map<String, PropertyBoxProducer> getPropertyBoxProducers() {
+    public Map<String, PropertyEditorDefinition> getPropertyEditorDefinitions() {
         return Collections.emptyMap();
     }
 }

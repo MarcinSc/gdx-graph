@@ -1,27 +1,27 @@
 package com.gempukku.libgdx.graph.pipeline.config.postprocessor;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Float;
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.RenderPipeline;
 
-public class BloomPipelineNodeConfiguration extends NodeConfigurationImpl {
+public class BloomPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public BloomPipelineNodeConfiguration() {
         super("Bloom", "Bloom post-processor", "Post-processing");
         addNodeInput(
-                new GraphNodeInputImpl("enabled", "Enabled", false, PipelineFieldType.Boolean));
+                new DefaultGraphNodeInput("enabled", "Enabled", false, PipelineFieldType.Boolean));
         addNodeInput(
-                new GraphNodeInputImpl("bloomRadius", "Radius", Float));
+                new DefaultGraphNodeInput("bloomRadius", "Radius", Float));
         addNodeInput(
-                new GraphNodeInputImpl("minimalBrightness", "Min Brightness", Float));
+                new DefaultGraphNodeInput("minimalBrightness", "Min Brightness", Float));
         addNodeInput(
-                new GraphNodeInputImpl("bloomStrength", "Strength", Float));
+                new DefaultGraphNodeInput("bloomStrength", "Strength", Float));
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, true, RenderPipeline));
+                new DefaultGraphNodeInput("input", "Input", true, true, RenderPipeline));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", true, RenderPipeline));
+                new DefaultGraphNodeOutput("output", "Output", true, RenderPipeline));
     }
 }

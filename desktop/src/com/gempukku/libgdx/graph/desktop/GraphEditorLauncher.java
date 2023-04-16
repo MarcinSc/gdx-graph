@@ -24,7 +24,7 @@ public class GraphEditorLauncher {
     }
 
     private static class LegacyGraphPluginProvider implements PluginsProvider<AssistantApplication, AssistantPlugin> {
-        private Array<AssistantPlugin> plugins = new Array<AssistantPlugin>();
+        private Array<AssistantPlugin> plugins = new Array<>();
 
         public LegacyGraphPluginProvider() {
             plugins.add(new WarningPlugin());

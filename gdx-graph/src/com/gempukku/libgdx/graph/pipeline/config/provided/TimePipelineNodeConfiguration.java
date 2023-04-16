@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.pipeline.config.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Float;
 
-public class TimePipelineNodeConfiguration extends NodeConfigurationImpl {
+public class TimePipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public TimePipelineNodeConfiguration() {
         super("Time", "Time", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("time", "Time", Float));
+                new DefaultGraphNodeOutput("time", "Time", Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("sinTime", "sin(Time)", Float));
+                new DefaultGraphNodeOutput("sinTime", "sin(Time)", Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("cosTime", "cos(Time)", Float));
+                new DefaultGraphNodeOutput("cosTime", "cos(Time)", Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("deltaTime", "deltaTime", Float));
+                new DefaultGraphNodeOutput("deltaTime", "deltaTime", Float));
     }
 }

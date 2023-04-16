@@ -1,22 +1,22 @@
 package com.gempukku.libgdx.graph.shader.config.common.texture;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class UVFlipbookShaderNodeConfiguration extends NodeConfigurationImpl {
+public class UVFlipbookShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public UVFlipbookShaderNodeConfiguration() {
         super("UVFlipbook", "UV Flipbook", "Texture");
         addNodeInput(
-                new GraphNodeInputImpl("uv", "UV", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("uv", "UV", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("tileCount", "Tile count", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("tileCount", "Tile count", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("index", "Index", true, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("index", "Index", true, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("looping", "Looping", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("looping", "Looping", false, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "UV", ShaderFieldType.Vector2));
+                new DefaultGraphNodeOutput("output", "UV", ShaderFieldType.Vector2));
     }
 }

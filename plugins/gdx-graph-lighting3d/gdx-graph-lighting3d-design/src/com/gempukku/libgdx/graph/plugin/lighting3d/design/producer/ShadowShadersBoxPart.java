@@ -1,21 +1,19 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
-import com.gempukku.libgdx.graph.plugin.lighting3d.design.ShadowShaderGraphType;
+import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.ShadowTemplateRegistry;
-import com.gempukku.libgdx.graph.plugin.lighting3d.design.UIShadowShaderConfiguration;
-import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphType;
+import com.gempukku.libgdx.graph.ui.UIGraphType;
 import com.gempukku.libgdx.graph.ui.graph.ShaderGraphBoxPart;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.GraphShaderTemplate;
-import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class ShadowShadersBoxPart extends ShaderGraphBoxPart {
-    private static UIGraphConfiguration[] graphConfigurations = new UIGraphConfiguration[]{
-            new UIModelShaderConfiguration(),
-            new UIShadowShaderConfiguration(),
-            new UICommonShaderConfiguration()
-    };
+    private UIGraphType graphType;
+
+    public ShadowShadersBoxPart() {
+        graphType = (UIGraphType) GraphTypeRegistry.findGraphType("Shadow_Shader");
+    }
 
     @Override
     protected Iterable<GraphShaderTemplate> getTemplates() {
@@ -24,11 +22,11 @@ public class ShadowShadersBoxPart extends ShaderGraphBoxPart {
 
     @Override
     protected GraphType getGraphType() {
-        return ShadowShaderGraphType.instance;
+        return graphType;
     }
 
     @Override
     protected UIGraphConfiguration[] getGraphConfigurations() {
-        return graphConfigurations;
+        return graphType.getUIConfigurations();
     }
 }

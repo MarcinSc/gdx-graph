@@ -6,7 +6,9 @@ dependencies {
     api project(":gdx-graph")
     api project(":gdx-graph-util")
 
-    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-common:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
+
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
 }

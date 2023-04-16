@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.ui.graph;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 
 

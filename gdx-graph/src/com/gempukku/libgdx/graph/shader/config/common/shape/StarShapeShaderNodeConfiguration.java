@@ -1,24 +1,24 @@
 package com.gempukku.libgdx.graph.shader.config.common.shape;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class StarShapeShaderNodeConfiguration extends NodeConfigurationImpl {
+public class StarShapeShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public StarShapeShaderNodeConfiguration() {
         super("StarShape", "Star Shape", "Shape");
         addNodeInput(
-                new GraphNodeInputImpl("uv", "UV", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("uv", "UV", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("arms", "Arms", true, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("arms", "Arms", true, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("minDepth", "Min depth", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("minDepth", "Min depth", false, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("maxDepth", "Max depth", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("maxDepth", "Max depth", false, ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("curve", "Curve", false, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("curve", "Curve", false, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("output", "Output", ShaderFieldType.Float));
     }
 }

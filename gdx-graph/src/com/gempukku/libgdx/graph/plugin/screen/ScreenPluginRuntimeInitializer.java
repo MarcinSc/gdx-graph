@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.screen;
 
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
@@ -9,6 +10,8 @@ public class ScreenPluginRuntimeInitializer implements PluginRuntimeInitializer 
     private final GraphScreenShadersImpl data = new GraphScreenShadersImpl();
 
     public static void register() {
+        GraphTypeRegistry.registerType(new ScreenShaderGraphType());
+
         PluginRegistryImpl.register(ScreenPluginRuntimeInitializer.class);
     }
 

@@ -1,16 +1,16 @@
 package com.gempukku.libgdx.graph.shader.config.common.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class SceneDepthShaderNodeConfiguration extends NodeConfigurationImpl {
+public class SceneDepthShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public SceneDepthShaderNodeConfiguration() {
         super("SceneDepth", "Scene depth", "Provided");
         addNodeInput(
-                new GraphNodeInputImpl("screenPosition", "Screen position", ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("screenPosition", "Screen position", ShaderFieldType.Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("depth", "Depth", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("depth", "Depth", ShaderFieldType.Float));
     }
 }

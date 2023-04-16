@@ -1,19 +1,19 @@
 package com.gempukku.libgdx.graph.pipeline.config.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Float;
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Vector2;
 
-public class RenderSizePipelineNodeConfiguration extends NodeConfigurationImpl {
+public class RenderSizePipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public RenderSizePipelineNodeConfiguration() {
         super("RenderSize", "Render size", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("size", "Size", Vector2));
+                new DefaultGraphNodeOutput("size", "Size", Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("width", "Width", Float));
+                new DefaultGraphNodeOutput("width", "Width", Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("height", "Height", Float));
+                new DefaultGraphNodeOutput("height", "Height", Float));
     }
 }

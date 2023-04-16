@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public abstract class TwoParamMathFunctionPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     private final String param1;

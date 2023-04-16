@@ -1,12 +1,11 @@
 package com.gempukku.libgdx.graph.ui;
 
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.Map;
 
 public interface UIGraphConfiguration {
-    Iterable<GraphBoxProducer> getGraphBoxProducers();
+    Iterable<? extends MenuGraphNodeEditorProducer> getGraphNodeEditorProducers();
 
-    Map<String, PropertyBoxProducer> getPropertyBoxProducers();
+    Map<String, ? extends PropertyEditorDefinition> getPropertyEditorDefinitions();
 }

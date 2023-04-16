@@ -1,13 +1,13 @@
 package com.gempukku.libgdx.graph.shader.config.common.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class ValueBooleanShaderNodeConfiguration extends NodeConfigurationImpl {
+public class ValueBooleanShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public ValueBooleanShaderNodeConfiguration() {
         super("ValueBoolean", "Boolean", "Constant");
         addNodeOutput(
-                new GraphNodeOutputImpl("value", "Value", ShaderFieldType.Boolean));
+                new DefaultGraphNodeOutput("value", "Value", ShaderFieldType.Boolean));
     }
 }

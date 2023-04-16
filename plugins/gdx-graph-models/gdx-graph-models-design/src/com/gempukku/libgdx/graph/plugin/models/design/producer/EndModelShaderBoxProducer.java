@@ -1,20 +1,22 @@
 package com.gempukku.libgdx.graph.plugin.models.design.producer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.graph.data.Graph;
-import com.gempukku.libgdx.graph.data.GraphConnection;
-import com.gempukku.libgdx.graph.data.GraphNode;
-import com.gempukku.libgdx.graph.data.GraphProperty;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.plugin.models.config.EndModelShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.graph.ui.part.*;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
+import com.gempukku.libgdx.graph.ui.part.BlendingBoxPart;
+import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
+import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.SectionEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.SelectEditorPart;
 
-public class EndModelShaderBoxProducer extends GraphBoxProducerImpl {
+public class EndModelShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public EndModelShaderBoxProducer() {
         super(new EndModelShaderNodeConfiguration());
     }
@@ -25,47 +27,45 @@ public class EndModelShaderBoxProducer extends GraphBoxProducerImpl {
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         final ModelShaderPreviewBoxPart previewBoxPart = new ModelShaderPreviewBoxPart();
-        previewBoxPart.initialize(data);
 
-        GraphBoxImpl result = new GraphBoxImpl(id, getConfiguration()) {
-            @Override
-            public void graphChanged(GraphChangedEvent event, boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
-                if (event.isData() || event.isStructure()) {
-                    previewBoxPart.graphChanged(hasErrors, graph);
-                }
-            }
-        };
-
-        SelectBoxPart positionType = new SelectBoxPart("Position", "positionType",
+        SelectEditorPart positionType = new SelectEditorPart("Position", "positionType",
                 "Object space", "World space");
-        positionType.initialize(data);
-        result.addGraphBoxPart(positionType);
+        graphNodeEditor.addGraphBoxPart(positionType);
 
-        addConfigurationInputsAndOutputs(result);
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
 
-        result.addGraphBoxPart(new SectionBoxPart("Rendering config"));
-
-        EnumSelectBoxPart cullingBox = new EnumSelectBoxPart("Culling", "culling", new StringifyEnum<BasicShader.Culling>(), BasicShader.Culling.values());
-        cullingBox.initialize(data);
-        result.addGraphBoxPart(cullingBox);
+        EnumSelectEditorPart cullingBox = new EnumSelectEditorPart("Culling", "culling", new StringifyEnum<BasicShader.Culling>(), BasicShader.Culling.values());
+        graphNodeEditor.addGraphBoxPart(cullingBox);
 
         BlendingBoxPart blendingBox = new BlendingBoxPart();
-        blendingBox.initialize(data);
-        result.addGraphBoxPart(blendingBox);
+        graphNodeEditor.addGraphBoxPart(blendingBox);
 
-        EnumSelectBoxPart depthTestBox = new EnumSelectBoxPart("DepthTest", "depthTest", new StringifyEnum<BasicShader.DepthTesting>(), BasicShader.DepthTesting.values());
-        depthTestBox.initialize(data);
-        result.addGraphBoxPart(depthTestBox);
+        EnumSelectEditorPart depthTestBox = new EnumSelectEditorPart("DepthTest", "depthTest", new StringifyEnum<BasicShader.DepthTesting>(), BasicShader.DepthTesting.values());
+        graphNodeEditor.addGraphBoxPart(depthTestBox);
 
-        CheckboxBoxPart writeDepthBox = new CheckboxBoxPart("Write depth", "depthWrite");
-        writeDepthBox.initialize(data);
-        result.addGraphBoxPart(writeDepthBox);
+        CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite");
+        graphNodeEditor.addGraphBoxPart(writeDepthBox);
 
-        result.addGraphBoxPart(new SectionBoxPart("Preview"));
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Preview"));
 
-        result.addGraphBoxPart(previewBoxPart);
-        return result;
+        graphNodeEditor.addGraphBoxPart(previewBoxPart);
+    }
+
+    private class GraphChangedAwareEditor extends DefaultGraphNodeEditor implements GraphChangedAware {
+        private ModelShaderPreviewBoxPart previewBoxPart;
+
+        public GraphChangedAwareEditor(NodeConfiguration configuration, ModelShaderPreviewBoxPart previewBoxPart) {
+            super(configuration);
+            this.previewBoxPart = previewBoxPart;
+        }
+
+        @Override
+        public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+            if (event.isData() || event.isStructure()) {
+                previewBoxPart.graphChanged(hasErrors, graph);
+            }
+        }
     }
 }

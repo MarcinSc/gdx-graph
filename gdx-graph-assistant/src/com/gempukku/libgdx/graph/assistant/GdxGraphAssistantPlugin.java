@@ -5,8 +5,10 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
 import com.gempukku.gdx.assistant.plugin.AssistantPlugin;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
+import com.gempukku.gdx.assistant.plugin.MenuManager;
 import com.gempukku.gdx.plugins.PluginEnvironment;
 import com.gempukku.gdx.plugins.PluginVersion;
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.BoneAnimationPlugin;
 import com.gempukku.libgdx.graph.plugin.callback.design.RenderCallbackPlugin;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.Lighting3DPlugin;
@@ -14,10 +16,12 @@ import com.gempukku.libgdx.graph.plugin.models.design.ModelsPlugin;
 import com.gempukku.libgdx.graph.plugin.particles.design.ParticlesPlugin;
 import com.gempukku.libgdx.graph.plugin.screen.design.ScreenPlugin;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
+import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineGraphType;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.curve.GCurveEditor;
 import com.gempukku.libgdx.ui.gradient.GGradientEditor;
-import com.kotcrab.vis.ui.VisUI;
+import com.gempukku.libgdx.ui.graph.GraphEditor;
+import com.gempukku.libgdx.ui.preview.PreviewWidget;
 
 public class GdxGraphAssistantPlugin implements AssistantPlugin {
     private AssistantApplication assistantApplication;
@@ -38,14 +42,36 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
     }
 
     @Override
-    public void registerPlugin(AssistantApplication assistantApplication) {
+    public void registerPlugin() {
+
+    }
+
+    @Override
+    public void initializePlugin(AssistantApplication assistantApplication) {
         this.assistantApplication = assistantApplication;
 
         WhitePixel.initializeShared();
         PatternTextures.initializeShared();
         registerGdxPlugins();
 
-        Skin skin = VisUI.getSkin();
+        Skin skin = assistantApplication.getApplicationSkin();
+
+        PreviewWidget.PreviewWidgetStyle previewWidgetStyle = new PreviewWidget.PreviewWidgetStyle();
+        previewWidgetStyle.background = skin.getDrawable("grey");
+        previewWidgetStyle.canvas = skin.getDrawable("white");
+        previewWidgetStyle.element = skin.getDrawable("dialogDim");
+        previewWidgetStyle.visible = skin.getDrawable("dialogDim");
+        skin.add("gdx-graph", previewWidgetStyle);
+
+        GraphEditor.GraphEditorStyle graphEditorStyle = new GraphEditor.GraphEditorStyle();
+        graphEditorStyle.background = skin.getDrawable("darkGrey");
+        graphEditorStyle.groupBackground = skin.getDrawable("darkGrey");
+        graphEditorStyle.groupNameFont = skin.getFont("default-font");
+        graphEditorStyle.groupNameColor = skin.getColor("white");
+        graphEditorStyle.invalidConnectorColor = skin.getColor("red");
+        graphEditorStyle.windowStyle = "noborder";
+        graphEditorStyle.windowSelectedStyle = "default";
+        skin.add("gdx-graph", graphEditorStyle);
 
         GGradientEditor.GGradientEditorStyle gradientEditorStyle = new GGradientEditor.GGradientEditorStyle();
         gradientEditorStyle.background = skin.getDrawable("white");
@@ -56,19 +82,22 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         curveEditorStyle.background = skin.getDrawable("white");
         skin.add("gdx-graph", curveEditorStyle);
 
-        assistantApplication.addMainMenu("Graph");
+        MenuManager menuManager = assistantApplication.getMenuManager();
 
-        assistantApplication.addPopupMenu("Graph", null, "New");
-        assistantApplication.setPopupMenuDisabled("Graph", null, "New", true);
+        menuManager.addMainMenu("Graph");
 
-        assistantApplication.addPopupMenu("Graph", null, "Open");
-        assistantApplication.setPopupMenuDisabled("Graph", null, "Open", true);
+        menuManager.addPopupMenu("Graph", null, "New");
+        menuManager.setPopupMenuDisabled("Graph", null, "New", true);
 
-        assistantApplication.addMenuItem("Graph", null, "Import graph", null);
-        assistantApplication.setMenuItemDisabled("Graph", null, "Import graph", true);
+        menuManager.addPopupMenu("Graph", null, "Open");
+        menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
+
+        menuManager.addMenuItem("Graph", null, "Import graph", null);
+        menuManager.setMenuItemDisabled("Graph", null, "Import graph", true);
     }
 
     private static void registerGdxPlugins() {
+        GraphTypeRegistry.registerType(new UIRenderPipelineGraphType());
         new RenderCallbackPlugin().initialize();
         new JsonGdxGraphPlugin("config/plugin-ui-config.json").initialize();
         new ScreenPlugin().initialize();

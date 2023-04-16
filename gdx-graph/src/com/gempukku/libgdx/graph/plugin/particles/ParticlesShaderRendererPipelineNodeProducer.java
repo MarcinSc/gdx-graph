@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
@@ -18,16 +17,9 @@ import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
-    private static final GraphConfiguration[] configurations = new GraphConfiguration[]{
-            new CommonShaderConfiguration(), new PropertyShaderConfiguration(),
-            new ParticlesShaderConfiguration()};
     private final PluginPrivateDataSource pluginPrivateDataSource;
 
     public ParticlesShaderRendererPipelineNodeProducer(PluginPrivateDataSource pluginPrivateDataSource) {
@@ -61,7 +53,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
                     String tag = shaderDefinition.getString("tag");
                     JsonValue shaderGraph = shaderDefinition.get("shader");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final GraphShader graphShader = GraphLoader.loadGraph(shaderGraph, new ParticlesShaderLoaderCallback(tag, pipelineDataProvider.getWhitePixel().texture, configurations), PropertyLocation.Uniform);
+                    final GraphShader graphShader = ParticleShaderLoader.loadShader(shaderGraph, tag, pipelineDataProvider.getWhitePixel().texture);
                     particleShaders.add(graphShader);
                 }
 

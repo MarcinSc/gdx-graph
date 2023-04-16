@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.UniformSetters;
@@ -13,7 +14,6 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
 
 public class ShadowPhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     private final int maxNumberOfDirectionalLights;

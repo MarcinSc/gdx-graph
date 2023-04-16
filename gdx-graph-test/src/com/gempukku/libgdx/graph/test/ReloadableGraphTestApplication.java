@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
@@ -22,7 +23,6 @@ import com.gempukku.libgdx.graph.plugin.screen.ScreenPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
 import com.gempukku.libgdx.graph.test.scenes.*;
-import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
 
 public class ReloadableGraphTestApplication extends ApplicationAdapter {
     private LibgdxGraphTestScene[] scenes;

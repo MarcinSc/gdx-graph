@@ -1,28 +1,28 @@
 package com.gempukku.libgdx.graph.pipeline.config.math.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Float;
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.*;
 
-public class MergePipelineNodeConfiguration extends NodeConfigurationImpl {
+public class MergePipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public MergePipelineNodeConfiguration() {
         super("Merge", "Merge", "Math/Value");
         addNodeInput(
-                new GraphNodeInputImpl("x", "X", Float));
+                new DefaultGraphNodeInput("x", "X", Float));
         addNodeInput(
-                new GraphNodeInputImpl("y", "Y", Float));
+                new DefaultGraphNodeInput("y", "Y", Float));
         addNodeInput(
-                new GraphNodeInputImpl("z", "Z", Float));
+                new DefaultGraphNodeInput("z", "Z", Float));
         addNodeInput(
-                new GraphNodeInputImpl("w", "W", Float));
+                new DefaultGraphNodeInput("w", "W", Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("v2", "Vector2", Vector2));
+                new DefaultGraphNodeOutput("v2", "Vector2", Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("v3", "Vector3", Vector3));
+                new DefaultGraphNodeOutput("v3", "Vector3", Vector3));
         addNodeOutput(
-                new GraphNodeOutputImpl("color", "Color", Color));
+                new DefaultGraphNodeOutput("color", "Color", Color));
     }
 }

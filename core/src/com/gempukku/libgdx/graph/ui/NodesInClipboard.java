@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.graph.ui;
 
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.data.GraphConnection;
-import com.gempukku.libgdx.graph.data.GraphNode;
-import com.gempukku.libgdx.graph.ui.graph.GraphType;
+import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.ui.graph.data.GraphConnection;
+import com.gempukku.libgdx.ui.graph.data.GraphNode;
 
 public class NodesInClipboard {
     public GraphType graphType;

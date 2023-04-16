@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.models;
 
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
@@ -9,6 +10,8 @@ import com.gempukku.libgdx.graph.plugin.models.producer.ModelShaderRendererPipel
 
 public class ModelsPluginRuntimeInitializer implements PluginRuntimeInitializer {
     public static void register() {
+        GraphTypeRegistry.registerType(new ModelShaderGraphType());
+
         PluginRegistryImpl.register(ModelsPluginRuntimeInitializer.class);
     }
 

@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.pipeline.config.math.exponential;
 
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.SameTypeOutputTypeFunction;
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class PowerPipelineNodeConfiguration extends NodeConfigurationImpl {
+public class PowerPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public PowerPipelineNodeConfiguration() {
         super("Power", "Power", "Math/Exponential");
         addNodeInput(
-                new GraphNodeInputImpl("a", "A", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
+                new DefaultGraphNodeInput("a", "A", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("b", "B", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
+                new DefaultGraphNodeInput("b", "B", true, PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Result",
+                new DefaultGraphNodeOutput("output", "Result",
                         new SameTypeOutputTypeFunction("a", "b"),
                         PipelineFieldType.Color, PipelineFieldType.Vector3, PipelineFieldType.Vector2, PipelineFieldType.Float));
     }

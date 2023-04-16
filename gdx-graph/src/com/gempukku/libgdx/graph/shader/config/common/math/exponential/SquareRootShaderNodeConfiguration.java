@@ -1,18 +1,18 @@
 package com.gempukku.libgdx.graph.shader.config.common.math.exponential;
 
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.SameTypeOutputTypeFunction;
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class SquareRootShaderNodeConfiguration extends NodeConfigurationImpl {
+public class SquareRootShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public SquareRootShaderNodeConfiguration() {
         super("Sqrt", "Square root", "Math/Exponential");
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, ShaderFieldType.Vector4, ShaderFieldType.Vector3, ShaderFieldType.Vector2, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("input", "Input", true, ShaderFieldType.Vector4, ShaderFieldType.Vector3, ShaderFieldType.Vector2, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Result",
+                new DefaultGraphNodeOutput("output", "Result",
                         new SameTypeOutputTypeFunction("input"),
                         ShaderFieldType.Vector4, ShaderFieldType.Vector3, ShaderFieldType.Vector2, ShaderFieldType.Float));
     }

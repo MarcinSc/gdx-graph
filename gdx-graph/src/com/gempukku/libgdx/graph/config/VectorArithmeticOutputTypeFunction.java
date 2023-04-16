@@ -2,8 +2,7 @@ package com.gempukku.libgdx.graph.config;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-
-import java.util.function.Function;
+import com.gempukku.libgdx.common.Function;
 
 public class VectorArithmeticOutputTypeFunction implements Function<ObjectMap<String, Array<String>>, String> {
     private final String floatType;
@@ -17,7 +16,7 @@ public class VectorArithmeticOutputTypeFunction implements Function<ObjectMap<St
     }
 
     @Override
-    public String apply(ObjectMap<String, Array<String>> inputs) {
+    public String evaluate(ObjectMap<String, Array<String>> inputs) {
         Array<String> inputA = inputs.get(input1);
         Array<String> inputB = inputs.get(input2);
         if (inputA.size < 1 || inputB.size < 1)

@@ -1,33 +1,24 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.DirectionalLightShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.part.IndexBoxPart;
-import com.gempukku.libgdx.graph.ui.part.StringBoxPart;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.IndexEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.StringEditorPart;
 
-public class DirectionalLightBoxProducer extends GraphBoxProducerImpl {
+public class DirectionalLightBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public DirectionalLightBoxProducer() {
         super(new DirectionalLightShaderNodeConfiguration());
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-        GraphBoxImpl result = createGraphBox(id);
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+        StringEditorPart envId = new StringEditorPart("Env id: ", "id");
+        graphNodeEditor.addGraphBoxPart(envId);
 
-        StringBoxPart envId = new StringBoxPart("Env id: ", "id");
-        envId.initialize(data);
-        result.addGraphBoxPart(envId);
-
-        addConfigurationInputsAndOutputs(result);
-
-        IndexBoxPart indexPart = new IndexBoxPart("Index", "index");
-        indexPart.initialize(data);
-        result.addGraphBoxPart(indexPart);
-
-        return result;
+        IndexEditorPart indexPart = new IndexEditorPart("Index", "index");
+        graphNodeEditor.addGraphBoxPart(indexPart);
     }
 }

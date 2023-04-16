@@ -1,13 +1,13 @@
 package com.gempukku.libgdx.graph.shader.config.common.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class CameraDirectionShaderNodeConfiguration extends NodeConfigurationImpl {
+public class CameraDirectionShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public CameraDirectionShaderNodeConfiguration() {
         super("CameraDirection", "Camera direction", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("direction", "Direction", ShaderFieldType.Vector3));
+                new DefaultGraphNodeOutput("direction", "Direction", ShaderFieldType.Vector3));
     }
 }

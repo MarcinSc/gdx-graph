@@ -5,26 +5,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.common.Function;
+import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.MultiParamVectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.graph.config.VectorArithmeticOutputTypeFunction;
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxPart;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxPartImpl;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxPart;
-import com.gempukku.libgdx.graph.ui.part.*;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyBoxProducerImpl;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.*;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class UIPipelineConfigurer {
     public static void processPipelineConfig(JsonValue value) {
@@ -47,7 +44,7 @@ public class UIPipelineConfigurer {
         String producerName = boxProducer.getString("name");
         String menuLocation = boxProducer.getString("menuLocation");
 
-        NodeConfigurationImpl nodeConfiguration = new NodeConfigurationImpl(producerType, producerName, menuLocation);
+        DefaultMenuNodeConfiguration nodeConfiguration = new DefaultMenuNodeConfiguration(producerType, producerName, menuLocation);
         JsonValue inputs = boxProducer.get("inputs");
         if (inputs != null) {
             for (JsonValue input : inputs) {
@@ -58,7 +55,7 @@ public class UIPipelineConfigurer {
                 boolean acceptMultiple = input.getBoolean("acceptMultiple", false);
                 JsonValue type = input.get("type");
                 String[] types = convertToArrayOfStrings(type);
-                GraphNodeInputImpl nodeInput = new GraphNodeInputImpl(id, name, required, mainConnection, acceptMultiple, types);
+                DefaultGraphNodeInput nodeInput = new DefaultGraphNodeInput(id, name, required, mainConnection, acceptMultiple, types);
                 nodeConfiguration.addNodeInput(nodeInput);
             }
         }
@@ -72,28 +69,21 @@ public class UIPipelineConfigurer {
                 Function<ObjectMap<String, Array<String>>, String> validationFunction = convertToValidationFunction(validation);
                 JsonValue type = output.get("type");
                 String[] types = convertToArrayOfStrings(type);
-                GraphNodeOutputImpl nodeOutput = new GraphNodeOutputImpl(id, name, mainConnection,
-                        validationFunction, types);
+                DefaultGraphNodeOutput nodeOutput = new DefaultGraphNodeOutput(id, name, mainConnection, validationFunction, types);
                 nodeConfiguration.addNodeOutput(nodeOutput);
             }
         }
         final JsonValue fields = boxProducer.get("fields");
-        GraphBoxProducerImpl producer = new GraphBoxProducerImpl(nodeConfiguration) {
+        DefaultMenuGraphNodeEditorProducer producer = new DefaultMenuGraphNodeEditorProducer(nodeConfiguration) {
             @Override
-            public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-                GraphBoxImpl result = createGraphBox(id);
-
+            protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
                 if (fields != null) {
                     for (JsonValue field : fields) {
                         String fieldType = field.getString("type");
-                        GraphBoxPart fieldGraphBoxPart = createFieldGraphBoxPart(fieldType, field);
-                        fieldGraphBoxPart.initialize(data);
-                        result.addGraphBoxPart(fieldGraphBoxPart);
+                        GraphNodeEditorPart fieldGraphBoxPart = createFieldGraphBoxPart(fieldType, field);
+                        graphNodeEditor.addGraphBoxPart(fieldGraphBoxPart);
                     }
                 }
-
-                addConfigurationInputsAndOutputs(result);
-                return result;
             }
         };
         UIPipelineConfiguration.register(producer);
@@ -128,17 +118,17 @@ public class UIPipelineConfigurer {
     private static void processPropertyType(JsonValue propertyType) {
         final String typeName = propertyType.name();
         final String defaultName = propertyType.getString("defaultName");
-        PipelinePropertyBoxProducerImpl producer = new PipelinePropertyBoxProducerImpl(defaultName, typeName);
+        PipelinePropertyEditorDefinitionImpl producer = new PipelinePropertyEditorDefinitionImpl(defaultName, typeName);
 
         JsonValue fields = propertyType.get("fields");
         if (fields != null) {
             for (final JsonValue field : fields) {
                 final String fieldType = field.getString("type");
                 producer.addPropertyBoxPart(
-                        new Supplier<PropertyBoxPart>() {
+                        new Supplier<GraphNodeEditorPart>() {
                             @Override
-                            public PropertyBoxPart get() {
-                                GraphBoxPart propertyBoxPart = createFieldGraphBoxPart(fieldType, field);
+                            public GraphNodeEditorPart get() {
+                                GraphNodeEditorPart propertyBoxPart = createFieldGraphBoxPart(fieldType, field);
                                 if (propertyBoxPart != null)
                                     return propertyBoxPart;
                                 throw new IllegalArgumentException("Unable to resolve field type: " + fieldType);
@@ -151,16 +141,16 @@ public class UIPipelineConfigurer {
         UIPipelineConfiguration.registerPropertyType(producer);
     }
 
-    private static GraphBoxPart createFieldGraphBoxPart(String fieldType, JsonValue field) {
+    private static GraphNodeEditorPart createFieldGraphBoxPart(String fieldType, JsonValue field) {
         switch (fieldType) {
             case PipelineFieldType.Float: {
-                return new FloatBoxPart(field.getString("label") + " ", field.getString("property"),
+                return new FloatEditorPart(field.getString("label") + " ", field.getString("property"),
                         field.getFloat("defaultValue", 0), null);
             }
             case PipelineFieldType.Vector2: {
                 JsonValue properties = field.get("properties");
                 JsonValue defaultValues = field.get("defaultValues");
-                return new Vector2BoxPart(field.getString("label") + " ",
+                return new Vector2EditorPart(field.getString("label") + " ",
                         properties.getString(0), properties.getString(1),
                         defaultValues.getFloat(0), defaultValues.getFloat(1),
                         null, null);
@@ -168,26 +158,26 @@ public class UIPipelineConfigurer {
             case PipelineFieldType.Vector3: {
                 JsonValue properties = field.get("properties");
                 JsonValue defaultValues = field.get("defaultValues");
-                return new Vector3BoxPart(field.getString("label") + " ",
+                return new Vector3EditorPart(field.getString("label") + " ",
                         properties.getString(0), properties.getString(1), properties.getString(2),
                         defaultValues.getFloat(0), defaultValues.getFloat(1), defaultValues.getFloat(2),
                         null, null, null);
             }
             case PipelineFieldType.Color: {
-                return new ColorBoxPart(field.getString("label") + " ", field.getString("property"),
+                return new ColorEditorPart(field.getString("label") + " ", field.getString("property"),
                         Color.valueOf(field.getString("defaultValue")));
             }
             case PipelineFieldType.Boolean: {
-                return new CheckboxBoxPart(field.getString("label") + " ", field.getString("property"),
+                return new CheckboxEditorPart(field.getString("label") + " ", field.getString("property"),
                         field.getBoolean("defaultValue"));
             }
             case "String": {
-                return new StringBoxPart(field.getString("label") + " ", field.getString("property"));
+                return new StringEditorPart(field.getString("label") + " ", field.getString("property"));
             }
             case "Comment": {
                 VisLabel description = new VisLabel(field.getString("text"));
                 description.setColor(Color.valueOf(field.getString("color", "FFFFFFFF")));
-                return new GraphBoxPartImpl(description, null);
+                return new DefaultGraphNodeEditorPart(description, null);
             }
         }
         return null;

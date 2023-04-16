@@ -1,16 +1,16 @@
 package com.gempukku.libgdx.graph.shader.config.common.math.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class RemapValueShaderNodeConfiguration extends NodeConfigurationImpl {
+public class RemapValueShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public RemapValueShaderNodeConfiguration() {
         super("RemapValue", "Remap value", "Math/Value");
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("input", "Input", true, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Result", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("output", "Result", ShaderFieldType.Float));
     }
 }

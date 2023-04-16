@@ -6,39 +6,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.config.common.math.value.RemapVectorShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxPartImpl;
-import com.gempukku.libgdx.graph.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
+import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class RemapVectorShaderBoxProducer extends GraphBoxProducerImpl {
+public class RemapVectorShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public RemapVectorShaderBoxProducer() {
         super(new RemapVectorShaderNodeConfiguration());
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-        String x = "X";
-        String y = "Y";
-        String z = "Z";
-        String w = "W";
-        if (data != null) {
-            x = data.getString("x", x);
-            y = data.getString("y", y);
-            z = data.getString("z", z);
-            w = data.getString("W", w);
-        }
-
-        GraphBoxImpl result = createGraphBox(id);
-        addConfigurationInputsAndOutputs(result);
-
-        final VisSelectBox<String> xBox = createSelectBox(x);
-        final VisSelectBox<String> yBox = createSelectBox(y);
-        final VisSelectBox<String> zBox = createSelectBox(z);
-        final VisSelectBox<String> wBox = createSelectBox(w);
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+        final VisSelectBox<String> xBox = createSelectBox("X");
+        final VisSelectBox<String> yBox = createSelectBox("Y");
+        final VisSelectBox<String> zBox = createSelectBox("Z");
+        final VisSelectBox<String> wBox = createSelectBox("W");
 
         VisTable table = new VisTable();
         table.add("X: ");
@@ -52,10 +38,10 @@ public class RemapVectorShaderBoxProducer extends GraphBoxProducerImpl {
         table.add(wBox);
         table.row();
 
-        result.addGraphBoxPart(
-                new GraphBoxPartImpl(
+        graphNodeEditor.addGraphBoxPart(
+                new DefaultGraphNodeEditorPart(
                         table,
-                        new GraphBoxPartImpl.Callback() {
+                        new DefaultGraphNodeEditorPart.Callback() {
                             @Override
                             public void serialize(JsonValue object) {
                                 object.addChild("x", new JsonValue(xBox.getSelected()));
@@ -64,13 +50,21 @@ public class RemapVectorShaderBoxProducer extends GraphBoxProducerImpl {
                                 object.addChild("w", new JsonValue(wBox.getSelected()));
                             }
                         }
-                ));
-
-        return result;
+                ) {
+                    @Override
+                    public void initialize(JsonValue data) {
+                        if (data != null) {
+                            xBox.setSelected(data.getString("x", "X"));
+                            yBox.setSelected(data.getString("y", "Y"));
+                            zBox.setSelected(data.getString("z", "Z"));
+                            wBox.setSelected(data.getString("w", "W"));
+                        }
+                    }
+                });
     }
 
     private VisSelectBox<String> createSelectBox(String defaultValue) {
-        final VisSelectBox<String> result = new VisSelectBox<String>();
+        final VisSelectBox<String> result = new VisSelectBox<>();
         result.setItems("0.0", "1.0", "X", "Y", "Z", "W");
         result.setSelected(defaultValue);
         result.setAlignment(Align.right);
@@ -83,5 +77,4 @@ public class RemapVectorShaderBoxProducer extends GraphBoxProducerImpl {
                 });
         return result;
     }
-
 }

@@ -4,8 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.GraphShaderTemplate;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
+import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogListener;
 import com.kotcrab.vis.ui.widget.*;
@@ -13,7 +17,7 @@ import com.kotcrab.vis.ui.widget.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public abstract class ShaderGraphBoxPart extends VisTable implements GraphBoxPart {
+public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEditorPart {
     private static final int EDIT_WIDTH = 40;
     private static final int REMOVE_WIDTH = 60;
     private final VerticalGroup shaderGroup;
@@ -95,18 +99,13 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphBoxPar
     }
 
     @Override
-    public GraphBoxOutputConnector getOutputConnector() {
+    public GraphNodeEditorOutput getOutputConnector() {
         return null;
     }
 
     @Override
-    public GraphBoxInputConnector getInputConnector() {
+    public GraphNodeEditorInput getInputConnector() {
         return null;
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     private void addShaderGraph(String id, String tag, JsonValue shader) {

@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.loader.GraphLoader;
+import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
@@ -18,24 +18,16 @@ import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderConfiguration;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderLoaderCallback;
+import com.gempukku.libgdx.graph.plugin.models.ModelShaderLoader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.config.ModelShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 import com.gempukku.libgdx.graph.plugin.models.strategy.*;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
-import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 
-import java.util.function.Function;
-
 public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
-    private static final GraphConfiguration[] configurations = new GraphConfiguration[]{new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ModelShaderConfiguration()};
     private final PluginPrivateDataSource pluginPrivateDataSource;
 
     public ModelShaderRendererPipelineNodeProducer(PluginPrivateDataSource pluginPrivateDataSource) {
@@ -60,7 +52,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         final RenderingStrategyCallback colorStrategyCallback = new RenderingStrategyCallback(
                 shaderContext, new Function<String, GraphShader>() {
             @Override
-            public GraphShader apply(String s) {
+            public GraphShader evaluate(String s) {
                 return shaderGroups.get(s).getColorShader();
             }
         });
@@ -68,7 +60,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         final RenderingStrategyCallback depthStrategyCallback = new RenderingStrategyCallback(
                 shaderContext, new Function<String, GraphShader>() {
             @Override
-            public GraphShader apply(String s) {
+            public GraphShader evaluate(String s) {
                 return shaderGroups.get(s).getDepthShader();
             }
         });
@@ -231,14 +223,14 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return GraphLoader.loadGraph(shaderGraph, new ModelShaderLoaderCallback(tag, defaultTexture, false, configurations), PropertyLocation.Uniform);
+        return ModelShaderLoader.loadShader(shaderGraph, tag, false, defaultTexture);
     }
 
     private static GraphShader createDepthShader(JsonValue shaderDefinition, Texture defaultTexture) {
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return GraphLoader.loadGraph(shaderGraph, new ModelShaderLoaderCallback(tag, defaultTexture, true, configurations), PropertyLocation.Uniform);
+        return ModelShaderLoader.loadShader(shaderGraph, tag, true, defaultTexture);
     }
 
     private static class ShaderGroup implements Disposable {
@@ -305,7 +297,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
         @Override
         public void process(RenderableModel model, String tag) {
-            GraphShader shader = shaderResolver.apply(tag);
+            GraphShader shader = shaderResolver.evaluate(tag);
             if (runningShader != shader) {
                 endCurrentShader();
 

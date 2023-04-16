@@ -1,14 +1,14 @@
 package com.gempukku.libgdx.graph.shader.config.common.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.shader.field.ShaderFieldType.Vector3;
 
-public class ValueVector3ShaderNodeConfiguration extends NodeConfigurationImpl {
+public class ValueVector3ShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public ValueVector3ShaderNodeConfiguration() {
         super("ValueVector3", "Vector3", "Constant");
         addNodeOutput(
-                new GraphNodeOutputImpl("value", "Value", Vector3));
+                new DefaultGraphNodeOutput("value", "Value", Vector3));
     }
 }

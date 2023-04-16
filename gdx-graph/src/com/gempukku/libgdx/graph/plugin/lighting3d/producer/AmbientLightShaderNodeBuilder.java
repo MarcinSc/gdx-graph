@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.LibGDXCollections;
 import com.gempukku.libgdx.graph.plugin.lighting3d.LightColor;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
@@ -12,7 +13,6 @@ import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.util.LibGDXCollections;
 
 public class AmbientLightShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
     public AmbientLightShaderNodeBuilder() {

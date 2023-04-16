@@ -3,31 +3,38 @@ package com.gempukku.libgdx.graph.assistant;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
-import com.gempukku.gdx.assistant.plugin.AssistantTab;
+import com.gempukku.gdx.assistant.plugin.StatusManager;
+import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.UIGraphLoaderCallback;
-import com.gempukku.libgdx.graph.ui.graph.*;
+import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GetSerializedGraph;
+import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
+import com.gempukku.libgdx.graph.ui.graph.GraphWithPropertiesEditor;
+import com.gempukku.libgdx.graph.ui.graph.RequestGraphOpen;
+import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
 public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl {
     private DirtyHierarchy dirtyHierarchy;
     private TabControl tabControl;
-    private GraphDesignTable graphDesignTable;
-    private AssistantTab assistantTab;
+    private GraphWithPropertiesEditor graphWithPropertiesEditor;
     private ObjectMap<String, GraphTab> subGraphTabs = new ObjectMap<>();
-    private ObjectMap<String, GraphDesignTable> subGraphDesignTables = new ObjectMap<>();
     private ObjectMap<String, JsonValue> serializedSubGraphs = new ObjectMap<>();
 
     private boolean dirty = false;
 
-    public GraphTab(Skin skin, DirtyHierarchy dirtyHierarchy, TabControl tabControl, GraphDesignTable graphDesignTable) {
+    public GraphTab(Skin skin, DirtyHierarchy dirtyHierarchy, TabControl tabControl, StatusManager statusManager,
+                    GraphWithProperties graph, UIGraphConfiguration... configurations) {
         this.dirtyHierarchy = dirtyHierarchy;
         this.tabControl = tabControl;
-        this.graphDesignTable = graphDesignTable;
-        graphDesignTable.addListener(
+
+        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, skin, dirtyHierarchy, configurations);
+        graphWithPropertiesEditor.addListener(
                 new EventListener() {
                     @Override
                     public boolean handle(Event event) {
@@ -38,22 +45,16 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                             if (subGraphTab != null) {
                                 tabControl.switchToTab(subGraphTab);
                             } else {
-                                GraphType graphType = requestGraphOpen.getType();
-                                GraphDesignTable subGraphDesignTable = new GraphDesignTable(graphType, skin,
-                                        GraphTab.this, requestGraphOpen.getGraphConfigurations());
+
                                 JsonValue jsonObject = requestGraphOpen.getJsonObject();
                                 if (serializedSubGraphs.containsKey(graphId))
                                     jsonObject = serializedSubGraphs.get(graphId);
-                                GraphLoader.loadGraph(jsonObject,
-                                        new UIGraphLoaderCallback(
-                                                skin, subGraphDesignTable, graphType.getPropertyLocations(),
-                                                requestGraphOpen.getGraphConfigurations()),
-                                        null);
-                                subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, subGraphDesignTable);
-                                AssistantTab subAssistantTab = tabControl.addTab(requestGraphOpen.getTitle(), subGraphTab);
-                                subGraphTab.setAssistantTab(subAssistantTab);
+
+                                GraphType graphType = requestGraphOpen.getType();
+                                GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
+                                subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, statusManager, subGraph, requestGraphOpen.getGraphConfigurations());
+                                tabControl.addTab(requestGraphOpen.getTitle(), subGraphTab);
                                 subGraphTabs.put(graphId, subGraphTab);
-                                subGraphDesignTables.put(graphId, subGraphDesignTable);
                                 tabControl.switchToTab(subGraphTab);
                             }
                             return true;
@@ -62,10 +63,16 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                             getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
                         } else if (event instanceof GraphChangedEvent) {
                             setDirty();
+                        } else if (event instanceof GraphStatusChangeEvent) {
+                            statusManager.addStatus(((GraphStatusChangeEvent) event).getMessage());
                         }
                         return false;
                     }
                 });
+    }
+
+    public Table getContent() {
+        return graphWithPropertiesEditor;
     }
 
     @Override
@@ -73,8 +80,8 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
         return dirty;
     }
 
-    public GraphDesignTable getTable() {
-        return graphDesignTable;
+    public GraphWithProperties getGraph() {
+        return graphWithPropertiesEditor.getGraph();
     }
 
     @Override
@@ -83,8 +90,13 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     }
 
     @Override
-    public AssistantTab addTab(String title, GraphTab graphTab) {
-        return tabControl.addTab(title, graphTab);
+    public void addTab(String title, GraphTab graphTab) {
+        tabControl.addTab(title, graphTab);
+    }
+
+    @Override
+    public void closeTab(GraphTab graphTab) {
+        tabControl.closeTab(graphTab);
     }
 
     @Override
@@ -92,14 +104,9 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
         for (ObjectMap.Entry<String, GraphTab> entry : subGraphTabs.entries()) {
             if (entry.value == graphTab) {
                 subGraphTabs.remove(entry.key);
-                subGraphDesignTables.remove(entry.key);
                 break;
             }
         }
-    }
-
-    public void setAssistantTab(AssistantTab assistantTab) {
-        this.assistantTab = assistantTab;
     }
 
     @Override
@@ -121,24 +128,12 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     }
 
     public void forceClose() {
-        assistantTab.closeTab();
-        for (GraphTab subGraphTab : subGraphTabs.values()) {
-            subGraphTab.forceClose();
-        }
-        subGraphTabs.clear();
-        subGraphDesignTables.clear();
-    }
-
-    public JsonValue serializeGraph() {
-        for (ObjectMap.Entry<String, GraphDesignTable> entry : subGraphDesignTables.entries()) {
-            serializedSubGraphs.put(entry.key, entry.value.serializeGraph());
-        }
-
-        return graphDesignTable.serializeGraph();
+        tabControl.closeTab(this);
     }
 
     @Override
     public void closed() {
+        graphWithPropertiesEditor.dispose();
         for (GraphTab subGraphTab : subGraphTabs.values()) {
             subGraphTab.forceClose();
         }

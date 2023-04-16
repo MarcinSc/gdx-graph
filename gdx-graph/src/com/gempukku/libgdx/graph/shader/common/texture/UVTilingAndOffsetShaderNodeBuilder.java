@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.shader.common.texture;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.LibGDXCollections;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
@@ -10,7 +11,6 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetS
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.util.LibGDXCollections;
 
 public class UVTilingAndOffsetShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
     public UVTilingAndOffsetShaderNodeBuilder() {

@@ -1,19 +1,18 @@
 package com.gempukku.libgdx.graph.plugin.screen.design;
 
 import com.gempukku.libgdx.graph.plugin.screen.design.producer.EndScreenShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBoxProducer;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducer;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class UIScreenShaderConfiguration implements UIGraphConfiguration {
-    private static Map<String, GraphBoxProducer> graphBoxProducers = new TreeMap<>();
+    private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
 
-    public static void register(GraphBoxProducer producer) {
+    public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)
             menuLocation = "Dummy";
@@ -21,18 +20,16 @@ public class UIScreenShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        GraphTypeRegistry.registerType(ScreenShaderGraphType.instance);
-
         register(new EndScreenShaderBoxProducer());
     }
 
     @Override
-    public Iterable<GraphBoxProducer> getGraphBoxProducers() {
+    public Iterable<? extends MenuGraphNodeEditorProducer> getGraphNodeEditorProducers() {
         return graphBoxProducers.values();
     }
 
     @Override
-    public Map<String, PropertyBoxProducer> getPropertyBoxProducers() {
+    public Map<String, PropertyEditorDefinition> getPropertyEditorDefinitions() {
         return Collections.emptyMap();
     }
 }

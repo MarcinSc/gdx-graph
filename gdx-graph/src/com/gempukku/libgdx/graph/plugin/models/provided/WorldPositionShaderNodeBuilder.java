@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.plugin.models.provided;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.LibGDXCollections;
 import com.gempukku.libgdx.graph.plugin.models.config.provided.WorldPositionShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
@@ -11,7 +12,6 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.util.LibGDXCollections;
 
 public class WorldPositionShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     public WorldPositionShaderNodeBuilder() {

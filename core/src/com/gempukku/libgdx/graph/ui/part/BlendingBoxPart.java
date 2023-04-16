@@ -4,13 +4,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxInputConnector;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxOutputConnector;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxPart;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
+import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class BlendingBoxPart extends VisTable implements GraphBoxPart {
-
+public class BlendingBoxPart extends VisTable implements GraphNodeEditorPart {
     public enum Blending {
         disabled(false, false, BasicShader.BlendingFactor.zero, BasicShader.BlendingFactor.one),
         alpha(false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one_minus_source_alpha),
@@ -63,15 +63,15 @@ public class BlendingBoxPart extends VisTable implements GraphBoxPart {
         }
     }
 
-    private EnumSelectBoxPart<Blending> blendingSelect;
-    private EnumSelectBoxPart<BasicShader.BlendingFactor> sourceFactorSelect;
-    private EnumSelectBoxPart<BasicShader.BlendingFactor> destinationFactorSelect;
+    private EnumSelectEditorPart<Blending> blendingSelect;
+    private EnumSelectEditorPart<BasicShader.BlendingFactor> sourceFactorSelect;
+    private EnumSelectEditorPart<BasicShader.BlendingFactor> destinationFactorSelect;
 
     public BlendingBoxPart() {
-        this.blendingSelect = new EnumSelectBoxPart<>("Blending: ", null, new StringifyEnum<Blending>(), Blending.values());
+        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new StringifyEnum<Blending>(), Blending.values());
 
-        this.sourceFactorSelect = new EnumSelectBoxPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
-        this.destinationFactorSelect = new EnumSelectBoxPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
+        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
+        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
 
         this.blendingSelect.addListener(
                 new ChangeListener() {
@@ -139,22 +139,17 @@ public class BlendingBoxPart extends VisTable implements GraphBoxPart {
     }
 
     @Override
-    public GraphBoxOutputConnector getOutputConnector() {
+    public GraphNodeEditorOutput getOutputConnector() {
         return null;
     }
 
     @Override
-    public GraphBoxInputConnector getInputConnector() {
+    public GraphNodeEditorInput getInputConnector() {
         return null;
     }
 
     @Override
     public Actor getActor() {
         return this;
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

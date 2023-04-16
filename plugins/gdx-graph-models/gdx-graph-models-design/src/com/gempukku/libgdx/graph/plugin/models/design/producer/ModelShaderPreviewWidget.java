@@ -11,10 +11,8 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Disposable;
-import com.gempukku.libgdx.graph.data.Graph;
-import com.gempukku.libgdx.graph.data.GraphConnection;
-import com.gempukku.libgdx.graph.data.GraphNode;
 import com.gempukku.libgdx.graph.data.GraphProperty;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
@@ -29,6 +27,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
+import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.DisposableWidget;
@@ -38,7 +37,7 @@ public class ModelShaderPreviewWidget extends DisposableWidget implements Dispos
         Sphere, Rectangle;
     }
 
-    private Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph;
+    private GraphWithProperties graph;
     private boolean shaderInitialized;
     private int width;
     private int height;
@@ -148,7 +147,7 @@ public class ModelShaderPreviewWidget extends DisposableWidget implements Dispos
         return height;
     }
 
-    private void createShader(final Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
+    private void createShader(final GraphWithProperties graph) {
         try {
             timeKeeper = new DefaultTimeKeeper();
             graphShader = GraphShaderBuilder.buildModelShader("Test", WhitePixel.sharedInstance.texture, graph, true);
@@ -206,7 +205,7 @@ public class ModelShaderPreviewWidget extends DisposableWidget implements Dispos
 
             shaderInitialized = true;
         } catch (Exception exp) {
-            exp.printStackTrace();
+            fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             if (graphShader != null)
                 graphShader.dispose();
         }
@@ -257,7 +256,7 @@ public class ModelShaderPreviewWidget extends DisposableWidget implements Dispos
                 renderContext.end();
             } catch (Exception exp) {
                 // Ignore
-                exp.printStackTrace();
+                fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             } finally {
                 if (ScissorStack.peekScissors() != null)
                     Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
@@ -268,7 +267,7 @@ public class ModelShaderPreviewWidget extends DisposableWidget implements Dispos
         }
     }
 
-    public void graphChanged(boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
+    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
         if (hasErrors) {
             this.graph = null;
         } else {

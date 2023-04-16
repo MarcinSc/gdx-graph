@@ -3,20 +3,18 @@ package com.gempukku.libgdx.graph.plugin.particles.design.producer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.graph.data.Graph;
-import com.gempukku.libgdx.graph.data.GraphConnection;
-import com.gempukku.libgdx.graph.data.GraphNode;
-import com.gempukku.libgdx.graph.data.GraphProperty;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxInputConnector;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxOutputConnector;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxPart;
+import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
+import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
-public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxPart {
+public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, Disposable {
     private final ParticlesShaderPreviewWidget shaderPreviewWidget;
 
     public ParticlesShaderPreviewBoxPart() {
@@ -111,12 +109,12 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
     }
 
     @Override
-    public GraphBoxOutputConnector getOutputConnector() {
+    public GraphNodeEditorOutput getOutputConnector() {
         return null;
     }
 
     @Override
-    public GraphBoxInputConnector getInputConnector() {
+    public GraphNodeEditorInput getInputConnector() {
         return null;
     }
 
@@ -124,7 +122,7 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphBoxP
     public void serializePart(JsonValue object) {
     }
 
-    public void graphChanged(boolean hasErrors, Graph<? extends GraphNode, ? extends GraphConnection, ? extends GraphProperty> graph) {
+    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
         shaderPreviewWidget.graphChanged(hasErrors, graph);
     }
 

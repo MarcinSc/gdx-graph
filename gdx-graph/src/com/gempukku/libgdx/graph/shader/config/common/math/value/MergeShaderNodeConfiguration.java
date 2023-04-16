@@ -1,26 +1,26 @@
 package com.gempukku.libgdx.graph.shader.config.common.math.value;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class MergeShaderNodeConfiguration extends NodeConfigurationImpl {
+public class MergeShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public MergeShaderNodeConfiguration() {
         super("Merge", "Merge", "Math/Value");
         addNodeInput(
-                new GraphNodeInputImpl("x", "X", ShaderFieldType.Float));
+                new DefaultGraphNodeInput("x", "X", ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("y", "Y", ShaderFieldType.Float));
+                new DefaultGraphNodeInput("y", "Y", ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("z", "Z", ShaderFieldType.Float));
+                new DefaultGraphNodeInput("z", "Z", ShaderFieldType.Float));
         addNodeInput(
-                new GraphNodeInputImpl("w", "W", ShaderFieldType.Float));
+                new DefaultGraphNodeInput("w", "W", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("v2", "Vector2", ShaderFieldType.Vector2));
+                new DefaultGraphNodeOutput("v2", "Vector2", ShaderFieldType.Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("v3", "Vector3", ShaderFieldType.Vector3));
+                new DefaultGraphNodeOutput("v3", "Vector3", ShaderFieldType.Vector3));
         addNodeOutput(
-                new GraphNodeOutputImpl("color", "Color", ShaderFieldType.Vector4));
+                new DefaultGraphNodeOutput("color", "Color", ShaderFieldType.Vector4));
     }
 }

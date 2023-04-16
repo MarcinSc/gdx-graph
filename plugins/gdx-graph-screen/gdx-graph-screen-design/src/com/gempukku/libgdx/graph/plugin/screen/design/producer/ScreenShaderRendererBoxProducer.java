@@ -1,26 +1,19 @@
 package com.gempukku.libgdx.graph.plugin.screen.design.producer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphBox;
-import com.gempukku.libgdx.graph.ui.graph.GraphBoxImpl;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 
-public class ScreenShaderRendererBoxProducer extends GraphBoxProducerImpl {
+public class ScreenShaderRendererBoxProducer extends DefaultMenuGraphNodeEditorProducer {
     public ScreenShaderRendererBoxProducer() {
         super(new ScreenShaderRendererPipelineNodeConfiguration());
     }
 
     @Override
-    public GraphBox createPipelineGraphBox(Skin skin, String id, JsonValue data) {
-        GraphBoxImpl result = createGraphBox(id);
-        addConfigurationInputsAndOutputs(result);
-
+    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         ScreenShaderBoxPart screenShaderBoxPart = new ScreenShaderBoxPart();
-        screenShaderBoxPart.initialize(data);
-        result.addGraphBoxPart(screenShaderBoxPart);
-
-        return result;
+        graphNodeEditor.addGraphBoxPart(screenShaderBoxPart);
     }
 }

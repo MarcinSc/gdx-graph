@@ -8,6 +8,8 @@ dependencies {
 
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    implementation "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-common:$gdxGempLibVersion"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-camera2d:$gdxGempLibVersion"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"

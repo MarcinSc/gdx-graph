@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.LibGDXCollections;
 import com.gempukku.libgdx.graph.shader.*;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -12,7 +13,6 @@ import com.gempukku.libgdx.graph.shader.config.common.provided.SceneColorShaderN
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultTextureFieldOutput;
-import com.gempukku.libgdx.graph.util.LibGDXCollections;
 
 public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
     public SceneColorShaderNodeBuilder() {

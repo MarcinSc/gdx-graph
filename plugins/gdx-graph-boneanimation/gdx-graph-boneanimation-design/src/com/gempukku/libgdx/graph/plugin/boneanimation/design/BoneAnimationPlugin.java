@@ -2,20 +2,20 @@ package com.gempukku.libgdx.graph.plugin.boneanimation.design;
 
 import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.boneanimation.config.SkinningShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneTransformPropertyBoxProducer;
-import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneWeightPropertyBoxProducer;
+import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneTransformPropertyEditorDefinition;
+import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneWeightPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
-import com.gempukku.libgdx.graph.ui.producer.GraphBoxProducerImpl;
+import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 
 public class BoneAnimationPlugin {
     public void initialize() {
         BoneAnimationPluginRuntimeInitializer.register();
 
         UIModelShaderConfiguration.registerPropertyType(
-                new BoneWeightPropertyBoxProducer());
+                new BoneWeightPropertyEditorDefinition());
         UIModelShaderConfiguration.registerPropertyType(
-                new BoneTransformPropertyBoxProducer());
+                new BoneTransformPropertyEditorDefinition());
         UIModelShaderConfiguration.register(
-                new GraphBoxProducerImpl(new SkinningShaderNodeConfiguration()));
+                new DefaultMenuGraphNodeEditorProducer(new SkinningShaderNodeConfiguration()));
     }
 }

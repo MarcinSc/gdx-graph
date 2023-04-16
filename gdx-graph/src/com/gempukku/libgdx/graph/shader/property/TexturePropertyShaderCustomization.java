@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
@@ -15,12 +14,13 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 public class TexturePropertyShaderCustomization implements PropertyShaderCustomization {
     @Override
     public void processConfiguration(ShaderFieldType shaderFieldType, PropertyNodeConfiguration propertyNodeConfiguration) {
         if (shaderFieldType.isTexture()) {
-            propertyNodeConfiguration.addNodeOutput(new GraphNodeOutputImpl("textureSize", "Texture Size", ShaderFieldType.Vector2));
+            propertyNodeConfiguration.addNodeOutput(new DefaultGraphNodeOutput("textureSize", "Texture Size", ShaderFieldType.Vector2));
         }
     }
 

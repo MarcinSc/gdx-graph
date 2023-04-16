@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
-import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -13,6 +12,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public class PropertyShaderNodeBuilder implements GraphShaderNodeBuilder {
     private Array<PropertyShaderCustomization> customizations = new Array<>();

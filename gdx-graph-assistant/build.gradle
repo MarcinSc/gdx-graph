@@ -16,10 +16,8 @@ dependencies {
     api project(":gdx-graph-lighting3d-design")
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    implementation "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
 }
 
 jar {

@@ -1,19 +1,19 @@
 package com.gempukku.libgdx.graph.plugin.models.design.producer;
 
-import com.gempukku.libgdx.graph.plugin.models.design.ModelShaderGraphType;
+import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.models.design.ModelsTemplateRegistry;
-import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.graph.GraphType;
+import com.gempukku.libgdx.graph.ui.UIGraphType;
 import com.gempukku.libgdx.graph.ui.graph.ShaderGraphBoxPart;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.GraphShaderTemplate;
-import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class ModelShadersBoxPart extends ShaderGraphBoxPart {
-    private static UIGraphConfiguration[] graphConfigurations = new UIGraphConfiguration[]{
-            new UIModelShaderConfiguration(),
-            new UICommonShaderConfiguration()
-    };
+    private UIGraphType graphType;
+
+    public ModelShadersBoxPart() {
+        graphType = (UIGraphType) GraphTypeRegistry.findGraphType("Model_Shader");
+    }
 
     @Override
     protected Iterable<GraphShaderTemplate> getTemplates() {
@@ -22,11 +22,11 @@ public class ModelShadersBoxPart extends ShaderGraphBoxPart {
 
     @Override
     protected GraphType getGraphType() {
-        return ModelShaderGraphType.instance;
+        return graphType;
     }
 
     @Override
     protected UIGraphConfiguration[] getGraphConfigurations() {
-        return graphConfigurations;
+        return graphType.getUIConfigurations();
     }
 }

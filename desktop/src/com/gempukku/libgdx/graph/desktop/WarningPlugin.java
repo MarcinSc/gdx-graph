@@ -60,7 +60,12 @@ public class WarningPlugin implements AssistantPlugin {
     }
 
     @Override
-    public void registerPlugin(AssistantApplication assistantApplication) {
+    public void registerPlugin() {
+
+    }
+
+    @Override
+    public void initializePlugin(AssistantApplication assistantApplication) {
         Dialogs.DetailsDialog dialog = new Dialogs.DetailsDialog(
                 "This application should no longer be opened from this project. Please read the details for how to migrate.",
                 "Deprecation message",

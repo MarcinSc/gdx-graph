@@ -1,20 +1,20 @@
 package com.gempukku.libgdx.graph.shader.config.common.texture;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class UVTilingAndOffsetShaderNodeConfiguration extends NodeConfigurationImpl {
+public class UVTilingAndOffsetShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public UVTilingAndOffsetShaderNodeConfiguration() {
         super("UVTilingOffset", "UV Tiling & Offset", "Texture");
         addNodeInput(
-                new GraphNodeInputImpl("uv", "UV", true, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("uv", "UV", true, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("tiling", "Tiling", false, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("tiling", "Tiling", false, ShaderFieldType.Vector2));
         addNodeInput(
-                new GraphNodeInputImpl("offset", "Offset", false, ShaderFieldType.Vector2));
+                new DefaultGraphNodeInput("offset", "Offset", false, ShaderFieldType.Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "UV", ShaderFieldType.Vector2));
+                new DefaultGraphNodeOutput("output", "UV", ShaderFieldType.Vector2));
     }
 }

@@ -1,17 +1,17 @@
 package com.gempukku.libgdx.graph.shader.config.common.provided;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class ViewportSizeShaderNodeConfiguration extends NodeConfigurationImpl {
+public class ViewportSizeShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public ViewportSizeShaderNodeConfiguration() {
         super("ViewportSize", "Viewport size", "Provided");
         addNodeOutput(
-                new GraphNodeOutputImpl("size", "Size", ShaderFieldType.Vector2));
+                new DefaultGraphNodeOutput("size", "Size", ShaderFieldType.Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("x", "X", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("x", "X", ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("y", "Y", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("y", "Y", ShaderFieldType.Float));
     }
 }

@@ -1,16 +1,16 @@
 package com.gempukku.libgdx.graph.shader.config.common.effect;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class GradientShaderNodeConfiguration extends NodeConfigurationImpl {
+public class GradientShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public GradientShaderNodeConfiguration() {
         super("Gradient", "Gradient", "Effect");
         addNodeInput(
-                new GraphNodeInputImpl("input", "Input", true, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("input", "Input", true, ShaderFieldType.Float));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Color", ShaderFieldType.Vector4));
+                new DefaultGraphNodeOutput("output", "Color", ShaderFieldType.Vector4));
     }
 }

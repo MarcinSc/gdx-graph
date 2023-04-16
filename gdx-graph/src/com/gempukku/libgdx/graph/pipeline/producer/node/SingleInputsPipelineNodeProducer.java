@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.producer.node;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public abstract class SingleInputsPipelineNodeProducer extends AbstractPipelineNodeProducer {
     public SingleInputsPipelineNodeProducer(NodeConfiguration configuration) {

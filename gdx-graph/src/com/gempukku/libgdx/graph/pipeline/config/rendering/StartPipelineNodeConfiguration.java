@@ -1,19 +1,19 @@
 package com.gempukku.libgdx.graph.pipeline.config.rendering;
 
-import com.gempukku.libgdx.graph.data.NodeConfigurationImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeInputImpl;
-import com.gempukku.libgdx.graph.pipeline.producer.node.GraphNodeOutputImpl;
+import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.*;
 
-public class StartPipelineNodeConfiguration extends NodeConfigurationImpl {
+public class StartPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public StartPipelineNodeConfiguration() {
         super("PipelineStart", "Pipeline start", "Pipeline");
         addNodeInput(
-                new GraphNodeInputImpl("background", "Background color", Color, Vector4));
+                new DefaultGraphNodeInput("background", "Background color", Color, Vector4));
         addNodeInput(
-                new GraphNodeInputImpl("size", "Size", Vector2));
+                new DefaultGraphNodeInput("size", "Size", Vector2));
         addNodeOutput(
-                new GraphNodeOutputImpl("output", "Output", true, RenderPipeline));
+                new DefaultGraphNodeOutput("output", "Output", true, RenderPipeline));
     }
 }

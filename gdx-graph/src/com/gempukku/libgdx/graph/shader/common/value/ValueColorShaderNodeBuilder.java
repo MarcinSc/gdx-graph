@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.common.LibGDXCollections;
+import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
@@ -11,8 +13,6 @@ import com.gempukku.libgdx.graph.shader.config.common.value.ValueColorShaderNode
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.util.LibGDXCollections;
-import com.gempukku.libgdx.graph.util.SimpleNumberFormatter;
 
 public class ValueColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
     public ValueColorShaderNodeBuilder() {
