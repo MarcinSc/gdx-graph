@@ -18,7 +18,6 @@ import com.gempukku.libgdx.graph.pipeline.config.rendering.EndPipelineNodeConfig
 import com.gempukku.libgdx.graph.pipeline.config.rendering.PipelineRendererNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.StartPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.value.*;
-import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
@@ -131,10 +130,10 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
         register(new DepthOfFieldBoxProducer());
         register(new DefaultMenuGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
 
-        propertyProducers.put(PipelineFieldType.Float, new PropertyFloatEditorDefinition());
-        propertyProducers.put(PipelineFieldType.Vector2, new PropertyVector2EditorDefinition());
-        propertyProducers.put(PipelineFieldType.Vector3, new PropertyVector3EditorDefinition());
-        propertyProducers.put(PipelineFieldType.Color, new PropertyColorEditorDefinition());
+        registerPropertyType(new PropertyFloatEditorDefinition());
+        registerPropertyType(new PropertyVector2EditorDefinition());
+        registerPropertyType(new PropertyVector3EditorDefinition());
+        registerPropertyType(new PropertyColorEditorDefinition());
         PipelinePropertyEditorDefinitionImpl booleanProperty = new PipelinePropertyEditorDefinitionImpl("New Boolean", "Boolean");
         booleanProperty.addPropertyBoxPart(
                 new Supplier<GraphNodeEditorPart>() {
@@ -143,8 +142,8 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
                         return new CheckboxEditorPart("Value", "value", false);
                     }
                 });
-        propertyProducers.put(PipelineFieldType.Boolean, booleanProperty);
-        propertyProducers.put(PipelineFieldType.Camera, new PipelinePropertyEditorDefinitionImpl("New Camera", "Camera"));
+        registerPropertyType(booleanProperty);
+        registerPropertyType(new PipelinePropertyEditorDefinitionImpl("New Camera", "Camera"));
     }
 
     @Override
