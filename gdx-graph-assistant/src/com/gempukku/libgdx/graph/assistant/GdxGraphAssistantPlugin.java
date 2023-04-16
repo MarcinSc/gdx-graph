@@ -12,9 +12,11 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.BoneAnimationPlugin;
 import com.gempukku.libgdx.graph.plugin.callback.design.RenderCallbackPlugin;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.Lighting3DPlugin;
+import com.gempukku.libgdx.graph.plugin.maps.MapsPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.models.design.ModelsPlugin;
 import com.gempukku.libgdx.graph.plugin.particles.design.ParticlesPlugin;
 import com.gempukku.libgdx.graph.plugin.screen.design.ScreenPlugin;
+import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineGraphType;
 import com.gempukku.libgdx.graph.util.WhitePixel;
@@ -100,12 +102,14 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         GraphTypeRegistry.registerType(new UIRenderPipelineGraphType());
         new RenderCallbackPlugin().initialize();
         new JsonGdxGraphPlugin("config/plugin-ui-config.json").initialize();
+        UIPluginRuntimeInitializer.register();
         new ScreenPlugin().initialize();
         new ParticlesPlugin().initialize();
         new ModelsPlugin().initialize();
         new BoneAnimationPlugin().initialize();
         new Lighting3DPlugin().initialize();
         new JsonGdxGraphPlugin("config/plugin-maps-config.json").initialize();
+        MapsPluginRuntimeInitializer.register();
     }
 
     @Override

@@ -12,6 +12,7 @@ public abstract class ValueGraphBoxProducerDefault extends DefaultMenuGraphNodeE
 
     public ValueGraphBoxProducerDefault(MenuNodeConfiguration configuration) {
         super(configuration);
+        this.configuration = configuration;
     }
 
     @Override

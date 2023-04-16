@@ -20,7 +20,7 @@ import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
-import com.gempukku.libgdx.graph.plugin.models.ModelShaderLoader;
+import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderLoader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 import com.gempukku.libgdx.graph.plugin.models.strategy.*;
@@ -216,7 +216,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ModelShaderLoader.loadShader(shaderGraph, tag, true, defaultTexture);
+        return ShadowShaderLoader.loadShader(shaderGraph, tag, true, defaultTexture);
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {

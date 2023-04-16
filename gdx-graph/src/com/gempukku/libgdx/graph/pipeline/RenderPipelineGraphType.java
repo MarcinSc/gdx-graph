@@ -1,8 +1,10 @@
 package com.gempukku.libgdx.graph.pipeline;
 
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
 import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
@@ -15,7 +17,10 @@ public class RenderPipelineGraphType implements GraphType {
                 new BiFunction<String, JsonValue, NodeConfiguration>() {
                     @Override
                     public NodeConfiguration evaluate(String type, JsonValue data) {
-                        return RendererPipelineConfiguration.findProducer(type).getConfiguration(data);
+                        PipelineNodeProducer producer = RendererPipelineConfiguration.findProducer(type);
+                        if (producer == null)
+                            throw new GdxRuntimeException("Unable to find producer for type: " + type);
+                        return producer.getConfiguration(data);
                     }
                 };
 

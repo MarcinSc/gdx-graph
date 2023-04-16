@@ -15,6 +15,7 @@ import com.gempukku.libgdx.graph.pipeline.impl.WritablePipelineProperty;
 import com.gempukku.libgdx.graph.pipeline.property.PipelinePropertyProducer;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
 import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,13 +39,15 @@ public class PipelineLoader {
 
     public static PipelineRenderer loadPipelineRenderer(InputStream pipelineInputStream, TimeProvider timeProvider, PipelineRendererResources resources) {
         try {
+            GraphTypeRegistry.registerType(new RenderPipelineGraphType());
             PluginRegistryImpl pluginRegistry = PluginRegistryImpl.initializePlugins();
 
             GraphType graphType = GraphTypeRegistry.findGraphType("Render_Pipeline");
 
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), pipelineInputStream);
 
-            if (graphType.getGraphValidator().validateGraph(graph).hasErrors())
+            GraphValidationResult validationResult = graphType.getGraphValidator().validateGraph(graph);
+            if (validationResult.hasErrors())
                 throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
             ObjectMap<String, WritablePipelineProperty> propertyMap = new ObjectMap<>();

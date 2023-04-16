@@ -24,7 +24,7 @@ public class WarningPlugin implements AssistantPlugin {
 
             @Override
             public JsonValue saveProject() {
-                return null;
+                return new JsonValue(JsonValue.ValueType.object);
             }
 
             @Override

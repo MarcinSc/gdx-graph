@@ -18,21 +18,21 @@ public class DefaultGraphProperty implements GraphProperty {
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public String getType() {
-        return null;
+        return type;
     }
 
     @Override
     public PropertyLocation getLocation() {
-        return null;
+        return location;
     }
 
     @Override
     public JsonValue getData() {
-        return null;
+        return data;
     }
 }

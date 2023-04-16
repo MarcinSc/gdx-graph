@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
+import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
@@ -130,6 +131,24 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         splitPane.setSplitAmount(0.2f);
 
         this.add(splitPane).grow().row();
+
+        for (GraphProperty property : graph.getProperties()) {
+            PropertyEditorDefinition propertyEditorDefinition = getPropertyEditorDefinition(property.getType());
+            PropertyBox propertyBox = propertyEditorDefinition.createPropertyBox(skin, property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
+            addPropertyBox(property.getName(), propertyBox);
+        }
+
+        processGraphChanged(null);
+    }
+
+    private PropertyEditorDefinition getPropertyEditorDefinition(String propertyType) {
+        for (UIGraphConfiguration graphConfiguration : uiGraphConfigurations) {
+            PropertyEditorDefinition propertyEditorDefinition = graphConfiguration.getPropertyEditorDefinitions().get(propertyType);
+            if (propertyEditorDefinition != null) {
+                return propertyEditorDefinition;
+            }
+        }
+        return null;
     }
 
     public GraphWithProperties getGraph() {

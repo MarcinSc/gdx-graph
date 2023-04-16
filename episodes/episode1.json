@@ -5,24 +5,24 @@
     {
       "id": "aabbec2d317c4b9da9339de61c084b74",
       "type": "Property",
-      "x": 50.0,
-      "y": 208.0,
+      "x": 0.0,
+      "y": 158.0,
       "data": {
         "name": "Background Color",
-        "type": "Vector4"
+        "type": "Color"
       }
     },
     {
       "id": "d214ec4a440d476aa2efc0560ad67ef9",
       "type": "PipelineStart",
-      "x": 319.0,
-      "y": 195.0
+      "x": 269.0,
+      "y": 145.0
     },
     {
       "id": "end",
       "type": "PipelineEnd",
-      "x": 318.0,
-      "y": 50.0
+      "x": 268.0,
+      "y": 0.0
     }
   ],
   "connections": [
@@ -39,6 +39,7 @@
       "toField": "input"
     }
   ],
+  "groups": [],
   "properties": [
     {
       "name": "Background Color",
@@ -47,6 +48,5 @@
         "color": "ffffffff"
       }
     }
-  ],
-  "groups": []
+  ]
 }
