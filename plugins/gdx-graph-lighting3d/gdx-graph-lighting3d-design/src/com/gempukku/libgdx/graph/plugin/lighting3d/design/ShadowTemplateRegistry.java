@@ -2,26 +2,27 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.FileGraphShaderTemplate;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.GraphShaderTemplate;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.shader.registry.LoadFileGraphShaderTemplate;
+import com.gempukku.libgdx.graph.GraphType;
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
+import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderGraphType;
+import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
+import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 
 public class ShadowTemplateRegistry {
-    private static Array<GraphShaderTemplate> templates = new Array<>();
+    private static Array<GraphTemplate> templates = new Array<>();
 
-    public static void register(GraphShaderTemplate template) {
+    public static void register(GraphTemplate template) {
         templates.add(template);
     }
 
     static {
+        GraphType graphType = GraphTypeRegistry.findGraphType(ShadowShaderGraphType.TYPE);
+
         register(
-                new FileGraphShaderTemplate("Empty", Gdx.files.classpath("template/shadow/empty-shadow-shader.json")));
-        register(null);
-        register(
-                new LoadFileGraphShaderTemplate("From file..."));
+                new FileGraphTemplate(graphType, "Empty shadow shader", Gdx.files.classpath("template/shadow/empty-shadow-shader.json")));
     }
 
-    public static Iterable<GraphShaderTemplate> getTemplates() {
+    public static Iterable<GraphTemplate> getTemplates() {
         return templates;
     }
 }

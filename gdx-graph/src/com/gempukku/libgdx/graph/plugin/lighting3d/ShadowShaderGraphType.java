@@ -13,6 +13,8 @@ import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
 public class ShadowShaderGraphType implements ShaderGraphType {
+    public static final String TYPE = "Shadow_Shader";
+
     private static final PropertyLocation[] propertyLocations = new PropertyLocation[]{PropertyLocation.Uniform, PropertyLocation.Global_Uniform, PropertyLocation.Attribute};
     private static final GraphConfiguration[] configurations = new GraphConfiguration[]{new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ModelShaderConfiguration()};
     private GraphValidator graphValidator;
@@ -41,7 +43,7 @@ public class ShadowShaderGraphType implements ShaderGraphType {
 
     @Override
     public String getType() {
-        return "Shadow_Shader";
+        return TYPE;
     }
 
     @Override

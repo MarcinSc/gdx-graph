@@ -10,6 +10,8 @@ import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
 public class RenderPipelineGraphType implements GraphType {
+    public static final String TYPE = "Render_Pipeline";
+
     private final GraphValidator graphValidator;
 
     public RenderPipelineGraphType() {
@@ -33,7 +35,7 @@ public class RenderPipelineGraphType implements GraphType {
 
     @Override
     public String getType() {
-        return "Render_Pipeline";
+        return TYPE;
     }
 
     @Override

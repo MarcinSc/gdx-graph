@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.ui.graph;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.GraphType;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 
 
 public class RequestGraphOpen extends Event {
@@ -11,15 +10,12 @@ public class RequestGraphOpen extends Event {
     private String title;
     private JsonValue jsonObject;
     private GraphType type;
-    private UIGraphConfiguration[] graphConfigurations;
 
-    public RequestGraphOpen(String id, String title, JsonValue jsonObject, GraphType type,
-                            UIGraphConfiguration... graphConfiguration) {
+    public RequestGraphOpen(String id, String title, JsonValue jsonObject, GraphType type) {
         this.id = id;
         this.title = title;
         this.jsonObject = jsonObject;
         this.type = type;
-        this.graphConfigurations = graphConfiguration;
     }
 
     public String getId() {
@@ -36,9 +32,5 @@ public class RequestGraphOpen extends Event {
 
     public GraphType getType() {
         return type;
-    }
-
-    public UIGraphConfiguration[] getGraphConfigurations() {
-        return graphConfigurations;
     }
 }

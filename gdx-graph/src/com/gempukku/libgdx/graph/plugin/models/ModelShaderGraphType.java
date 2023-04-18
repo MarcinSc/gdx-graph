@@ -12,6 +12,8 @@ import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
 public class ModelShaderGraphType implements ShaderGraphType {
+    public static final String TYPE = "Model_Shader";
+
     private static final PropertyLocation[] propertyLocations = new PropertyLocation[]{PropertyLocation.Uniform, PropertyLocation.Global_Uniform, PropertyLocation.Attribute};
     private static final GraphConfiguration[] configurations = new GraphConfiguration[]{new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ModelShaderConfiguration()};
 
@@ -41,7 +43,7 @@ public class ModelShaderGraphType implements ShaderGraphType {
 
     @Override
     public String getType() {
-        return "Model_Shader";
+        return TYPE;
     }
 
     @Override

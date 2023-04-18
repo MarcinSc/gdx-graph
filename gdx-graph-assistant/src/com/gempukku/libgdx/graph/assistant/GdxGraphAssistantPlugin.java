@@ -96,28 +96,27 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         menuManager.addPopupMenu("Graph", null, "Open");
         menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
 
-        menuManager.addMenuItem("Graph", null, "Import graph", null);
-        menuManager.setMenuItemDisabled("Graph", null, "Import graph", true);
+        menuManager.addPopupMenu("Graph", null, "Import");
+        menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
 
         menuManager.addMenuSeparator("Graph", null);
 
-        menuManager.addMenuItem("Graph", null, "Create group", null);
+        menuManager.addMenuItem("Graph", null, "Create group", new KeyCombination(true, false, false, Input.Keys.G), null);
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
-        menuManager.setMenuItemShortcut("Graph", null, "Create group", new KeyCombination(true, false, false, Input.Keys.G));
     }
 
     private static void registerGdxPlugins() {
         GraphTypeRegistry.registerType(new UIRenderPipelineGraphType());
         new RenderCallbackPlugin().initialize();
-        new JsonGdxGraphPlugin("config/plugin-ui-config.json").initialize();
-        UIPluginRuntimeInitializer.register();
-        new ScreenPlugin().initialize();
-        new ParticlesPlugin().initialize();
-        new ModelsPlugin().initialize();
-        new BoneAnimationPlugin().initialize();
-        new Lighting3DPlugin().initialize();
         new JsonGdxGraphPlugin("config/plugin-maps-config.json").initialize();
         MapsPluginRuntimeInitializer.register();
+        new JsonGdxGraphPlugin("config/plugin-ui-config.json").initialize();
+        UIPluginRuntimeInitializer.register();
+        new ModelsPlugin().initialize();
+        new Lighting3DPlugin().initialize();
+        new ParticlesPlugin().initialize();
+        new ScreenPlugin().initialize();
+        new BoneAnimationPlugin().initialize();
     }
 
     @Override

@@ -1,12 +1,17 @@
 package com.gempukku.libgdx.graph;
 
-import com.badlogic.gdx.utils.ObjectMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class GraphTypeRegistry {
-    private static ObjectMap<String, GraphType> types = new ObjectMap<>();
+    private static Map<String, GraphType> types = new LinkedHashMap<>();
 
     public static GraphType findGraphType(String name) {
         return types.get(name);
+    }
+
+    public static Iterable<? extends GraphType> getAllGraphTypes() {
+        return types.values();
     }
 
     public static void registerType(GraphType graphType) {

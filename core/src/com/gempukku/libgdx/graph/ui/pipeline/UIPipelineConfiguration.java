@@ -18,10 +18,10 @@ import com.gempukku.libgdx.graph.pipeline.config.rendering.EndPipelineNodeConfig
 import com.gempukku.libgdx.graph.pipeline.config.rendering.PipelineRendererNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.StartPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.value.*;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldBoxProducer;

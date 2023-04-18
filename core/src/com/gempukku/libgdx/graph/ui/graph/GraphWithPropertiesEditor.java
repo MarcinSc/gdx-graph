@@ -14,13 +14,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.Function;
-import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
@@ -43,31 +40,29 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     private List<PropertyBox> propertyBoxes = new LinkedList<>();
     private final GraphEditor graphEditor;
 
-    private GraphType type;
+    private UIGraphType type;
     private Skin skin;
-    private UIGraphConfiguration[] uiGraphConfigurations;
 
     private final VerticalGroup pipelineProperties;
     private VisLabel validationLabel;
 
     private CompositeGraphWithProperties compositeGraphWithProperties;
 
-    public GraphWithPropertiesEditor(GraphWithProperties graph, Skin skin, DirtyHierarchy dirtyHierarchy, UIGraphConfiguration... uiGraphConfiguration) {
-        this.type = GraphTypeRegistry.findGraphType(graph.getType());
+    public GraphWithPropertiesEditor(GraphWithProperties graph, Skin skin, DirtyHierarchy dirtyHierarchy) {
+        this.type = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getType());
 
         pipelineProperties = createPropertiesUI(skin);
         this.skin = skin;
-        this.uiGraphConfigurations = uiGraphConfiguration;
 
         graphEditor = new GraphEditor(graph,
                 new Function<String, GraphNodeEditorProducer>() {
                     @Override
                     public GraphNodeEditorProducer evaluate(String value) {
                         if (value.equals("Property")) {
-                            return new PropertyGraphNodeEditorProducer(uiGraphConfigurations);
+                            return new PropertyGraphNodeEditorProducer(type.getUIConfigurations());
                         }
 
-                        for (UIGraphConfiguration graphConfiguration : uiGraphConfigurations) {
+                        for (UIGraphConfiguration graphConfiguration : type.getUIConfigurations()) {
                             for (MenuGraphNodeEditorProducer graphNodeEditorProducer : graphConfiguration.getGraphNodeEditorProducers()) {
                                 if (graphNodeEditorProducer.getType().equals(value))
                                     return graphNodeEditorProducer;
@@ -141,7 +136,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     }
 
     private PropertyEditorDefinition getPropertyEditorDefinition(String propertyType) {
-        for (UIGraphConfiguration graphConfiguration : uiGraphConfigurations) {
+        for (UIGraphConfiguration graphConfiguration : type.getUIConfigurations()) {
             PropertyEditorDefinition propertyEditorDefinition = graphConfiguration.getPropertyEditorDefinitions().get(propertyType);
             if (propertyEditorDefinition != null) {
                 return propertyEditorDefinition;
@@ -157,7 +152,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     private PopupMenu createGraphPopupMenu(final float popupX, final float popupY) {
         PopupMenu popupMenu = new PopupMenu();
 
-        for (UIGraphConfiguration uiGraphConfiguration : uiGraphConfigurations) {
+        for (UIGraphConfiguration uiGraphConfiguration : type.getUIConfigurations()) {
             boolean hasChild = false;
             for (final MenuGraphNodeEditorProducer producer : uiGraphConfiguration.getGraphNodeEditorProducers()) {
                 String menuLocation = producer.getMenuLocation();
@@ -259,7 +254,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
 
     private PopupMenu createPropertyPopupMenu() {
         PopupMenu menu = new PopupMenu();
-        for (UIGraphConfiguration uiGraphConfiguration : uiGraphConfigurations) {
+        for (UIGraphConfiguration uiGraphConfiguration : type.getUIConfigurations()) {
             for (Map.Entry<String, ? extends PropertyEditorDefinition> propertyEntry : uiGraphConfiguration.getPropertyEditorDefinitions().entrySet()) {
                 final String name = propertyEntry.getKey();
                 final PropertyEditorDefinition value = propertyEntry.getValue();
@@ -319,7 +314,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
             validationLabel.setText("OK");
         }
 
-        for (UIGraphConfiguration uiGraphConfiguration : uiGraphConfigurations) {
+        for (UIGraphConfiguration uiGraphConfiguration : type.getUIConfigurations()) {
             for (MenuGraphNodeEditorProducer graphNodeEditorProducer : uiGraphConfiguration.getGraphNodeEditorProducers()) {
                 if (graphNodeEditorProducer instanceof GraphChangedAware) {
                     ((GraphChangedAware) graphNodeEditorProducer).graphChanged(event, validationResult.hasErrors(), graph);

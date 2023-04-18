@@ -1,159 +1,159 @@
 {
 "pluginsData": {
-  "gdx-graph": {
-    "graphs": [
-      {
-        "name": "Episode 1",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode1.json"
-      },
-      {
-        "name": "Episode 2",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode2.json"
-      },
-      {
-        "name": "Episode 3",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode3.json"
-      },
-      {
-        "name": "Episode 4",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode4.json"
-      },
-      {
-        "name": "Episode 5",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode5.json"
-      },
-      {
-        "name": "Episode 6",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode6.json"
-      },
-      {
-        "name": "Episode 7",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode7.json"
-      },
-      {
-        "name": "Episode 8",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode8.json"
-      },
-      {
-        "name": "Episode 9",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode9.json"
-      },
-      {
-        "name": "Episode 11",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode11.json"
-      },
-      {
-        "name": "Episode 12",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode12.json"
-      },
-      {
-        "name": "Episode 13",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode13.json"
-      },
-      {
-        "name": "Episode 14",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode14.json"
-      },
-      {
-        "name": "Episode 15",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode15.json"
-      },
-      {
-        "name": "Episode 16",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode16.json"
-      },
-      {
-        "name": "Episode 17",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode17.json"
-      },
-      {
-        "name": "Episode 18",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode18.json"
-      },
-      {
-        "name": "Episode 19",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode19.json"
-      },
-      {
-        "name": "Episode 20",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode20.json"
-      },
-      {
-        "name": "Episode 21",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode21.json"
-      },
-      {
-        "name": "Episode 22",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode22.json"
-      },
-      {
-        "name": "Episode 23",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode23.json"
-      },
-      {
-        "name": "Episode 24",
-        "graphType": "Render_Pipeline",
-        "path": "episodes/episode24.json"
-      },
-      {
-        "name": "Sprite Shader",
-        "graphType": "Render_Pipeline",
-        "path": "test/sprite-shader-test.json"
-      },
-      {
-        "name": "Particle Shader",
-        "graphType": "Render_Pipeline",
-        "path": "test/particles-shader-test.json"
-      },
-      {
-        "name": "Shadow Shader",
-        "graphType": "Render_Pipeline",
-        "path": "test/shadow-shader-test.json"
-      },
-      {
-        "name": "SDF Text Shader",
-        "graphType": "Render_Pipeline",
-        "path": "test/sdf-text-shader-test.json"
-      },
-      {
-        "name": "Hierarchy and Transform",
-        "graphType": "Render_Pipeline",
-        "path": "test/hierarchy-transform-shader-test.json"
-      },
-      {
-        "name": "Stylized Shader",
-        "graphType": "Render_Pipeline",
-        "path": "test/stylized-shading-shader-test.json"
-      },
-      {
-        "name": "Top Down Camera",
-        "graphType": "Render_Pipeline",
-        "path": "test/top-down-camera-test.json"
-      }
-    ]
-  },
-  "deprecation-warning": {}
+	"gdx-graph": {
+		"graphs": [
+			{
+				"name": "Episode 1",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode1.json"
+			},
+			{
+				"name": "Episode 2",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode2.json"
+			},
+			{
+				"name": "Episode 3",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode3.json"
+			},
+			{
+				"name": "Episode 4",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode4.json"
+			},
+			{
+				"name": "Episode 5",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode5.json"
+			},
+			{
+				"name": "Episode 6",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode6.json"
+			},
+			{
+				"name": "Episode 7",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode7.json"
+			},
+			{
+				"name": "Episode 8",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode8.json"
+			},
+			{
+				"name": "Episode 9",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode9.json"
+			},
+			{
+				"name": "Episode 11",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode11.json"
+			},
+			{
+				"name": "Episode 12",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode12.json"
+			},
+			{
+				"name": "Episode 13",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode13.json"
+			},
+			{
+				"name": "Episode 14",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode14.json"
+			},
+			{
+				"name": "Episode 15",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode15.json"
+			},
+			{
+				"name": "Episode 16",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode16.json"
+			},
+			{
+				"name": "Episode 17",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode17.json"
+			},
+			{
+				"name": "Episode 18",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode18.json"
+			},
+			{
+				"name": "Episode 19",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode19.json"
+			},
+			{
+				"name": "Episode 20",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode20.json"
+			},
+			{
+				"name": "Episode 21",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode21.json"
+			},
+			{
+				"name": "Episode 22",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode22.json"
+			},
+			{
+				"name": "Episode 23",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode23.json"
+			},
+			{
+				"name": "Episode 24",
+				"graphType": "Render_Pipeline",
+				"path": "episodes/episode24.json"
+			},
+			{
+				"name": "Sprite Shader",
+				"graphType": "Render_Pipeline",
+				"path": "test/sprite-shader-test.json"
+			},
+			{
+				"name": "Particle Shader",
+				"graphType": "Render_Pipeline",
+				"path": "test/particles-shader-test.json"
+			},
+			{
+				"name": "Shadow Shader",
+				"graphType": "Render_Pipeline",
+				"path": "test/shadow-shader-test.json"
+			},
+			{
+				"name": "SDF Text Shader",
+				"graphType": "Render_Pipeline",
+				"path": "test/sdf-text-shader-test.json"
+			},
+			{
+				"name": "Hierarchy and Transform",
+				"graphType": "Render_Pipeline",
+				"path": "test/hierarchy-transform-shader-test.json"
+			},
+			{
+				"name": "Stylized Shader",
+				"graphType": "Render_Pipeline",
+				"path": "test/stylized-shading-shader-test.json"
+			},
+			{
+				"name": "Top Down Camera",
+				"graphType": "Render_Pipeline",
+				"path": "test/top-down-camera-test.json"
+			}
+		]
+	},
+	"deprecation-warning": {}
 }
 }

@@ -12,6 +12,8 @@ import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
 public class ScreenShaderGraphType implements ShaderGraphType {
+    public static final String TYPE = "Screen_Shader";
+
     private static final PropertyLocation[] propertyLocations = {PropertyLocation.Global_Uniform};
     private static final GraphConfiguration[] configurations = new GraphConfiguration[]{new CommonShaderConfiguration(), new PropertyShaderConfiguration(), new ScreenShaderConfiguration()};
     private GraphValidator graphValidator;
@@ -40,7 +42,7 @@ public class ScreenShaderGraphType implements ShaderGraphType {
 
     @Override
     public String getType() {
-        return "Screen_Shader";
+        return TYPE;
     }
 
     @Override

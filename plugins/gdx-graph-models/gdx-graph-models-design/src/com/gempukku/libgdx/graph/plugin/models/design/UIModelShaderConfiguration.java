@@ -2,9 +2,9 @@ package com.gempukku.libgdx.graph.plugin.models.design;
 
 import com.gempukku.libgdx.graph.plugin.models.config.provided.*;
 import com.gempukku.libgdx.graph.plugin.models.design.producer.EndModelShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.LinkedHashMap;

@@ -20,9 +20,9 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.BorderDetectionSha
 import com.gempukku.libgdx.graph.shader.config.common.texture.Sampler2DShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherShaderBoxProducer;

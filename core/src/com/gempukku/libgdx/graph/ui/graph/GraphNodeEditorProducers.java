@@ -3,8 +3,6 @@ package com.gempukku.libgdx.graph.ui.graph;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public class GraphNodeEditorProducers implements BiFunction<String, JsonValue, NodeConfiguration> {

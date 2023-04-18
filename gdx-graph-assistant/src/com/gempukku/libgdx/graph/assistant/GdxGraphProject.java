@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.assistant;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -8,6 +7,7 @@ import com.gempukku.gdx.assistant.plugin.AssistantApplication;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
 import com.gempukku.gdx.assistant.plugin.MenuManager;
 import com.gempukku.gdx.assistant.plugin.TabManager;
+import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.assistant.data.GdxGraphData;
 import com.gempukku.libgdx.graph.assistant.data.GdxGraphProjectData;
@@ -16,8 +16,8 @@ import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.UIGraphType;
-import com.gempukku.libgdx.graph.ui.pipeline.UIPipelineConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
@@ -36,7 +36,6 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     private AssistantApplication application;
     private MenuManager menuManager;
     private TabManager tabManager;
-    private FileTypeFilter graphFilter;
 
     private InputValidator graphNameValidator;
 
@@ -68,29 +67,40 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
             }
         };
 
-        graphFilter = new FileTypeFilter(true);
-        graphFilter.addRule("Render pipeline (*.rnp)", "rnp");
-        graphFilter.addRule("Render pipeline [old] (*.json)", "json");
-
         menuManager.setPopupMenuDisabled("Graph", null, "New", false);
-        menuManager.addMenuItem("Graph", "New", "Rendering Pipeline",
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        newRenderingPipeline();
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                if (type.getGraphTemplates() != null) {
+                    menuManager.addPopupMenu("Graph", "New", type.getPresentableName());
+                    for (GraphTemplate graphTemplate : type.getGraphTemplates()) {
+                        menuManager.addMenuItem("Graph", "New" + "/" + type.getPresentableName(), graphTemplate.getTitle(),
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        newGraph(type, graphTemplate.getGraph());
+                                    }
+                                });
                     }
-                });
+                }
+            }
+        }
 
         menuManager.setPopupMenuDisabled("Graph", null, "Open", gdxGraphProjectData.getGraphs().isEmpty());
 
-        menuManager.setMenuItemDisabled("Graph", null, "Import graph", false);
-        menuManager.updateMenuItemListener("Graph", null, "Import graph",
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        importGraph();
-                    }
-                });
+        menuManager.setPopupMenuDisabled("Graph", null, "Import", false);
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                menuManager.addMenuItem("Graph", "Import", type.getPresentableName(),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                importGraph(type);
+                            }
+                        });
+            }
+        }
 
         menuManager.updateMenuItemListener("Graph", null, "Create group",
                 new Runnable() {
@@ -126,10 +136,19 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         }
     }
 
-    private void newRenderingPipeline() {
+    private FileTypeFilter createGraphFileFilter(UIGraphType graphType, boolean otherExtensionsAllowed) {
+        String fileExtension = graphType.getFileExtension();
+        FileTypeFilter graphFilter = new FileTypeFilter(otherExtensionsAllowed);
+        graphFilter.addRule(graphType.getPresentableName() + " (*." + fileExtension + ")", fileExtension);
+        if (otherExtensionsAllowed)
+            graphFilter.addRule(graphType.getPresentableName() + " [legacy] (*.json)", "json");
+        return graphFilter;
+    }
+
+    private void newGraph(UIGraphType graphType, JsonValue graph) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.SAVE);
         fileChooser.setDirectory(application.getProjectFolder());
-        fileChooser.setFileTypeFilter(graphFilter);
+        fileChooser.setFileTypeFilter(createGraphFileFilter(graphType, false));
         fileChooser.setModal(true);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setListener(
@@ -137,26 +156,33 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                     @Override
                     public void selected(Array<FileHandle> files) {
                         FileHandle selectedFile = files.get(0);
-                        if (!selectedFile.name().toLowerCase().endsWith(".rnp")) {
-                            selectedFile = selectedFile.parent().child(selectedFile.name() + ".rnp");
+                        String filePath = toProjectChildPath(selectedFile);
+                        if (filePath == null) {
+                            Dialogs.DetailsDialog error = new Dialogs.DetailsDialog("Can't create a graph outside of the folder the project is in", "Error", null);
+                            application.addWindow(error.fadeIn());
+                            return;
                         }
-                        newRenderingPipelineAtPath(selectedFile);
+
+                        String fileExtension = graphType.getFileExtension();
+                        if (!filePath.toLowerCase().endsWith("." + fileExtension)) {
+                            filePath = filePath + "." + fileExtension;
+                        }
+                        newGraphAtPath(graphType, graph, filePath);
                     }
                 }
         );
         application.addWindow(fileChooser.fadeIn());
     }
 
-    private void newRenderingPipelineAtPath(FileHandle selectedFile) {
+    private void newGraphAtPath(UIGraphType graphType, JsonValue graph, String filePath) {
         Dialogs.InputDialog inputDialog = new Dialogs.InputDialog("Choose graph name", "Name the graph", true,
                 graphNameValidator,
                 new InputDialogAdapter() {
                     @Override
                     public void finished(String input) {
                         String graphId = input.trim();
-                        UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType("Render_Pipeline");
-                        GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), selectedFile.path());
-                        loadGraphIntoProject(new JsonReader(), graphId, graphType, Gdx.files.classpath("template/empty-pipeline.json"));
+                        GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
+                        loadGraphIntoProject(graphId, graphType, graph);
                         gdxGraphProjectData.getGraphs().add(graphData);
                         setDirty();
                         openGraphTab(graphId, graphType);
@@ -182,37 +208,61 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                 });
     }
 
+    private void loadGraphIntoProject(String graphName, UIGraphType graphType, JsonValue graph) {
+        mainGraphs.put(graphName, graph);
+        menuManager.addMenuItem("Graph", "Open", graphName,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        openGraphTab(graphName, graphType);
+                    }
+                });
+    }
+
+    private String toProjectChildPath(FileHandle file) {
+        String projectFolderPath = application.getProjectFolder().path() + "/";
+        if (!file.path().startsWith(projectFolderPath)) {
+            return null;
+        } else {
+            return file.path().substring(projectFolderPath.length());
+        }
+    }
+
     private void openGraphTab(String graphId, UIGraphType graphType) {
         GraphTab graphTab = mainGraphTabs.get(graphId);
         if (graphTab != null) {
             tabManager.switchToTab(graphTab);
         } else {
-            UIPipelineConfiguration pipelineConfiguration = new UIPipelineConfiguration();
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
-            graphTab = new GraphTab(application.getApplicationSkin(), GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph, pipelineConfiguration);
+            graphTab = new GraphTab(application.getApplicationSkin(), GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph);
             tabManager.addTab(graphId, graphTab.getContent(), graphTab);
             mainGraphTabs.put(graphId, graphTab);
         }
     }
 
-    private void importGraph() {
+    private void importGraph(UIGraphType graphType) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setDirectory(application.getProjectFolder());
-        fileChooser.setFileTypeFilter(graphFilter);
+        fileChooser.setFileTypeFilter(createGraphFileFilter(graphType, true));
         fileChooser.setModal(true);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected(Array<FileHandle> file) {
                 FileHandle selectedFile = file.get(0);
+                String filePath = toProjectChildPath(selectedFile);
+                if (filePath == null) {
+                    Dialogs.DetailsDialog error = new Dialogs.DetailsDialog("Can't create a graph outside of the folder the project is in", "Error", null);
+                    application.addWindow(error.fadeIn());
+                    return;
+                }
                 Dialogs.InputDialog inputDialog = new Dialogs.InputDialog("Choose graph name", "Name the graph", true,
                         graphNameValidator,
                         new InputDialogAdapter() {
                             @Override
                             public void finished(String input) {
                                 String graphId = input.trim();
-                                UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType("Render_Pipeline");
-                                GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), selectedFile.path());
+                                GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
                                 loadGraphIntoProject(new JsonReader(), graphData);
                                 gdxGraphProjectData.getGraphs().add(graphData);
                                 setDirty();
@@ -322,9 +372,12 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
             graphTab.forceClose();
         }
         mainGraphTabs.clear();
+        menuManager.clearPopupMenuContents("Graph", null, "New");
+        menuManager.setPopupMenuDisabled("Graph", null, "New", true);
         menuManager.clearPopupMenuContents("Graph", null, "Open");
         menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
-        menuManager.setMenuItemDisabled("Graph", null, "Import graph", true);
+        menuManager.clearPopupMenuContents("Graph", null, "Import");
+        menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
     }
 }

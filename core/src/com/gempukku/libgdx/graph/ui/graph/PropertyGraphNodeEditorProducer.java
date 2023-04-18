@@ -3,8 +3,6 @@ package com.gempukku.libgdx.graph.ui.graph;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
 import com.gempukku.libgdx.graph.ui.producer.ValueGraphNodeOutput;

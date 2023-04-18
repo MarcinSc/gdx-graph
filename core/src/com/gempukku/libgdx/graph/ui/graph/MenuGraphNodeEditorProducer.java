@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.ui;
+package com.gempukku.libgdx.graph.ui.graph;
 
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;

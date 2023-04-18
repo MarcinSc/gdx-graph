@@ -2,8 +2,9 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
 import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderGraphType;
 import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.UIGraphType;
+import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class UIShadowShaderGraphType extends ShadowShaderGraphType implements UIGraphType {
@@ -14,6 +15,21 @@ public class UIShadowShaderGraphType extends ShadowShaderGraphType implements UI
                 new UIModelShaderConfiguration(),
                 new UIShadowShaderConfiguration(),
                 new UICommonShaderConfiguration()};
+    }
+
+    @Override
+    public String getFileExtension() {
+        return "sds";
+    }
+
+    @Override
+    public String getPresentableName() {
+        return "Shadow shader";
+    }
+
+    @Override
+    public Iterable<? extends GraphTemplate> getGraphTemplates() {
+        return ShadowTemplateRegistry.getTemplates();
     }
 
     @Override

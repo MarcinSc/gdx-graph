@@ -12,7 +12,6 @@ import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GetSerializedGraph;
 import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
 import com.gempukku.libgdx.graph.ui.graph.GraphWithPropertiesEditor;
@@ -29,11 +28,11 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     private boolean dirty = false;
 
     public GraphTab(Skin skin, DirtyHierarchy dirtyHierarchy, TabControl tabControl, StatusManager statusManager,
-                    GraphWithProperties graph, UIGraphConfiguration... configurations) {
+                    GraphWithProperties graph) {
         this.dirtyHierarchy = dirtyHierarchy;
         this.tabControl = tabControl;
 
-        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, skin, dirtyHierarchy, configurations);
+        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, skin, dirtyHierarchy);
         graphWithPropertiesEditor.addListener(
                 new EventListener() {
                     @Override
@@ -52,7 +51,7 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
 
                                 GraphType graphType = requestGraphOpen.getType();
                                 GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
-                                subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, statusManager, subGraph, requestGraphOpen.getGraphConfigurations());
+                                subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, statusManager, subGraph);
                                 tabControl.addTab(requestGraphOpen.getTitle(), subGraphTab);
                                 subGraphTabs.put(graphId, subGraphTab);
                                 tabControl.switchToTab(subGraphTab);

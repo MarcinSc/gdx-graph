@@ -1,8 +1,9 @@
 package com.gempukku.libgdx.graph.plugin.screen.design;
 
 import com.gempukku.libgdx.graph.plugin.screen.ScreenShaderGraphType;
-import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
-import com.gempukku.libgdx.graph.ui.UIGraphType;
+import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class UIScreenShaderGraphType extends ScreenShaderGraphType implements UIGraphType {
@@ -12,6 +13,21 @@ public class UIScreenShaderGraphType extends ScreenShaderGraphType implements UI
         configurations = new UIGraphConfiguration[]{
                 new UIScreenShaderConfiguration(),
                 new UICommonShaderConfiguration()};
+    }
+
+    @Override
+    public String getFileExtension() {
+        return "scs";
+    }
+
+    @Override
+    public String getPresentableName() {
+        return "Screen shader";
+    }
+
+    @Override
+    public Iterable<? extends GraphTemplate> getGraphTemplates() {
+        return ScreenTemplateRegistry.getTemplates();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.ui;
+package com.gempukku.libgdx.graph.ui.graph;
 
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 

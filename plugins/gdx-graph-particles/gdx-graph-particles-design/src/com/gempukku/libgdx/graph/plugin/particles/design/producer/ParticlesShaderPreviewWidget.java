@@ -281,9 +281,10 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
 
     @Override
     public void dispose() {
-        if (shaderInitialized)
+        if (shaderInitialized) {
             destroyShader();
-        particleModel.dispose();
+            particleModel.dispose();
+        }
     }
 
     @Override

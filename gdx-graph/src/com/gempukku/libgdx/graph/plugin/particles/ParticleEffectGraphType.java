@@ -12,6 +12,8 @@ import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
 public class ParticleEffectGraphType implements ShaderGraphType {
+    public static final String TYPE = "Particle_Effect";
+
     private static final PropertyLocation[] propertyLocations = {PropertyLocation.Uniform, PropertyLocation.Global_Uniform, PropertyLocation.Attribute};
     private static final GraphConfiguration[] configurations = new GraphConfiguration[]{
             new CommonShaderConfiguration(), new PropertyShaderConfiguration(),
@@ -42,7 +44,7 @@ public class ParticleEffectGraphType implements ShaderGraphType {
 
     @Override
     public String getType() {
-        return "Particle_Effect";
+        return TYPE;
     }
 
     @Override
