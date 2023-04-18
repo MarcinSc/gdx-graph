@@ -1,20 +1,18 @@
 package com.gempukku.libgdx.graph.ui.graph;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
@@ -29,6 +27,7 @@ import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.GraphChangedListener;
 import com.gempukku.libgdx.ui.graph.GraphEditor;
 import com.gempukku.libgdx.ui.graph.PopupMenuProducer;
+import com.gempukku.libgdx.ui.graph.data.NodeGroup;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
@@ -213,6 +212,26 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         return popupMenu;
     }
 
+    public boolean canGroupNodes() {
+        ObjectSet<String> selectedNodes = graphEditor.getSelectedNodes();
+        if (selectedNodes.size == 0)
+            return false;
+        for (NodeGroup group : graphEditor.getGraph().getGroups()) {
+            for (String selectedNode : selectedNodes) {
+                if (group.getNodeIds().contains(selectedNode))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public void createGroup(String groupName) {
+        if (canGroupNodes()) {
+            ObjectSet<String> selectedNodes = graphEditor.getSelectedNodes();
+            graphEditor.addNodeGroup(groupName, selectedNodes);
+        }
+    }
+
     private PopupMenu findOrCreatePopupMenu(PopupMenu popupMenu, String[] menuSplit, int startIndex) {
         for (Actor child : popupMenu.getChildren()) {
             if (child instanceof MenuItem) {
@@ -238,7 +257,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         }
     }
 
-    private PopupMenu createPropertyPopupMenu(float x, float y) {
+    private PopupMenu createPropertyPopupMenu() {
         PopupMenu menu = new PopupMenu();
         for (UIGraphConfiguration uiGraphConfiguration : uiGraphConfigurations) {
             for (Map.Entry<String, ? extends PropertyEditorDefinition> propertyEntry : uiGraphConfiguration.getPropertyEditorDefinitions().entrySet()) {
@@ -317,10 +336,10 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         headerTable.add(new VisLabel("Properties")).growX();
         final VisTextButton newPropertyButton = new VisTextButton("Add", "menu-bar");
         newPropertyButton.addListener(
-                new ClickListener(Input.Buttons.LEFT) {
+                new ChangeListener() {
                     @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        PopupMenu popupMenu = createPropertyPopupMenu(x, y);
+                    public void changed(ChangeEvent event, Actor actor) {
+                        PopupMenu popupMenu = createPropertyPopupMenu();
                         popupMenu.showMenu(pipelineProperties.getStage(), newPropertyButton);
                     }
                 });

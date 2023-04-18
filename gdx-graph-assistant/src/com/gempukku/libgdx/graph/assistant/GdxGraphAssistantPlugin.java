@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.assistant;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
@@ -23,6 +24,7 @@ import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.curve.GCurveEditor;
 import com.gempukku.libgdx.ui.gradient.GGradientEditor;
 import com.gempukku.libgdx.ui.graph.GraphEditor;
+import com.gempukku.libgdx.ui.input.KeyCombination;
 import com.gempukku.libgdx.ui.preview.PreviewWidget;
 
 public class GdxGraphAssistantPlugin implements AssistantPlugin {
@@ -96,6 +98,12 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
         menuManager.addMenuItem("Graph", null, "Import graph", null);
         menuManager.setMenuItemDisabled("Graph", null, "Import graph", true);
+
+        menuManager.addMenuSeparator("Graph", null);
+
+        menuManager.addMenuItem("Graph", null, "Create group", null);
+        menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
+        menuManager.setMenuItemShortcut("Graph", null, "Create group", new KeyCombination(true, false, false, Input.Keys.G));
     }
 
     private static void registerGdxPlugins() {

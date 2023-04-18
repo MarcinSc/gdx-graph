@@ -21,6 +21,7 @@ import com.gempukku.libgdx.graph.ui.pipeline.UIPipelineConfiguration;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
@@ -88,6 +89,34 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                     @Override
                     public void run() {
                         importGraph();
+                    }
+                });
+
+        menuManager.updateMenuItemListener("Graph", null, "Create group",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialogs.InputDialog inputDialog = new Dialogs.InputDialog("Create group",
+                                "Specify name of the group", true,
+                                new InputValidator() {
+                                    @Override
+                                    public boolean validateInput(String input) {
+                                        return input.trim().length() > 0;
+                                    }
+                                },
+                                new InputDialogListener() {
+                                    @Override
+                                    public void finished(String input) {
+                                        GraphTab activeTab = getActiveTab();
+                                        activeTab.createGroup(input.trim());
+                                    }
+
+                                    @Override
+                                    public void canceled() {
+
+                                    }
+                                });
+                        application.addWindow(inputDialog.fadeIn());
                     }
                 });
 
@@ -207,6 +236,11 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     }
 
     @Override
+    public boolean isActiveTab(GraphTab graphTab) {
+        return tabManager.isActiveTab(graphTab);
+    }
+
+    @Override
     public void closeTab(GraphTab graphTab) {
         tabManager.closeTab(graphTab);
     }
@@ -228,7 +262,19 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
 
     @Override
     public void processUpdate(float v) {
+        // Update menu items
+        GraphTab activeTab = getActiveTab();
+        boolean groupNodesEnabled = activeTab != null && activeTab.canGroupNodes();
+        menuManager.setMenuItemDisabled("Graph", null, "Create group", !groupNodesEnabled);
+    }
 
+    private GraphTab getActiveTab() {
+        for (GraphTab value : mainGraphTabs.values()) {
+            GraphTab activeTab = value.getActiveTab();
+            if (activeTab != null)
+                return activeTab;
+        }
+        return null;
     }
 
     @Override
@@ -279,5 +325,6 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         menuManager.clearPopupMenuContents("Graph", null, "Open");
         menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
         menuManager.setMenuItemDisabled("Graph", null, "Import graph", true);
+        menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
     }
 }

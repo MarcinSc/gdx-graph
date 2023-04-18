@@ -75,6 +75,25 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
         return graphWithPropertiesEditor;
     }
 
+    public boolean canGroupNodes() {
+        return graphWithPropertiesEditor.canGroupNodes();
+    }
+
+    public void createGroup(String groupName) {
+        graphWithPropertiesEditor.createGroup(groupName);
+    }
+
+    public GraphTab getActiveTab() {
+        if (tabControl.isActiveTab(this))
+            return this;
+        for (GraphTab value : subGraphTabs.values()) {
+            GraphTab activeTab = value.getActiveTab();
+            if (activeTab != null)
+                return activeTab;
+        }
+        return null;
+    }
+
     @Override
     public boolean isDirty() {
         return dirty;
@@ -92,6 +111,11 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     @Override
     public void addTab(String title, GraphTab graphTab) {
         tabControl.addTab(title, graphTab);
+    }
+
+    @Override
+    public boolean isActiveTab(GraphTab graphTab) {
+        return tabControl.isActiveTab(graphTab);
     }
 
     @Override
