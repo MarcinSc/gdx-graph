@@ -33,13 +33,13 @@ public class EndModelShaderBoxProducer extends GdxGraphNodeEditorProducer {
 
         graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
 
-        EnumSelectEditorPart cullingBox = new EnumSelectEditorPart("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
+        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
         graphNodeEditor.addGraphBoxPart(cullingBox);
 
         BlendingBoxPart blendingBox = new BlendingBoxPart();
         graphNodeEditor.addGraphBoxPart(blendingBox);
 
-        EnumSelectEditorPart depthTestBox = new EnumSelectEditorPart("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
+        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
         graphNodeEditor.addGraphBoxPart(depthTestBox);
 
         CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite");

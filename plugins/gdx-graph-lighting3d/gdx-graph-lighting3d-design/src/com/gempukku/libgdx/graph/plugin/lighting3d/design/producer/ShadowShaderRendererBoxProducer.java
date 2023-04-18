@@ -17,8 +17,8 @@ public class ShadowShaderRendererBoxProducer extends GdxGraphNodeEditorProducer 
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        EnumSelectEditorPart<RenderOrder> renderOrderSelect = new EnumSelectEditorPart("Render order", "renderOrder",
-                new ToStringEnum<RenderOrder>(), RenderOrder.values());
+        EnumSelectEditorPart<RenderOrder> renderOrderSelect = new EnumSelectEditorPart<>("Render order", "renderOrder",
+                new ToStringEnum<>(), RenderOrder.values());
         graphNodeEditor.addGraphBoxPart(renderOrderSelect);
 
         StringEditorPart envId = new StringEditorPart("Env id: ", "id");

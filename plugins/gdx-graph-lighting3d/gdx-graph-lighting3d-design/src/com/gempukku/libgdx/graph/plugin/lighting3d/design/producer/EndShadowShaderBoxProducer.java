@@ -30,10 +30,10 @@ public class EndShadowShaderBoxProducer extends GdxGraphNodeEditorProducer {
                 "Object space", "World space");
         graphNodeEditor.addGraphBoxPart(positionType);
 
-        EnumSelectEditorPart cullingBox = new EnumSelectEditorPart("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
+        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
         graphNodeEditor.addGraphBoxPart(cullingBox);
 
-        EnumSelectEditorPart depthTestBox = new EnumSelectEditorPart("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
+        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
         graphNodeEditor.addGraphBoxPart(depthTestBox);
 
         CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite");
