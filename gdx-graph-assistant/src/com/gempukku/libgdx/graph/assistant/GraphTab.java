@@ -12,10 +12,7 @@ import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.graph.GetSerializedGraph;
-import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
-import com.gempukku.libgdx.graph.ui.graph.GraphWithPropertiesEditor;
-import com.gempukku.libgdx.graph.ui.graph.RequestGraphOpen;
+import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
 public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl {
@@ -57,6 +54,13 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                                 tabControl.switchToTab(subGraphTab);
                             }
                             return true;
+                        } else if (event instanceof GraphRemoved) {
+                            GraphRemoved graphRemoved = (GraphRemoved) event;
+                            serializedSubGraphs.remove(graphRemoved.getId());
+                            GraphTab graphTab = subGraphTabs.get(graphRemoved.getId());
+                            if (graphTab != null) {
+                                graphTab.forceClose();
+                            }
                         } else if (event instanceof GetSerializedGraph) {
                             GetSerializedGraph getSerializedGraph = (GetSerializedGraph) event;
                             getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
