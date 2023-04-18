@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.screen.design;
 
-import com.gempukku.libgdx.graph.plugin.screen.design.producer.EndScreenShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
@@ -17,10 +16,6 @@ public class UIScreenShaderConfiguration implements UIGraphConfiguration {
         if (menuLocation == null)
             menuLocation = "Dummy";
         graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
-    }
-
-    static {
-        register(new EndScreenShaderBoxProducer());
     }
 
     @Override

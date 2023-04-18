@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.assistant.data.GdxGraphProjectData;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
-import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
@@ -54,7 +54,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         }
 
         try {
-            PluginRegistryImpl.initializePlugins();
+            RuntimePluginRegistry.initializePlugins();
         } catch (ReflectionException exp) {
             throw new GdxRuntimeException(exp);
         }

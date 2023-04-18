@@ -3,9 +3,10 @@ package com.gempukku.libgdx.graph.plugin.lighting3d;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.plugin.PluginRegistry;
-import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.*;
+import com.gempukku.libgdx.graph.plugin.models.ModelShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.common.CommonShaderConfiguration;
 
 public class Lighting3DPluginRuntimeInitializer implements PluginRuntimeInitializer {
@@ -21,33 +22,35 @@ public class Lighting3DPluginRuntimeInitializer implements PluginRuntimeInitiali
 
     public static void register(int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights,
                                 float shadowAcneValue, int shadowSoftness) {
-        GraphTypeRegistry.registerType(new ShadowShaderGraphType());
-
         Lighting3DPluginRuntimeInitializer.maxNumberOfDirectionalLights = maxNumberOfDirectionalLights;
         Lighting3DPluginRuntimeInitializer.maxNumberOfPointLights = maxNumberOfPointLights;
         Lighting3DPluginRuntimeInitializer.maxNumberOfSpotlights = maxNumberOfSpotlights;
         Lighting3DPluginRuntimeInitializer.shadowAcneValue = shadowAcneValue;
         Lighting3DPluginRuntimeInitializer.shadowSoftness = shadowSoftness;
-        PluginRegistryImpl.register(Lighting3DPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(Lighting3DPluginRuntimeInitializer.class);
     }
 
     @Override
     public void initialize(PluginRegistry pluginRegistry) {
+        GraphTypeRegistry.registerType(new ShadowShaderGraphType());
+
+        ModelShaderConfiguration.addNodeBuilder(new EndShadowShaderNodeBuilder());
+
         RendererPipelineConfiguration.register(new ShadowShaderRendererPipelineNodeProducer(pluginRegistry));
 
-        CommonShaderConfiguration.register(new BlinnPhongLightingShaderNodeBuilder(maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights));
-        CommonShaderConfiguration.register(new PhongLightingShaderNodeBuilder(maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights));
-        CommonShaderConfiguration.register(new ShadowPhongLightingShaderNodeBuilder(
+        CommonShaderConfiguration.addNodeBuilder(new BlinnPhongLightingShaderNodeBuilder(maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights));
+        CommonShaderConfiguration.addNodeBuilder(new PhongLightingShaderNodeBuilder(maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights));
+        CommonShaderConfiguration.addNodeBuilder(new ShadowPhongLightingShaderNodeBuilder(
                 maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights,
                 shadowAcneValue, shadowSoftness));
-        CommonShaderConfiguration.register(new ShadowBlinnPhongLightingShaderNodeBuilder(
+        CommonShaderConfiguration.addNodeBuilder(new ShadowBlinnPhongLightingShaderNodeBuilder(
                 maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights,
                 shadowAcneValue, shadowSoftness));
-        CommonShaderConfiguration.register(new ApplyNormalMapShaderNodeBuilder());
-        CommonShaderConfiguration.register(new AmbientLightShaderNodeBuilder());
-        CommonShaderConfiguration.register(new DirectionalLightShaderNodeBuilder());
-        CommonShaderConfiguration.register(new PointLightShaderNodeBuilder());
-        CommonShaderConfiguration.register(new SpotLightShaderNodeBuilder());
+        CommonShaderConfiguration.addNodeBuilder(new ApplyNormalMapShaderNodeBuilder());
+        CommonShaderConfiguration.addNodeBuilder(new AmbientLightShaderNodeBuilder());
+        CommonShaderConfiguration.addNodeBuilder(new DirectionalLightShaderNodeBuilder());
+        CommonShaderConfiguration.addNodeBuilder(new PointLightShaderNodeBuilder());
+        CommonShaderConfiguration.addNodeBuilder(new SpotLightShaderNodeBuilder());
 
         Lighting3DPrivateData data = new Lighting3DPrivateData();
 

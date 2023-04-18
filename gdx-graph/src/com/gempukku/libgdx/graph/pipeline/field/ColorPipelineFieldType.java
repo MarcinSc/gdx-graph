@@ -15,7 +15,7 @@ public class ColorPipelineFieldType implements PipelineFieldType {
 
     @Override
     public String getName() {
-        return PipelineFieldType.Vector4;
+        return PipelineFieldType.Color;
     }
 
     @Override

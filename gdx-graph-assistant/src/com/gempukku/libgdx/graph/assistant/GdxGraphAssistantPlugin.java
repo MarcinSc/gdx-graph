@@ -2,24 +2,26 @@ package com.gempukku.libgdx.graph.assistant;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
 import com.gempukku.gdx.assistant.plugin.AssistantPlugin;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
 import com.gempukku.gdx.assistant.plugin.MenuManager;
 import com.gempukku.gdx.plugins.PluginEnvironment;
 import com.gempukku.gdx.plugins.PluginVersion;
-import com.gempukku.libgdx.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.plugin.boneanimation.design.BoneAnimationPlugin;
-import com.gempukku.libgdx.graph.plugin.callback.design.RenderCallbackPlugin;
-import com.gempukku.libgdx.graph.plugin.lighting3d.design.Lighting3DPlugin;
-import com.gempukku.libgdx.graph.plugin.maps.MapsPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.models.design.ModelsPlugin;
-import com.gempukku.libgdx.graph.plugin.particles.design.ParticlesPlugin;
-import com.gempukku.libgdx.graph.plugin.screen.design.ScreenPlugin;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.plugin.boneanimation.design.UIBoneAnimationPlugin;
+import com.gempukku.libgdx.graph.plugin.callback.design.UIRenderCallbackPlugin;
+import com.gempukku.libgdx.graph.plugin.lighting3d.design.UILighting3DPlugin;
+import com.gempukku.libgdx.graph.plugin.maps.design.UIMapsPlugin;
+import com.gempukku.libgdx.graph.plugin.models.design.UIModelsPlugin;
+import com.gempukku.libgdx.graph.plugin.particles.design.UIParticlesPlugin;
+import com.gempukku.libgdx.graph.plugin.screen.design.UIScreenPlugin;
+import com.gempukku.libgdx.graph.plugin.ui.design.UIUserInterfacePlugin;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
-import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineGraphType;
+import com.gempukku.libgdx.graph.ui.UIGdxGraphPluginRegistry;
+import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelinePlugin;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.curve.GCurveEditor;
 import com.gempukku.libgdx.ui.gradient.GGradientEditor;
@@ -47,7 +49,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public void registerPlugin() {
-
+        registerGdxPlugins();
     }
 
     @Override
@@ -56,7 +58,11 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
         WhitePixel.initializeShared();
         PatternTextures.initializeShared();
-        registerGdxPlugins();
+        try {
+            UIGdxGraphPluginRegistry.initializePlugins();
+        } catch (ReflectionException exp) {
+            throw new GdxRuntimeException("Unable to initialize plugins", exp);
+        }
 
         Skin skin = assistantApplication.getApplicationSkin();
 
@@ -106,17 +112,15 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
     }
 
     private static void registerGdxPlugins() {
-        GraphTypeRegistry.registerType(new UIRenderPipelineGraphType());
-        new RenderCallbackPlugin().initialize();
-        new JsonGdxGraphPlugin("config/plugin-maps-config.json").initialize();
-        MapsPluginRuntimeInitializer.register();
-        new JsonGdxGraphPlugin("config/plugin-ui-config.json").initialize();
-        UIPluginRuntimeInitializer.register();
-        new ModelsPlugin().initialize();
-        new Lighting3DPlugin().initialize();
-        new ParticlesPlugin().initialize();
-        new ScreenPlugin().initialize();
-        new BoneAnimationPlugin().initialize();
+        UIGdxGraphPluginRegistry.register(UIRenderPipelinePlugin.class);
+        UIGdxGraphPluginRegistry.register(UIRenderCallbackPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIMapsPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIUserInterfacePlugin.class);
+        UIGdxGraphPluginRegistry.register(UIModelsPlugin.class);
+        UIGdxGraphPluginRegistry.register(UILighting3DPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIParticlesPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIScreenPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIBoneAnimationPlugin.class);
     }
 
     @Override

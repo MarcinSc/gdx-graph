@@ -1,8 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.models.design;
 
-import com.gempukku.libgdx.graph.plugin.models.config.provided.*;
-import com.gempukku.libgdx.graph.plugin.models.design.producer.EndModelShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
@@ -20,16 +17,6 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
         if (menuLocation == null)
             menuLocation = "Dummy";
         graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
-    }
-
-    static {
-        register(new EndModelShaderBoxProducer());
-
-        register(new GdxGraphNodeEditorProducer(new WorldPositionShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ObjectToWorldShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ObjectNormalToWorldShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ModelFragmentCoordinateShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new InstanceIdShaderNodeConfiguration()));
     }
 
     public static void registerPropertyType(PropertyEditorDefinition propertyEditorDefinition) {

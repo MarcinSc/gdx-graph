@@ -1,9 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.particles.design;
 
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifePercentageShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifetimeShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
@@ -20,13 +16,6 @@ public class UIParticlesShaderConfiguration implements UIGraphConfiguration {
         if (menuLocation == null)
             menuLocation = "Dummy";
         graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
-    }
-
-    static {
-        register(new EndParticlesShaderBoxProducer());
-
-        register(new GdxGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
     }
 
     @Override

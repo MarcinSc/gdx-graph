@@ -13,7 +13,7 @@ import com.gempukku.libgdx.graph.pipeline.impl.PipelineRendererImpl;
 import com.gempukku.libgdx.graph.pipeline.impl.PreparedRenderingPipelineImpl;
 import com.gempukku.libgdx.graph.pipeline.impl.WritablePipelineProperty;
 import com.gempukku.libgdx.graph.pipeline.property.PipelinePropertyProducer;
-import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
@@ -39,10 +39,9 @@ public class PipelineLoader {
 
     public static PipelineRenderer loadPipelineRenderer(InputStream pipelineInputStream, TimeProvider timeProvider, PipelineRendererResources resources) {
         try {
-            GraphTypeRegistry.registerType(new RenderPipelineGraphType());
-            PluginRegistryImpl pluginRegistry = PluginRegistryImpl.initializePlugins();
+            RuntimePluginRegistry pluginRegistry = RuntimePluginRegistry.initializePlugins();
 
-            GraphType graphType = GraphTypeRegistry.findGraphType("Render_Pipeline");
+            GraphType graphType = GraphTypeRegistry.findGraphType(RenderPipelineGraphType.TYPE);
 
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), pipelineInputStream);
 

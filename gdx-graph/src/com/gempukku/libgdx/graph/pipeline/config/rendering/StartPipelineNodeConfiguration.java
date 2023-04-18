@@ -10,7 +10,7 @@ public class StartPipelineNodeConfiguration extends DefaultMenuNodeConfiguration
     public StartPipelineNodeConfiguration() {
         super("PipelineStart", "Pipeline start", "Pipeline");
         addNodeInput(
-                new DefaultGraphNodeInput("background", "Background color", Color, Vector4));
+                new DefaultGraphNodeInput("background", "Background color", Color));
         addNodeInput(
                 new DefaultGraphNodeInput("size", "Size", Vector2));
         addNodeOutput(

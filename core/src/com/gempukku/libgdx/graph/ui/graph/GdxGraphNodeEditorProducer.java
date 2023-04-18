@@ -16,9 +16,14 @@ import java.util.Iterator;
 public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, GraphChangedAware {
     private MenuNodeConfiguration configuration;
     private ObjectSet<GraphChangedAware> awareChildren = new ObjectSet<>();
+    private boolean closeable = true;
 
     public GdxGraphNodeEditorProducer(MenuNodeConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    public void setCloseable(boolean closeable) {
+        this.closeable = closeable;
     }
 
     @Override
@@ -43,7 +48,7 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
 
     @Override
     public boolean isCloseable() {
-        return true;
+        return closeable;
     }
 
     @Override

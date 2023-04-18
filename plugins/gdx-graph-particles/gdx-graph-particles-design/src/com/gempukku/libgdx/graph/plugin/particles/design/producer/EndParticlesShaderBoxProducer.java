@@ -15,11 +15,7 @@ import com.gempukku.libgdx.ui.graph.editor.part.SectionEditorPart;
 public class EndParticlesShaderBoxProducer extends GdxGraphNodeEditorProducer {
     public EndParticlesShaderBoxProducer() {
         super(new EndParticlesShaderNodeConfiguration());
-    }
-
-    @Override
-    public boolean isCloseable() {
-        return false;
+        setCloseable(false);
     }
 
     @Override

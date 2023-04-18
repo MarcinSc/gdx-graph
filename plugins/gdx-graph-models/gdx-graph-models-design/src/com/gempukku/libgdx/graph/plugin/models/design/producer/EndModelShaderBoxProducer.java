@@ -16,11 +16,7 @@ import com.gempukku.libgdx.ui.graph.editor.part.SelectEditorPart;
 public class EndModelShaderBoxProducer extends GdxGraphNodeEditorProducer {
     public EndModelShaderBoxProducer() {
         super(new EndModelShaderNodeConfiguration());
-    }
-
-    @Override
-    public boolean isCloseable() {
-        return false;
+        setCloseable(false);
     }
 
     @Override

@@ -9,7 +9,7 @@ public class UIRenderPipelineGraphType extends RenderPipelineGraphType implement
     private UIGraphConfiguration[] configurations;
 
     public UIRenderPipelineGraphType() {
-        configurations = new UIGraphConfiguration[]{new UIPipelineConfiguration()};
+        configurations = new UIGraphConfiguration[]{new UIRenderPipelineConfiguration()};
     }
 
     @Override

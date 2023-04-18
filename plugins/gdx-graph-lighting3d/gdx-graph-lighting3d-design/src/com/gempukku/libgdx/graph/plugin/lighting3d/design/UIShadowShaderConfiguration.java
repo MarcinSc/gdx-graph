@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
-import com.gempukku.libgdx.graph.plugin.lighting3d.design.producer.EndShadowShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
@@ -17,10 +16,6 @@ public class UIShadowShaderConfiguration implements UIGraphConfiguration {
         if (menuLocation == null)
             menuLocation = "Dummy";
         graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
-    }
-
-    static {
-        register(new EndShadowShaderBoxProducer());
     }
 
     @Override

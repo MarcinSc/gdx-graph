@@ -7,15 +7,15 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
-public class PluginRegistryImpl implements PluginRegistry, Disposable {
+public class RuntimePluginRegistry implements PluginRegistry, Disposable {
     private static final ObjectSet<Class<? extends PluginRuntimeInitializer>> plugins = new ObjectSet<>();
 
     public static void register(Class<? extends PluginRuntimeInitializer> clazz) {
         plugins.add(clazz);
     }
 
-    public static PluginRegistryImpl initializePlugins() throws ReflectionException {
-        PluginRegistryImpl result = new PluginRegistryImpl();
+    public static RuntimePluginRegistry initializePlugins() throws ReflectionException {
+        RuntimePluginRegistry result = new RuntimePluginRegistry();
         for (Class<? extends PluginRuntimeInitializer> plugin : plugins) {
             PluginRuntimeInitializer pluginRuntimeInitializer = ClassReflection.newInstance(plugin);
             pluginRuntimeInitializer.initialize(result);

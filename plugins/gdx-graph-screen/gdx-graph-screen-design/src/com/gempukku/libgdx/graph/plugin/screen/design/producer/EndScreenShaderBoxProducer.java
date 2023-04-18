@@ -12,11 +12,7 @@ import com.gempukku.libgdx.ui.graph.editor.part.SectionEditorPart;
 public class EndScreenShaderBoxProducer extends GdxGraphNodeEditorProducer {
     public EndScreenShaderBoxProducer() {
         super(new EndScreenShaderNodeConfiguration());
-    }
-
-    @Override
-    public boolean isCloseable() {
-        return false;
+        setCloseable(false);
     }
 
     @Override

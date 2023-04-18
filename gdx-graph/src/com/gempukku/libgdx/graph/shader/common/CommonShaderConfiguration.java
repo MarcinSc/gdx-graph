@@ -31,8 +31,13 @@ public class CommonShaderConfiguration implements GraphConfiguration {
     private static final Array<GraphShaderPropertyProducer> graphShaderPropertyProducers = new Array<>();
     private static TextureRegion defaultTextureRegion;
 
-    public static void register(GraphShaderNodeBuilder graphShaderNodeBuilder) {
+    public static void addNodeBuilder(GraphShaderNodeBuilder graphShaderNodeBuilder) {
         graphShaderNodeBuilders.put(graphShaderNodeBuilder.getType(), graphShaderNodeBuilder);
+    }
+
+    public static void addPropertyProducer(GraphShaderPropertyProducer graphShaderPropertyProducer) {
+        graphShaderPropertyProducers.add(graphShaderPropertyProducer);
+        ShaderFieldTypeRegistry.registerShaderFieldType(graphShaderPropertyProducer.getType());
     }
 
     public static void setDefaultTextureRegionProperty(TextureRegion textureRegion) {
@@ -41,136 +46,131 @@ public class CommonShaderConfiguration implements GraphConfiguration {
 
     static {
         // Math - Arithmetic
-        register(new AddShaderNodeBuilder());
-        register(new SubtractShaderNodeBuilder());
-        register(new OneMinusShaderNodeBuilder());
-        register(new MultiplyShaderNodeBuilder());
-        register(new DivideShaderNodeBuilder());
-        register(new ReciprocalShaderNodeBuilder());
+        addNodeBuilder(new AddShaderNodeBuilder());
+        addNodeBuilder(new SubtractShaderNodeBuilder());
+        addNodeBuilder(new OneMinusShaderNodeBuilder());
+        addNodeBuilder(new MultiplyShaderNodeBuilder());
+        addNodeBuilder(new DivideShaderNodeBuilder());
+        addNodeBuilder(new ReciprocalShaderNodeBuilder());
 
         // Math - exponential
-        register(new PowerShaderNodeBuilder());
-        register(new ExponentialShaderNodeBuilder());
-        register(new ExponentialBase2ShaderNodeBuilder());
-        register(new NaturalLogarithmShaderNodeBuilder());
-        register(new LogarithmBase2ShaderNodeBuilder());
-        register(new SquareRootShaderNodeBuilder());
-        register(new InverseSquareRootShaderNodeBuilder());
+        addNodeBuilder(new PowerShaderNodeBuilder());
+        addNodeBuilder(new ExponentialShaderNodeBuilder());
+        addNodeBuilder(new ExponentialBase2ShaderNodeBuilder());
+        addNodeBuilder(new NaturalLogarithmShaderNodeBuilder());
+        addNodeBuilder(new LogarithmBase2ShaderNodeBuilder());
+        addNodeBuilder(new SquareRootShaderNodeBuilder());
+        addNodeBuilder(new InverseSquareRootShaderNodeBuilder());
 
         // Math - Common
-        register(new AbsShaderNodeBuilder());
-        register(new SignShaderNodeBuilder());
-        register(new FloorShaderNodeBuilder());
-        register(new CeilingShaderNodeBuilder());
-        register(new FractionalPartShaderNodeBuilder());
-        register(new ModuloShaderNodeBuilder());
-        register(new MinimumShaderNodeBuilder());
-        register(new MaximumShaderNodeBuilder());
-        register(new MaximumShaderNodeBuilder());
-        register(new ClampShaderNodeBuilder());
-        register(new SaturateShaderNodeBuilder());
-        register(new LerpShaderNodeBuilder());
-        register(new ConditionalShaderNodeBuilder());
-        register(new StepShaderNodeBuilder());
-        register(new SmoothstepShaderNodeBuilder());
+        addNodeBuilder(new AbsShaderNodeBuilder());
+        addNodeBuilder(new SignShaderNodeBuilder());
+        addNodeBuilder(new FloorShaderNodeBuilder());
+        addNodeBuilder(new CeilingShaderNodeBuilder());
+        addNodeBuilder(new FractionalPartShaderNodeBuilder());
+        addNodeBuilder(new ModuloShaderNodeBuilder());
+        addNodeBuilder(new MinimumShaderNodeBuilder());
+        addNodeBuilder(new MaximumShaderNodeBuilder());
+        addNodeBuilder(new MaximumShaderNodeBuilder());
+        addNodeBuilder(new ClampShaderNodeBuilder());
+        addNodeBuilder(new SaturateShaderNodeBuilder());
+        addNodeBuilder(new LerpShaderNodeBuilder());
+        addNodeBuilder(new ConditionalShaderNodeBuilder());
+        addNodeBuilder(new StepShaderNodeBuilder());
+        addNodeBuilder(new SmoothstepShaderNodeBuilder());
 
         // Math - geometric
-        register(new LengthShaderNodeBuilder());
-        register(new DistanceShaderNodeBuilder());
-        register(new DotProductShaderNodeBuilder());
-        register(new CrossProductShaderNodeBuilder());
-        register(new NormalizeShaderNodeBuilder());
+        addNodeBuilder(new LengthShaderNodeBuilder());
+        addNodeBuilder(new DistanceShaderNodeBuilder());
+        addNodeBuilder(new DotProductShaderNodeBuilder());
+        addNodeBuilder(new CrossProductShaderNodeBuilder());
+        addNodeBuilder(new NormalizeShaderNodeBuilder());
 
         // Math - advanced
-        register(new MergeShaderNodeBuilder());
-        register(new SplitShaderNodeBuilder());
-        register(new RemapShaderNodeBuilder());
-        register(new RemapVectorShaderNodeBuilder());
-        register(new RemapValueShaderNodeBuilder());
+        addNodeBuilder(new MergeShaderNodeBuilder());
+        addNodeBuilder(new SplitShaderNodeBuilder());
+        addNodeBuilder(new RemapShaderNodeBuilder());
+        addNodeBuilder(new RemapVectorShaderNodeBuilder());
+        addNodeBuilder(new RemapValueShaderNodeBuilder());
 
         // Math - trigonometry
-        register(new SinShaderNodeBuilder());
-        register(new CosShaderNodeBuilder());
-        register(new TanShaderNodeBuilder());
-        register(new ArcsinShaderNodeBuilder());
-        register(new ArccosShaderNodeBuilder());
-        register(new ArctanShaderNodeBuilder());
-        register(new Arctan2ShaderNodeBuilder());
-        register(new RadiansShaderNodeBuilder());
-        register(new DegreesShaderNodeBuilder());
+        addNodeBuilder(new SinShaderNodeBuilder());
+        addNodeBuilder(new CosShaderNodeBuilder());
+        addNodeBuilder(new TanShaderNodeBuilder());
+        addNodeBuilder(new ArcsinShaderNodeBuilder());
+        addNodeBuilder(new ArccosShaderNodeBuilder());
+        addNodeBuilder(new ArctanShaderNodeBuilder());
+        addNodeBuilder(new Arctan2ShaderNodeBuilder());
+        addNodeBuilder(new RadiansShaderNodeBuilder());
+        addNodeBuilder(new DegreesShaderNodeBuilder());
 
         // Math - utilities
-        register(new DistanceFromPlaneShaderNodeBuilder());
+        addNodeBuilder(new DistanceFromPlaneShaderNodeBuilder());
 
         // Effect
-        register(new FresnelEffectShaderNodeBuilder());
-        register(new DitherShaderNodeBuilder());
-        register(new DitherColorShaderNodeBuilder());
-        register(new IntensityShaderNodeBuilder());
-        register(new GradientShaderNodeBuilder());
+        addNodeBuilder(new FresnelEffectShaderNodeBuilder());
+        addNodeBuilder(new DitherShaderNodeBuilder());
+        addNodeBuilder(new DitherColorShaderNodeBuilder());
+        addNodeBuilder(new IntensityShaderNodeBuilder());
+        addNodeBuilder(new GradientShaderNodeBuilder());
 
         // Texture
-        register(new Sampler2DShaderNodeBuilder());
-        register(new UVFlipbookShaderNodeBuilder());
-        register(new UVTilingAndOffsetShaderNodeBuilder());
-        register(new BorderDetectionShaderNodeBuilder());
+        addNodeBuilder(new Sampler2DShaderNodeBuilder());
+        addNodeBuilder(new UVFlipbookShaderNodeBuilder());
+        addNodeBuilder(new UVTilingAndOffsetShaderNodeBuilder());
+        addNodeBuilder(new BorderDetectionShaderNodeBuilder());
 
         // Noise
-        register(new SimplexNoise2DShaderNodeBuilder());
-        register(new SimplexNoise3DShaderNodeBuilder());
-        register(new PerlinNoise2DShaderNodeBuilder());
-        register(new PerlinNoise3DShaderNodeBuilder());
-        register(new VoronoiDistance2DShaderNodeBuilder());
-        register(new VoronoiDistance3DShaderNodeBuilder());
-        register(new VoronoiBorder2DShaderNodeBuilder());
-        register(new VoronoiBorder3DShaderNodeBuilder());
+        addNodeBuilder(new SimplexNoise2DShaderNodeBuilder());
+        addNodeBuilder(new SimplexNoise3DShaderNodeBuilder());
+        addNodeBuilder(new PerlinNoise2DShaderNodeBuilder());
+        addNodeBuilder(new PerlinNoise3DShaderNodeBuilder());
+        addNodeBuilder(new VoronoiDistance2DShaderNodeBuilder());
+        addNodeBuilder(new VoronoiDistance3DShaderNodeBuilder());
+        addNodeBuilder(new VoronoiBorder2DShaderNodeBuilder());
+        addNodeBuilder(new VoronoiBorder3DShaderNodeBuilder());
 
         // Shape
-        register(new DotShapeShaderNodeBuilder());
-        register(new CheckerboardShapeShaderNodeBuilder());
-        register(new EllipseShapeShaderNodeBuilder());
-        register(new RectangleShapeShaderNodeBuilder());
-        register(new StarShapeShaderNodeBuilder());
+        addNodeBuilder(new DotShapeShaderNodeBuilder());
+        addNodeBuilder(new CheckerboardShapeShaderNodeBuilder());
+        addNodeBuilder(new EllipseShapeShaderNodeBuilder());
+        addNodeBuilder(new RectangleShapeShaderNodeBuilder());
+        addNodeBuilder(new StarShapeShaderNodeBuilder());
 
         // Provided
-        register(new TimeGraphShaderNodeBuilder());
-        register(new CameraPositionShaderNodeBuilder());
-        register(new CameraDirectionShaderNodeBuilder());
-        register(new CameraViewportSizeShaderNodeBuilder());
-        register(new FragmentCoordinateShaderNodeBuilder());
-        register(new SceneDepthShaderNodeBuilder());
-        register(new SceneColorShaderNodeBuilder());
-        register(new ScreenPositionShaderNodeBuilder());
-        register(new PixelSizeShaderNodeBuilder());
-        register(new ViewportSizeShaderNodeBuilder());
+        addNodeBuilder(new TimeGraphShaderNodeBuilder());
+        addNodeBuilder(new CameraPositionShaderNodeBuilder());
+        addNodeBuilder(new CameraDirectionShaderNodeBuilder());
+        addNodeBuilder(new CameraViewportSizeShaderNodeBuilder());
+        addNodeBuilder(new FragmentCoordinateShaderNodeBuilder());
+        addNodeBuilder(new SceneDepthShaderNodeBuilder());
+        addNodeBuilder(new SceneColorShaderNodeBuilder());
+        addNodeBuilder(new ScreenPositionShaderNodeBuilder());
+        addNodeBuilder(new PixelSizeShaderNodeBuilder());
+        addNodeBuilder(new ViewportSizeShaderNodeBuilder());
 
         // Sprite
-        register(new BillboardSpriteShaderNodeBuilder());
-        register(new ScreenSpriteShaderNodeBuilder());
+        addNodeBuilder(new BillboardSpriteShaderNodeBuilder());
+        addNodeBuilder(new ScreenSpriteShaderNodeBuilder());
 
         // Values
-        register(new ValueBooleanShaderNodeBuilder());
-        register(new ValueColorShaderNodeBuilder());
-        register(new ValueFloatShaderNodeBuilder());
-        register(new ValueVector2ShaderNodeBuilder());
-        register(new ValueVector3ShaderNodeBuilder());
+        addNodeBuilder(new ValueBooleanShaderNodeBuilder());
+        addNodeBuilder(new ValueColorShaderNodeBuilder());
+        addNodeBuilder(new ValueFloatShaderNodeBuilder());
+        addNodeBuilder(new ValueVector2ShaderNodeBuilder());
+        addNodeBuilder(new ValueVector3ShaderNodeBuilder());
 
-        registerPropertyProducer(new FloatShaderPropertyProducer());
-        registerPropertyProducer(new ColorShaderPropertyProducer());
-        registerPropertyProducer(new Vector2ShaderPropertyProducer());
-        registerPropertyProducer(new Vector3ShaderPropertyProducer());
-        registerPropertyProducer(new Matrix4ShaderPropertyProducer());
-        registerPropertyProducer(new TextureShaderPropertyProducer() {
+        addPropertyProducer(new FloatShaderPropertyProducer());
+        addPropertyProducer(new ColorShaderPropertyProducer());
+        addPropertyProducer(new Vector2ShaderPropertyProducer());
+        addPropertyProducer(new Vector3ShaderPropertyProducer());
+        addPropertyProducer(new Matrix4ShaderPropertyProducer());
+        addPropertyProducer(new TextureShaderPropertyProducer() {
             @Override
             protected TextureRegion getDefaultTextureRegion() {
                 return defaultTextureRegion;
             }
         });
-    }
-
-    public static void registerPropertyProducer(GraphShaderPropertyProducer graphShaderPropertyProducer) {
-        graphShaderPropertyProducers.add(graphShaderPropertyProducer);
-        ShaderFieldTypeRegistry.registerShaderFieldType(graphShaderPropertyProducer.getType());
     }
 
     @Override

@@ -43,7 +43,7 @@
   "properties": [
     {
       "name": "Background Color",
-      "type": "Vector4",
+      "type": "Color",
       "data": {
         "color": "ffffffff"
       }

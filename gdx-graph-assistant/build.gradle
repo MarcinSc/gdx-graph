@@ -9,11 +9,13 @@ dependencies {
 
     // Plugins
     api project(":gdx-graph-callback-design")
+    api project(":gdx-graph-maps-design")
     api project(":gdx-graph-particles-design")
     api project(":gdx-graph-screen-design")
     api project(":gdx-graph-models-design")
     api project(":gdx-graph-boneanimation-design")
     api project(":gdx-graph-lighting3d-design")
+    api project(":gdx-graph-ui-design")
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"

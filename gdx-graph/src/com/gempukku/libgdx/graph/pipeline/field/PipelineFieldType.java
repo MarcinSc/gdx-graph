@@ -6,7 +6,6 @@ public interface PipelineFieldType extends FieldType {
     String Float = "Float";
     String Vector2 = "Vector2";
     String Vector3 = "Vector3";
-    String Vector4 = "Vector4";
     String Color = "Color";
     String Boolean = "Boolean";
     String Camera = "Camera";

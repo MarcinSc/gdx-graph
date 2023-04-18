@@ -9,7 +9,7 @@ import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
-import com.gempukku.libgdx.graph.plugin.PluginRegistryImpl;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 
@@ -18,12 +18,12 @@ public class PipelineRendererImpl implements PipelineRenderer {
     private PreparedRenderingPipeline preparedRenderingPipeline;
     private final ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap;
     private final PipelineRenderingContextImpl pipelineRenderingContext;
-    private final PluginRegistryImpl pluginRegistry;
+    private final RuntimePluginRegistry pluginRegistry;
     private final boolean ownsResources;
     private final PipelineRendererResources resources;
     private final WhitePixel whitePixel;
 
-    public PipelineRendererImpl(PluginRegistryImpl pluginRegistry, TimeProvider timeProvider,
+    public PipelineRendererImpl(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
                                 PreparedRenderingPipeline preparedRenderingPipeline, ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap,
                                 PipelineRendererResources resources) {
         whitePixel = new WhitePixel();
@@ -44,7 +44,7 @@ public class PipelineRendererImpl implements PipelineRenderer {
         preparedRenderingPipeline.initialize(pipelineRenderingContext);
     }
 
-    public PipelineRendererImpl(PluginRegistryImpl pluginRegistry, TimeProvider timeProvider,
+    public PipelineRendererImpl(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
                                 PreparedRenderingPipeline preparedRenderingPipeline, ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap) {
         this(pluginRegistry, timeProvider, preparedRenderingPipeline, pipelinePropertyMap, null);
     }

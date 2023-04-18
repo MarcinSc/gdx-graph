@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
+import com.gempukku.libgdx.graph.pipeline.RenderPipelineRuntimeInitializer;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
@@ -41,12 +43,13 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
     @Override
     public void create() {
         //Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
-        RenderCallbackPluginRuntimeInitializer.register();
-        UIPluginRuntimeInitializer.register();
-        ParticlesPluginRuntimeInitializer.register();
-        ScreenPluginRuntimeInitializer.register();
-        ModelsPluginRuntimeInitializer.register();
-        BoneAnimationPluginRuntimeInitializer.register();
+        RuntimePluginRegistry.register(RenderPipelineRuntimeInitializer.class);
+        RuntimePluginRegistry.register(RenderCallbackPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(UIPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(ParticlesPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(ScreenPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(ModelsPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(BoneAnimationPluginRuntimeInitializer.class);
         Lighting3DPluginRuntimeInitializer.register(
                 1, 0, 0,
                 0.2f, 5);
