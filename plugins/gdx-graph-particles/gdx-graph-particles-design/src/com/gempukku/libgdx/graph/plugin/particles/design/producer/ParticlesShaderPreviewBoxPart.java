@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
+import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
@@ -14,7 +16,7 @@ import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
-public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, Disposable {
+public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, GraphChangedAware, Disposable {
     private final ParticlesShaderPreviewWidget shaderPreviewWidget;
 
     public ParticlesShaderPreviewBoxPart() {
@@ -122,8 +124,11 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
     public void serializePart(JsonValue object) {
     }
 
-    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
-        shaderPreviewWidget.graphChanged(hasErrors, graph);
+    @Override
+    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+        if (event.isStructure() || event.isData()) {
+            shaderPreviewWidget.graphChanged(hasErrors, graph);
+        }
     }
 
     @Override

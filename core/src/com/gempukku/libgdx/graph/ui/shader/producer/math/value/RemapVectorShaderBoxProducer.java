@@ -6,21 +6,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.config.common.math.value.RemapVectorShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class RemapVectorShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
+public class RemapVectorShaderBoxProducer extends GdxGraphNodeEditorProducer {
     public RemapVectorShaderBoxProducer() {
         super(new RemapVectorShaderNodeConfiguration());
     }
 
     @Override
-    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         final VisSelectBox<String> xBox = createSelectBox("X");
         final VisSelectBox<String> yBox = createSelectBox("Y");
         final VisSelectBox<String> zBox = createSelectBox("Z");

@@ -2,12 +2,12 @@ package com.gempukku.libgdx.graph.ui.shader.producer.value;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 
-public abstract class ValueGraphBoxProducerDefault extends DefaultMenuGraphNodeEditorProducer {
+public abstract class ValueGraphBoxProducerDefault extends GdxGraphNodeEditorProducer {
     protected NodeConfiguration configuration;
 
     public ValueGraphBoxProducerDefault(MenuNodeConfiguration configuration) {
@@ -16,7 +16,7 @@ public abstract class ValueGraphBoxProducerDefault extends DefaultMenuGraphNodeE
     }
 
     @Override
-    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         graphNodeEditor.addGraphBoxPart(createValuePart(skin));
     }
 

@@ -18,9 +18,10 @@ import com.gempukku.libgdx.graph.pipeline.config.rendering.EndPipelineNodeConfig
 import com.gempukku.libgdx.graph.pipeline.config.rendering.PipelineRendererNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.StartPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.value.*;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldBoxProducer;
@@ -30,7 +31,6 @@ import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector2Edit
 import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector3EditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 
@@ -53,9 +53,9 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        DefaultMenuGraphNodeEditorProducer endProducer = new DefaultMenuGraphNodeEditorProducer(new EndPipelineNodeConfiguration()) {
+        GdxGraphNodeEditorProducer endProducer = new GdxGraphNodeEditorProducer(new EndPipelineNodeConfiguration()) {
             @Override
-            protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+            protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
 
             }
 
@@ -72,63 +72,63 @@ public class UIPipelineConfiguration implements UIGraphConfiguration {
         register(new ValueVector3BoxProducerDefault(new ValueVector3PipelineNodeConfiguration()));
         register(new ValueBooleanBoxProducerDefault(new ValueBooleanPipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new TimePipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new RenderSizePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new TimePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new RenderSizePipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new AddPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DividePipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MultiplyPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new OneMinusPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ReciprocalPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SubtractPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new AddPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DividePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MultiplyPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new OneMinusPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ReciprocalPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SubtractPipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new AbsPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CeilingPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ClampPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FloorPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FractionalPartPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new LerpPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MaximumPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MinimumPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ModuloPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SaturatePipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SignPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SmoothstepPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new StepPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new AbsPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CeilingPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ClampPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FloorPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FractionalPartPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LerpPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MaximumPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MinimumPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ModuloPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SaturatePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SignPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SmoothstepPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new StepPipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialBase2PipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new InverseSquareRootPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new LogarithmBase2PipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new NaturalLogarithmPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new PowerPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SquareRootPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ExponentialBase2PipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ExponentialPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new InverseSquareRootPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LogarithmBase2PipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new NaturalLogarithmPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PowerPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SquareRootPipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new CrossProductPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DistancePipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DotProductPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new LengthPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new NormalizePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CrossProductPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DistancePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DotProductPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LengthPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new NormalizePipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new ArccosPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ArcsinPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ArctanPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CosPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DegreesPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new RadiansPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SinPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new TanPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArccosPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArcsinPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArctanPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CosPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DegreesPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new RadiansPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SinPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new TanPipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new SplitPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MergePipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SplitPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MergePipelineNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new StartPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new PipelineRendererNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new StartPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PipelineRendererNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new BloomPipelineNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new GaussianBlurPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new BloomPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new GaussianBlurPipelineNodeConfiguration()));
         register(new DepthOfFieldBoxProducer());
-        register(new DefaultMenuGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
 
         registerPropertyType(new PropertyFloatEditorDefinition());
         registerPropertyType(new PropertyVector2EditorDefinition());

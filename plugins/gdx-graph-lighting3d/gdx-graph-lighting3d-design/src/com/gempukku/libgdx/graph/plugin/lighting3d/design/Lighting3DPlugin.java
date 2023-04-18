@@ -4,7 +4,7 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.producer.*;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ApplyNormalMapShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.UIPipelineConfiguration;
 import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
@@ -18,7 +18,7 @@ public class Lighting3DPlugin {
         UICommonShaderConfiguration.register(new ShadowPhongLightingBoxProducer());
         UICommonShaderConfiguration.register(new BlinnPhongLightingBoxProducer());
         UICommonShaderConfiguration.register(new ShadowBlinnPhongLightingBoxProducer());
-        UICommonShaderConfiguration.register(new DefaultMenuGraphNodeEditorProducer(new ApplyNormalMapShaderNodeConfiguration()));
+        UICommonShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ApplyNormalMapShaderNodeConfiguration()));
         UICommonShaderConfiguration.register(new AmbientLightBoxProducer());
         UICommonShaderConfiguration.register(new DirectionalLightBoxProducer());
         UICommonShaderConfiguration.register(new PointLightBoxProducer());

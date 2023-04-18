@@ -2,9 +2,9 @@ package com.gempukku.libgdx.graph.plugin.models.design;
 
 import com.gempukku.libgdx.graph.plugin.models.config.provided.*;
 import com.gempukku.libgdx.graph.plugin.models.design.producer.EndModelShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.LinkedHashMap;
@@ -25,11 +25,11 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     static {
         register(new EndModelShaderBoxProducer());
 
-        register(new DefaultMenuGraphNodeEditorProducer(new WorldPositionShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ObjectToWorldShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ObjectNormalToWorldShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ModelFragmentCoordinateShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new InstanceIdShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new WorldPositionShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ObjectToWorldShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ObjectNormalToWorldShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ModelFragmentCoordinateShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new InstanceIdShaderNodeConfiguration()));
     }
 
     public static void registerPropertyType(PropertyEditorDefinition propertyEditorDefinition) {

@@ -1,21 +1,18 @@
 package com.gempukku.libgdx.graph.plugin.particles.design.producer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.plugin.particles.config.EndParticlesShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.part.BlendingBoxPart;
 import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.SectionEditorPart;
 
-public class EndParticlesShaderBoxProducer extends DefaultMenuGraphNodeEditorProducer {
+public class EndParticlesShaderBoxProducer extends GdxGraphNodeEditorProducer {
     public EndParticlesShaderBoxProducer() {
         super(new EndParticlesShaderNodeConfiguration());
     }
@@ -26,7 +23,7 @@ public class EndParticlesShaderBoxProducer extends DefaultMenuGraphNodeEditorPro
     }
 
     @Override
-    protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
         final ParticlesShaderPreviewBoxPart previewBoxPart = new ParticlesShaderPreviewBoxPart();
 
         graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
@@ -46,21 +43,5 @@ public class EndParticlesShaderBoxProducer extends DefaultMenuGraphNodeEditorPro
         graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Preview"));
 
         graphNodeEditor.addGraphBoxPart(previewBoxPart);
-    }
-
-    private class GraphChangedAwareEditor extends DefaultGraphNodeEditor implements GraphChangedAware {
-        private ParticlesShaderPreviewBoxPart previewBoxPart;
-
-        public GraphChangedAwareEditor(NodeConfiguration configuration, ParticlesShaderPreviewBoxPart previewBoxPart) {
-            super(configuration);
-            this.previewBoxPart = previewBoxPart;
-        }
-
-        @Override
-        public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
-            if (event.isData() || event.isStructure()) {
-                previewBoxPart.graphChanged(hasErrors, graph);
-            }
-        }
     }
 }

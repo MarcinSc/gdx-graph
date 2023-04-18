@@ -5,7 +5,7 @@ import com.gempukku.libgdx.graph.plugin.boneanimation.config.SkinningShaderNodeC
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneTransformPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.producer.BoneWeightPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 
 public class BoneAnimationPlugin {
     public void initialize() {
@@ -16,6 +16,6 @@ public class BoneAnimationPlugin {
         UIModelShaderConfiguration.registerPropertyType(
                 new BoneTransformPropertyEditorDefinition());
         UIModelShaderConfiguration.register(
-                new DefaultMenuGraphNodeEditorProducer(new SkinningShaderNodeConfiguration()));
+                new GdxGraphNodeEditorProducer(new SkinningShaderNodeConfiguration()));
     }
 }

@@ -138,7 +138,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
             addPropertyBox(property.getName(), propertyBox);
         }
 
-        processGraphChanged(null);
+        processGraphChanged(new GraphChangedEvent(false, false));
     }
 
     private PropertyEditorDefinition getPropertyEditorDefinition(String propertyType) {
@@ -298,6 +298,14 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         } else {
             validationLabel.setColor(Color.GREEN);
             validationLabel.setText("OK");
+        }
+
+        for (UIGraphConfiguration uiGraphConfiguration : uiGraphConfigurations) {
+            for (MenuGraphNodeEditorProducer graphNodeEditorProducer : uiGraphConfiguration.getGraphNodeEditorProducers()) {
+                if (graphNodeEditorProducer instanceof GraphChangedAware) {
+                    ((GraphChangedAware) graphNodeEditorProducer).graphChanged(event, validationResult.hasErrors(), graph);
+                }
+            }
         }
     }
 

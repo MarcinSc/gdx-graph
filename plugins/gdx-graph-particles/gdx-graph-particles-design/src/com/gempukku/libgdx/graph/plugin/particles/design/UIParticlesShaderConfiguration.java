@@ -3,9 +3,9 @@ package com.gempukku.libgdx.graph.plugin.particles.design;
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifePercentageShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifetimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 
 import java.util.Collections;
@@ -25,8 +25,8 @@ public class UIParticlesShaderConfiguration implements UIGraphConfiguration {
     static {
         register(new EndParticlesShaderBoxProducer());
 
-        register(new DefaultMenuGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
     }
 
     @Override

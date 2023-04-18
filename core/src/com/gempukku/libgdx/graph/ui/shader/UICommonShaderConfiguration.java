@@ -20,9 +20,9 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.BorderDetectionSha
 import com.gempukku.libgdx.graph.shader.config.common.texture.Sampler2DShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.UIGraphConfiguration;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderBoxProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherShaderBoxProducer;
@@ -56,99 +56,99 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        register(new DefaultMenuGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration()));
         register(new UVFlipbookShaderBoxProducer());
-        register(new DefaultMenuGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new AddShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SubtractShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DivideShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new AddShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SubtractShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DivideShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new PowerShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PowerShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new SinShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CosShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new TanShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ArccosShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ArctanShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new RadiansShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DegreesShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SinShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CosShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new TanShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArccosShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ArctanShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new RadiansShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DegreesShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new AbsShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SignShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FloorShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CeilingShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ModuloShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MinimumShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MaximumShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ClampShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SaturateShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new LerpShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new AbsShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SignShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FloorShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CeilingShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ModuloShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MinimumShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MaximumShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ClampShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SaturateShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LerpShaderNodeConfiguration()));
         register(new ConditionalShaderBoxProducer());
-        register(new DefaultMenuGraphNodeEditorProducer(new StepShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new StepShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new LengthShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DistanceShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new DotProductShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new LengthShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DistanceShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DotProductShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new MergeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new RemapShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new MergeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new RemapShaderNodeConfiguration()));
         register(new RemapVectorShaderBoxProducer());
         register(new RemapValueShaderBoxProducer());
 
         register(new DitherShaderBoxProducer());
         register(new DitherColorShaderBoxProducer());
-        register(new DefaultMenuGraphNodeEditorProducer(new IntensityShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new IntensityShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
         register(new GradientShaderBoxProducer());
 
-        register(new DefaultMenuGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration()));
 
         register(new TimeShaderBoxProducerDefault());
-        register(new DefaultMenuGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CameraDirectionShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new CameraViewportSizeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new FragmentCoordinateShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new SceneDepthShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CameraDirectionShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new CameraViewportSizeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new FragmentCoordinateShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new SceneDepthShaderNodeConfiguration()));
         register(new SceneColorShaderBoxProducer());
-        register(new DefaultMenuGraphNodeEditorProducer(new ScreenPositionShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new PixelSizeShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ViewportSizeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ScreenPositionShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new PixelSizeShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ViewportSizeShaderNodeConfiguration()));
 
-        register(new DefaultMenuGraphNodeEditorProducer(new BillboardSpriteShaderNodeConfiguration()));
-        register(new DefaultMenuGraphNodeEditorProducer(new ScreenSpriteShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new BillboardSpriteShaderNodeConfiguration()));
+        register(new GdxGraphNodeEditorProducer(new ScreenSpriteShaderNodeConfiguration()));
 
         register(new ValueColorBoxProducerDefault(new ValueColorShaderNodeConfiguration()));
         register(new ValueFloatBoxProducerDefault(new ValueFloatShaderNodeConfiguration()));

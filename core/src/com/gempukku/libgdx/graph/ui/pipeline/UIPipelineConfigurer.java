@@ -11,12 +11,12 @@ import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.MultiParamVectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.graph.config.VectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.ui.DefaultMenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.*;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
@@ -74,9 +74,9 @@ public class UIPipelineConfigurer {
             }
         }
         final JsonValue fields = boxProducer.get("fields");
-        DefaultMenuGraphNodeEditorProducer producer = new DefaultMenuGraphNodeEditorProducer(nodeConfiguration) {
+        GdxGraphNodeEditorProducer producer = new GdxGraphNodeEditorProducer(nodeConfiguration) {
             @Override
-            protected void buildNodeEditor(DefaultGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+            protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
                 if (fields != null) {
                     for (JsonValue field : fields) {
                         String fieldType = field.getString("type");
