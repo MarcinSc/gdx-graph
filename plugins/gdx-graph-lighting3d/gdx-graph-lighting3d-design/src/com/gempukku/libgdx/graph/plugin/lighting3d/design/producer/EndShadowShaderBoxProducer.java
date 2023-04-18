@@ -6,7 +6,7 @@ import com.gempukku.libgdx.graph.plugin.models.design.producer.ModelShaderPrevie
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
+import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
@@ -30,10 +30,10 @@ public class EndShadowShaderBoxProducer extends GdxGraphNodeEditorProducer {
                 "Object space", "World space");
         graphNodeEditor.addGraphBoxPart(positionType);
 
-        EnumSelectEditorPart cullingBox = new EnumSelectEditorPart("Culling", "culling", new StringifyEnum<BasicShader.Culling>(), BasicShader.Culling.values());
+        EnumSelectEditorPart cullingBox = new EnumSelectEditorPart("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
         graphNodeEditor.addGraphBoxPart(cullingBox);
 
-        EnumSelectEditorPart depthTestBox = new EnumSelectEditorPart("DepthTest", "depthTest", new StringifyEnum<BasicShader.DepthTesting>(), BasicShader.DepthTesting.values());
+        EnumSelectEditorPart depthTestBox = new EnumSelectEditorPart("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
         graphNodeEditor.addGraphBoxPart(depthTestBox);
 
         CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite");

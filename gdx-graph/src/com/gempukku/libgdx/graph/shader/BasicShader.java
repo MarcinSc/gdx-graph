@@ -16,16 +16,23 @@ import static com.badlogic.gdx.graphics.GL20.*;
 
 public abstract class BasicShader implements UniformRegistry, Disposable {
     public enum Culling {
-        back(GL_BACK), none(GL_NONE), front(GL_FRONT);
+        back(GL_BACK, "back"), front(GL_FRONT, "front"), none(GL_NONE, "none");
 
         private final int cullFace;
+        private final String text;
 
-        Culling(int cullFace) {
+        Culling(int cullFace, String text) {
             this.cullFace = cullFace;
+            this.text = text;
         }
 
         public void setCullFace(OpenGLContext renderContext) {
             renderContext.setCullFace(cullFace);
+        }
+
+        @Override
+        public String toString() {
+            return text;
         }
     }
 
@@ -54,19 +61,25 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
     }
 
     public enum DepthTesting {
-        less(GL20.GL_LESS), less_or_equal(GL20.GL_LEQUAL),
-        equal(GL20.GL_EQUAL), not_equal(GL20.GL_NOTEQUAL), greater_or_equal(GL20.GL_GEQUAL),
-        greater(GL20.GL_GREATER), never(GL20.GL_NEVER), always(GL20.GL_ALWAYS),
-        disabled(0);
+        less(GL20.GL_LESS, "less"), less_or_equal(GL20.GL_LEQUAL, "less or equal"),
+        equal(GL20.GL_EQUAL, "equal"), not_equal(GL20.GL_NOTEQUAL, "not equal"), greater_or_equal(GL20.GL_GEQUAL, "greater or equal"),
+        greater(GL20.GL_GREATER, "greater"), never(GL20.GL_NEVER, "never"), always(GL20.GL_ALWAYS, "always"),
+        disabled(0, "disabled");
 
         private final int depthFunction;
+        private final String text;
 
-        DepthTesting(int depthFunction) {
+        DepthTesting(int depthFunction, String text) {
             this.depthFunction = depthFunction;
+            this.text = text;
         }
 
         void setDepthTest(OpenGLContext renderContext, float depthNear, float depthFar) {
             renderContext.setDepthTest(depthFunction, depthNear, depthFar);
+        }
+
+        public String toString() {
+            return text;
         }
     }
 

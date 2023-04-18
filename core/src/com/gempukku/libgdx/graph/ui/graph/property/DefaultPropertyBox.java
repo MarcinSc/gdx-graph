@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
+import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
@@ -26,7 +26,7 @@ public class DefaultPropertyBox extends VisTable implements PropertyBox {
                               PropertyLocation... propertyLocations) {
         this.propertyType = propertyType;
 
-        locationPart = new EnumSelectEditorPart<>("Location", "location", new StringifyEnum<PropertyLocation>(), propertyLocations);
+        locationPart = new EnumSelectEditorPart<>("Location", "location", new ToStringEnum<>(), propertyLocations);
         if (selectedLocation != null)
             locationPart.setSelected(selectedLocation);
 

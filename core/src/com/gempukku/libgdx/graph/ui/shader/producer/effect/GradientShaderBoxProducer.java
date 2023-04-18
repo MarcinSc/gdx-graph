@@ -5,7 +5,7 @@ import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.config.common.effect.GradientShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.part.StringifyEnum;
+import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GradientEditorPart;
@@ -21,6 +21,6 @@ public class GradientShaderBoxProducer extends GdxGraphNodeEditorProducer {
                 new GradientEditorPart("points", "gdx-graph"));
         graphNodeEditor.addGraphBoxPart(
                 new EnumSelectEditorPart<>("Clamp method:", "clamp",
-                        new StringifyEnum<>(), ClampMethod.values()));
+                        new ToStringEnum<>(), ClampMethod.values()));
     }
 }

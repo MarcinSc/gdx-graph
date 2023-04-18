@@ -12,18 +12,20 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 public class BlendingBoxPart extends VisTable implements GraphNodeEditorPart {
     public enum Blending {
-        disabled(false, false, BasicShader.BlendingFactor.zero, BasicShader.BlendingFactor.one),
-        alpha(false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one_minus_source_alpha),
-        additive(false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one),
-        multiplicative(false, true, BasicShader.BlendingFactor.destination_color, BasicShader.BlendingFactor.zero),
-        custom(true, true, null, null);
+        disabled("Disabled", false, false, BasicShader.BlendingFactor.zero, BasicShader.BlendingFactor.one),
+        alpha("Alpha", false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one_minus_source_alpha),
+        additive("Additive", false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one),
+        multiplicative("Multiplicative", false, true, BasicShader.BlendingFactor.destination_color, BasicShader.BlendingFactor.zero),
+        custom("Custom", true, true, null, null);
 
+        private final String text;
         private final boolean customBlending;
         private final boolean enabled;
         private final BasicShader.BlendingFactor sourceFactor;
         private final BasicShader.BlendingFactor destinationFactor;
 
-        Blending(boolean customBlending, boolean enabled, BasicShader.BlendingFactor sourceFactor, BasicShader.BlendingFactor destinationFactor) {
+        Blending(String text, boolean customBlending, boolean enabled, BasicShader.BlendingFactor sourceFactor, BasicShader.BlendingFactor destinationFactor) {
+            this.text = text;
             this.customBlending = customBlending;
             this.enabled = enabled;
             this.sourceFactor = sourceFactor;
@@ -61,6 +63,11 @@ public class BlendingBoxPart extends VisTable implements GraphNodeEditorPart {
             }
             return null;
         }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
     private EnumSelectEditorPart<Blending> blendingSelect;
@@ -68,10 +75,10 @@ public class BlendingBoxPart extends VisTable implements GraphNodeEditorPart {
     private EnumSelectEditorPart<BasicShader.BlendingFactor> destinationFactorSelect;
 
     public BlendingBoxPart() {
-        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new StringifyEnum<Blending>(), Blending.values());
+        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new ToStringEnum<>(), Blending.values());
 
-        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
-        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<BasicShader.BlendingFactor>(), BasicShader.BlendingFactor.values());
+        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<>(), BasicShader.BlendingFactor.values());
+        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<>(), BasicShader.BlendingFactor.values());
 
         this.blendingSelect.addListener(
                 new ChangeListener() {
