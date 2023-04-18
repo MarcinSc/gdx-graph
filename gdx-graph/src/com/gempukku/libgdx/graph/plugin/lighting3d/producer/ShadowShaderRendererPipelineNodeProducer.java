@@ -216,7 +216,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ShadowShaderLoader.loadShader(shaderGraph, tag, true, defaultTexture);
+        return ShadowShaderLoader.loadShader(shaderGraph, tag, defaultTexture);
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {

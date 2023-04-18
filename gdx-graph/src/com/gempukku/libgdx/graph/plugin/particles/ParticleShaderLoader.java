@@ -12,7 +12,7 @@ import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 
 public class ParticleShaderLoader {
     public static GraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture) {
-        GraphType graphType = GraphTypeRegistry.findGraphType("Particle_Effect");
+        GraphType graphType = GraphTypeRegistry.findGraphType(ParticleEffectGraphType.TYPE);
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
 

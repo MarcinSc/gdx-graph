@@ -12,7 +12,7 @@ import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 
 public class ModelShaderLoader {
     public static GraphShader loadShader(JsonValue jsonGraph, String tag, boolean depthShader, Texture defaultTexture) {
-        GraphType graphType = GraphTypeRegistry.findGraphType("Model_Shader");
+        GraphType graphType = GraphTypeRegistry.findGraphType(ModelShaderGraphType.TYPE);
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
 

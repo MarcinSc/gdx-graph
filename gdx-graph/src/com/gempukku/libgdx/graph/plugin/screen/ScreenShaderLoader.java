@@ -8,12 +8,10 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
-import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 
 public class ScreenShaderLoader {
-    public static ScreenGraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture,
-                                               final GraphConfiguration... graphConfiguration) {
-        GraphType graphType = GraphTypeRegistry.findGraphType("Screen_Shader");
+    public static ScreenGraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture) {
+        GraphType graphType = GraphTypeRegistry.findGraphType(ScreenShaderGraphType.TYPE);
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
 
