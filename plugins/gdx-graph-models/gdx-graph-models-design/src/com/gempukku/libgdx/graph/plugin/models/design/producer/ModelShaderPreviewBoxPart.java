@@ -16,10 +16,12 @@ import com.kotcrab.vis.ui.widget.VisTable;
 public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, GraphChangedAware, Disposable {
     private final ModelShaderPreviewWidget shaderPreviewWidget;
     private final VisSelectBox<ModelShaderPreviewWidget.ShaderPreviewModel> selectBox;
+    private final String modelTypeProperty;
 
-    public ModelShaderPreviewBoxPart() {
+    public ModelShaderPreviewBoxPart(String modelTypeProperty) {
+        this.modelTypeProperty = modelTypeProperty;
         shaderPreviewWidget = new ModelShaderPreviewWidget(300, 300);
-        selectBox = new VisSelectBox<ModelShaderPreviewWidget.ShaderPreviewModel>();
+        selectBox = new VisSelectBox<>();
         selectBox.setItems(ModelShaderPreviewWidget.ShaderPreviewModel.values());
 
         selectBox.addListener(
@@ -36,6 +38,10 @@ public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEdit
     }
 
     public void initialize(JsonValue data) {
+        String modelTypeProperty = data.getString(this.modelTypeProperty, null);
+        if (modelTypeProperty != null) {
+            setPreviewModel(ModelShaderPreviewWidget.ShaderPreviewModel.valueOf(modelTypeProperty));
+        }
     }
 
     public void setPreviewModel(ModelShaderPreviewWidget.ShaderPreviewModel previewModel) {
@@ -60,7 +66,7 @@ public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEdit
 
     @Override
     public void serializePart(JsonValue value) {
-
+        value.addChild(modelTypeProperty, new JsonValue(selectBox.getSelected().name()));
     }
 
     @Override

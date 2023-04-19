@@ -8,13 +8,11 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.gdx.assistant.GdxAssistant;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
 import com.gempukku.gdx.assistant.plugin.AssistantPlugin;
-import com.gempukku.gdx.plugins.PluginsProvider;
+import com.gempukku.gdx.plugins.provider.PluginsProvider;
 import com.gempukku.libgdx.graph.assistant.GdxGraphAssistantPlugin;
 
-import java.io.IOException;
-
 public class GraphEditorLauncher {
-    public static void main(String[] arg) throws IOException {
+    public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Gdx Assistant";
         config.width = 1440;

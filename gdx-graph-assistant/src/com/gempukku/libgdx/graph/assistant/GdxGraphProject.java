@@ -13,7 +13,6 @@ import com.gempukku.libgdx.graph.assistant.data.GdxGraphData;
 import com.gempukku.libgdx.graph.assistant.data.GdxGraphProjectData;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
-import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
@@ -331,8 +330,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     public JsonValue saveProject() {
         for (ObjectMap.Entry<String, GraphTab> openGraphEntry : mainGraphTabs.entries()) {
             String graphId = openGraphEntry.key;
-            GraphWithProperties graph = openGraphEntry.value.getGraph();
-            JsonValue serializedGraph = GraphSerializer.serializeGraphWithProperties(graph);
+            JsonValue serializedGraph = openGraphEntry.value.saveGraph();
             mainGraphs.put(graphId, serializedGraph);
             GdxGraphData graphData = getGraphDataById(graphId);
             FileHandle graphFile = application.getProjectFolder().child(graphData.getPath());

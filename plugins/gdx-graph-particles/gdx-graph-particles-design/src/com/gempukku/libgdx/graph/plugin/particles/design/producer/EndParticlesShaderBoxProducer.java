@@ -20,7 +20,9 @@ public class EndParticlesShaderBoxProducer extends GdxGraphNodeEditorProducer {
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        final ParticlesShaderPreviewBoxPart previewBoxPart = new ParticlesShaderPreviewBoxPart();
+        final ParticlesShaderPreviewBoxPart previewBoxPart = new ParticlesShaderPreviewBoxPart(
+                "preview.cameraDistance", "preview.lifetime", "preview.initialCount",
+                "preview.perSecond", "preview.modelType");
 
         graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
 

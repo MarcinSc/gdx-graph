@@ -11,6 +11,7 @@ import com.gempukku.gdx.assistant.plugin.StatusManager;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
+import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
@@ -72,6 +73,15 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                         return false;
                     }
                 });
+    }
+
+    public JsonValue saveGraph() {
+        for (ObjectMap.Entry<String, GraphTab> subGraphTab : subGraphTabs) {
+            JsonValue jsonValue = subGraphTab.value.saveGraph();
+            serializedSubGraphs.put(subGraphTab.key, jsonValue);
+        }
+        GraphWithProperties graph = graphWithPropertiesEditor.getGraph();
+        return GraphSerializer.serializeGraphWithProperties(graph);
     }
 
     public Table getContent() {

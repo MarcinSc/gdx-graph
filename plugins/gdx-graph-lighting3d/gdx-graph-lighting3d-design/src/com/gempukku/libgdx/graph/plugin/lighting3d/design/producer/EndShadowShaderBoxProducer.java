@@ -20,7 +20,7 @@ public class EndShadowShaderBoxProducer extends GdxGraphNodeEditorProducer {
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        final ModelShaderPreviewBoxPart previewBoxPart = new ModelShaderPreviewBoxPart();
+        final ModelShaderPreviewBoxPart previewBoxPart = new ModelShaderPreviewBoxPart("preview.modelType");
 
         SelectEditorPart positionType = new SelectEditorPart("Position", "positionType",
                 "Object space", "World space");
