@@ -1,0 +1,50 @@
+
+uiskin.png
+size: 512, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+default
+  rotate: false
+  xy: 2, 166
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+graph-background
+  rotate: false
+  xy: 2, 36
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+graph-rounded-background
+  rotate: false
+  xy: 260, 390
+  size: 32, 32
+  split: 7, 7, 7, 7
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+graph-rounded-frame
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  split: 7, 7, 7, 7
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+graph-tick
+  rotate: false
+  xy: 132, 155
+  size: 9, 9
+  orig: 9, 9
+  offset: 0, 0
+  index: -1
+graph-white
+  rotate: false
+  xy: 260, 385
+  size: 3, 3
+  orig: 3, 3
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,140 @@
+{
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "gdx-graph-default-font": {
+      "file": "default.fnt"
+    }
+  },
+  "com.badlogic.gdx.graphics.Color": {
+    "gdx-graph-white": {
+      "r": 1,
+      "b": 1,
+      "g": 1,
+      "a": 1
+    },
+    "gdx-graph-black": {
+      "r": 0,
+      "b": 0,
+      "g": 0,
+      "a": 1
+    },
+    "gdx-graph-error": {
+      "r": 1,
+      "g": 0.3,
+      "b": 0.3,
+      "a": 1
+    },
+    "gdx-graph-light-grey": {
+      "r": 0.8,
+      "g": 0.8,
+      "b": 0.8,
+      "a": 1
+    },
+    "gdx-graph-blue": {
+      "r": 0.3,
+      "g": 0.3,
+      "b": 1,
+      "a": 1
+    },
+    "gdx-graph-red": {
+      "r": 1,
+      "g": 0.3,
+      "b": 0.3,
+      "a": 1
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "gdx-graph-white": {
+      "name": "graph-white",
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      }
+    },
+    "gdx-graph-dimmed-white": {
+      "name": "graph-white",
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.5
+      }
+    },
+    "gdx-graph-dark-grey": {
+      "name": "graph-white",
+      "color": {
+        "r": 0.2,
+        "g": 0.2,
+        "b": 0.2,
+        "a": 1
+      }
+    },
+    "gdx-graph-preview-visible": {
+      "name": "graph-rounded-frame",
+      "color": {
+        "r": 0.25,
+        "g": 0.18,
+        "b": 0.37,
+        "a": 1
+      }
+    },
+    "gdx-graph-group-background": {
+      "name": "graph-rounded-background",
+      "color": {
+        "r": 0.25,
+        "g": 0.3,
+        "b": 0.25,
+        "a": 1
+      }
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable": {
+    "graph-background-tiled": {
+      "region": "graph-background"
+    }
+  },
+  "com.gempukku.libgdx.ui.curve.GCurveEditor$GCurveEditorStyle": {
+    "gdx-graph": {
+      "background": "gdx-graph-white",
+      "gridThickness": 1,
+      "gridColor":  "gdx-graph-light-grey",
+      "pointSize": 3,
+      "pointsColor": "gdx-graph-blue",
+      "curveThickness": 2,
+      "curveColor": "gdx-graph-red"
+    }
+  },
+  "com.gempukku.libgdx.ui.gradient.GGradientEditor$GGradientEditorStyle": {
+    "gdx-graph": {
+      "background": "gdx-graph-white",
+      "tickWidth": 9,
+      "tickHeight": 9,
+      "tick": "graph-tick"
+    }
+  },
+  "com.gempukku.libgdx.ui.preview.PreviewWidget$PreviewWidgetStyle": {
+    "gdx-graph": {
+      "background": "gdx-graph-dark-grey",
+      "canvas": "gdx-graph-dimmed-white",
+      "element": "gdx-graph-white",
+      "visible": "gdx-graph-preview-visible"
+    }
+  },
+  "com.gempukku.libgdx.ui.graph.GraphEditor$GraphEditorStyle": {
+    "gdx-graph": {
+      "background": "graph-background-tiled",
+      "windowStyle": "noborder",
+      "windowSelectedStyle": "default",
+      "groupBackground": "gdx-graph-group-background",
+      "groupGap": 10,
+      "groupNameFont": "gdx-graph-default-font",
+      "groupNameColor": "gdx-graph-white",
+      "connectorLength": 10,
+      "connectorRadius": 5,
+      "connectionColor": "gdx-graph-white",
+      "connectorColor": "gdx-graph-white",
+      "invalidConnectorColor": "gdx-graph-error"
+    }
+  }
+}

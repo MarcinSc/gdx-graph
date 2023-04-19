@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.assistant;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.ui.ExtensionSkin;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
@@ -23,14 +25,11 @@ import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPluginRegistry;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelinePlugin;
 import com.gempukku.libgdx.graph.util.WhitePixel;
-import com.gempukku.libgdx.ui.curve.GCurveEditor;
-import com.gempukku.libgdx.ui.gradient.GGradientEditor;
-import com.gempukku.libgdx.ui.graph.GraphEditor;
 import com.gempukku.libgdx.ui.input.KeyCombination;
-import com.gempukku.libgdx.ui.preview.PreviewWidget;
 
 public class GdxGraphAssistantPlugin implements AssistantPlugin {
     private AssistantApplication assistantApplication;
+    private ExtensionSkin gdxGraphSkin;
 
     @Override
     public String getId() {
@@ -66,31 +65,8 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
         Skin skin = assistantApplication.getApplicationSkin();
 
-        PreviewWidget.PreviewWidgetStyle previewWidgetStyle = new PreviewWidget.PreviewWidgetStyle();
-        previewWidgetStyle.background = skin.getDrawable("grey");
-        previewWidgetStyle.canvas = skin.getDrawable("white");
-        previewWidgetStyle.element = skin.getDrawable("dialogDim");
-        previewWidgetStyle.visible = skin.getDrawable("dialogDim");
-        skin.add("gdx-graph", previewWidgetStyle);
-
-        GraphEditor.GraphEditorStyle graphEditorStyle = new GraphEditor.GraphEditorStyle();
-        graphEditorStyle.background = skin.getDrawable("darkGrey");
-        graphEditorStyle.groupBackground = skin.getDrawable("darkGrey");
-        graphEditorStyle.groupNameFont = skin.getFont("default-font");
-        graphEditorStyle.groupNameColor = skin.getColor("white");
-        graphEditorStyle.invalidConnectorColor = skin.getColor("red");
-        graphEditorStyle.windowStyle = "noborder";
-        graphEditorStyle.windowSelectedStyle = "default";
-        skin.add("gdx-graph", graphEditorStyle);
-
-        GGradientEditor.GGradientEditorStyle gradientEditorStyle = new GGradientEditor.GGradientEditorStyle();
-        gradientEditorStyle.background = skin.getDrawable("white");
-        gradientEditorStyle.tick = skin.getDrawable("white");
-        skin.add("gdx-graph", gradientEditorStyle);
-
-        GCurveEditor.GCurveEditorStyle curveEditorStyle = new GCurveEditor.GCurveEditorStyle();
-        curveEditorStyle.background = skin.getDrawable("white");
-        skin.add("gdx-graph", curveEditorStyle);
+        gdxGraphSkin = new ExtensionSkin(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
+        gdxGraphSkin.mergeInto(skin);
 
         MenuManager menuManager = assistantApplication.getMenuManager();
 
@@ -125,6 +101,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public void deregisterPlugin() {
+        gdxGraphSkin.dispose();
         WhitePixel.disposeShared();
         PatternTextures.disposeShared();
     }
