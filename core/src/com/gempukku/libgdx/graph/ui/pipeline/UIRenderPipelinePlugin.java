@@ -31,12 +31,13 @@ import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector3Edit
 import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
 import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.kotcrab.vis.ui.VisUI;
 
 public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
     @Override
     public void initialize() {
         // Register graph type
-        GraphTypeRegistry.registerType(new UIRenderPipelineGraphType());
+        GraphTypeRegistry.registerType(new UIRenderPipelineGraphType(VisUI.getSkin().getDrawable("graph-render-pipeline-icon")));
 
         // Register node editors
         GdxGraphNodeEditorProducer endProducer = new GdxGraphNodeEditorProducer(new EndPipelineNodeConfiguration());

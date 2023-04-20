@@ -10,11 +10,12 @@ import com.gempukku.libgdx.graph.plugin.particles.design.producer.ParticlesShade
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
+import com.kotcrab.vis.ui.VisUI;
 
 public class UIParticlesPlugin implements UIGdxGraphPlugin {
     public void initialize() {
         // Register graph type
-        GraphTypeRegistry.registerType(new UIParticleEffectGraphType());
+        GraphTypeRegistry.registerType(new UIParticleEffectGraphType(VisUI.getSkin().getDrawable("graph-particle-effect-icon")));
 
         // Register node editors
         UIParticlesShaderConfiguration.register(new EndParticlesShaderBoxProducer());

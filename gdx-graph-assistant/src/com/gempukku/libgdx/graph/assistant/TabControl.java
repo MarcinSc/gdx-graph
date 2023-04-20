@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.assistant;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+
 public interface TabControl {
     /**
      * Requests to switch to the argument tab.
@@ -14,7 +16,7 @@ public interface TabControl {
      * @param title
      * @param graphTab
      */
-    void addTab(String title, GraphTab graphTab);
+    void addTab(String title, Drawable icon, GraphTab graphTab);
 
     boolean isActiveTab(GraphTab graphTab);
 

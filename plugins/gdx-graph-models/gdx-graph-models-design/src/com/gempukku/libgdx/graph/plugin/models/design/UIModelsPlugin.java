@@ -9,11 +9,12 @@ import com.gempukku.libgdx.graph.plugin.models.design.producer.ModelShaderRender
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
+import com.kotcrab.vis.ui.VisUI;
 
 public class UIModelsPlugin implements UIGdxGraphPlugin {
     public void initialize() {
         // Register graph type
-        GraphTypeRegistry.registerType(new UIModelShaderGraphType());
+        GraphTypeRegistry.registerType(new UIModelShaderGraphType(VisUI.getSkin().getDrawable("graph-model-shader-icon")));
 
         // Register node editors
         UIModelShaderConfiguration.register(new EndModelShaderBoxProducer());

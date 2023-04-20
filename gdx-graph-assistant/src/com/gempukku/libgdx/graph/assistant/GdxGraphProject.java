@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.assistant;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
@@ -234,7 +235,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         } else {
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
             graphTab = new GraphTab(application.getApplicationSkin(), GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph);
-            tabManager.addTab(graphId, graphTab.getContent(), graphTab);
+            tabManager.addTab(graphId, graphType.getIcon(), graphTab.getContent(), graphTab);
             mainGraphTabs.put(graphId, graphTab);
         }
     }
@@ -280,8 +281,8 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     }
 
     @Override
-    public void addTab(String title, GraphTab graphTab) {
-        tabManager.addTab(title, graphTab.getContent(), graphTab);
+    public void addTab(String title, Drawable icon, GraphTab graphTab) {
+        tabManager.addTab(title, icon, graphTab.getContent(), graphTab);
     }
 
     @Override

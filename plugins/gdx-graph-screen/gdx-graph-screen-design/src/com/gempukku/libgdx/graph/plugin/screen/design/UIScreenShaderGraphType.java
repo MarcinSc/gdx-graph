@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.screen.design;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.gempukku.libgdx.graph.plugin.screen.ScreenShaderGraphType;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
@@ -8,8 +9,10 @@ import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class UIScreenShaderGraphType extends ScreenShaderGraphType implements UIGraphType {
     private UIGraphConfiguration[] configurations;
+    private Drawable icon;
 
-    public UIScreenShaderGraphType() {
+    public UIScreenShaderGraphType(Drawable icon) {
+        this.icon = icon;
         configurations = new UIGraphConfiguration[]{
                 new UIScreenShaderConfiguration(),
                 new UICommonShaderConfiguration()};
@@ -23,6 +26,11 @@ public class UIScreenShaderGraphType extends ScreenShaderGraphType implements UI
     @Override
     public String getPresentableName() {
         return "Screen shader";
+    }
+
+    @Override
+    public Drawable getIcon() {
+        return icon;
     }
 
     @Override

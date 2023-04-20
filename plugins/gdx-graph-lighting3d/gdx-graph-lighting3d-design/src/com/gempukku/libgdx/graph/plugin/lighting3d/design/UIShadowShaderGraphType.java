@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderGraphType;
 import com.gempukku.libgdx.graph.plugin.models.design.UIModelShaderConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
@@ -25,6 +26,11 @@ public class UIShadowShaderGraphType extends ShadowShaderGraphType implements UI
     @Override
     public String getPresentableName() {
         return "Shadow shader";
+    }
+
+    @Override
+    public Drawable getIcon() {
+        return null;
     }
 
     @Override

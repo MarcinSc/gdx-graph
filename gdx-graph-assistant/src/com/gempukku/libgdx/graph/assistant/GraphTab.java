@@ -4,11 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.gdx.assistant.plugin.StatusManager;
-import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
@@ -47,10 +47,10 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                                 if (serializedSubGraphs.containsKey(graphId))
                                     jsonObject = serializedSubGraphs.get(graphId);
 
-                                GraphType graphType = requestGraphOpen.getType();
+                                UIGraphType graphType = (UIGraphType) requestGraphOpen.getType();
                                 GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
                                 subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, statusManager, subGraph);
-                                tabControl.addTab(requestGraphOpen.getTitle(), subGraphTab);
+                                tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), subGraphTab);
                                 subGraphTabs.put(graphId, subGraphTab);
                                 tabControl.switchToTab(subGraphTab);
                             }
@@ -122,8 +122,8 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     }
 
     @Override
-    public void addTab(String title, GraphTab graphTab) {
-        tabControl.addTab(title, graphTab);
+    public void addTab(String title, Drawable icon, GraphTab graphTab) {
+        tabControl.addTab(title, icon, graphTab);
     }
 
     @Override

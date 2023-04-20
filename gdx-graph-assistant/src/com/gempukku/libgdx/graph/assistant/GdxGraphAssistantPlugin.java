@@ -55,6 +55,11 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
     public void initializePlugin(AssistantApplication assistantApplication) {
         this.assistantApplication = assistantApplication;
 
+        Skin skin = assistantApplication.getApplicationSkin();
+
+        gdxGraphSkin = new ExtensionSkin(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
+        gdxGraphSkin.mergeInto(skin);
+
         WhitePixel.initializeShared();
         PatternTextures.initializeShared();
         try {
@@ -63,10 +68,6 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
             throw new GdxRuntimeException("Unable to initialize plugins", exp);
         }
 
-        Skin skin = assistantApplication.getApplicationSkin();
-
-        gdxGraphSkin = new ExtensionSkin(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
-        gdxGraphSkin.mergeInto(skin);
 
         MenuManager menuManager = assistantApplication.getMenuManager();
 
