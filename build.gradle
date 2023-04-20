@@ -8,13 +8,13 @@ buildscript {
     }
     dependencies {
         classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-
     }
 }
 
 allprojects {
     apply plugin: "eclipse"
 
+    group = "com.gempukku.libgdx.gdx-graph"
     version = "$gdxGraphVersion"
     ext {
         appName = "Gdx Graph"
@@ -43,6 +43,7 @@ configure(subprojects) {
     sourceSets.main.java.srcDirs = ["src/"]
     sourceSets.main.resources.srcDirs = ["resources/"]
     sourceSets.test.java.srcDirs = ["test/"]
+    sourceSets.test.resources.srcDirs = ["test-resources/"]
 
     compileJava {
         options.incremental = true
