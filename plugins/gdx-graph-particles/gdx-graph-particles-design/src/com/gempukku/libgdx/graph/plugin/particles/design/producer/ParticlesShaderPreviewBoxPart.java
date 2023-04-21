@@ -40,19 +40,19 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         selectBox.setItems(ParticlesShaderPreviewWidget.ShaderPreviewModel.values());
 
         VisLabel lifetimeText = new VisLabel("Lifetime: 3.00", "gdx-graph-property-label");
-        lifetime = new VisSlider(0f, 10f, 0.01f, false);
+        lifetime = new VisSlider(0f, 10f, 0.01f, false, "gdx-graph");
         lifetime.setValue(3f);
 
         VisLabel initialCountText = new VisLabel("Initial count: 0", "gdx-graph-property-label");
-        initialCount = new VisSlider(0f, 100f, 1f, false);
+        initialCount = new VisSlider(0f, 100f, 1f, false, "gdx-graph");
         initialCount.setValue(0f);
 
         VisLabel perSecondCountText = new VisLabel("Per second count: 10", "gdx-graph-property-label");
-        perSecondCount = new VisSlider(0, 100f, 0.1f, false);
+        perSecondCount = new VisSlider(0, 100f, 0.1f, false, "gdx-graph");
         perSecondCount.setValue(10f);
 
         VisLabel cameraDistanceText = new VisLabel("Camera distance: 1", "gdx-graph-property-label");
-        cameraDistance = new VisSlider(0.5f, 10f, 0.01f, false);
+        cameraDistance = new VisSlider(0.5f, 10f, 0.01f, false, "gdx-graph");
         cameraDistance.setValue(1f);
 
         final VisTextButton resetButton = new VisTextButton("Reset particles","gdx-graph-property-label");

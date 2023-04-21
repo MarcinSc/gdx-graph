@@ -112,6 +112,15 @@
   "com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle": {
     "gdx-graph-window-close": "assistant-tab-close"
   },
+  "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+    "gdx-graph": {
+      "background": "slider",
+      "knob": "graph-slider-knob",
+      "knobOver": "graph-slider-knob-over",
+      "knobDown": "graph-slider-knob-over",
+      "disabledKnob": "graph-slider-knob"
+    }
+  },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
     "gdx-graph-white": {
       "name": "graph-white",

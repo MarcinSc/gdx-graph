@@ -6,35 +6,35 @@ filter: Nearest, Nearest
 repeat: none
 graph-background
   rotate: false
-  xy: 2, 89
+  xy: 2, 108
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 graph-model-shader-icon
   rotate: false
-  xy: 36, 72
+  xy: 36, 91
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-particle-effect-icon
   rotate: false
-  xy: 166, 202
+  xy: 166, 221
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-render-pipeline-icon
   rotate: false
-  xy: 2, 2
+  xy: 2, 21
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-rounded-background
   rotate: false
-  xy: 2, 55
+  xy: 2, 74
   size: 32, 32
   split: 7, 7, 7, 7
   orig: 32, 32
@@ -42,7 +42,7 @@ graph-rounded-background
   index: -1
 graph-rounded-frame
   rotate: false
-  xy: 132, 185
+  xy: 132, 204
   size: 32, 32
   split: 7, 7, 7, 7
   orig: 32, 32
@@ -50,28 +50,42 @@ graph-rounded-frame
   index: -1
 graph-screen-shader-icon
   rotate: false
-  xy: 132, 132
+  xy: 132, 151
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
+graph-slider-knob
+  rotate: false
+  xy: 2, 2
+  size: 9, 17
+  orig: 9, 17
+  offset: 0, 0
+  index: -1
+graph-slider-knob-over
+  rotate: false
+  xy: 132, 132
+  size: 9, 17
+  orig: 9, 17
+  offset: 0, 0
+  index: -1
 graph-tick
   rotate: false
-  xy: 36, 61
+  xy: 36, 80
   size: 9, 9
   orig: 9, 9
   offset: 0, 0
   index: -1
 graph-white
   rotate: false
-  xy: 31, 50
+  xy: 31, 69
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 graph-window
   rotate: false
-  xy: 132, 149
+  xy: 132, 168
   size: 27, 34
   split: 5, 4, 26, 3
   orig: 27, 34
@@ -79,7 +93,7 @@ graph-window
   index: -1
 graph-window-selected
   rotate: false
-  xy: 2, 19
+  xy: 2, 38
   size: 27, 34
   split: 5, 4, 26, 3
   orig: 27, 34

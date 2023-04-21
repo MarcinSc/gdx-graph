@@ -52,7 +52,18 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private SpriteSlotMemoryMesh<RenderableSprite> spriteMesh;
 
     public enum ShaderPreviewModel {
-        Point, SphereSurface, Sphere, Line
+        Point("Point"), SphereSurface("Sphere Surface"), Sphere("Sphere"), Line("Line");
+
+        private String text;
+
+        ShaderPreviewModel(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
     private GraphWithProperties graph;
