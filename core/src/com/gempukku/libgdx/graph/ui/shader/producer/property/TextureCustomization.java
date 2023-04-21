@@ -4,15 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
+import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 
 public class TextureCustomization implements PropertyGraphBoxCustomization {
     @Override
-    public void process(DefaultNodeConfiguration configuration, DefaultGraphNodeEditor result, JsonValue data) {
+    public void process(DefaultNodeConfiguration configuration, GdxGraphNodeEditor result, JsonValue data) {
         ShaderFieldType shaderFieldType = ShaderFieldTypeRegistry.findShaderFieldType(configuration.getType());
         if (shaderFieldType != null && shaderFieldType.isTexture()) {
             Texture.TextureWrap[] wrapValues = new Texture.TextureWrap[]{Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.Repeat, Texture.TextureWrap.MirroredRepeat};

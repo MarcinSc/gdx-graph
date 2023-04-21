@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.ui.graph;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
@@ -52,7 +51,7 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
     }
 
     @Override
-    public GraphNodeEditor createNodeEditor(Skin skin, JsonValue data) {
+    public GraphNodeEditor createNodeEditor(JsonValue data) {
         GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(configuration) {
             @Override
             public void dispose() {
@@ -61,9 +60,9 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
             }
         };
         awareChildren.add(nodeEditor);
-        buildNodeEditorBeforeIO(nodeEditor, skin, configuration);
+        buildNodeEditorBeforeIO(nodeEditor, configuration);
         addConfigurationInputsAndOutputs(nodeEditor);
-        buildNodeEditorAfterIO(nodeEditor, skin, configuration);
+        buildNodeEditorAfterIO(nodeEditor, configuration);
 
         if (data != null)
             nodeEditor.initialize(data);
@@ -71,11 +70,11 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
         return nodeEditor;
     }
 
-    protected void buildNodeEditorBeforeIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorBeforeIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
 
     }
 
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
 
     }
 

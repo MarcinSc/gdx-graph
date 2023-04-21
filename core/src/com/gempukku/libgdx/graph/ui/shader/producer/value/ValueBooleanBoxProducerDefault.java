@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.ui.shader.producer.value;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
@@ -18,10 +17,10 @@ public class ValueBooleanBoxProducerDefault extends ValueGraphBoxProducerDefault
     }
 
     @Override
-    protected DefaultGraphNodeEditorPart createValuePart(Skin skin) {
+    protected DefaultGraphNodeEditorPart createValuePart() {
         boolean v = false;
         HorizontalGroup horizontalGroup = new HorizontalGroup();
-        final VisCheckBox checkBox = new VisCheckBox("Value");
+        final VisCheckBox checkBox = new VisCheckBox("Value", "gdx-graph-property-label");
         checkBox.addListener(
                 new ChangeListener() {
                     @Override

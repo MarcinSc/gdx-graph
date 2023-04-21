@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.screen.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -12,7 +11,7 @@ public class ScreenShaderRendererBoxProducer extends GdxGraphNodeEditorProducer 
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         ScreenShaderBoxPart screenShaderBoxPart = new ScreenShaderBoxPart();
         graphNodeEditor.addGraphBoxPart(screenShaderBoxPart);
     }

@@ -34,7 +34,7 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
         shaderGroup.grow();
 
         VisTable table = new VisTable();
-        table.add("Tag").colspan(5).growX();
+        table.add(new VisLabel("Tag", "gdx-graph-property-label")).colspan(5).growX();
         table.row();
 
         VisScrollPane scrollPane = new VisScrollPane(shaderGroup);
@@ -43,7 +43,7 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
 
         table.add(scrollPane).grow().row();
 
-        final VisTextButton newShader = new VisTextButton("New Shader");
+        final VisTextButton newShader = new VisTextButton("New Shader", "gdx-graph-property-label");
         newShader.addListener(
                 new ChangeListener() {
                     @Override
@@ -214,11 +214,11 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
             this.id = id;
             this.initialShaderJson = initialShaderJson;
             table = new VisTable();
-            textField = new VisTextField(tag);
+            textField = new VisTextField(tag, "gdx-graph-property");
             textField.setMessageText("Shader Tag");
             table.add(textField).growX();
 
-            VisTextButton upButton = new VisTextButton("Up");
+            VisTextButton upButton = new VisTextButton("Up", "gdx-graph-property-label");
             upButton.addListener(
                     new ChangeListener() {
                         @Override
@@ -227,7 +227,7 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
                         }
                     });
             table.add(upButton).width(30);
-            VisTextButton downButton = new VisTextButton("Dn");
+            VisTextButton downButton = new VisTextButton("Dn", "gdx-graph-property-label");
             downButton.addListener(
                     new ChangeListener() {
                         @Override
@@ -237,7 +237,7 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
                     });
             table.add(downButton).width(30);
 
-            final VisTextButton editButton = new VisTextButton("Edit");
+            final VisTextButton editButton = new VisTextButton("Edit", "gdx-graph-property-label");
             editButton.addListener(
                     new ChangeListener() {
                         @Override
@@ -246,7 +246,7 @@ public abstract class ShaderGraphBoxPart extends VisTable implements GraphNodeEd
                         }
                     });
             table.add(editButton).width(EDIT_WIDTH);
-            final VisTextButton deleteButton = new VisTextButton("Remove");
+            final VisTextButton deleteButton = new VisTextButton("Remove", "gdx-graph-property-label");
             deleteButton.addListener(
                     new ChangeListener() {
                         @Override

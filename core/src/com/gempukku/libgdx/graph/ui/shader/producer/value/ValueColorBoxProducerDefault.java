@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -29,7 +28,7 @@ public class ValueColorBoxProducerDefault extends ValueGraphBoxProducerDefault {
     }
 
     @Override
-    protected DefaultGraphNodeEditorPart createValuePart(Skin skin) {
+    protected DefaultGraphNodeEditorPart createValuePart() {
         Color color = Color.valueOf("FFFFFFFF");
 
         final TextureRegionDrawable drawable = new TextureRegionDrawable(WhitePixel.sharedInstance.texture);
@@ -64,7 +63,7 @@ public class ValueColorBoxProducerDefault extends ValueGraphBoxProducerDefault {
 
 
         VisTable table = new VisTable();
-        table.add(new VisLabel("Color")).growX();
+        table.add(new VisLabel("Color", "gdx-graph-property-label")).growX();
         table.add(image);
         table.row();
 

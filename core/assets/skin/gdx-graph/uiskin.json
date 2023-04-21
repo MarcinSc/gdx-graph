@@ -1,8 +1,6 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "gdx-graph-default-font": {
-      "file": "default.fnt"
-    }
+    "gdx-graph-small-font": "small-font"
   },
   "com.badlogic.gdx.graphics.Color": {
     "gdx-graph-white": {
@@ -29,6 +27,12 @@
       "b": 0.8,
       "a": 1
     },
+    "gdx-graph-grey": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5,
+      "a": 1
+    },
     "gdx-graph-blue": {
       "r": 0.3,
       "g": 0.3,
@@ -41,6 +45,72 @@
       "b": 0.3,
       "a": 1
     }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "gdx-graph-io-label": "small",
+    "gdx-graph-property-label": "small",
+    "gdx-graph-section-label": {
+      "font": "small-font",
+      "fontColor": "gdx-graph-grey"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
+    "gdx-graph-property": "small"
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
+    "gdx-graph-property": {
+      "background": "default-select",
+      "scrollStyle": "default",
+      "listStyle": {
+        "font": "small-font",
+        "selection": "padded-list-selection",
+        "background": "select-box-list-bg"
+      },
+      "font": "small-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
+    "gdx-graph-property-label": {
+      "checkBackground": "vis-check",
+      "checkBackgroundOver": "vis-check-over",
+      "checkBackgroundDown": "vis-check-down",
+      "tick": "vis-check-tick",
+      "tickDisabled": "vis-check-tick-disabled",
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "small-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
+    "gdx-graph-property-label": {
+      "focusBorder": "border",
+      "down": "button-down",
+      "up": "button",
+      "over": "button-over",
+      "disabled": "button",
+      "font": "small-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+    "gdx-graph": {
+      "background": "graph-window",
+      "titleFont": "gdx-graph-small-font",
+      "titleFontColor": "gdx-graph-white"
+    },
+    "gdx-graph-selected": {
+      "background": "graph-window-selected",
+      "titleFont": "gdx-graph-small-font",
+      "titleFontColor": "gdx-graph-white"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle": {
+    "gdx-graph-window-close": "assistant-tab-close"
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
     "gdx-graph-white": {
@@ -98,7 +168,7 @@
     "gdx-graph": {
       "background": "gdx-graph-white",
       "gridThickness": 1,
-      "gridColor":  "gdx-graph-light-grey",
+      "gridColor": "gdx-graph-light-grey",
       "pointSize": 3,
       "pointsColor": "gdx-graph-blue",
       "curveThickness": 2,
@@ -124,14 +194,16 @@
   "com.gempukku.libgdx.ui.graph.GraphEditor$GraphEditorStyle": {
     "gdx-graph": {
       "background": "graph-background-tiled",
-      "windowStyle": "noborder",
-      "windowSelectedStyle": "default",
+      "windowStyle": "gdx-graph",
+      "windowSelectedStyle": "gdx-graph-selected",
+      "windowCloseButtonStyle": "gdx-graph-window-close",
+      "windowTitleAlignment": 1,
       "groupBackground": "gdx-graph-group-background",
-      "groupGap": 10,
-      "groupNameFont": "gdx-graph-default-font",
+      "groupGap": 6,
+      "groupNameFont": "gdx-graph-small-font",
       "groupNameColor": "gdx-graph-white",
       "connectorLength": 10,
-      "connectorRadius": 5,
+      "connectorRadius": 4,
       "connectionColor": "gdx-graph-white",
       "connectorColor": "gdx-graph-white",
       "invalidConnectorColor": "gdx-graph-error"

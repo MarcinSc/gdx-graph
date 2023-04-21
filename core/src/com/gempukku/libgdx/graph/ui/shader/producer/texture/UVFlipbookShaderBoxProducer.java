@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.texture;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.shader.config.common.texture.UVFlipbookShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -13,10 +12,10 @@ public class UVFlipbookShaderBoxProducer extends GdxGraphNodeEditorProducer {
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        CheckboxEditorPart invertX = new CheckboxEditorPart("Invert X", "invertX");
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
+        CheckboxEditorPart invertX = new CheckboxEditorPart("Invert X", "invertX", false, "gdx-graph-property-label");
         graphNodeEditor.addGraphBoxPart(invertX);
-        CheckboxEditorPart invertY = new CheckboxEditorPart("Invert Y", "invertY");
+        CheckboxEditorPart invertY = new CheckboxEditorPart("Invert Y", "invertY", false, "gdx-graph-property-label");
         graphNodeEditor.addGraphBoxPart(invertY);
     }
 }

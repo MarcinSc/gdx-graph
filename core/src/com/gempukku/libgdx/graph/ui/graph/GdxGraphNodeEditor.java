@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphChangedAware {
+    private static final String ioLabelStyle = "gdx-graph-io-label";
+
     private NodeConfiguration configuration;
     private VisTable table;
     private List<GraphNodeEditorPart> editorParts = new LinkedList<>();
@@ -60,8 +62,8 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     public void addTwoSideGraphPart(GraphNodeInput graphNodeInput,
                                     GraphNodeOutput graphNodeOutput) {
         VisTable table = new VisTable();
-        table.add(new VisLabel(graphNodeInput.getFieldName())).grow();
-        VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName());
+        table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow();
+        VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName(), ioLabelStyle);
         outputLabel.setAlignment(Align.right);
         table.add(outputLabel).grow();
         table.row();
@@ -74,7 +76,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
 
     public void addInputGraphPart(GraphNodeInput graphNodeInput) {
         VisTable table = new VisTable();
-        table.add(new VisLabel(graphNodeInput.getFieldName())).grow().row();
+        table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow().row();
 
         DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
         graphBoxPart.setInputConnector(GraphNodeEditorInput.Side.Left, graphNodeInput);
@@ -84,7 +86,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     public void addOutputGraphPart(
             GraphNodeOutput graphNodeOutput) {
         VisTable table = new VisTable();
-        VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName());
+        VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName(), ioLabelStyle);
         outputLabel.setAlignment(Align.right);
         table.add(outputLabel).grow().row();
 

@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.screen.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.screen.config.EndScreenShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.screen.design.ScreenShaderPreviewBoxPart;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -16,15 +15,15 @@ public class EndScreenShaderBoxProducer extends GdxGraphNodeEditorProducer {
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         final ScreenShaderPreviewBoxPart previewBoxPart = new ScreenShaderPreviewBoxPart();
 
-        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config"));
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Rendering config", "gdx-graph-section-label", "default"));
 
         BlendingBoxPart blendingBox = new BlendingBoxPart();
         graphNodeEditor.addGraphBoxPart(blendingBox);
 
-        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Preview"));
+        graphNodeEditor.addGraphBoxPart(new SectionEditorPart("Preview", "gdx-graph-section-label", "default"));
 
         graphNodeEditor.addGraphBoxPart(previewBoxPart);
     }

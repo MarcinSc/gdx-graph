@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.callback.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.callback.producer.RenderCallbackPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -13,8 +12,8 @@ public class RenderCallbackBoxProducer extends GdxGraphNodeEditorProducer {
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        StringEditorPart callbackId = new StringEditorPart("Callback id: ", "callbackId");
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
+        StringEditorPart callbackId = new StringEditorPart("Callback id: ", "callbackId", "", "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphBoxPart(callbackId);
     }
 }

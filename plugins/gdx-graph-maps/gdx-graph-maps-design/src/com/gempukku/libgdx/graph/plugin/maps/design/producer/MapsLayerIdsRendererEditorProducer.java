@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.maps.design.producer;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.maps.producer.MapsLayerIdsRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -17,13 +16,13 @@ public class MapsLayerIdsRendererEditorProducer extends GdxGraphNodeEditorProduc
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         graphNodeEditor.addGraphBoxPart(
-                new StringEditorPart("Map Id:", "id"));
+                new StringEditorPart("Map Id:", "id", "", "gdx-graph-property-label", "gdx-graph-property"));
         graphNodeEditor.addGraphBoxPart(
-                new StringEditorPart("Layer ids:", "layers"));
+                new StringEditorPart("Layer ids:", "layers", "", "gdx-graph-property-label", "gdx-graph-property"));
 
-        VisLabel description = new VisLabel("Comma separated list of layer ids");
+        VisLabel description = new VisLabel("Comma separated list of layer ids", "gdx-graph-property-label");
         description.setColor(Color.valueOf("7f7f7fff"));
         GraphNodeEditorPart commentPart = new DefaultGraphNodeEditorPart(description, null);
         graphNodeEditor.addGraphBoxPart(commentPart);

@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.lighting3d.config.EndShadowShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.models.design.producer.ModelShaderPreviewBoxPart;
 import com.gempukku.libgdx.graph.shader.BasicShader;
@@ -19,20 +18,21 @@ public class EndShadowShaderBoxProducer extends GdxGraphNodeEditorProducer {
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         final ModelShaderPreviewBoxPart previewBoxPart = new ModelShaderPreviewBoxPart("preview.modelType");
 
         SelectEditorPart positionType = new SelectEditorPart("Position", "positionType",
-                "Object space", "World space");
+                "gdx-graph-property-label", "gdx-graph-property",
+                new String[] {"Object space", "World space"});
         graphNodeEditor.addGraphBoxPart(positionType);
 
-        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", new ToStringEnum<>(), BasicShader.Culling.values());
+        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.Culling.values());
         graphNodeEditor.addGraphBoxPart(cullingBox);
 
-        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", new ToStringEnum<>(), BasicShader.DepthTesting.values());
+        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.DepthTesting.values());
         graphNodeEditor.addGraphBoxPart(depthTestBox);
 
-        CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite");
+        CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite", false, "gdx-graph-property-label");
         graphNodeEditor.addGraphBoxPart(writeDepthBox);
 
         graphNodeEditor.addGraphBoxPart(previewBoxPart);

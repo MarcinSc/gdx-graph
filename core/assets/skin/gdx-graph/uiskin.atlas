@@ -1,47 +1,40 @@
 
 uiskin.png
-size: 512, 512
+size: 256, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-default
-  rotate: false
-  xy: 2, 183
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
 graph-background
   rotate: false
-  xy: 2, 53
+  xy: 2, 89
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 graph-model-shader-icon
   rotate: false
-  xy: 132, 166
+  xy: 36, 72
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-particle-effect-icon
   rotate: false
-  xy: 260, 390
+  xy: 166, 202
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-render-pipeline-icon
   rotate: false
-  xy: 294, 424
+  xy: 2, 2
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-rounded-background
   rotate: false
-  xy: 260, 407
+  xy: 2, 55
   size: 32, 32
   split: 7, 7, 7, 7
   orig: 32, 32
@@ -49,7 +42,7 @@ graph-rounded-background
   index: -1
 graph-rounded-frame
   rotate: false
-  xy: 2, 19
+  xy: 132, 185
   size: 32, 32
   split: 7, 7, 7, 7
   orig: 32, 32
@@ -57,22 +50,38 @@ graph-rounded-frame
   index: -1
 graph-screen-shader-icon
   rotate: false
-  xy: 2, 2
+  xy: 132, 132
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-tick
   rotate: false
-  xy: 36, 42
+  xy: 36, 61
   size: 9, 9
   orig: 9, 9
   offset: 0, 0
   index: -1
 graph-white
   rotate: false
-  xy: 132, 161
+  xy: 31, 50
   size: 3, 3
   orig: 3, 3
+  offset: 0, 0
+  index: -1
+graph-window
+  rotate: false
+  xy: 132, 149
+  size: 27, 34
+  split: 5, 4, 26, 3
+  orig: 27, 34
+  offset: 0, 0
+  index: -1
+graph-window-selected
+  rotate: false
+  xy: 2, 19
+  size: 27, 34
+  split: 5, 4, 26, 3
+  orig: 27, 34
   offset: 0, 0
   index: -1

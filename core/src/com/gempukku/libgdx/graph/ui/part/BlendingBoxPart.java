@@ -75,10 +75,12 @@ public class BlendingBoxPart extends VisTable implements GraphNodeEditorPart {
     private EnumSelectEditorPart<BasicShader.BlendingFactor> destinationFactorSelect;
 
     public BlendingBoxPart() {
-        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new ToStringEnum<>(), Blending.values());
+        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new ToStringEnum<>(),
+                "gdx-graph-property-label", "gdx-graph-property",
+                Blending.values());
 
-        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<>(), BasicShader.BlendingFactor.values());
-        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<>(), BasicShader.BlendingFactor.values());
+        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.BlendingFactor.values());
+        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.BlendingFactor.values());
 
         this.blendingSelect.addListener(
                 new ChangeListener() {

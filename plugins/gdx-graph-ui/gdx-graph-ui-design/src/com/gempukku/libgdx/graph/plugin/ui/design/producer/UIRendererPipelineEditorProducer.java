@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.ui.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.ui.UIRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -13,8 +12,8 @@ public class UIRendererPipelineEditorProducer extends GdxGraphNodeEditorProducer
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         graphNodeEditor.addGraphBoxPart(
-                new StringEditorPart("Stage Id:", "id"));
+                new StringEditorPart("Stage Id:", "id", "", "gdx-graph-property-label", "gdx-graph-property"));
     }
 }

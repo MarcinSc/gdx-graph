@@ -54,6 +54,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         pipelineProperties = createPropertiesUI(skin);
         this.skin = skin;
 
+
         graphEditor = new GraphEditor(graph,
                 new Function<String, GraphNodeEditorProducer>() {
                     @Override
@@ -77,8 +78,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                     public PopupMenu createPopupMenu(float x, float y) {
                         return createGraphPopupMenu(x, y);
                     }
-                }, skin, "gdx-graph");
-
+                }, "gdx-graph");
         this.compositeGraphWithProperties = new CompositeGraphWithProperties(graphEditor.getGraph(), propertyBoxes);
 
         this.addListener(

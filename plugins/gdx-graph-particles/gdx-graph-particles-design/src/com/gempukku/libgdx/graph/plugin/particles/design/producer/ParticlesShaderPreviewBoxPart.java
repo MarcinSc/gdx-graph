@@ -36,26 +36,26 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         this.perSecondProperty = perSecondProperty;
         this.previewModelProperty = previewModelProperty;
 
-        selectBox = new VisSelectBox<>();
+        selectBox = new VisSelectBox<>("gdx-graph-property");
         selectBox.setItems(ParticlesShaderPreviewWidget.ShaderPreviewModel.values());
 
-        VisLabel lifetimeText = new VisLabel("Lifetime: 3.00");
+        VisLabel lifetimeText = new VisLabel("Lifetime: 3.00", "gdx-graph-property-label");
         lifetime = new VisSlider(0f, 10f, 0.01f, false);
         lifetime.setValue(3f);
 
-        VisLabel initialCountText = new VisLabel("Initial count: 0");
+        VisLabel initialCountText = new VisLabel("Initial count: 0", "gdx-graph-property-label");
         initialCount = new VisSlider(0f, 100f, 1f, false);
         initialCount.setValue(0f);
 
-        VisLabel perSecondCountText = new VisLabel("Per second count: 10");
+        VisLabel perSecondCountText = new VisLabel("Per second count: 10", "gdx-graph-property-label");
         perSecondCount = new VisSlider(0, 100f, 0.1f, false);
         perSecondCount.setValue(10f);
 
-        VisLabel cameraDistanceText = new VisLabel("Camera distance: 1");
+        VisLabel cameraDistanceText = new VisLabel("Camera distance: 1", "gdx-graph-property-label");
         cameraDistance = new VisSlider(0.5f, 10f, 0.01f, false);
         cameraDistance.setValue(1f);
 
-        final VisTextButton resetButton = new VisTextButton("Reset particles");
+        final VisTextButton resetButton = new VisTextButton("Reset particles","gdx-graph-property-label");
         resetButton.padLeft(10).padRight(10);
 
         shaderPreviewWidget = new ParticlesShaderPreviewWidget(300, 300);
@@ -112,7 +112,7 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
                     }
                 });
 
-        add("Shape: ");
+        add(new VisLabel("Shape: ", "gdx-graph-property-label"));
         add(selectBox).growX().row();
         add(lifetimeText).colspan(2).growX().row();
         add(lifetime).colspan(2).growX().row();

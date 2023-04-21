@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.provided;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.shader.config.common.provided.TimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -13,8 +12,8 @@ public class TimeShaderBoxProducerDefault extends GdxGraphNodeEditorProducer {
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        FloatEditorPart multiplierPart = new FloatEditorPart("Multiplier", "multiplier", 1f, null);
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
+        FloatEditorPart multiplierPart = new FloatEditorPart("Multiplier", "multiplier", 1f, null, "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphBoxPart(multiplierPart);
     }
 }

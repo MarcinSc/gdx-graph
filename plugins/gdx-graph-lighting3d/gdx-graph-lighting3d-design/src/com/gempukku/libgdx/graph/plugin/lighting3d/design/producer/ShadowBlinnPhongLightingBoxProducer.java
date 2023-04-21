@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ShadowBlinnPhongLightingShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -13,8 +12,8 @@ public class ShadowBlinnPhongLightingBoxProducer extends GdxGraphNodeEditorProdu
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
-        StringEditorPart envId = new StringEditorPart("Env id: ", "id");
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
+        StringEditorPart envId = new StringEditorPart("Env id: ", "id", "", "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphBoxPart(envId);
     }
 }

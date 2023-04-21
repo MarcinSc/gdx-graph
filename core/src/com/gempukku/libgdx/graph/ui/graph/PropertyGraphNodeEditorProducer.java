@@ -1,13 +1,11 @@
 package com.gempukku.libgdx.graph.ui.graph;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
 import com.gempukku.libgdx.graph.ui.producer.ValueGraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
-import com.gempukku.libgdx.ui.graph.editor.DefaultGraphNodeEditor;
 
 
 public class PropertyGraphNodeEditorProducer implements MenuGraphNodeEditorProducer {
@@ -43,10 +41,10 @@ public class PropertyGraphNodeEditorProducer implements MenuGraphNodeEditorProdu
     }
 
     @Override
-    public DefaultGraphNodeEditor createNodeEditor(Skin skin, JsonValue data) {
+    public GdxGraphNodeEditor createNodeEditor(JsonValue data) {
         final String name = data.getString("name");
         final String propertyType = data.getString("type");
-        DefaultGraphNodeEditor result = new DefaultGraphNodeEditor(new PropertyNodeConfiguration(name, propertyType)) {
+        GdxGraphNodeEditor result = new GdxGraphNodeEditor(new PropertyNodeConfiguration(name, propertyType)) {
             @Override
             public JsonValue getData() {
                 JsonValue result = super.getData();

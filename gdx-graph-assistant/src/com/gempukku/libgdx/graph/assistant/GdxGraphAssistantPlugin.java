@@ -2,7 +2,7 @@ package com.gempukku.libgdx.graph.assistant;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.ui.ExtensionSkin;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
@@ -29,7 +29,7 @@ import com.gempukku.libgdx.ui.input.KeyCombination;
 
 public class GdxGraphAssistantPlugin implements AssistantPlugin {
     private AssistantApplication assistantApplication;
-    private ExtensionSkin gdxGraphSkin;
+    private TextureAtlas gdxGraphTextureAtlas;
 
     @Override
     public String getId() {
@@ -57,8 +57,9 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
         Skin skin = assistantApplication.getApplicationSkin();
 
-        gdxGraphSkin = new ExtensionSkin(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
-        gdxGraphSkin.mergeInto(skin);
+        gdxGraphTextureAtlas = new TextureAtlas(Gdx.files.internal("skin/gdx-graph/uiskin.atlas"));
+        skin.addRegions(gdxGraphTextureAtlas);
+        skin.load(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
 
         WhitePixel.initializeShared();
         PatternTextures.initializeShared();
@@ -102,7 +103,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public void deregisterPlugin() {
-        gdxGraphSkin.dispose();
+        gdxGraphTextureAtlas.dispose();
         WhitePixel.disposeShared();
         PatternTextures.disposeShared();
     }

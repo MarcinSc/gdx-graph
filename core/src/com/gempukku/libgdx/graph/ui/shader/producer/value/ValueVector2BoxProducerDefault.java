@@ -1,15 +1,10 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.value;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
-import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 
@@ -20,39 +15,9 @@ public class ValueVector2BoxProducerDefault extends ValueGraphBoxProducerDefault
     }
 
     @Override
-    protected DefaultGraphNodeEditorPart createValuePart(Skin skin) {
-        float v1 = 0;
-        float v2 = 0;
-
-        final VisValidatableTextField v1Input = new VisValidatableTextField(Validators.FLOATS) {
-            @Override
-            public float getPrefWidth() {
-                return 50;
-            }
-        };
-        v1Input.setText(String.valueOf(v1));
-        v1Input.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        v1Input.fire(new GraphChangedEvent(false, true));
-                    }
-                });
-
-        final VisValidatableTextField v2Input = new VisValidatableTextField(Validators.FLOATS) {
-            @Override
-            public float getPrefWidth() {
-                return 50;
-            }
-        };
-        v2Input.setText(String.valueOf(v2));
-        v2Input.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        v2Input.fire(new GraphChangedEvent(false, true));
-                    }
-                });
+    protected DefaultGraphNodeEditorPart createValuePart() {
+        final VisValidatableTextField v1Input = ValueVectorCreator.createValueInput(0);
+        final VisValidatableTextField v2Input = ValueVectorCreator.createValueInput(0);
 
         HorizontalGroup horizontalGroup = new HorizontalGroup();
         horizontalGroup.addActor(new VisLabel("x"));

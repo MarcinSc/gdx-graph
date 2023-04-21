@@ -10,6 +10,7 @@ import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
@@ -21,7 +22,7 @@ public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEdit
     public ModelShaderPreviewBoxPart(String modelTypeProperty) {
         this.modelTypeProperty = modelTypeProperty;
         shaderPreviewWidget = new ModelShaderPreviewWidget(300, 300);
-        selectBox = new VisSelectBox<>();
+        selectBox = new VisSelectBox<>("gdx-graph-property");
         selectBox.setItems(ModelShaderPreviewWidget.ShaderPreviewModel.values());
 
         selectBox.addListener(
@@ -32,7 +33,7 @@ public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEdit
                     }
                 });
 
-        add("Preview model: ");
+        add(new VisLabel("Preview model: ", "gdx-graph-property-label"));
         add(selectBox).growX().row();
         add(shaderPreviewWidget).colspan(2).grow().row();
     }

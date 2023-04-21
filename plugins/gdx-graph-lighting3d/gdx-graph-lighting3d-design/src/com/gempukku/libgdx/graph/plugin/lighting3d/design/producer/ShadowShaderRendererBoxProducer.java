@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ShadowShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -16,12 +15,12 @@ public class ShadowShaderRendererBoxProducer extends GdxGraphNodeEditorProducer 
     }
 
     @Override
-    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, Skin skin, NodeConfiguration configuration) {
+    protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         EnumSelectEditorPart<RenderOrder> renderOrderSelect = new EnumSelectEditorPart<>("Render order", "renderOrder",
-                new ToStringEnum<>(), RenderOrder.values());
+                new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", RenderOrder.values());
         graphNodeEditor.addGraphBoxPart(renderOrderSelect);
 
-        StringEditorPart envId = new StringEditorPart("Env id: ", "id");
+        StringEditorPart envId = new StringEditorPart("Env id: ", "id", "", "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphBoxPart(envId);
 
         ShadowShadersBoxPart graphBoxPart = new ShadowShadersBoxPart();
