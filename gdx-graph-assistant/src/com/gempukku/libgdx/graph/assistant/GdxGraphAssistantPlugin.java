@@ -87,6 +87,9 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
         menuManager.addMenuItem("Graph", null, "Create group", new KeyCombination(true, false, false, Input.Keys.G), null);
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
+
+        menuManager.addMenuItem("Graph", null, "View shader text", new KeyCombination(true, true, false, Input.Keys.V), null);
+        menuManager.setMenuItemDisabled("Graph", null, "View shader text", true);
     }
 
     private static void registerGdxPlugins() {

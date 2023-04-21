@@ -15,9 +15,15 @@ import com.gempukku.libgdx.graph.assistant.data.GdxGraphProjectData;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
+import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
+import com.gempukku.libgdx.graph.shader.ShaderGraphType;
+import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
+import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
+import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
@@ -127,6 +133,29 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                                     }
                                 });
                         application.addWindow(inputDialog.fadeIn());
+                    }
+                });
+
+        menuManager.updateMenuItemListener("Graph", null, "View shader text",
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        GraphTab activeTab = getActiveTab();
+                        GraphWithProperties graph = activeTab.getGraph();
+
+                        String type = graph.getType();
+                        GraphValidator graphValidator = GraphTypeRegistry.findGraphType(type).getGraphValidator();
+                        GraphValidationResult graphValidationResult = graphValidator.validateGraph(graph);
+                        if (graphValidationResult.hasErrors()) {
+                            Dialogs.DetailsDialog errorDialog = new Dialogs.DetailsDialog("Graph has errors, can't generate source code", "Error", null);
+                            errorDialog.setModal(true);
+                            application.addWindow(errorDialog.fadeIn());
+                        } else {
+                            GraphShader graphShader = GraphShaderBuilder.buildShader(graph);
+                            ShaderCodeWindow shaderCodeWindow = new ShaderCodeWindow(graphShader);
+                            shaderCodeWindow.setCenterOnAdd(true);
+                            application.addWindow(shaderCodeWindow.fadeIn());
+                        }
                     }
                 });
 
@@ -316,6 +345,9 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         GraphTab activeTab = getActiveTab();
         boolean groupNodesEnabled = activeTab != null && activeTab.canGroupNodes();
         menuManager.setMenuItemDisabled("Graph", null, "Create group", !groupNodesEnabled);
+
+        boolean canViewShader = activeTab != null && (GraphTypeRegistry.findGraphType(activeTab.getGraph().getType()) instanceof ShaderGraphType);
+        menuManager.setMenuItemDisabled("Graph", null, "View shader text", !canViewShader);
     }
 
     private GraphTab getActiveTab() {
@@ -378,5 +410,33 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
         menuManager.clearPopupMenuContents("Graph", null, "Import");
         menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
+        menuManager.setMenuItemDisabled("Graph", null, "View shader text", true);
+    }
+
+    private static class DummyUniformRegistry implements UniformRegistry {
+        @Override
+        public void registerAttribute(String alias, int componentCount) {
+
+        }
+
+        @Override
+        public void registerGlobalUniform(String alias, UniformSetter setter) {
+
+        }
+
+        @Override
+        public void registerLocalUniform(String alias, UniformSetter setter) {
+
+        }
+
+        @Override
+        public void registerGlobalStructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
+
+        }
+
+        @Override
+        public void registerLocalStructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
+
+        }
     }
 }

@@ -17,14 +17,25 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
     private final PropertyToLocationMapping propertyToLocationMapping = new PropertyToLocationMapping();
     private final Array<Disposable> disposableList = new Array<>();
     protected ObjectMap<String, ShaderPropertySource> propertySourceMap = new ObjectMap<>();
+    private String vertexShaderProgram;
+    private String fragmentShaderProgram;
     private ShaderProgram shaderProgram;
 
     public GraphShader(String tag, Texture defaultTexture) {
         super(tag, defaultTexture);
     }
 
-    public void setProgram(ShaderProgram shaderProgram) {
-        this.shaderProgram = shaderProgram;
+    public void setProgram(String vertexShaderProgram, String fragmentShaderProgram) {
+        this.vertexShaderProgram = vertexShaderProgram;
+        this.fragmentShaderProgram = fragmentShaderProgram;
+    }
+
+    public String getVertexShaderProgram() {
+        return vertexShaderProgram;
+    }
+
+    public String getFragmentShaderProgram() {
+        return fragmentShaderProgram;
     }
 
     public ShaderProgram getShaderProgram() {
@@ -40,6 +51,7 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
     }
 
     public void init() {
+        shaderProgram = new ShaderProgram(vertexShaderProgram, fragmentShaderProgram);
         init(shaderProgram);
     }
 
