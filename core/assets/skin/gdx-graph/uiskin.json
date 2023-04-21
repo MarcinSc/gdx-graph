@@ -1,6 +1,9 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "gdx-graph-small-font": "small-font"
+    "gdx-graph-small-font": "small-font",
+    "gdx-graph-code": {
+      "file": "Consolas.fnt"
+    }
   },
   "com.badlogic.gdx.graphics.Color": {
     "gdx-graph-white": {
@@ -55,7 +58,18 @@
     }
   },
   "com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle": {
-    "gdx-graph-property": "small"
+    "gdx-graph-property": "small",
+    "gdx-graph-code": {
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "gdx-graph-code",
+      "fontColor": "white",
+      "disabledFontColor": "grey",
+      "selection": "selection",
+      "background": "textfield",
+      "backgroundOver": "textfield-over",
+      "cursor": "cursor"
+    }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
     "gdx-graph-property": {

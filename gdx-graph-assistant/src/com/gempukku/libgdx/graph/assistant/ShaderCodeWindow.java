@@ -19,11 +19,11 @@ public class ShaderCodeWindow extends VisWindow {
         GTabbedPane<SimpleTab> tabbedPane = new GTabbedPane<>();
 
         VisTable vertexShader = new VisTable();
-        ScrollableTextArea vertexTextArea = new ScrollableTextArea(graphShader.getVertexShaderProgram());
+        ScrollableTextArea vertexTextArea = new ScrollableTextArea(graphShader.getVertexShaderProgram(), "gdx-graph-code");
         vertexShader.add(new VisScrollPane(vertexTextArea)).grow();
 
         VisTable fragmentShader = new VisTable();
-        ScrollableTextArea fragmentTextArea = new ScrollableTextArea(graphShader.getFragmentShaderProgram());
+        ScrollableTextArea fragmentTextArea = new ScrollableTextArea(graphShader.getFragmentShaderProgram(), "gdx-graph-code");
         fragmentShader.add(new VisScrollPane(fragmentTextArea)).grow();
 
         tabbedPane.addTab(new SimpleTab(tabbedPane, "Vertex shader", vertexShader));
