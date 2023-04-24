@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
@@ -20,6 +21,7 @@ import com.gempukku.libgdx.ui.DisposableWidget;
 public class GraphShaderRenderingWidget extends DisposableWidget {
     private final DefaultShaderContext shaderContext;
     private final StateOpenGLContext renderContext;
+    private ObjectMap<Class<?>, Object> privatePluginData = new ObjectMap<>();
 
     private boolean initialized;
     private FrameBuffer frameBuffer;
@@ -28,9 +30,19 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
     private GraphShader graphShader;
     private RenderableModel renderableModel;
 
-    public GraphShaderRenderingWidget(PluginPrivateDataSource pluginPrivateDataSource) {
-        shaderContext = new DefaultShaderContext(pluginPrivateDataSource);
+    public GraphShaderRenderingWidget() {
+        shaderContext = new DefaultShaderContext(
+                new PluginPrivateDataSource() {
+                    @Override
+                    public <T> T getPrivatePluginData(Class<T> clazz) {
+                        return (T) privatePluginData.get(clazz);
+                    }
+                });
         renderContext = new StateOpenGLContext();
+    }
+
+    public <T> void addPrivatePluginData(Class<T> clazz, T data) {
+        privatePluginData.put(clazz, data);
     }
 
     public void setColorTexture(Texture texture) {
@@ -84,10 +96,15 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
                     frameBuffer.dispose();
                 }
                 frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
+
                 shaderContext.setRenderWidth(width);
                 shaderContext.setRenderHeight(height);
+
+                camera.viewportWidth = width;
+                camera.viewportHeight = height;
+                camera.update();
             }
-            drawToOffscreen(width, height);
+            drawToOffscreen();
         }
     }
 
@@ -95,18 +112,16 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
         return frameBuffer == null || frameBuffer.getWidth() != width || frameBuffer.getHeight() != height;
     }
 
-    private void drawToOffscreen(int width, int height) {
+    private void drawToOffscreen() {
         frameBuffer.begin();
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
-
         renderContext.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        graphShader.begin(shaderContext, renderContext);
-        graphShader.render(shaderContext, renderableModel);
-        graphShader.end();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | GL20.GL_STENCIL_BUFFER_BIT);
+        if (graphShader != null && renderableModel != null) {
+            graphShader.begin(shaderContext, renderContext);
+            graphShader.render(shaderContext, renderableModel);
+            graphShader.end();
+        }
         renderContext.end();
         frameBuffer.end();
     }

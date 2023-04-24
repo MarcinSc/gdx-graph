@@ -15,12 +15,12 @@ import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.*;
 
 public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, GraphChangedAware, Disposable {
-    private final ParticlesShaderPreviewWidget shaderPreviewWidget;
+    private final ParticlesShaderPreview shaderPreviewWidget;
     private final VisSlider cameraDistance;
     private final VisSlider lifetime;
     private final VisSlider initialCount;
     private final VisSlider perSecondCount;
-    private final VisSelectBox<ParticlesShaderPreviewWidget.ShaderPreviewModel> selectBox;
+    private final VisSelectBox<ParticlesShaderPreview.ShaderPreviewModel> selectBox;
     private final String cameraDistanceProperty;
     private final String lifetimeProperty;
     private final String initialCountProperty;
@@ -37,7 +37,7 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         this.previewModelProperty = previewModelProperty;
 
         selectBox = new VisSelectBox<>("gdx-graph-property");
-        selectBox.setItems(ParticlesShaderPreviewWidget.ShaderPreviewModel.values());
+        selectBox.setItems(ParticlesShaderPreview.ShaderPreviewModel.values());
 
         VisLabel lifetimeText = new VisLabel("Lifetime: 3.00", "gdx-graph-property-label");
         lifetime = new VisSlider(0f, 10f, 0.01f, false, "gdx-graph");
@@ -58,8 +58,8 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         final VisTextButton resetButton = new VisTextButton("Reset particles","gdx-graph-property-label");
         resetButton.padLeft(10).padRight(10);
 
-        shaderPreviewWidget = new ParticlesShaderPreviewWidget(300, 300);
-        shaderPreviewWidget.setModel(ParticlesShaderPreviewWidget.ShaderPreviewModel.Point);
+        shaderPreviewWidget = new ParticlesShaderPreview(300, 300);
+        shaderPreviewWidget.setModel(ParticlesShaderPreview.ShaderPreviewModel.Point);
         shaderPreviewWidget.setCameraDistance(1f);
         shaderPreviewWidget.setLifetime(3f);
         shaderPreviewWidget.setInitialCount(0);
@@ -145,7 +145,7 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         }
         String previewModel = data.getString(previewModelProperty, null);
         if (previewModel != null) {
-            this.selectBox.setSelected(ParticlesShaderPreviewWidget.ShaderPreviewModel.valueOf(previewModel));
+            this.selectBox.setSelected(ParticlesShaderPreview.ShaderPreviewModel.valueOf(previewModel));
         }
     }
 
