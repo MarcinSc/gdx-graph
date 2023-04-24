@@ -116,12 +116,12 @@ public class ParticlesShaderPreviewBoxPart extends VisTable implements GraphNode
         add(selectBox).growX().row();
         add(lifetimeText).colspan(2).growX().row();
         add(lifetime).colspan(2).growX().row();
+        add(cameraDistanceText).colspan(2).growX().row();
+        add(cameraDistance).colspan(2).growX().row();
         add(initialCountText).colspan(2).growX().row();
         add(initialCount).colspan(2).growX().row();
         add(perSecondCountText).colspan(2).growX().row();
         add(perSecondCount).colspan(2).growX().row();
-        add(cameraDistanceText).colspan(2).growX().row();
-        add(cameraDistance).colspan(2).growX().row();
         add(resetButton).colspan(2).center().pad(2).row();
         add(shaderPreviewWidget).colspan(2).grow().row();
     }
