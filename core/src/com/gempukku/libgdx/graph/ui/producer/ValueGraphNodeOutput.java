@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.ui.producer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 
 public class ValueGraphNodeOutput implements GraphNodeOutput {
     private String fieldName;
@@ -14,8 +15,8 @@ public class ValueGraphNodeOutput implements GraphNodeOutput {
     }
 
     @Override
-    public boolean isMainConnection() {
-        return false;
+    public GraphNodeOutputSide getSide() {
+        return GraphNodeOutputSide.Right;
     }
 
     @Override
@@ -29,14 +30,14 @@ public class ValueGraphNodeOutput implements GraphNodeOutput {
     }
 
     @Override
-    public Array<String> getProducableFieldTypes() {
+    public Array<String> getConnectableFieldTypes() {
         Array<String> result = new Array<>();
         result.add(fieldType);
         return result;
     }
 
     @Override
-    public boolean supportsMultiple() {
+    public boolean acceptsMultipleConnections() {
         return true;
     }
 

@@ -7,9 +7,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.*;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
@@ -41,7 +39,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     }
 
     public void addTopConnector(GraphNodeInput graphNodeInput) {
-        inputConnectors.put(graphNodeInput.getFieldId(), new DefaultGraphNodeEditorInput(GraphNodeEditorInput.Side.Top, new Supplier<Float>() {
+        inputConnectors.put(graphNodeInput.getFieldId(), new DefaultGraphNodeEditorInput(GraphNodeInputSide.Top, new Supplier<Float>() {
             @Override
             public Float get() {
                 return table.getWidth() / 2f;
@@ -50,7 +48,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     }
 
     public void addBottomConnector(GraphNodeOutput graphNodeOutput) {
-        outputConnectors.put(graphNodeOutput.getFieldId(), new DefaultGraphNodeEditorOutput(GraphNodeEditorOutput.Side.Bottom,
+        outputConnectors.put(graphNodeOutput.getFieldId(), new DefaultGraphNodeEditorOutput(GraphNodeOutputSide.Bottom,
                 new Supplier<Float>() {
                     @Override
                     public Float get() {
@@ -69,8 +67,8 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         table.row();
 
         DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setInputConnector(GraphNodeEditorInput.Side.Left, graphNodeInput);
-        graphBoxPart.setOutputConnector(GraphNodeEditorOutput.Side.Right, graphNodeOutput);
+        graphBoxPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
+        graphBoxPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
         addGraphBoxPart(graphBoxPart);
     }
 
@@ -79,7 +77,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow().row();
 
         DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setInputConnector(GraphNodeEditorInput.Side.Left, graphNodeInput);
+        graphBoxPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
         addGraphBoxPart(graphBoxPart);
     }
 
@@ -91,7 +89,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         table.add(outputLabel).grow().row();
 
         DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setOutputConnector(GraphNodeEditorOutput.Side.Right, graphNodeOutput);
+        graphBoxPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
         addGraphBoxPart(graphBoxPart);
     }
 

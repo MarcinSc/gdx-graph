@@ -300,7 +300,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         GraphWithProperties graph = getGraph();
 
         GraphValidator graphValidator = type.getGraphValidator();
-        GraphValidationResult validationResult = graphValidator.validateGraph(graph);
+        GraphValidationResult validationResult = graphValidator.validateGraph(graph, type.getStartNodeIdForValidation());
         graphEditor.setValidationResult(validationResult);
         if (validationResult.hasErrors()) {
             validationLabel.setColor(Color.RED);

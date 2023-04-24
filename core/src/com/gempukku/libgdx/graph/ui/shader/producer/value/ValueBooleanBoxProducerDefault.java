@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 
@@ -44,7 +44,7 @@ public class ValueBooleanBoxProducerDefault extends ValueGraphBoxProducerDefault
                     checkBox.setChecked(data != null && data.getBoolean("v", false));
             }
         };
-        colorPart.setOutputConnector(GraphNodeEditorOutput.Side.Right, configuration.getNodeOutputs().get("value"));
+        colorPart.setOutputConnector(GraphNodeOutputSide.Right, configuration.getNodeOutputs().get("value"));
         return colorPart;
     }
 }

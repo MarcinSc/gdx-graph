@@ -142,8 +142,9 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                         GraphWithProperties graph = activeTab.getGraph();
 
                         String type = graph.getType();
-                        GraphValidator graphValidator = GraphTypeRegistry.findGraphType(type).getGraphValidator();
-                        GraphValidationResult graphValidationResult = graphValidator.validateGraph(graph);
+                        GraphType graphType = GraphTypeRegistry.findGraphType(type);
+                        GraphValidator graphValidator = graphType.getGraphValidator();
+                        GraphValidationResult graphValidationResult = graphValidator.validateGraph(graph, graphType.getStartNodeIdForValidation());
                         if (graphValidationResult.hasErrors()) {
                             Dialogs.DetailsDialog errorDialog = new Dialogs.DetailsDialog("Graph has errors, can't generate source code", "Error", null);
                             errorDialog.setModal(true);

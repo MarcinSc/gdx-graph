@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -74,7 +74,7 @@ public class ValueColorBoxProducerDefault extends ValueGraphBoxProducerDefault {
                         object.addChild("color", new JsonValue(image.getColor().toString()));
                     }
                 }, picker, image);
-        colorPart.setOutputConnector(GraphNodeEditorOutput.Side.Right, configuration.getNodeOutputs().get("value"));
+        colorPart.setOutputConnector(GraphNodeOutputSide.Right, configuration.getNodeOutputs().get("value"));
         return colorPart;
     }
 

@@ -396,8 +396,6 @@ public class GraphShaderBuilder {
                     fieldTypes.add(fieldType.getName());
                     fieldOutputs.add(fieldOutput);
                 }
-                if (!acceptsInputTypes(nodeInput.getAcceptedPropertyTypes(), fieldTypes))
-                    throw new IllegalStateException("Producer produces a field of value not compatible with consumer");
                 inputFields.put(fieldId, fieldOutputs);
             }
             ObjectSet<String> requiredOutputs = findRequiredOutputs(graph, nodeId);

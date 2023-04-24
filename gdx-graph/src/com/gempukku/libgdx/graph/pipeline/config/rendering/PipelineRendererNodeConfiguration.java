@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.pipeline.config.rendering;
 
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeInputSide;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
@@ -17,8 +19,8 @@ public class PipelineRendererNodeConfiguration extends DefaultMenuNodeConfigurat
         addNodeInput(
                 new DefaultGraphNodeInput("size", "Size", false, Vector2));
         addNodeInput(
-                new DefaultGraphNodeInput("input", "Input", true, true, RenderPipeline));
+                new DefaultGraphNodeInput("input", "Input", true, GraphNodeInputSide.Top, RenderPipeline));
         addNodeOutput(
-                new DefaultGraphNodeOutput("output", "Output", true, RenderPipeline));
+                new DefaultGraphNodeOutput("output", "Output", GraphNodeOutputSide.Bottom, RenderPipeline));
     }
 }

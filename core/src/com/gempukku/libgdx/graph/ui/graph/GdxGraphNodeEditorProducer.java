@@ -5,9 +5,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 
 import java.util.Iterator;
@@ -86,7 +84,7 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
             GraphNodeOutput output = null;
             while (inputIterator.hasNext()) {
                 input = inputIterator.next();
-                if (input.isMainConnection()) {
+                if (input.getSide() == GraphNodeInputSide.Top) {
                     nodeEditor.addTopConnector(input);
                     input = null;
                 } else {
@@ -95,7 +93,7 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
             }
             while (outputIterator.hasNext()) {
                 output = outputIterator.next();
-                if (output.isMainConnection()) {
+                if (output.getSide() == GraphNodeOutputSide.Bottom) {
                     nodeEditor.addBottomConnector(output);
                     output = null;
                 } else {

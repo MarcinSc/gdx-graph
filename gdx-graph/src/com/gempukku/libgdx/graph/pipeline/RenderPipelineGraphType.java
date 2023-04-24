@@ -26,9 +26,11 @@ public class RenderPipelineGraphType implements GraphType {
                     }
                 };
 
-        DAGValidatorWithEndNode dagValidator = new DAGValidatorWithEndNode("end");
+        DAGValidatorWithEndNode dagValidator = new DAGValidatorWithEndNode();
         SumGraphValidator sumValidator = new SumGraphValidator(
-                new RequiredInputsValidator(nodeConfigurationResolver), new FieldTypeValidator(nodeConfigurationResolver));
+                new RequiredInputsValidator(nodeConfigurationResolver),
+                new MultipleConnectionsValidator(nodeConfigurationResolver),
+                new FieldTypeValidator(nodeConfigurationResolver));
         SerialGraphValidator validator = new SerialGraphValidator(dagValidator, sumValidator);
         graphValidator = validator;
     }
@@ -36,6 +38,11 @@ public class RenderPipelineGraphType implements GraphType {
     @Override
     public String getType() {
         return TYPE;
+    }
+
+    @Override
+    public String getStartNodeIdForValidation() {
+        return "end";
     }
 
     @Override

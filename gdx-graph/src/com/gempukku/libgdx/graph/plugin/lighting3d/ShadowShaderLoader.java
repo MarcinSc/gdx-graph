@@ -16,7 +16,7 @@ public class ShadowShaderLoader {
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
 
-        if (graphType.getGraphValidator().validateGraph(graph).hasErrors())
+        if (graphType.getGraphValidator().validateGraph(graph, graphType.getStartNodeIdForValidation()).hasErrors())
             throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
         return GraphShaderBuilder.buildModelDepthShader(tag, defaultTexture, graph, false);
