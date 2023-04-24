@@ -12,7 +12,7 @@ import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
@@ -29,7 +29,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final ShaderContextImpl shaderContext = new ShaderContextImpl(pluginPrivateDataSource);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pluginPrivateDataSource);
 
         final Array<GraphShader> shaderArray = new Array<>();
 

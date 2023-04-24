@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.models.ModelShaderLoader;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
@@ -37,7 +37,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final ShaderContextImpl shaderContext = new ShaderContextImpl(pluginPrivateDataSource);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pluginPrivateDataSource);
 
         final ObjectMap<String, ShaderGroup> shaderGroups = new ObjectMap<>();
 
@@ -273,14 +273,14 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {
-        private final ShaderContextImpl shaderContext;
+        private final DefaultShaderContext shaderContext;
         private final Function<String, GraphShader> shaderResolver;
 
         private GraphModelsImpl graphModels;
         private PipelineRenderingContext context;
         private GraphShader runningShader = null;
 
-        public RenderingStrategyCallback(ShaderContextImpl shaderContext, Function<String, GraphShader> shaderResolver) {
+        public RenderingStrategyCallback(DefaultShaderContext shaderContext, Function<String, GraphShader> shaderResolver) {
             this.shaderContext = shaderContext;
             this.shaderResolver = shaderResolver;
         }

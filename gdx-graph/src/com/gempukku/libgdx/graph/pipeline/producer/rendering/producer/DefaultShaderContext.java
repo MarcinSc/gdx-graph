@@ -7,7 +7,7 @@ import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
-public class ShaderContextImpl implements ShaderContext {
+public class DefaultShaderContext implements ShaderContext {
     private int renderWidth;
     private int renderHeight;
     private RenderableModel renderableModel;
@@ -21,7 +21,7 @@ public class ShaderContextImpl implements ShaderContext {
 
     private final PluginPrivateDataSource pluginPrivateDataSource;
 
-    public ShaderContextImpl(PluginPrivateDataSource pluginPrivateDataSource) {
+    public DefaultShaderContext(PluginPrivateDataSource pluginPrivateDataSource) {
         this.pluginPrivateDataSource = pluginPrivateDataSource;
     }
 

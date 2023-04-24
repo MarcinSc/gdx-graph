@@ -17,8 +17,8 @@ import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
@@ -83,7 +83,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
     private Camera camera;
     private final DefaultTimeKeeper timeKeeper;
     private Lighting3DEnvironment graphShaderEnvironment;
-    private ShaderContextImpl shaderContext;
+    private DefaultShaderContext shaderContext;
 
     private final MapWritablePropertyContainer localPropertyContainer;
 
@@ -119,7 +119,7 @@ public class ParticlesShaderPreviewWidget extends Widget implements Disposable {
             }
         };
 
-        shaderContext = new ShaderContextImpl(dataSource);
+        shaderContext = new DefaultShaderContext(dataSource);
         shaderContext.setCamera(camera);
         shaderContext.setRenderWidth(width);
         shaderContext.setRenderHeight(height);

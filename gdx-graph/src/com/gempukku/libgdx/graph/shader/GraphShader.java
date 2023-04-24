@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.IntMapping;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.field.ArrayShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -73,7 +73,7 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
         disposableList.add(disposable);
     }
 
-    public void render(ShaderContextImpl shaderContext, RenderableModel renderableModel) {
+    public void render(DefaultShaderContext shaderContext, RenderableModel renderableModel) {
         renderableModel.prepareToRender(shaderContext);
 
         shaderContext.setRenderableModel(renderableModel);
