@@ -34,7 +34,7 @@ graph-particle-effect-icon
   index: -1
 graph-render-pipeline-icon
   rotate: false
-  xy: 166, 200
+  xy: 166, 204
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
@@ -64,7 +64,7 @@ graph-screen-shader-icon
   index: -1
 graph-slider-knob
   rotate: false
-  xy: 132, 130
+  xy: 132, 134
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
@@ -92,17 +92,17 @@ graph-white
   index: -1
 graph-window
   rotate: false
-  xy: 132, 149
-  size: 27, 34
-  split: 5, 4, 26, 3
-  orig: 27, 34
+  xy: 132, 153
+  size: 27, 30
+  split: 5, 4, 22, 3
+  orig: 27, 30
   offset: 0, 0
   index: -1
 graph-window-selected
   rotate: false
-  xy: 166, 217
-  size: 27, 34
-  split: 5, 4, 26, 3
-  orig: 27, 34
+  xy: 166, 221
+  size: 27, 30
+  split: 5, 4, 22, 3
+  orig: 27, 30
   offset: 0, 0
   index: -1
