@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.plugin.boneanimation.design.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.plugin.boneanimation.property.BoneWeightFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
@@ -28,7 +27,7 @@ public class BoneWeightPropertyEditorDefinition implements PropertyEditorDefinit
     }
 
     @Override
-    public PropertyBox createPropertyBox(Skin skin, String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyBox result = new DefaultPropertyBox(name, BoneWeightFieldType.type, location, propertyLocations);
         result.addPropertyBoxPart(new IntegerEditorPart("Max bone weights", "maxBoneWeightCount", 4, new Validators.GreaterThanValidator(0)));
         result.initialize(jsonObject);

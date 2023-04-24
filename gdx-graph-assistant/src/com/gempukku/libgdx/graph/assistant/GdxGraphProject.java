@@ -1,13 +1,11 @@
 package com.gempukku.libgdx.graph.assistant;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.gempukku.gdx.assistant.plugin.AssistantApplication;
-import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
-import com.gempukku.gdx.assistant.plugin.MenuManager;
-import com.gempukku.gdx.assistant.plugin.TabManager;
+import com.gempukku.gdx.assistant.plugin.*;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.assistant.data.GdxGraphData;
@@ -123,7 +121,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                                 new InputDialogListener() {
                                     @Override
                                     public void finished(String input) {
-                                        GraphTab activeTab = getActiveTab();
+                                        GraphTab activeTab = getActiveGraphTab();
                                         activeTab.createGroup(input.trim());
                                     }
 
@@ -140,7 +138,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                 new Runnable() {
                     @Override
                     public void run() {
-                        GraphTab activeTab = getActiveTab();
+                        GraphTab activeTab = getActiveGraphTab();
                         GraphWithProperties graph = activeTab.getGraph();
 
                         String type = graph.getType();
@@ -263,7 +261,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
             tabManager.switchToTab(graphTab);
         } else {
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
-            graphTab = new GraphTab(application.getApplicationSkin(), GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph);
+            graphTab = new GraphTab(GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph);
             tabManager.addTab(graphId, graphType.getIcon(), graphTab.getContent(), graphTab);
             mainGraphTabs.put(graphId, graphTab);
         }
@@ -305,29 +303,44 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     }
 
     @Override
-    public void switchToTab(GraphTab graphTab) {
-        tabManager.switchToTab(graphTab);
+    public void setTabTitle(AssistantPluginTab tab, String title) {
+        tabManager.setTabTitle(tab, title);
     }
 
     @Override
-    public void addTab(String title, Drawable icon, GraphTab graphTab) {
-        tabManager.addTab(title, icon, graphTab.getContent(), graphTab);
+    public void switchToTab(AssistantPluginTab tab) {
+        tabManager.switchToTab(tab);
     }
 
     @Override
-    public boolean isActiveTab(GraphTab graphTab) {
-        return tabManager.isActiveTab(graphTab);
+    public void addTab(String title, Table table, AssistantPluginTab tab) {
+        tabManager.addTab(title, table, tab);
     }
 
     @Override
-    public void closeTab(GraphTab graphTab) {
-        tabManager.closeTab(graphTab);
+    public void addTab(String title, Drawable icon, Table content, AssistantPluginTab tab) {
+        tabManager.addTab(title, icon, content, tab);
     }
 
     @Override
-    public void tabClosed(GraphTab graphTab) {
+    public boolean isActiveTab(AssistantPluginTab tab) {
+        return tabManager.isActiveTab(tab);
+    }
+
+    @Override
+    public AssistantPluginTab getActiveTab() {
+        return tabManager.getActiveTab();
+    }
+
+    @Override
+    public void closeTab(AssistantPluginTab tab) {
+        tabManager.closeTab(tab);
+    }
+
+    @Override
+    public void tabClosed(AssistantPluginTab tab) {
         for (ObjectMap.Entry<String, GraphTab> entry : mainGraphTabs.entries()) {
-            if (entry.value == graphTab) {
+            if (entry.value == tab) {
                 mainGraphTabs.remove(entry.key);
                 break;
             }
@@ -342,20 +355,19 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     @Override
     public void processUpdate(float v) {
         // Update menu items
-        GraphTab activeTab = getActiveTab();
-        boolean groupNodesEnabled = activeTab != null && activeTab.canGroupNodes();
+        GraphTab activeGraphTab = getActiveGraphTab();
+
+        boolean groupNodesEnabled = activeGraphTab != null && activeGraphTab.canGroupNodes();
         menuManager.setMenuItemDisabled("Graph", null, "Create group", !groupNodesEnabled);
 
-        boolean canViewShader = activeTab != null && (GraphTypeRegistry.findGraphType(activeTab.getGraph().getType()) instanceof ShaderGraphType);
+        boolean canViewShader = activeGraphTab != null && (GraphTypeRegistry.findGraphType(activeGraphTab.getGraph().getType()) instanceof ShaderGraphType);
         menuManager.setMenuItemDisabled("Graph", null, "View shader text", !canViewShader);
     }
 
-    private GraphTab getActiveTab() {
-        for (GraphTab value : mainGraphTabs.values()) {
-            GraphTab activeTab = value.getActiveTab();
-            if (activeTab != null)
-                return activeTab;
-        }
+    private GraphTab getActiveGraphTab() {
+        AssistantPluginTab tab = tabManager.getActiveTab();
+        if (tab instanceof GraphTab)
+            return (GraphTab) tab;
         return null;
     }
 
@@ -363,7 +375,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     public JsonValue saveProject() {
         for (ObjectMap.Entry<String, GraphTab> openGraphEntry : mainGraphTabs.entries()) {
             String graphId = openGraphEntry.key;
-            JsonValue serializedGraph = openGraphEntry.value.saveGraph();
+            JsonValue serializedGraph = openGraphEntry.value.serializeGraph();
             mainGraphs.put(graphId, serializedGraph);
             GdxGraphData graphData = getGraphDataById(graphId);
             FileHandle graphFile = application.getProjectFolder().child(graphData.getPath());
@@ -400,7 +412,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
     @Override
     public void closeProject() {
         for (GraphTab graphTab : mainGraphTabs.values()) {
-            graphTab.forceClose();
+            tabManager.closeTab(graphTab);
         }
         mainGraphTabs.clear();
         menuManager.clearPopupMenuContents("Graph", null, "New");

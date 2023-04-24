@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.assistant;
 
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -17,20 +16,20 @@ import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
 public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl {
-    private DirtyHierarchy dirtyHierarchy;
-    private TabControl tabControl;
-    private GraphWithPropertiesEditor graphWithPropertiesEditor;
-    private ObjectMap<String, GraphTab> subGraphTabs = new ObjectMap<>();
-    private ObjectMap<String, JsonValue> serializedSubGraphs = new ObjectMap<>();
+    private final DirtyHierarchy dirtyHierarchy;
+    private final TabControl tabControl;
+    private final GraphWithPropertiesEditor graphWithPropertiesEditor;
+    private final ObjectMap<String, AssistantPluginTab> subTabs = new ObjectMap<>();
+    private final ObjectMap<String, JsonValue> serializedSubGraphs = new ObjectMap<>();
 
     private boolean dirty = false;
 
-    public GraphTab(Skin skin, DirtyHierarchy dirtyHierarchy, TabControl tabControl, StatusManager statusManager,
+    public GraphTab(DirtyHierarchy dirtyHierarchy, TabControl tabControl, StatusManager statusManager,
                     GraphWithProperties graph) {
         this.dirtyHierarchy = dirtyHierarchy;
         this.tabControl = tabControl;
 
-        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, skin, dirtyHierarchy);
+        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, dirtyHierarchy);
         graphWithPropertiesEditor.addListener(
                 new EventListener() {
                     @Override
@@ -38,47 +37,66 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                         if (event instanceof RequestGraphOpen) {
                             RequestGraphOpen requestGraphOpen = (RequestGraphOpen) event;
                             String graphId = requestGraphOpen.getId();
-                            GraphTab subGraphTab = subGraphTabs.get(graphId);
+                            AssistantPluginTab subGraphTab = subTabs.get(graphId);
                             if (subGraphTab != null) {
                                 tabControl.switchToTab(subGraphTab);
                             } else {
-
                                 JsonValue jsonObject = requestGraphOpen.getJsonObject();
                                 if (serializedSubGraphs.containsKey(graphId))
                                     jsonObject = serializedSubGraphs.get(graphId);
 
                                 UIGraphType graphType = (UIGraphType) requestGraphOpen.getType();
                                 GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
-                                subGraphTab = new GraphTab(skin, GraphTab.this, GraphTab.this, statusManager, subGraph);
-                                tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), subGraphTab);
-                                subGraphTabs.put(graphId, subGraphTab);
-                                tabControl.switchToTab(subGraphTab);
+                                GraphTab graphTab = new GraphTab(GraphTab.this, GraphTab.this, statusManager, subGraph);
+                                tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), graphTab.getContent(), graphTab);
+                                subTabs.put(graphId, graphTab);
+                                tabControl.switchToTab(graphTab);
                             }
                             return true;
                         } else if (event instanceof GraphRemoved) {
                             GraphRemoved graphRemoved = (GraphRemoved) event;
                             serializedSubGraphs.remove(graphRemoved.getId());
-                            GraphTab graphTab = subGraphTabs.get(graphRemoved.getId());
+                            AssistantPluginTab graphTab = subTabs.get(graphRemoved.getId());
                             if (graphTab != null) {
-                                graphTab.forceClose();
+                                tabControl.closeTab(graphTab);
                             }
+                            return true;
                         } else if (event instanceof GetSerializedGraph) {
                             GetSerializedGraph getSerializedGraph = (GetSerializedGraph) event;
                             getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
+                            return true;
                         } else if (event instanceof GraphChangedEvent) {
                             setDirty();
+                            return true;
                         } else if (event instanceof GraphStatusChangeEvent) {
                             statusManager.addStatus(((GraphStatusChangeEvent) event).getMessage());
+                            return true;
+                        } else if (event instanceof RequestTabOpen) {
+                            RequestTabOpen requestTabOpen = (RequestTabOpen) event;
+                            String tabId = requestTabOpen.getId();
+                            AssistantPluginTab subTab = subTabs.get(tabId);
+                            if (subTab != null) {
+                                tabControl.switchToTab(subTab);
+                            } else {
+                                AssistantPluginTab assistantPluginTab = requestTabOpen.getTabSupplier().get();
+                                tabControl.addTab(requestTabOpen.getTitle(), requestTabOpen.getIcon(), requestTabOpen.getContentSupplier().get(),
+                                        assistantPluginTab);
+                                subTabs.put(tabId, assistantPluginTab);
+                                tabControl.switchToTab(assistantPluginTab);
+                            }
+                            return true;
                         }
                         return false;
                     }
                 });
     }
 
-    public JsonValue saveGraph() {
-        for (ObjectMap.Entry<String, GraphTab> subGraphTab : subGraphTabs) {
-            JsonValue jsonValue = subGraphTab.value.saveGraph();
-            serializedSubGraphs.put(subGraphTab.key, jsonValue);
+    public JsonValue serializeGraph() {
+        for (ObjectMap.Entry<String, AssistantPluginTab> subTab : subTabs) {
+            if (subTab.value instanceof GraphTab) {
+                JsonValue jsonValue = ((GraphTab) subTab.value).serializeGraph();
+                serializedSubGraphs.put(subTab.key, jsonValue);
+            }
         }
         GraphWithProperties graph = graphWithPropertiesEditor.getGraph();
         return GraphSerializer.serializeGraphWithProperties(graph);
@@ -96,17 +114,6 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
         graphWithPropertiesEditor.createGroup(groupName);
     }
 
-    public GraphTab getActiveTab() {
-        if (tabControl.isActiveTab(this))
-            return this;
-        for (GraphTab value : subGraphTabs.values()) {
-            GraphTab activeTab = value.getActiveTab();
-            if (activeTab != null)
-                return activeTab;
-        }
-        return null;
-    }
-
     @Override
     public boolean isDirty() {
         return dirty;
@@ -117,30 +124,45 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     }
 
     @Override
-    public void switchToTab(GraphTab graphTab) {
-        tabControl.switchToTab(graphTab);
+    public void addTab(String s, Table table, AssistantPluginTab assistantPluginTab) {
+        tabControl.addTab(s, table, assistantPluginTab);
     }
 
     @Override
-    public void addTab(String title, Drawable icon, GraphTab graphTab) {
-        tabControl.addTab(title, icon, graphTab);
+    public void addTab(String s, Drawable drawable, Table table, AssistantPluginTab assistantPluginTab) {
+        tabControl.addTab(s, drawable, table, assistantPluginTab);
     }
 
     @Override
-    public boolean isActiveTab(GraphTab graphTab) {
-        return tabControl.isActiveTab(graphTab);
+    public boolean isActiveTab(AssistantPluginTab assistantPluginTab) {
+        return tabControl.isActiveTab(assistantPluginTab);
     }
 
     @Override
-    public void closeTab(GraphTab graphTab) {
-        tabControl.closeTab(graphTab);
+    public AssistantPluginTab getActiveTab() {
+        return tabControl.getActiveTab();
     }
 
     @Override
-    public void tabClosed(GraphTab graphTab) {
-        for (ObjectMap.Entry<String, GraphTab> entry : subGraphTabs.entries()) {
-            if (entry.value == graphTab) {
-                subGraphTabs.remove(entry.key);
+    public void switchToTab(AssistantPluginTab assistantPluginTab) {
+        tabControl.switchToTab(assistantPluginTab);
+    }
+
+    @Override
+    public void setTabTitle(AssistantPluginTab assistantPluginTab, String s) {
+        tabControl.setTabTitle(assistantPluginTab, s);
+    }
+
+    @Override
+    public void closeTab(AssistantPluginTab assistantPluginTab) {
+        tabControl.closeTab(assistantPluginTab);
+    }
+
+    @Override
+    public void tabClosed(AssistantPluginTab tab) {
+        for (ObjectMap.Entry<String, AssistantPluginTab> entry : subTabs.entries()) {
+            if (entry.value == tab) {
+                subTabs.remove(entry.key);
                 break;
             }
         }
@@ -159,22 +181,20 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
 
     public void markClean() {
         dirty = false;
-        for (GraphTab subGraphTab : subGraphTabs.values()) {
-            subGraphTab.markClean();
+        for (AssistantPluginTab subTab : subTabs.values()) {
+            if (subTab instanceof GraphTab) {
+                ((GraphTab) subTab).markClean();
+            }
         }
-    }
-
-    public void forceClose() {
-        tabControl.closeTab(this);
     }
 
     @Override
     public void closed() {
         graphWithPropertiesEditor.dispose();
-        for (GraphTab subGraphTab : subGraphTabs.values()) {
-            subGraphTab.forceClose();
+        for (AssistantPluginTab subGraphTab : subTabs.values()) {
+            tabControl.closeTab(subGraphTab);
         }
-        subGraphTabs.clear();
+        subTabs.clear();
         tabControl.tabClosed(this);
     }
 }

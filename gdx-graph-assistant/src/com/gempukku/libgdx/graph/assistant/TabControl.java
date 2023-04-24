@@ -1,36 +1,13 @@
 package com.gempukku.libgdx.graph.assistant;
 
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
+import com.gempukku.gdx.assistant.plugin.TabManager;
 
-public interface TabControl {
-    /**
-     * Requests to switch to the argument tab.
-     *
-     * @param graphTab
-     */
-    void switchToTab(GraphTab graphTab);
-
-    /**
-     * Adds the argument tab.
-     *
-     * @param title
-     * @param graphTab
-     */
-    void addTab(String title, Drawable icon, GraphTab graphTab);
-
-    boolean isActiveTab(GraphTab graphTab);
-
-    /**
-     * Requests that the argument tab be closed.
-     *
-     * @param graphTab
-     */
-    void closeTab(GraphTab graphTab);
-
+public interface TabControl extends TabManager {
     /**
      * Notifies that the argument tab was closed.
      *
-     * @param graphTab
+     * @param tab
      */
-    void tabClosed(GraphTab graphTab);
+    void tabClosed(AssistantPluginTab tab);
 }

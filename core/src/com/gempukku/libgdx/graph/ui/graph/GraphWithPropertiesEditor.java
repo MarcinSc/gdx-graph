@@ -29,6 +29,7 @@ import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.gempukku.libgdx.ui.preview.PreviewWidget;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
 import java.util.LinkedList;
@@ -37,23 +38,21 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GraphWithPropertiesEditor extends VisTable implements Disposable {
-    private List<PropertyBox> propertyBoxes = new LinkedList<>();
+    private final UIGraphType type;
+    private final Skin skin;
+
+    private final List<PropertyBox> propertyBoxes = new LinkedList<>();
+    private final CompositeGraphWithProperties compositeGraphWithProperties;
     private final GraphEditor graphEditor;
 
-    private UIGraphType type;
-    private Skin skin;
-
     private final VerticalGroup pipelineProperties;
-    private VisLabel validationLabel;
+    private final VisLabel validationLabel;
 
-    private CompositeGraphWithProperties compositeGraphWithProperties;
-
-    public GraphWithPropertiesEditor(GraphWithProperties graph, Skin skin, DirtyHierarchy dirtyHierarchy) {
+    public GraphWithPropertiesEditor(GraphWithProperties graph, DirtyHierarchy dirtyHierarchy) {
         this.type = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getType());
+        this.skin = VisUI.getSkin();
 
-        pipelineProperties = createPropertiesUI(skin);
-        this.skin = skin;
-
+        pipelineProperties = createPropertiesUI();
 
         graphEditor = new GraphEditor(graph,
                 new Function<String, GraphNodeEditorProducer>() {
@@ -128,7 +127,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
 
         for (GraphProperty property : graph.getProperties()) {
             PropertyEditorDefinition propertyEditorDefinition = getPropertyEditorDefinition(property.getType());
-            PropertyBox propertyBox = propertyEditorDefinition.createPropertyBox(skin, property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
+            PropertyBox propertyBox = propertyEditorDefinition.createPropertyBox(property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
             addPropertyBox(property.getName(), propertyBox);
         }
 
@@ -265,7 +264,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                             public void changed(ChangeEvent event, Actor actor) {
                                 String defaultName = value.getDefaultName();
                                 String propertyName = resolveUniqueName(defaultName);
-                                PropertyBox defaultPropertyBox = value.createPropertyBox(skin, propertyName, null, null, type.getPropertyLocations());
+                                PropertyBox defaultPropertyBox = value.createPropertyBox(propertyName, null, null, type.getPropertyLocations());
                                 addPropertyBox(name, defaultPropertyBox);
                             }
                         });
@@ -323,7 +322,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         }
     }
 
-    private VerticalGroup createPropertiesUI(final Skin skin) {
+    private VerticalGroup createPropertiesUI() {
         final VerticalGroup pipelineProperties = new VerticalGroup();
         pipelineProperties.grow();
         VisTable headerTable = new VisTable();

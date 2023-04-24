@@ -15,15 +15,15 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEditorPart, GraphChangedAware, Disposable {
-    private final ModelShaderPreviewWidget shaderPreviewWidget;
-    private final VisSelectBox<ModelShaderPreviewWidget.ShaderPreviewModel> selectBox;
+    private final ModelShaderPreview shaderPreviewWidget;
+    private final VisSelectBox<ModelShaderPreview.ShaderPreviewModel> selectBox;
     private final String modelTypeProperty;
 
     public ModelShaderPreviewBoxPart(String modelTypeProperty) {
         this.modelTypeProperty = modelTypeProperty;
-        shaderPreviewWidget = new ModelShaderPreviewWidget(300, 300);
+        shaderPreviewWidget = new ModelShaderPreview(300, 300);
         selectBox = new VisSelectBox<>("gdx-graph-property");
-        selectBox.setItems(ModelShaderPreviewWidget.ShaderPreviewModel.values());
+        selectBox.setItems(ModelShaderPreview.ShaderPreviewModel.values());
 
         selectBox.addListener(
                 new ChangeListener() {
@@ -41,11 +41,11 @@ public class ModelShaderPreviewBoxPart extends VisTable implements GraphNodeEdit
     public void initialize(JsonValue data) {
         String modelTypeProperty = data.getString(this.modelTypeProperty, null);
         if (modelTypeProperty != null) {
-            setPreviewModel(ModelShaderPreviewWidget.ShaderPreviewModel.valueOf(modelTypeProperty));
+            setPreviewModel(ModelShaderPreview.ShaderPreviewModel.valueOf(modelTypeProperty));
         }
     }
 
-    public void setPreviewModel(ModelShaderPreviewWidget.ShaderPreviewModel previewModel) {
+    public void setPreviewModel(ModelShaderPreview.ShaderPreviewModel previewModel) {
         shaderPreviewWidget.setModel(previewModel);
         selectBox.setSelected(previewModel);
     }

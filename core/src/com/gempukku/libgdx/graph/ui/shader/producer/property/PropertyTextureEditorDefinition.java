@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.property;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -36,7 +35,7 @@ public class PropertyTextureEditorDefinition implements PropertyEditorDefinition
     }
 
     @Override
-    public PropertyBox createPropertyBox(Skin skin, String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyBox result = new DefaultPropertyBox(name, ShaderFieldType.TextureRegion, location, propertyLocations);
         result.addPropertyBoxPart(new EnumSelectEditorPart<>("Min filter ", "minFilter",
                 new TextureFilterDisplayText(), Texture.TextureFilter.values()));

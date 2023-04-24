@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.ui.pipeline.producer;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Supplier;
@@ -49,7 +48,7 @@ public class PipelinePropertyEditorDefinitionImpl implements PropertyEditorDefin
     }
 
     @Override
-    public PropertyBox createPropertyBox(Skin skin, String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyBox result = new DefaultPropertyBox(name, type, null, propertyLocations);
         for (Supplier<GraphNodeEditorPart> propertyBoxPart : propertyBoxParts) {
             result.addPropertyBoxPart(propertyBoxPart.get());

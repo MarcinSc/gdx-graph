@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.property;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
@@ -27,7 +26,7 @@ public class PropertyVector2EditorDefinition implements PropertyEditorDefinition
     }
 
     @Override
-    public PropertyBox createPropertyBox(Skin skin, String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyBox result = new DefaultPropertyBox(name, ShaderFieldType.Vector2, location, propertyLocations);
         result.addPropertyBoxPart(new Vector2EditorPart("Vector2", "x", "y", 0, 0, null, null));
         result.initialize(jsonObject);
