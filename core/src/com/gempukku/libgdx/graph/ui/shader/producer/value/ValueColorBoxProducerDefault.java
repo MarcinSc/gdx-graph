@@ -38,7 +38,7 @@ public class ValueColorBoxProducerDefault extends ValueGraphBoxProducerDefault {
                 drawable.draw(batch, x, y, width, height);
             }
         };
-        baseDrawable.setMinSize(20, 20);
+        baseDrawable.setMinWidth(20);
 
         final VisImage image = new VisImage(baseDrawable);
         image.setColor(color);
@@ -64,7 +64,7 @@ public class ValueColorBoxProducerDefault extends ValueGraphBoxProducerDefault {
 
         VisTable table = new VisTable();
         table.add(new VisLabel("Color", "gdx-graph-property-label")).growX();
-        table.add(image);
+        table.add(image).fillY();
         table.row();
 
         DefaultGraphNodeEditorPart colorPart = new ColorEditorPart(table,
