@@ -14,7 +14,9 @@ import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.ShaderContextImpl;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
+import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
@@ -29,7 +31,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
         final ShaderContextImpl shaderContext = new ShaderContextImpl(pluginPrivateDataSource);
 
-        final Array<ScreenGraphShader> shaderArray = new Array<>();
+        final Array<GraphShader> shaderArray = new Array<>();
 
         final JsonValue shaderDefinitions = data.get("shaders");
 
@@ -38,6 +40,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         result.put("output", output);
 
         return new SingleInputsPipelineNode(result) {
+            private GraphScreenShadersImpl graphScreenShaders;
             private TimeProvider timeProvider;
             private FullScreenRender fullScreenRender;
 
@@ -45,23 +48,23 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
             public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
                 timeProvider = pipelineDataProvider.getTimeProvider();
-                GraphScreenShadersImpl graphScreenShaders = pipelineDataProvider.getPrivatePluginData(GraphScreenShadersImpl.class);
+                graphScreenShaders = pipelineDataProvider.getPrivatePluginData(GraphScreenShadersImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
                     JsonValue shaderGraph = shaderDefinition.get("shader");
                     String tag = shaderDefinition.getString("tag");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final ScreenGraphShader shader = ScreenShaderLoader.loadShader(shaderGraph, tag, pipelineDataProvider.getWhitePixel().texture);
+                    final GraphShader shader = ScreenShaderLoader.loadShader(shaderGraph, tag, pipelineDataProvider.getWhitePixel().texture);
                     shaderArray.add(shader);
                 }
 
-                for (ScreenGraphShader shader : shaderArray) {
-                    graphScreenShaders.registerTag(shader.getTag(), shader);
+                for (GraphShader shader : shaderArray) {
+                    graphScreenShaders.registerTag(shader.getTag());
                 }
             }
 
             private boolean needsDepth() {
-                for (ScreenGraphShader shader : shaderArray) {
+                for (GraphShader shader : shaderArray) {
                     if (shader.isUsingDepthTexture())
                         return true;
                 }
@@ -69,7 +72,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
             }
 
             private boolean isRequiringSceneColor() {
-                for (ScreenGraphShader shader : shaderArray) {
+                for (GraphShader shader : shaderArray) {
                     if (shader.isUsingColorTexture())
                         return true;
                 }
@@ -119,10 +122,11 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
                     currentBuffer.beginColor();
 
-                    for (ScreenGraphShader shader : shaderArray) {
-                        shaderContext.setGlobalPropertyContainer(shader.getPropertyContainer());
+                    for (GraphShader shader : shaderArray) {
+                        shaderContext.setGlobalPropertyContainer(graphScreenShaders.getPropertyContainer(shader.getTag()));
+                        RenderableModel renderableModel = graphScreenShaders.getRenderableModel(shader.getTag(), fullScreenRender);
                         shader.begin(shaderContext, pipelineRenderingContext.getRenderContext());
-                        shader.render(shaderContext, fullScreenRender);
+                        shader.render(shaderContext, renderableModel);
                         shader.end();
                     }
 
@@ -145,7 +149,7 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
             @Override
             public void dispose() {
-                for (ScreenGraphShader shader : shaderArray) {
+                for (GraphShader shader : shaderArray) {
                     shader.dispose();
                 }
             }

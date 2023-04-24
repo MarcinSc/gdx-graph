@@ -14,7 +14,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderGraphType;
 import com.gempukku.libgdx.graph.plugin.models.ModelShaderGraphType;
 import com.gempukku.libgdx.graph.plugin.models.ModelsUniformSetters;
 import com.gempukku.libgdx.graph.plugin.particles.ParticleEffectGraphType;
-import com.gempukku.libgdx.graph.plugin.screen.ScreenGraphShader;
 import com.gempukku.libgdx.graph.plugin.screen.ScreenShaderGraphType;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
@@ -91,6 +90,9 @@ public class GraphShaderBuilder {
                 break;
             case Screen:
                 buildScreenFragmentShader(graph, designTime, graphShader, vertexShaderBuilder, fragmentShaderBuilder, configurations);
+                graphShader.setCulling(BasicShader.Culling.back);
+                graphShader.setDepthTesting(BasicShader.DepthTesting.disabled);
+                graphShader.setDepthWriting(false);
                 break;
             case Depth:
                 buildDepthFragmentShader(graph, designTime, graphShader, vertexShaderBuilder, fragmentShaderBuilder, configurations);
@@ -139,10 +141,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static ScreenGraphShader buildScreenShader(String tag, Texture defaultTexture,
+    public static GraphShader buildScreenShader(String tag, Texture defaultTexture,
                                                       GraphWithProperties graph,
                                                       boolean designTime) {
-        ScreenGraphShader graphShader = new ScreenGraphShader(tag, defaultTexture);
+        GraphShader graphShader = new GraphShader(tag, defaultTexture);
 
         buildShader(graph, ShaderType.Screen, designTime, graphShader);
         graphShader.init();

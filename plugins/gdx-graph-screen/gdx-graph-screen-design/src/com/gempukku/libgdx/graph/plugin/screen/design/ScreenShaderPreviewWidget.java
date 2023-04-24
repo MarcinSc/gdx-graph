@@ -20,7 +20,8 @@ import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
-import com.gempukku.libgdx.graph.plugin.screen.ScreenGraphShader;
+import com.gempukku.libgdx.graph.plugin.screen.FullScreenRenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
@@ -36,7 +37,7 @@ public class ScreenShaderPreviewWidget extends Widget implements Disposable {
     private int height;
 
     private FrameBuffer frameBuffer;
-    private ScreenGraphShader graphShader;
+    private GraphShader graphShader;
     private OpenGLContext renderContext;
 
     private Camera camera;
@@ -44,6 +45,7 @@ public class ScreenShaderPreviewWidget extends Widget implements Disposable {
     private Lighting3DEnvironment graphShaderEnvironment;
     private ShaderContextImpl shaderContext;
     private FullScreenRenderImpl fullScreenRender;
+    private FullScreenRenderableModel renderableModel = new FullScreenRenderableModel();
 
     public ScreenShaderPreviewWidget(int width, int height) {
         this.width = width;
@@ -178,8 +180,9 @@ public class ScreenShaderPreviewWidget extends Widget implements Disposable {
                 renderContext.begin();
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+                renderableModel.setFullScreenRender(fullScreenRender);
                 graphShader.begin(shaderContext, renderContext);
-                graphShader.render(shaderContext, fullScreenRender);
+                graphShader.render(shaderContext, renderableModel);
                 graphShader.end();
                 frameBuffer.end();
                 renderContext.end();

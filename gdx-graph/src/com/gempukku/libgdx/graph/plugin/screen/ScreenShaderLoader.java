@@ -7,10 +7,11 @@ import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 
 public class ScreenShaderLoader {
-    public static ScreenGraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture) {
+    public static GraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture) {
         GraphType graphType = GraphTypeRegistry.findGraphType(ScreenShaderGraphType.TYPE);
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);

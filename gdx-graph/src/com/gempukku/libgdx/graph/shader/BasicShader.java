@@ -1,6 +1,9 @@
 package com.gempukku.libgdx.graph.shader;
 
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GLTexture;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
@@ -379,8 +382,6 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
     public void begin(ShaderContext shaderContext, OpenGLContext context) {
         this.context = context;
         program.begin();
-
-        Camera camera = shaderContext.getCamera();
 
         // Set depth mask/testing
         context.setDepthMask(depthWriting);
