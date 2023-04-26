@@ -53,10 +53,9 @@ public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, Gr
     private final VisSlider tabPerSecondCount;
     private final VisTextButton tabResetButton;
 
+    private final VisTable localTable;
+    private final VisTable tabTable;
     private final VisImageButton maximizeButton;
-
-    private VisTable localTable;
-    private VisTable tabTable;
 
     public ParticlesShaderPreviewEditorPart(
             String cameraDistanceProperty, String lifetimeProperty, String initialCountProperty,
@@ -73,11 +72,6 @@ public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, Gr
         tabTable.setBackground("darkGrey");
         tabTable.setFillParent(true);
 
-        selectBox = new VisSelectBox<>("gdx-graph-property");
-        selectBox.setItems(ParticlesShaderPreview.ShaderPreviewModel.values());
-        tabSelectBox = new VisSelectBox<>("gdx-graph-property");
-        tabSelectBox.setItems(ParticlesShaderPreview.ShaderPreviewModel.values());
-
         Drawable maximizeDrawable = VisUI.getSkin().getDrawable("icon-maximize");
         maximizeButton = new VisImageButton(maximizeDrawable);
         maximizeButton.addListener(
@@ -87,6 +81,11 @@ public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, Gr
                         openInNewTab();
                     }
                 });
+
+        selectBox = new VisSelectBox<>("gdx-graph-property");
+        selectBox.setItems(ParticlesShaderPreview.ShaderPreviewModel.values());
+        tabSelectBox = new VisSelectBox<>("gdx-graph-property");
+        tabSelectBox.setItems(ParticlesShaderPreview.ShaderPreviewModel.values());
 
         lifetimeText = new VisLabel("Lifetime: 3.00", "gdx-graph-property-label");
         lifetime = new VisSlider(0f, 10f, 0.01f, false, "gdx-graph");

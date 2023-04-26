@@ -35,7 +35,6 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
 
     private GraphWithProperties graph;
-    private boolean shaderInitialized;
 
     private GraphShader graphShader;
     private MeshBasedRenderableModel renderableModel;
@@ -46,7 +45,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
-    public ModelShaderPreview(int width, int height) {
+    public ModelShaderPreview() {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
@@ -72,7 +71,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
         renderableModel = createRenderableModel(ShaderPreviewModel.Sphere);
         graphShaderRenderingWidget.setRenderableModel(renderableModel);
 
-        add(graphShaderRenderingWidget).width(width).height(height);
+        add(graphShaderRenderingWidget).grow();
     }
 
     private static Lighting3DPrivateData createLightingPluginData() {
@@ -133,9 +132,9 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     @Override
     protected void setStage(Stage stage) {
         super.setStage(stage);
-        if (stage == null && shaderInitialized) {
+        if (stage == null) {
             destroyShader();
-        } else if (stage != null && !shaderInitialized && graph != null) {
+        } else if (graphShader == null && graph != null) {
             createShader(graph);
         }
     }
@@ -191,8 +190,6 @@ public class ModelShaderPreview extends VisTable implements Disposable {
             renderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
 
             graphShaderRenderingWidget.setGraphShader(graphShader);
-
-            shaderInitialized = true;
         } catch (Exception exp) {
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             if (graphShader != null)
@@ -201,16 +198,16 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     }
 
     private void destroyShader() {
-        if (shaderInitialized) {
+        if (graphShader != null) {
             graphShader.dispose();
-            shaderInitialized = false;
+            graphShaderRenderingWidget.setGraphShader(null);
+            graphShader = null;
         }
     }
 
     @Override
     public void dispose() {
-        if (shaderInitialized)
-            destroyShader();
+        destroyShader();
         renderableModel.dispose();
     }
 
@@ -223,18 +220,11 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     }
 
     public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+        destroyShader();
         if (hasErrors) {
             this.graph = null;
         } else {
             this.graph = graph;
-        }
-
-        if (hasErrors && shaderInitialized) {
-            destroyShader();
-        } else if (!hasErrors && !shaderInitialized) {
-            createShader(graph);
-        } else if (!hasErrors && shaderInitialized) {
-            destroyShader();
             createShader(graph);
         }
     }

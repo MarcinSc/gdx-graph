@@ -29,11 +29,10 @@ import com.gempukku.libgdx.graph.util.FullScreenRenderImpl;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
+public class ScreenShaderPreview extends VisTable implements Disposable {
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
 
     private GraphWithProperties graph;
-    private boolean shaderInitialized;
 
     private GraphShader graphShader;
     private final FullScreenRenderableModel renderableModel;
@@ -45,7 +44,7 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
-    public ScreenShaderPreviewWidget(int width, int height) {
+    public ScreenShaderPreview() {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
@@ -73,7 +72,7 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
         renderableModel.setFullScreenRender(fullScreenRender);
         graphShaderRenderingWidget.setRenderableModel(renderableModel);
 
-        add(graphShaderRenderingWidget).width(width).height(height);
+        add(graphShaderRenderingWidget).grow();
     }
 
     private static Lighting3DPrivateData createLightingPluginData() {
@@ -91,9 +90,9 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
     @Override
     protected void setStage(Stage stage) {
         super.setStage(stage);
-        if (stage == null && shaderInitialized) {
+        if (stage == null) {
             destroyShader();
-        } else if (stage != null && !shaderInitialized && graph != null) {
+        } else if (graphShader == null && graph != null) {
             createShader(graph);
         }
     }
@@ -126,8 +125,6 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
             }
 
             graphShaderRenderingWidget.setGraphShader(graphShader);
-
-            shaderInitialized = true;
         } catch (Exception exp) {
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             if (graphShader != null)
@@ -136,15 +133,17 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
     }
 
     private void destroyShader() {
-        graphShader.dispose();
-        shaderInitialized = false;
+        if (graphShader != null) {
+            graphShader.dispose();
+            graphShaderRenderingWidget.setGraphShader(null);
+            graphShader = null;
+        }
     }
 
     @Override
     public void dispose() {
+        destroyShader();
         fullScreenRender.dispose();
-        if (shaderInitialized)
-            destroyShader();
     }
 
     @Override
@@ -156,18 +155,11 @@ public class ScreenShaderPreviewWidget extends VisTable implements Disposable {
     }
 
     public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+        destroyShader();
         if (hasErrors) {
             this.graph = null;
         } else {
             this.graph = graph;
-        }
-
-        if (hasErrors && shaderInitialized) {
-            destroyShader();
-        } else if (!hasErrors && !shaderInitialized) {
-            createShader(graph);
-        } else if (!hasErrors && shaderInitialized) {
-            destroyShader();
             createShader(graph);
         }
     }

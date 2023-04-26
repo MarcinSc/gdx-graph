@@ -60,7 +60,6 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
 
     private GraphWithProperties graph;
-    private boolean shaderInitialized;
 
     private GraphShader graphShader;
     private GdxMeshRenderableModel particleModel;
@@ -174,12 +173,13 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         camera.update();
     }
 
+
     @Override
     protected void setStage(Stage stage) {
         super.setStage(stage);
-        if (stage == null && shaderInitialized) {
+        if (stage == null) {
             destroyShader();
-        } else if (stage != null && !shaderInitialized && graph != null) {
+        } else if (graphShader == null && graph != null) {
             createShader(graph);
         }
     }
@@ -220,8 +220,6 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
             resetParticles();
 
             graphShaderRenderingWidget.setGraphShader(graphShader);
-
-            shaderInitialized = true;
         } catch (Exception exp) {
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             if (graphShader != null)
@@ -259,16 +257,17 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     }
 
     private void destroyShader() {
-        graphShaderRenderingWidget.setGraphShader(null);
-        graphShader.dispose();
-        graphShader = null;
-        shaderInitialized = false;
+        if (graphShader != null) {
+            graphShader.dispose();
+            graphShaderRenderingWidget.setGraphShader(null);
+            graphShader = null;
+        }
     }
 
     @Override
     public void dispose() {
-        if (shaderInitialized) {
-            destroyShader();
+        destroyShader();
+        if (particleModel != null) {
             particleModel.dispose();
         }
     }
@@ -278,7 +277,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         // Update time keeper
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
-        if (shaderInitialized) {
+        if (graphShader != null) {
             // Remove and create new particles, as needed
             float currentTime = timeKeeper.getTime();
             Iterator<ParticleRenderableSprite> spriteIterator = sprites.iterator();
@@ -305,18 +304,11 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     }
 
     public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+        destroyShader();
         if (hasErrors) {
             this.graph = null;
         } else {
             this.graph = graph;
-        }
-
-        if (hasErrors && shaderInitialized) {
-            destroyShader();
-        } else if (!hasErrors && !shaderInitialized) {
-            createShader(graph);
-        } else if (!hasErrors && shaderInitialized) {
-            destroyShader();
             createShader(graph);
         }
     }
