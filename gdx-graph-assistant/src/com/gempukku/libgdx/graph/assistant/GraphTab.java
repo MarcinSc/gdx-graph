@@ -63,6 +63,7 @@ public class GraphTab implements AssistantPluginTab, TabControl {
                             getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
                             return true;
                         } else if (event instanceof GraphChangedEvent) {
+                            System.out.println("Graph changed");
                             dirty = true;
                             return true;
                         } else if (event instanceof GraphStatusChangeEvent) {

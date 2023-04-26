@@ -84,8 +84,6 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                     @Override
                     protected boolean graphChanged(GraphChangedEvent event) {
                         processGraphChanged(event);
-
-                        event.stop();
                         return true;
                     }
                 });
@@ -129,7 +127,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
             addPropertyEditor(property.getName(), propertyEditor);
         }
 
-        processGraphChanged(new GraphChangedEvent(false, false));
+        processGraphChanged(new GraphChangedEvent(true, true));
     }
 
     private PropertyEditorDefinition getPropertyEditorDefinition(String propertyType) {
