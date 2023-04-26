@@ -1,5 +1,5 @@
 package com.gempukku.libgdx.graph.ui;
 
-public interface DirtyHierarchy {
+public interface DirtyListener {
     void setDirty();
 }

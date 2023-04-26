@@ -17,7 +17,6 @@ import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
@@ -48,7 +47,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     private final VerticalGroup pipelineProperties;
     private final VisLabel validationLabel;
 
-    public GraphWithPropertiesEditor(GraphWithProperties graph, DirtyHierarchy dirtyHierarchy) {
+    public GraphWithPropertiesEditor(GraphWithProperties graph) {
         this.type = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getType());
         this.skin = VisUI.getSkin();
 
@@ -84,7 +83,6 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                 new GraphChangedListener() {
                     @Override
                     protected boolean graphChanged(GraphChangedEvent event) {
-                        dirtyHierarchy.setDirty();
                         processGraphChanged(event);
 
                         event.stop();

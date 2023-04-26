@@ -17,7 +17,6 @@ import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
-import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
@@ -31,18 +30,19 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
-public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, TabControl {
+public class GdxGraphProject implements AssistantPluginProject, TabControl {
     private GdxGraphProjectData gdxGraphProjectData;
 
     private ObjectMap<String, JsonValue> mainGraphs = new ObjectMap<>();
     private ObjectMap<String, GraphTab> mainGraphTabs = new ObjectMap<>();
 
-    private boolean dirty = false;
     private AssistantApplication application;
     private MenuManager menuManager;
     private TabManager tabManager;
 
     private InputValidator graphNameValidator;
+
+    private boolean dirty;
 
     public GdxGraphProject(AssistantApplication application) {
         this(application, null);
@@ -213,7 +213,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                         GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
                         loadGraphIntoProject(graphId, graphType, graph);
                         gdxGraphProjectData.getGraphs().add(graphData);
-                        setDirty();
+                        dirty = true;
                         openGraphTab(graphId, graphType);
                     }
                 });
@@ -263,7 +263,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
             tabManager.switchToTab(graphTab);
         } else {
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
-            graphTab = new GraphTab(GdxGraphProject.this, GdxGraphProject.this, application.getStatusManager(), graph);
+            graphTab = new GraphTab(GdxGraphProject.this, application.getStatusManager(), graph);
             tabManager.addTab(graphId, graphType.getIcon(), graphTab.getContent(), graphTab);
             mainGraphTabs.put(graphId, graphTab);
         }
@@ -294,7 +294,7 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                                 GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
                                 loadGraphIntoProject(new JsonReader(), graphData);
                                 gdxGraphProjectData.getGraphs().add(graphData);
-                                setDirty();
+                                dirty = true;
                                 openGraphTab(graphId, graphType);
                             }
                         });
@@ -351,7 +351,13 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
 
     @Override
     public boolean isProjectDirty() {
-        return dirty;
+        if (dirty)
+            return true;
+        for (GraphTab value : mainGraphTabs.values()) {
+            if (value.isDirty())
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -396,11 +402,6 @@ public class GdxGraphProject implements AssistantPluginProject, DirtyHierarchy, 
                 return graph;
         }
         return null;
-    }
-
-    @Override
-    public void setDirty() {
-        dirty = true;
     }
 
     @Override

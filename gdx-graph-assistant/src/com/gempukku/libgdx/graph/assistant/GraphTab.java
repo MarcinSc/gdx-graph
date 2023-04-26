@@ -11,13 +11,11 @@ import com.gempukku.gdx.assistant.plugin.StatusManager;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
-import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
-public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl {
-    private final DirtyHierarchy dirtyHierarchy;
+public class GraphTab implements AssistantPluginTab, TabControl {
     private final TabControl tabControl;
     private final GraphWithPropertiesEditor graphWithPropertiesEditor;
     private final ObjectMap<String, AssistantPluginTab> subTabs = new ObjectMap<>();
@@ -25,12 +23,10 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
 
     private boolean dirty = false;
 
-    public GraphTab(DirtyHierarchy dirtyHierarchy, TabControl tabControl, StatusManager statusManager,
-                    GraphWithProperties graph) {
-        this.dirtyHierarchy = dirtyHierarchy;
+    public GraphTab(TabControl tabControl, StatusManager statusManager, GraphWithProperties graph) {
         this.tabControl = tabControl;
 
-        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph, dirtyHierarchy);
+        graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph);
         graphWithPropertiesEditor.addListener(
                 new EventListener() {
                     @Override
@@ -48,7 +44,7 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
 
                                 UIGraphType graphType = (UIGraphType) requestGraphOpen.getType();
                                 GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
-                                GraphTab graphTab = new GraphTab(GraphTab.this, GraphTab.this, statusManager, subGraph);
+                                GraphTab graphTab = new GraphTab(GraphTab.this, statusManager, subGraph);
                                 tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), graphTab.getContent(), graphTab);
                                 subTabs.put(graphId, graphTab);
                                 tabControl.switchToTab(graphTab);
@@ -67,7 +63,7 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                             getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
                             return true;
                         } else if (event instanceof GraphChangedEvent) {
-                            setDirty();
+                            dirty = true;
                             return true;
                         } else if (event instanceof GraphStatusChangeEvent) {
                             statusManager.addStatus(((GraphStatusChangeEvent) event).getMessage());
@@ -117,7 +113,22 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
 
     @Override
     public boolean isDirty() {
-        return dirty;
+        if (dirty)
+            return true;
+        for (AssistantPluginTab value : subTabs.values()) {
+            if (value.isDirty())
+                return true;
+        }
+        return false;
+    }
+
+    public void markClean() {
+        dirty = false;
+        for (AssistantPluginTab subTab : subTabs.values()) {
+            if (subTab instanceof GraphTab) {
+                ((GraphTab) subTab).markClean();
+            }
+        }
     }
 
     public GraphWithProperties getGraph() {
@@ -172,21 +183,6 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
     @Override
     public void setActive(boolean b) {
 
-    }
-
-    @Override
-    public void setDirty() {
-        dirty = true;
-        dirtyHierarchy.setDirty();
-    }
-
-    public void markClean() {
-        dirty = false;
-        for (AssistantPluginTab subTab : subTabs.values()) {
-            if (subTab instanceof GraphTab) {
-                ((GraphTab) subTab).markClean();
-            }
-        }
     }
 
     @Override
