@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.assistant;
+package com.gempukku.libgdx.graph.ui;
 
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.gdx.assistant.plugin.TabManager;

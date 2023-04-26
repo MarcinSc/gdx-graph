@@ -49,6 +49,53 @@
       "a": 1
     }
   },
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "gdx-graph-white": {
+      "name": "graph-white",
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 1
+      }
+    },
+    "gdx-graph-dimmed-white": {
+      "name": "graph-white",
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.5
+      }
+    },
+    "gdx-graph-dark-grey": {
+      "name": "graph-white",
+      "color": {
+        "r": 0.2,
+        "g": 0.2,
+        "b": 0.2,
+        "a": 1
+      }
+    },
+    "gdx-graph-preview-visible": {
+      "name": "graph-rounded-frame",
+      "color": {
+        "r": 0.25,
+        "g": 0.18,
+        "b": 0.37,
+        "a": 1
+      }
+    },
+    "gdx-graph-group-background": {
+      "name": "graph-rounded-background",
+      "color": {
+        "r": 0.25,
+        "g": 0.3,
+        "b": 0.25,
+        "a": 0.7
+      }
+    }
+  },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "gdx-graph-io-label": "small",
     "gdx-graph-property-label": "small",
@@ -133,53 +180,6 @@
       "knobOver": "graph-slider-knob-over",
       "knobDown": "graph-slider-knob-over",
       "disabledKnob": "graph-slider-knob"
-    }
-  },
-  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
-    "gdx-graph-white": {
-      "name": "graph-white",
-      "color": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 1
-      }
-    },
-    "gdx-graph-dimmed-white": {
-      "name": "graph-white",
-      "color": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.5
-      }
-    },
-    "gdx-graph-dark-grey": {
-      "name": "graph-white",
-      "color": {
-        "r": 0.2,
-        "g": 0.2,
-        "b": 0.2,
-        "a": 1
-      }
-    },
-    "gdx-graph-preview-visible": {
-      "name": "graph-rounded-frame",
-      "color": {
-        "r": 0.25,
-        "g": 0.18,
-        "b": 0.37,
-        "a": 1
-      }
-    },
-    "gdx-graph-group-background": {
-      "name": "graph-rounded-background",
-      "color": {
-        "r": 0.25,
-        "g": 0.3,
-        "b": 0.25,
-        "a": 0.7
-      }
     }
   },
   "com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable": {

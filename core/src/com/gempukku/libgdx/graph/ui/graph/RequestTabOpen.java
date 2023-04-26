@@ -4,21 +4,23 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
+import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.graph.ui.TabControl;
 
 public class RequestTabOpen extends Event {
     private String id;
     private String title;
     private Drawable icon;
     private Supplier<Table> contentSupplier;
-    private Supplier<AssistantPluginTab> tabSupplier;
+    private Function<TabControl, AssistantPluginTab> tabCreator;
 
-    public RequestTabOpen(String id, String title, Drawable icon, Supplier<Table> contentSupplier, Supplier<AssistantPluginTab> tabSupplier) {
+    public RequestTabOpen(String id, String title, Drawable icon, Supplier<Table> contentSupplier, Function<TabControl, AssistantPluginTab> tabCreator) {
         this.id = id;
         this.title = title;
         this.icon = icon;
         this.contentSupplier = contentSupplier;
-        this.tabSupplier = tabSupplier;
+        this.tabCreator = tabCreator;
     }
 
     public String getId() {
@@ -33,8 +35,8 @@ public class RequestTabOpen extends Event {
         return icon;
     }
 
-    public Supplier<AssistantPluginTab> getTabSupplier() {
-        return tabSupplier;
+    public Function<TabControl, AssistantPluginTab> getTabCreator() {
+        return tabCreator;
     }
 
     public Supplier<Table> getContentSupplier() {

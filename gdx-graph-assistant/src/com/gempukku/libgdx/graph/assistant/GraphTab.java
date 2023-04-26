@@ -12,6 +12,7 @@ import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
+import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
@@ -78,7 +79,7 @@ public class GraphTab implements AssistantPluginTab, DirtyHierarchy, TabControl 
                             if (subTab != null) {
                                 tabControl.switchToTab(subTab);
                             } else {
-                                AssistantPluginTab assistantPluginTab = requestTabOpen.getTabSupplier().get();
+                                AssistantPluginTab assistantPluginTab = requestTabOpen.getTabCreator().evaluate(GraphTab.this);
                                 tabControl.addTab(requestTabOpen.getTitle(), requestTabOpen.getIcon(), requestTabOpen.getContentSupplier().get(),
                                         assistantPluginTab);
                                 subTabs.put(tabId, assistantPluginTab);

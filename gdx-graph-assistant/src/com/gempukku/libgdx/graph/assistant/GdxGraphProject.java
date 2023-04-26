@@ -18,6 +18,7 @@ import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
+import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;

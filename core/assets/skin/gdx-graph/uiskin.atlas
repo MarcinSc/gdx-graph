@@ -34,65 +34,65 @@ graph-particle-effect-icon
   index: -1
 graph-render-pipeline-icon
   rotate: false
-  xy: 166, 204
+  xy: 161, 236
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-rounded-background
   rotate: false
-  xy: 132, 219
-  size: 32, 32
+  xy: 23, 2
+  size: 15, 15
   split: 7, 7, 7, 7
-  orig: 32, 32
+  orig: 15, 15
   offset: 0, 0
   index: -1
 graph-rounded-frame
   rotate: false
-  xy: 132, 185
-  size: 32, 32
+  xy: 107, 89
+  size: 15, 15
   split: 7, 7, 7, 7
-  orig: 32, 32
+  orig: 15, 15
   offset: 0, 0
   index: -1
 graph-screen-shader-icon
   rotate: false
-  xy: 195, 236
+  xy: 132, 172
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 graph-slider-knob
   rotate: false
-  xy: 132, 134
+  xy: 161, 217
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 graph-slider-knob-over
   rotate: false
-  xy: 107, 87
+  xy: 132, 153
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 graph-tick
   rotate: false
-  xy: 23, 8
+  xy: 182, 242
   size: 9, 9
   orig: 9, 9
   offset: 0, 0
   index: -1
 graph-white
   rotate: false
-  xy: 161, 180
+  xy: 153, 184
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 graph-window
   rotate: false
-  xy: 132, 153
+  xy: 132, 189
   size: 27, 30
   split: 5, 4, 22, 3
   orig: 27, 30
@@ -100,7 +100,7 @@ graph-window
   index: -1
 graph-window-selected
   rotate: false
-  xy: 166, 221
+  xy: 132, 221
   size: 27, 30
   split: 5, 4, 22, 3
   orig: 27, 30

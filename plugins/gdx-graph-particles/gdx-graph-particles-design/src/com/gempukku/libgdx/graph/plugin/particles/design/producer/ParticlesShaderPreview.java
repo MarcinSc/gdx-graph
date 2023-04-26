@@ -76,7 +76,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
-    public ParticlesShaderPreview(int width, int height) {
+    public ParticlesShaderPreview() {
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
@@ -109,7 +109,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         graphShaderRenderingWidget.setGlobalPropertyContainer(globalPropertyContainer);
         graphShaderRenderingWidget.setLocalPropertyContainer(localPropertyContainer);
 
-        add(graphShaderRenderingWidget).width(width).height(height);
+        add(graphShaderRenderingWidget).grow();
     }
 
     private static Lighting3DPrivateData createLightingPluginData() {
@@ -230,6 +230,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     }
 
     public void resetParticles() {
+        timeKeeper.setTime(0);
         if (graphShader != null) {
             if (particleModel != null) {
                 particleModel.dispose();
@@ -277,26 +278,28 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         // Update time keeper
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
-        // Remove and create new particles, as needed
-        float currentTime = timeKeeper.getTime();
-        Iterator<ParticleRenderableSprite> spriteIterator = sprites.iterator();
-        while (spriteIterator.hasNext()) {
-            ParticleRenderableSprite sprite = spriteIterator.next();
-            if (sprite.getParticleDeath() < currentTime) {
-                spriteMesh.removePart(spriteIdentifiers.remove(sprite));
-                spriteIterator.remove();
+        if (shaderInitialized) {
+            // Remove and create new particles, as needed
+            float currentTime = timeKeeper.getTime();
+            Iterator<ParticleRenderableSprite> spriteIterator = sprites.iterator();
+            while (spriteIterator.hasNext()) {
+                ParticleRenderableSprite sprite = spriteIterator.next();
+                if (sprite.getParticleDeath() < currentTime) {
+                    spriteMesh.removePart(spriteIdentifiers.remove(sprite));
+                    spriteIterator.remove();
+                }
             }
-        }
 
-        particleGenerator.createParticles(currentTime,
-                new ParticleGenerator.ParticleCreateCallback() {
-                    @Override
-                    public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
-                        ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
-                        sprites.add(sprite);
-                        spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
-                    }
-                });
+            particleGenerator.createParticles(currentTime,
+                    new ParticleGenerator.ParticleCreateCallback() {
+                        @Override
+                        public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
+                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
+                            sprites.add(sprite);
+                            spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
+                        }
+                    });
+        }
 
         super.act(delta);
     }
