@@ -15,19 +15,19 @@ public class UILighting3DPlugin implements UIGdxGraphPlugin {
         GraphTypeRegistry.registerType(new UIShadowShaderGraphType());
 
         // Register node editors
-        UICommonShaderConfiguration.register(new EndShadowShaderBoxProducer());
+        UICommonShaderConfiguration.register(new EndShadowShaderEditorProducer());
 
-        UICommonShaderConfiguration.register(new PhongLightingBoxProducer());
-        UICommonShaderConfiguration.register(new ShadowPhongLightingBoxProducer());
-        UICommonShaderConfiguration.register(new BlinnPhongLightingBoxProducer());
-        UICommonShaderConfiguration.register(new ShadowBlinnPhongLightingBoxProducer());
+        UICommonShaderConfiguration.register(new PhongLightingEditorProducer());
+        UICommonShaderConfiguration.register(new ShadowPhongLightingEditorProducer());
+        UICommonShaderConfiguration.register(new BlinnPhongLightingEditorProducer());
+        UICommonShaderConfiguration.register(new ShadowBlinnPhongLightingEditorProducer());
         UICommonShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ApplyNormalMapShaderNodeConfiguration()));
-        UICommonShaderConfiguration.register(new AmbientLightBoxProducer());
-        UICommonShaderConfiguration.register(new DirectionalLightBoxProducer());
-        UICommonShaderConfiguration.register(new PointLightBoxProducer());
-        UICommonShaderConfiguration.register(new SpotlightBoxProducer());
+        UICommonShaderConfiguration.register(new AmbientLightEditorProducer());
+        UICommonShaderConfiguration.register(new DirectionalLightEditorProducer());
+        UICommonShaderConfiguration.register(new PointLightEditorProducer());
+        UICommonShaderConfiguration.register(new SpotlightEditorProducer());
 
-        UIRenderPipelineConfiguration.register(new ShadowShaderRendererBoxProducer());
+        UIRenderPipelineConfiguration.register(new ShadowShaderRendererEditorProducer());
 
         // Register runtime plugin
         Lighting3DPluginRuntimeInitializer.register();

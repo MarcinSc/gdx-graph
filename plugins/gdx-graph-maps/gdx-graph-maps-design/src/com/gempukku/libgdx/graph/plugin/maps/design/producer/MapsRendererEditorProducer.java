@@ -13,7 +13,7 @@ public class MapsRendererEditorProducer extends GdxGraphNodeEditorProducer {
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
-        graphNodeEditor.addGraphBoxPart(
+        graphNodeEditor.addGraphEditorPart(
                 new StringEditorPart("Map Id:", "id", "", "gdx-graph-property-label", "gdx-graph-property"));
     }
 }

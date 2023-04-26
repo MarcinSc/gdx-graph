@@ -66,19 +66,19 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         table.add(outputLabel).grow();
         table.row();
 
-        DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
-        graphBoxPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
-        addGraphBoxPart(graphBoxPart);
+        DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
+        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
+        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
+        addGraphEditorPart(graphEditorPart);
     }
 
     public void addInputGraphPart(GraphNodeInput graphNodeInput) {
         VisTable table = new VisTable();
         table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow().row();
 
-        DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
-        addGraphBoxPart(graphBoxPart);
+        DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
+        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
+        addGraphEditorPart(graphEditorPart);
     }
 
     public void addOutputGraphPart(
@@ -88,16 +88,16 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         outputLabel.setAlignment(Align.right);
         table.add(outputLabel).grow().row();
 
-        DefaultGraphNodeEditorPart graphBoxPart = new DefaultGraphNodeEditorPart(table, null);
-        graphBoxPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
-        addGraphBoxPart(graphBoxPart);
+        DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
+        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
+        addGraphEditorPart(graphEditorPart);
     }
 
-    public void addGraphBoxPart(GraphNodeEditorPart graphBoxPart) {
-        editorParts.add(graphBoxPart);
-        final Actor actor = graphBoxPart.getActor();
+    public void addGraphEditorPart(GraphNodeEditorPart graphEditorPart) {
+        editorParts.add(graphEditorPart);
+        final Actor actor = graphEditorPart.getActor();
         table.add(actor).growX().row();
-        final GraphNodeEditorInput inputConnector = graphBoxPart.getInputConnector();
+        final GraphNodeEditorInput inputConnector = graphEditorPart.getInputConnector();
         if (inputConnector != null) {
             inputConnectors.put(inputConnector.getFieldId(),
                     new DefaultGraphNodeEditorInput(inputConnector.getSide(),
@@ -109,7 +109,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
                             },
                             inputConnector.getFieldId()));
         }
-        final GraphNodeEditorOutput outputConnector = graphBoxPart.getOutputConnector();
+        final GraphNodeEditorOutput outputConnector = graphEditorPart.getOutputConnector();
         if (outputConnector != null) {
             outputConnectors.put(outputConnector.getFieldId(),
                     new DefaultGraphNodeEditorOutput(outputConnector.getSide(),
@@ -148,8 +148,8 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     public JsonValue getData() {
         JsonValue result = new JsonValue(JsonValue.ValueType.object);
 
-        for (GraphNodeEditorPart graphBoxPart : editorParts)
-            graphBoxPart.serializePart(result);
+        for (GraphNodeEditorPart graphEditorPart : editorParts)
+            graphEditorPart.serializePart(result);
 
         if (result.isEmpty())
             return null;

@@ -3,10 +3,10 @@ package com.gempukku.libgdx.graph.ui.shader.producer.property;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyBox;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
+import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyEditor;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.ui.graph.editor.part.FloatEditorPart;
 
 
@@ -22,14 +22,14 @@ public class PropertyFloatEditorDefinition implements PropertyEditorDefinition {
     }
 
     @Override
-    public Iterable<? extends PropertyGraphBoxCustomization> getCustomizations() {
+    public Iterable<? extends PropertyGraphEditorCustomization> getCustomizations() {
         return null;
     }
 
     @Override
-    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue data, PropertyLocation[] propertyLocations) {
-        DefaultPropertyBox result = new DefaultPropertyBox(name, ShaderFieldType.Float, location, propertyLocations);
-        result.addPropertyBoxPart(new FloatEditorPart("Value", "x", 0, null));
+    public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue data, PropertyLocation[] propertyLocations) {
+        DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.Float, location, propertyLocations);
+        result.addPropertyEditorPart(new FloatEditorPart("Value", "x", 0, null));
         if (data != null)
             result.initialize(data);
 

@@ -3,10 +3,10 @@ package com.gempukku.libgdx.graph.plugin.boneanimation.design.producer;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.plugin.boneanimation.property.BoneWeightFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyBox;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
+import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyEditor;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.ui.graph.editor.part.IntegerEditorPart;
 import com.kotcrab.vis.ui.util.Validators;
 
@@ -22,14 +22,14 @@ public class BoneWeightPropertyEditorDefinition implements PropertyEditorDefinit
     }
 
     @Override
-    public Iterable<? extends PropertyGraphBoxCustomization> getCustomizations() {
+    public Iterable<? extends PropertyGraphEditorCustomization> getCustomizations() {
         return null;
     }
 
     @Override
-    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
-        DefaultPropertyBox result = new DefaultPropertyBox(name, BoneWeightFieldType.type, location, propertyLocations);
-        result.addPropertyBoxPart(new IntegerEditorPart("Max bone weights", "maxBoneWeightCount", 4, new Validators.GreaterThanValidator(0)));
+    public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+        DefaultPropertyEditor result = new DefaultPropertyEditor(name, BoneWeightFieldType.type, location, propertyLocations);
+        result.addPropertyEditorPart(new IntegerEditorPart("Max bone weights", "maxBoneWeightCount", 4, new Validators.GreaterThanValidator(0)));
         result.initialize(jsonObject);
 
         return result;

@@ -18,7 +18,7 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.ui.DirtyHierarchy;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.GraphChangedListener;
@@ -41,7 +41,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     private final UIGraphType type;
     private final Skin skin;
 
-    private final List<PropertyBox> propertyBoxes = new LinkedList<>();
+    private final List<PropertyEditor> propertyEditors = new LinkedList<>();
     private final CompositeGraphWithProperties compositeGraphWithProperties;
     private final GraphEditor graphEditor;
 
@@ -78,7 +78,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                         return createGraphPopupMenu(x, y);
                     }
                 }, "gdx-graph");
-        this.compositeGraphWithProperties = new CompositeGraphWithProperties(graphEditor.getGraph(), propertyBoxes);
+        this.compositeGraphWithProperties = new CompositeGraphWithProperties(graphEditor.getGraph(), propertyEditors);
 
         this.addListener(
                 new GraphChangedListener() {
@@ -127,8 +127,8 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
 
         for (GraphProperty property : graph.getProperties()) {
             PropertyEditorDefinition propertyEditorDefinition = getPropertyEditorDefinition(property.getType());
-            PropertyBox propertyBox = propertyEditorDefinition.createPropertyBox(property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
-            addPropertyBox(property.getName(), propertyBox);
+            PropertyEditor propertyEditor = propertyEditorDefinition.createPropertyEditor(property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
+            addPropertyEditor(property.getName(), propertyEditor);
         }
 
         processGraphChanged(new GraphChangedEvent(false, false));
@@ -179,9 +179,9 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         propertyMenuItem.setDisabled(true);
         popupMenu.addItem(propertyMenuItem);
 
-        if (!propertyBoxes.isEmpty()) {
+        if (!propertyEditors.isEmpty()) {
             PopupMenu propertyMenu = new PopupMenu();
-            for (final PropertyBox propertyProducer : propertyBoxes) {
+            for (final PropertyEditor propertyProducer : propertyEditors) {
                 final String name = propertyProducer.getName();
                 MenuItem valueMenuItem = new MenuItem(name);
                 valueMenuItem.addListener(
@@ -264,8 +264,8 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                             public void changed(ChangeEvent event, Actor actor) {
                                 String defaultName = value.getDefaultName();
                                 String propertyName = resolveUniqueName(defaultName);
-                                PropertyBox defaultPropertyBox = value.createPropertyBox(propertyName, null, null, type.getPropertyLocations());
-                                addPropertyBox(name, defaultPropertyBox);
+                                PropertyEditor defaultPropertyEditor = value.createPropertyEditor(propertyName, null, null, type.getPropertyLocations());
+                                addPropertyEditor(name, defaultPropertyEditor);
                             }
                         });
                 menu.addItem(valueMenuItem);
@@ -289,8 +289,8 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     }
 
     private boolean hasPropertyName(String name) {
-        for (PropertyBox propertyBox : propertyBoxes) {
-            if (propertyBox.getName().equals(name))
+        for (PropertyEditor propertyEditor : propertyEditors) {
+            if (propertyEditor.getName().equals(name))
                 return true;
         }
         return false;
@@ -343,9 +343,9 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         return pipelineProperties;
     }
 
-    public void addPropertyBox(String type, final PropertyBox propertyBox) {
-        propertyBoxes.add(propertyBox);
-        final Actor actor = propertyBox.getActor();
+    public void addPropertyEditor(String type, final PropertyEditor propertyEditor) {
+        propertyEditors.add(propertyEditor);
+        final Actor actor = propertyEditor.getActor();
 
         final VisTable table = new VisTable();
         final Drawable window = skin.getDrawable("window");
@@ -363,7 +363,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        removePropertyBox(propertyBox);
+                        removePropertyEditor(propertyEditor);
                     }
                 });
         table.add(removeButton);
@@ -375,11 +375,11 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         this.fire(new GraphChangedEvent(true, false));
     }
 
-    private void removePropertyBox(PropertyBox propertyBox) {
-        Actor actor = propertyBox.getActor();
-        propertyBoxes.remove(propertyBox);
+    private void removePropertyEditor(PropertyEditor propertyEditor) {
+        Actor actor = propertyEditor.getActor();
+        propertyEditors.remove(propertyEditor);
         pipelineProperties.removeActor(actor.getParent());
-        propertyBox.dispose();
+        propertyEditor.dispose();
 
         this.fire(new GraphChangedEvent(true, false));
     }
@@ -387,8 +387,8 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
     @Override
     public void dispose() {
         graphEditor.dispose();
-        for (PropertyBox propertyBox : propertyBoxes) {
-            propertyBox.dispose();
+        for (PropertyEditor propertyEditor : propertyEditors) {
+            propertyEditor.dispose();
         }
     }
 }

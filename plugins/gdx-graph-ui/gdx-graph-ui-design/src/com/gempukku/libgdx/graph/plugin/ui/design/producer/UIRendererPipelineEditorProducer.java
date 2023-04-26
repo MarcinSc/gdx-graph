@@ -13,7 +13,7 @@ public class UIRendererPipelineEditorProducer extends GdxGraphNodeEditorProducer
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
-        graphNodeEditor.addGraphBoxPart(
+        graphNodeEditor.addGraphEditorPart(
                 new StringEditorPart("Stage Id:", "id", "", "gdx-graph-property-label", "gdx-graph-property"));
     }
 }

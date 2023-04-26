@@ -86,15 +86,15 @@ public class GraphSerializer {
         JsonValue result = serializeGraph(graph);
 
         JsonValue properties = new JsonValue(JsonValue.ValueType.array);
-        for (GraphProperty propertyBox : graph.getProperties()) {
+        for (GraphProperty graphProperty : graph.getProperties()) {
             JsonValue property = new JsonValue(JsonValue.ValueType.object);
-            property.addChild("name", new JsonValue(propertyBox.getName()));
-            property.addChild("type", new JsonValue(propertyBox.getType()));
-            PropertyLocation location = propertyBox.getLocation();
+            property.addChild("name", new JsonValue(graphProperty.getName()));
+            property.addChild("type", new JsonValue(graphProperty.getType()));
+            PropertyLocation location = graphProperty.getLocation();
             if (location != null)
                 property.addChild("location", new JsonValue(location.name()));
 
-            JsonValue data = propertyBox.getData();
+            JsonValue data = graphProperty.getData();
             if (data != null)
                 property.addChild("data", data);
 

@@ -5,15 +5,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
-import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyBox;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyBox;
+import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyEditor;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.FileSelectorEditorPart;
 
 public class PropertyTextureEditorDefinition implements PropertyEditorDefinition {
-    private Array<PropertyGraphBoxCustomization> customizations = new Array<>();
+    private Array<PropertyGraphEditorCustomization> customizations = new Array<>();
 
     public PropertyTextureEditorDefinition() {
         customizations.add(new TextureCustomization());
@@ -30,18 +30,18 @@ public class PropertyTextureEditorDefinition implements PropertyEditorDefinition
     }
 
     @Override
-    public Iterable<? extends PropertyGraphBoxCustomization> getCustomizations() {
+    public Iterable<? extends PropertyGraphEditorCustomization> getCustomizations() {
         return customizations;
     }
 
     @Override
-    public PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
-        DefaultPropertyBox result = new DefaultPropertyBox(name, ShaderFieldType.TextureRegion, location, propertyLocations);
-        result.addPropertyBoxPart(new EnumSelectEditorPart<>("Min filter ", "minFilter",
+    public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
+        DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.TextureRegion, location, propertyLocations);
+        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Min filter ", "minFilter",
                 new TextureFilterDisplayText(), Texture.TextureFilter.values()));
-        result.addPropertyBoxPart(new EnumSelectEditorPart<>("Mag filter ", "magFilter",
+        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Mag filter ", "magFilter",
                 new TextureFilterDisplayText(), Texture.TextureFilter.values()));
-        result.addPropertyBoxPart(new FileSelectorEditorPart("Preview texture ", "previewPath"));
+        result.addPropertyEditorPart(new FileSelectorEditorPart("Preview texture ", "previewPath"));
         result.initialize(jsonObject);
 
         return result;

@@ -24,16 +24,16 @@ import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
-import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.effect.GradientShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.math.common.ConditionalShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapValueShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapVectorShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.effect.GradientShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.math.common.ConditionalShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapValueShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.math.value.RemapVectorShaderEditorProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.property.*;
-import com.gempukku.libgdx.graph.ui.shader.producer.provided.SceneColorShaderBoxProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.provided.TimeShaderBoxProducerDefault;
-import com.gempukku.libgdx.graph.ui.shader.producer.texture.UVFlipbookShaderBoxProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.provided.SceneColorShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.provided.TimeShaderEditorProducer;
+import com.gempukku.libgdx.graph.ui.shader.producer.texture.UVFlipbookShaderEditorProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
 
 import java.util.LinkedHashMap;
@@ -41,14 +41,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class UICommonShaderConfiguration implements UIGraphConfiguration {
-    private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
+    private static Map<String, MenuGraphNodeEditorProducer> graphEditorProducers = new TreeMap<>();
     private static Map<String, PropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)
             menuLocation = "Dummy";
-        graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
+        graphEditorProducers.put(menuLocation + "/" + producer.getName(), producer);
     }
 
     public static void registerPropertyType(PropertyEditorDefinition propertyEditorDefinition) {
@@ -57,7 +57,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
 
     static {
         register(new GdxGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration()));
-        register(new UVFlipbookShaderBoxProducer());
+        register(new UVFlipbookShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
 
@@ -97,7 +97,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GdxGraphNodeEditorProducer(new ClampShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new SaturateShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new LerpShaderNodeConfiguration()));
-        register(new ConditionalShaderBoxProducer());
+        register(new ConditionalShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new StepShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration()));
 
@@ -112,14 +112,14 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GdxGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new MergeShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new RemapShaderNodeConfiguration()));
-        register(new RemapVectorShaderBoxProducer());
-        register(new RemapValueShaderBoxProducer());
+        register(new RemapVectorShaderEditorProducer());
+        register(new RemapValueShaderEditorProducer());
 
-        register(new DitherShaderBoxProducer());
-        register(new DitherColorShaderBoxProducer());
+        register(new DitherShaderEditorProducer());
+        register(new DitherColorShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new IntensityShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
-        register(new GradientShaderBoxProducer());
+        register(new GradientShaderEditorProducer());
 
         register(new GdxGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration()));
@@ -136,13 +136,13 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GdxGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration()));
 
-        register(new TimeShaderBoxProducerDefault());
+        register(new TimeShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new CameraDirectionShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new CameraViewportSizeShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new FragmentCoordinateShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new SceneDepthShaderNodeConfiguration()));
-        register(new SceneColorShaderBoxProducer());
+        register(new SceneColorShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new ScreenPositionShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new PixelSizeShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new ViewportSizeShaderNodeConfiguration()));
@@ -150,11 +150,11 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GdxGraphNodeEditorProducer(new BillboardSpriteShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new ScreenSpriteShaderNodeConfiguration()));
 
-        register(new ValueColorBoxProducerDefault(new ValueColorShaderNodeConfiguration()));
-        register(new ValueFloatBoxProducerDefault(new ValueFloatShaderNodeConfiguration()));
-        register(new ValueVector2BoxProducerDefault(new ValueVector2ShaderNodeConfiguration()));
-        register(new ValueVector3BoxProducerDefault(new ValueVector3ShaderNodeConfiguration()));
-        register(new ValueBooleanBoxProducerDefault(new ValueBooleanShaderNodeConfiguration()));
+        register(new ValueColorEditorProducer(new ValueColorShaderNodeConfiguration()));
+        register(new ValueFloatEditorProducer(new ValueFloatShaderNodeConfiguration()));
+        register(new ValueVector2EditorProducer(new ValueVector2ShaderNodeConfiguration()));
+        register(new ValueVector3EditorProducer(new ValueVector3ShaderNodeConfiguration()));
+        register(new ValueBooleanEditorProducer(new ValueBooleanShaderNodeConfiguration()));
 
         registerPropertyType(new PropertyFloatEditorDefinition());
         registerPropertyType(new PropertyVector2EditorDefinition());
@@ -166,7 +166,7 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
 
     @Override
     public Iterable<MenuGraphNodeEditorProducer> getGraphNodeEditorProducers() {
-        return graphBoxProducers.values();
+        return graphEditorProducers.values();
     }
 
     @Override

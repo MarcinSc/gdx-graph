@@ -8,14 +8,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class UIRenderPipelineConfiguration implements UIGraphConfiguration {
-    private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
+    private static Map<String, MenuGraphNodeEditorProducer> graphEditorProducers = new TreeMap<>();
     private static Map<String, PropertyEditorDefinition> propertyProducers = new TreeMap<>();
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)
             menuLocation = "Dummy";
-        graphBoxProducers.put(menuLocation + "/" + producer.getName(), producer);
+        graphEditorProducers.put(menuLocation + "/" + producer.getName(), producer);
     }
 
     public static void registerPropertyType(PropertyEditorDefinition propertyEditorDefinition) {
@@ -24,7 +24,7 @@ public class UIRenderPipelineConfiguration implements UIGraphConfiguration {
 
     @Override
     public Iterable<? extends MenuGraphNodeEditorProducer> getGraphNodeEditorProducers() {
-        return graphBoxProducers.values();
+        return graphEditorProducers.values();
     }
 
     @Override

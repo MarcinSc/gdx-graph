@@ -17,14 +17,14 @@ public class MapsLayersRendererEditorProducer extends GdxGraphNodeEditorProducer
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
-        graphNodeEditor.addGraphBoxPart(
+        graphNodeEditor.addGraphEditorPart(
                 new StringEditorPart("Map Id:", "id", "", "gdx-graph-property-label", "gdx-graph-property"));
-        graphNodeEditor.addGraphBoxPart(
+        graphNodeEditor.addGraphEditorPart(
                 new StringEditorPart("Layers:", "layers", "", "gdx-graph-property-label", "gdx-graph-property"));
 
         VisLabel description = new VisLabel("Comma separated list of layer names", "gdx-graph-property-label");
         description.setColor(Color.valueOf("7f7f7fff"));
         GraphNodeEditorPart commentPart = new DefaultGraphNodeEditorPart(description, null);
-        graphNodeEditor.addGraphBoxPart(commentPart);
+        graphNodeEditor.addGraphEditorPart(commentPart);
     }
 }

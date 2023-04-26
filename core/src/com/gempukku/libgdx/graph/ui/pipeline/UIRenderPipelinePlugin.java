@@ -23,7 +23,7 @@ import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldBoxProducer;
+import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldEditorProducer;
 import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyColorEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyFloatEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector2EditorDefinition;
@@ -44,11 +44,11 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
         endProducer.setCloseable(false);
         UIRenderPipelineConfiguration.register(endProducer);
 
-        UIRenderPipelineConfiguration.register(new ValueColorBoxProducerDefault(new ValueColorPipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new ValueFloatBoxProducerDefault(new ValueFloatPipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new ValueVector2BoxProducerDefault(new ValueVector2PipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new ValueVector3BoxProducerDefault(new ValueVector3PipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new ValueBooleanBoxProducerDefault(new ValueBooleanPipelineNodeConfiguration()));
+        UIRenderPipelineConfiguration.register(new ValueColorEditorProducer(new ValueColorPipelineNodeConfiguration()));
+        UIRenderPipelineConfiguration.register(new ValueFloatEditorProducer(new ValueFloatPipelineNodeConfiguration()));
+        UIRenderPipelineConfiguration.register(new ValueVector2EditorProducer(new ValueVector2PipelineNodeConfiguration()));
+        UIRenderPipelineConfiguration.register(new ValueVector3EditorProducer(new ValueVector3PipelineNodeConfiguration()));
+        UIRenderPipelineConfiguration.register(new ValueBooleanEditorProducer(new ValueBooleanPipelineNodeConfiguration()));
 
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new TimePipelineNodeConfiguration()));
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new RenderSizePipelineNodeConfiguration()));
@@ -105,7 +105,7 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
 
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new BloomPipelineNodeConfiguration()));
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GaussianBlurPipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new DepthOfFieldBoxProducer());
+        UIRenderPipelineConfiguration.register(new DepthOfFieldEditorProducer());
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
 
         // Register property types
@@ -114,7 +114,7 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyVector3EditorDefinition());
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyColorEditorDefinition());
         PipelinePropertyEditorDefinitionImpl booleanProperty = new PipelinePropertyEditorDefinitionImpl("New Boolean", "Boolean");
-        booleanProperty.addPropertyBoxPart(
+        booleanProperty.addPropertyEditorPart(
                 new Supplier<GraphNodeEditorPart>() {
                     @Override
                     public GraphNodeEditorPart get() {

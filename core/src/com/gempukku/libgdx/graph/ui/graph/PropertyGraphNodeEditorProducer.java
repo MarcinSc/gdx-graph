@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.ui.graph;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
-import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphBoxCustomization;
+import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.graph.ui.producer.ValueGraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
 
@@ -59,9 +59,9 @@ public class PropertyGraphNodeEditorProducer implements MenuGraphNodeEditorProdu
         for (UIGraphConfiguration configuration : configurations) {
             PropertyEditorDefinition propertyEditorDefinition = configuration.getPropertyEditorDefinitions().get(propertyType);
             if (propertyEditorDefinition != null) {
-                Iterable<? extends PropertyGraphBoxCustomization> customizations = propertyEditorDefinition.getCustomizations();
+                Iterable<? extends PropertyGraphEditorCustomization> customizations = propertyEditorDefinition.getCustomizations();
                 if (customizations != null) {
-                    for (PropertyGraphBoxCustomization customization : customizations) {
+                    for (PropertyGraphEditorCustomization customization : customizations) {
                         customization.process(getConfiguration(data), result, data);
                     }
                 }

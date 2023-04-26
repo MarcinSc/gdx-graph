@@ -8,7 +8,7 @@ public interface PropertyEditorDefinition {
 
     String getDefaultName();
 
-    PropertyBox createPropertyBox(String name, PropertyLocation location, JsonValue data, PropertyLocation[] propertyLocations);
+    PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue data, PropertyLocation[] propertyLocations);
 
-    Iterable<? extends PropertyGraphBoxCustomization> getCustomizations();
+    Iterable<? extends PropertyGraphEditorCustomization> getCustomizations();
 }
