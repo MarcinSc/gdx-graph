@@ -36,7 +36,9 @@ allprojects {
 }
 
 configure(subprojects) {
-    apply plugin: 'java-library'
+    apply plugin: "java"
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
 
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -45,21 +47,19 @@ configure(subprojects) {
     sourceSets.test.java.srcDirs = ["test/"]
     sourceSets.test.resources.srcDirs = ["test-resources/"]
 
-    compileJava {
-        options.incremental = true
+    java {
+        withSourcesJar()
+        withJavadocJar()
     }
 
-    task javadocJar(type: Jar) {
-        archiveClassifier = "javadoc"
-        from javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        archiveClassifier = "sources"
-        from sourceSets.main.allJava
-    }
-
-    artifacts {
-        archives javadocJar, sourcesJar
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
+            }
+        }
     }
 }
