@@ -13,6 +13,7 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
+//    implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-desktop:$gdxAssistantVersion"
     implementation("com.github.MarcinSc.gdx-assistant:gdx-assistant-desktop:$gdxAssistantVersion") {
         exclude group: "com.github.MarcinSc.gdx-gemp-lib"
     }

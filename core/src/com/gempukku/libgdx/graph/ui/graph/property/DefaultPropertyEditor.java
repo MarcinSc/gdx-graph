@@ -1,15 +1,13 @@
 package com.gempukku.libgdx.graph.ui.graph.property;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.gempukku.libgdx.ui.undo.UndoableTextField;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -26,22 +24,17 @@ public class DefaultPropertyEditor extends VisTable implements PropertyEditor {
                                  PropertyLocation... propertyLocations) {
         this.propertyType = propertyType;
 
-        locationPart = new EnumSelectEditorPart<>("Location", "location", new ToStringEnum<>(), propertyLocations);
-        if (selectedLocation != null)
-            locationPart.setSelected(selectedLocation);
+        if (propertyLocations.length>0) {
+            if (selectedLocation == null)
+                selectedLocation = propertyLocations[0];
+            locationPart = new EnumSelectEditorPart<>("Location", "location", selectedLocation, new ToStringEnum<>(), new Array<>(propertyLocations));
+        }
 
-        nameField = new VisTextField(name);
+        nameField = new UndoableTextField(name);
         this.propertyLocations = propertyLocations;
         VisTable headerTable = new VisTable();
         headerTable.add(new VisLabel("Name: "));
         headerTable.add(nameField).growX();
-        nameField.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        fire(new GraphChangedEvent(true, true));
-                    }
-                });
         headerTable.row();
         add(headerTable).growX().row();
 
@@ -93,14 +86,5 @@ public class DefaultPropertyEditor extends VisTable implements PropertyEditor {
     @Override
     public Actor getActor() {
         return this;
-    }
-
-    @Override
-    public void dispose() {
-        for (GraphNodeEditorPart graphEditorPart : propertyEditorParts) {
-            if (graphEditorPart instanceof Disposable) {
-                ((Disposable) graphEditorPart).dispose();
-            }
-        }
     }
 }

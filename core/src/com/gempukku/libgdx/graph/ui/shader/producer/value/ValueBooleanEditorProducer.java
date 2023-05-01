@@ -1,13 +1,11 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.value;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
+import com.gempukku.libgdx.ui.undo.UndoableCheckBox;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 
 
@@ -20,14 +18,7 @@ public class ValueBooleanEditorProducer extends ValueGraphEditorProducer {
     protected DefaultGraphNodeEditorPart createValuePart() {
         boolean v = false;
         HorizontalGroup horizontalGroup = new HorizontalGroup();
-        final VisCheckBox checkBox = new VisCheckBox("Value", "gdx-graph-property-label");
-        checkBox.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        checkBox.fire(new GraphChangedEvent(false, true));
-                    }
-                });
+        final VisCheckBox checkBox = new UndoableCheckBox("Value", "gdx-graph-property-label");
         checkBox.setChecked(v);
         horizontalGroup.addActor(checkBox);
 

@@ -1,15 +1,13 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.math.value;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.config.common.math.value.RemapVectorShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
+import com.gempukku.libgdx.ui.undo.UndoableSelectBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -64,17 +62,10 @@ public class RemapVectorShaderEditorProducer extends GdxGraphNodeEditorProducer 
     }
 
     private VisSelectBox<String> createSelectBox(String defaultValue) {
-        final VisSelectBox<String> result = new VisSelectBox<>("gdx-graph-property");
+        final VisSelectBox<String> result = new UndoableSelectBox<>("gdx-graph-property");
         result.setItems("0.0", "1.0", "X", "Y", "Z", "W");
         result.setSelected(defaultValue);
         result.setAlignment(Align.right);
-        result.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        result.fire(new GraphChangedEvent(false, true));
-                    }
-                });
         return result;
     }
 }

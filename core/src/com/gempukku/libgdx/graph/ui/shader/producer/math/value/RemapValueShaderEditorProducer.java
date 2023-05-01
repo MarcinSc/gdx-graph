@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.math.value;
 
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.config.common.math.value.RemapValueShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -20,6 +21,7 @@ public class RemapValueShaderEditorProducer extends GdxGraphNodeEditorProducer {
                 new CurveEditorPart("points", "gdx-graph"));
         graphNodeEditor.addGraphEditorPart(
                 new EnumSelectEditorPart<>("Clamp method:", "clamp",
-                        new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", ClampMethod.values()));
+                        ClampMethod.Normal,
+                        new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(ClampMethod.values())));
     }
 }

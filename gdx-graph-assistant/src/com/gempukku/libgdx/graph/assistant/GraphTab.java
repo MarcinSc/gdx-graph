@@ -14,6 +14,10 @@ import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.undo.UndoManager;
+import com.gempukku.libgdx.undo.UndoableAction;
+import com.gempukku.libgdx.undo.event.UndoableEvent;
+import com.gempukku.libgdx.undo.event.UndoableListener;
 
 public class GraphTab implements AssistantPluginTab, TabControl {
     private final TabControl tabControl;
@@ -23,10 +27,19 @@ public class GraphTab implements AssistantPluginTab, TabControl {
 
     private boolean dirty = false;
 
-    public GraphTab(TabControl tabControl, StatusManager statusManager, GraphWithProperties graph) {
+    public GraphTab(TabControl tabControl, StatusManager statusManager, UndoManager undoManager, GraphWithProperties graph) {
         this.tabControl = tabControl;
 
         graphWithPropertiesEditor = new GraphWithPropertiesEditor(graph);
+        graphWithPropertiesEditor.addListener(
+                new UndoableListener() {
+                    @Override
+                    public void undoable(UndoableEvent undoableEvent) {
+                        UndoableAction undoableAction = undoableEvent.getUndoableAction();
+                        if (undoableAction != null)
+                            undoManager.addUndoableAction(undoableAction);
+                    }
+                });
         graphWithPropertiesEditor.addListener(
                 new EventListener() {
                     @Override
@@ -44,7 +57,7 @@ public class GraphTab implements AssistantPluginTab, TabControl {
 
                                 UIGraphType graphType = (UIGraphType) requestGraphOpen.getType();
                                 GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
-                                GraphTab graphTab = new GraphTab(GraphTab.this, statusManager, subGraph);
+                                GraphTab graphTab = new GraphTab(GraphTab.this, statusManager, undoManager, subGraph);
                                 tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), graphTab.getContent(), graphTab);
                                 subTabs.put(graphId, graphTab);
                                 tabControl.switchToTab(graphTab);
@@ -187,7 +200,6 @@ public class GraphTab implements AssistantPluginTab, TabControl {
 
     @Override
     public void closed() {
-        graphWithPropertiesEditor.dispose();
         for (AssistantPluginTab subGraphTab : subTabs.values()) {
             tabControl.closeTab(subGraphTab);
         }

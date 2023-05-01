@@ -263,7 +263,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             tabManager.switchToTab(graphTab);
         } else {
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
-            graphTab = new GraphTab(GdxGraphProject.this, application.getStatusManager(), graph);
+            graphTab = new GraphTab(GdxGraphProject.this, application.getStatusManager(), application.getUndoManager(), graph);
             tabManager.addTab(graphId, graphType.getIcon(), graphTab.getContent(), graphTab);
             mainGraphTabs.put(graphId, graphTab);
         }

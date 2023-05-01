@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ShadowShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -16,8 +17,8 @@ public class ShadowShaderRendererEditorProducer extends GdxGraphNodeEditorProduc
 
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
-        EnumSelectEditorPart<RenderOrder> renderOrderSelect = new EnumSelectEditorPart<>("Render order", "renderOrder",
-                new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", RenderOrder.values());
+        EnumSelectEditorPart<RenderOrder> renderOrderSelect = new EnumSelectEditorPart<>("Render order", "renderOrder", RenderOrder.Shader_Unordered,
+                new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(RenderOrder.values()));
         graphNodeEditor.addGraphEditorPart(renderOrderSelect);
 
         StringEditorPart envId = new StringEditorPart("Env id: ", "id", "", "gdx-graph-property-label", "gdx-graph-property");

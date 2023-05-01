@@ -2,10 +2,10 @@ package com.gempukku.libgdx.graph.ui.graph;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.ui.DisposableTable;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.*;
@@ -19,18 +19,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphChangedAware {
+public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEditor, GraphChangedAware {
     private static final String ioLabelStyle = "gdx-graph-io-label";
 
     private NodeConfiguration configuration;
-    private VisTable table;
     private List<GraphNodeEditorPart> editorParts = new LinkedList<>();
     private Map<String, GraphNodeEditorInput> inputConnectors = new HashMap<>();
     private Map<String, GraphNodeEditorOutput> outputConnectors = new HashMap<>();
 
     public GdxGraphNodeEditor(NodeConfiguration configuration) {
         this.configuration = configuration;
-        table = new VisTable();
+    }
+
+    @Override
+    protected void initializeWidget() {
+
+    }
+
+    @Override
+    protected void disposeWidget() {
+
     }
 
     @Override
@@ -42,7 +50,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         inputConnectors.put(graphNodeInput.getFieldId(), new DefaultGraphNodeEditorInput(GraphNodeInputSide.Top, new Supplier<Float>() {
             @Override
             public Float get() {
-                return table.getWidth() / 2f;
+                return getWidth() / 2f;
             }
         }, graphNodeInput.getFieldId()));
     }
@@ -52,7 +60,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
                 new Supplier<Float>() {
                     @Override
                     public Float get() {
-                        return table.getWidth() / 2f;
+                        return getWidth() / 2f;
                     }
                 }, graphNodeOutput.getFieldId()));
     }
@@ -96,7 +104,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
     public void addGraphEditorPart(GraphNodeEditorPart graphEditorPart) {
         editorParts.add(graphEditorPart);
         final Actor actor = graphEditorPart.getActor();
-        table.add(actor).growX().row();
+        add(actor).growX().row();
         final GraphNodeEditorInput inputConnector = graphEditorPart.getInputConnector();
         if (inputConnector != null) {
             inputConnectors.put(inputConnector.getFieldId(),
@@ -135,7 +143,7 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
 
     @Override
     public Actor getActor() {
-        return table;
+        return this;
     }
 
     public void initialize(JsonValue data) {
@@ -161,15 +169,6 @@ public class GdxGraphNodeEditor implements GraphNodeEditor, Disposable, GraphCha
         for (GraphNodeEditorPart editorPart : editorParts) {
             if (editorPart instanceof GraphChangedAware) {
                 ((GraphChangedAware) editorPart).graphChanged(event, hasErrors, graph);
-            }
-        }
-    }
-
-    @Override
-    public void dispose() {
-        for (GraphNodeEditorPart editorPart : editorParts) {
-            if (editorPart instanceof Disposable) {
-                ((Disposable) editorPart).dispose();
             }
         }
     }

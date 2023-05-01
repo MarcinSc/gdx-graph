@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.models.design.producer;
 
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.plugin.models.config.EndModelShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -29,15 +30,17 @@ public class EndModelShaderEditorProducer extends GdxGraphNodeEditorProducer {
 
         graphNodeEditor.addGraphEditorPart(new SectionEditorPart("Rendering config", "gdx-graph-section-label", "default"));
 
-        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", new ToStringEnum<>(),
+        EnumSelectEditorPart<BasicShader.Culling> cullingBox = new EnumSelectEditorPart<>("Culling", "culling", BasicShader.Culling.back,
+                new ToStringEnum<>(),
                 "gdx-graph-property-label", "gdx-graph-property",
-                BasicShader.Culling.values());
+                new Array<>(BasicShader.Culling.values()));
         graphNodeEditor.addGraphEditorPart(cullingBox);
 
         BlendingEditorPart blendingBox = new BlendingEditorPart();
         graphNodeEditor.addGraphEditorPart(blendingBox);
 
-        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.DepthTesting.values());
+        EnumSelectEditorPart<BasicShader.DepthTesting> depthTestBox = new EnumSelectEditorPart<>("DepthTest", "depthTest", BasicShader.DepthTesting.less,
+                new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BasicShader.DepthTesting.values()));
         graphNodeEditor.addGraphEditorPart(depthTestBox);
 
         CheckboxEditorPart writeDepthBox = new CheckboxEditorPart("Write depth", "depthWrite", false, "gdx-graph-property-label");

@@ -6,7 +6,7 @@ import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
-import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
+import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 
 public abstract class ValueGraphEditorProducer implements MenuGraphNodeEditorProducer {
     protected MenuNodeConfiguration configuration;
@@ -51,5 +51,5 @@ public abstract class ValueGraphEditorProducer implements MenuGraphNodeEditorPro
         return graphNodeEditor;
     }
 
-    protected abstract DefaultGraphNodeEditorPart createValuePart();
+    protected abstract GraphNodeEditorPart createValuePart();
 }

@@ -37,10 +37,10 @@ public class PropertyTextureEditorDefinition implements PropertyEditorDefinition
     @Override
     public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.TextureRegion, location, propertyLocations);
-        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Min filter ", "minFilter",
-                new TextureFilterDisplayText(), Texture.TextureFilter.values()));
-        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Mag filter ", "magFilter",
-                new TextureFilterDisplayText(), Texture.TextureFilter.values()));
+        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Min filter ", "minFilter", Texture.TextureFilter.Nearest,
+                new TextureFilterDisplayText(), new Array<>(Texture.TextureFilter.values())));
+        result.addPropertyEditorPart(new EnumSelectEditorPart<>("Mag filter ", "magFilter", Texture.TextureFilter.Nearest,
+                new TextureFilterDisplayText(), new Array<>(Texture.TextureFilter.values())));
         result.addPropertyEditorPart(new FileSelectorEditorPart("Preview texture ", "previewPath"));
         result.initialize(jsonObject);
 

@@ -192,8 +192,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
             graphShaderRenderingWidget.setGraphShader(graphShader);
         } catch (Exception exp) {
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
-            if (graphShader != null)
-                graphShader.dispose();
+            destroyShader();
         }
     }
 

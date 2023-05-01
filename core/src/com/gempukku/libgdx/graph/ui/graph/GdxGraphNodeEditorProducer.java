@@ -52,8 +52,12 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
     public GraphNodeEditor createNodeEditor(JsonValue data) {
         GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(configuration) {
             @Override
-            public void dispose() {
-                super.dispose();
+            protected void initializeWidget() {
+                awareChildren.add(this);
+            }
+
+            @Override
+            protected void disposeWidget() {
                 awareChildren.remove(this);
             }
         };

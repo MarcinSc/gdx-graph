@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.property;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
@@ -18,10 +19,10 @@ public class TextureCustomization implements PropertyGraphEditorCustomization {
             Texture.TextureWrap[] wrapValues = new Texture.TextureWrap[]{Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.Repeat, Texture.TextureWrap.MirroredRepeat};
             configuration.addNodeOutput(new DefaultGraphNodeOutput("textureSize", "Texture Size", ShaderFieldType.Vector2));
             result.addOutputGraphPart(new DefaultGraphNodeOutput("textureSize", "Texture Size", ShaderFieldType.Vector2));
-            EnumSelectEditorPart<Texture.TextureWrap> uWrap = new EnumSelectEditorPart<>("U wrap ", "uWrap",
-                    new TextureWrapDisplayText(), wrapValues);
-            EnumSelectEditorPart<Texture.TextureWrap> vWrap = new EnumSelectEditorPart<>("V wrap ", "vWrap",
-                    new TextureWrapDisplayText(), wrapValues);
+            EnumSelectEditorPart<Texture.TextureWrap> uWrap = new EnumSelectEditorPart<>("U wrap ", "uWrap", wrapValues[0],
+                    new TextureWrapDisplayText(), new Array<>(wrapValues));
+            EnumSelectEditorPart<Texture.TextureWrap> vWrap = new EnumSelectEditorPart<>("V wrap ", "vWrap", wrapValues[0],
+                    new TextureWrapDisplayText(), new Array<>(wrapValues));
             result.addGraphEditorPart(uWrap);
             result.addGraphEditorPart(vWrap);
 

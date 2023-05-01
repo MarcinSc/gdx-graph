@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
@@ -28,6 +28,7 @@ import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.gempukku.libgdx.ui.preview.PreviewWidget;
+import com.gempukku.libgdx.undo.UndoableAction;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class GraphWithPropertiesEditor extends VisTable implements Disposable {
+public class GraphWithPropertiesEditor extends VisTable  {
     private final UIGraphType type;
     private final Skin skin;
 
@@ -84,7 +85,7 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
                     @Override
                     protected boolean graphChanged(GraphChangedEvent event) {
                         processGraphChanged(event);
-                        return true;
+                        return false;
                     }
                 });
 
@@ -127,7 +128,20 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
             addPropertyEditor(property.getName(), propertyEditor);
         }
 
-        processGraphChanged(new GraphChangedEvent(true, true));
+        GraphChangedEvent event = Pools.obtain(GraphChangedEvent.class);
+        event.setStructure(true);
+        event.setData(true);
+        processGraphChanged(event);
+        Pools.free(event);
+    }
+
+    private void graphChanged(boolean structure, boolean data, UndoableAction undoableAction) {
+        GraphChangedEvent event = Pools.obtain(GraphChangedEvent.class);
+        event.setStructure(true);
+        event.setData(true);
+        event.setUndoableAction(undoableAction);
+        fire(event);
+        Pools.free(event);
     }
 
     private PropertyEditorDefinition getPropertyEditorDefinition(String propertyType) {
@@ -368,23 +382,14 @@ public class GraphWithPropertiesEditor extends VisTable implements Disposable {
         table.row();
         pipelineProperties.addActor(table);
 
-        this.fire(new GraphChangedEvent(true, false));
+        graphChanged(true, false, null);
     }
 
     private void removePropertyEditor(PropertyEditor propertyEditor) {
         Actor actor = propertyEditor.getActor();
         propertyEditors.remove(propertyEditor);
         pipelineProperties.removeActor(actor.getParent());
-        propertyEditor.dispose();
 
-        this.fire(new GraphChangedEvent(true, false));
-    }
-
-    @Override
-    public void dispose() {
-        graphEditor.dispose();
-        for (PropertyEditor propertyEditor : propertyEditors) {
-            propertyEditor.dispose();
-        }
+        graphChanged(true, false, null);
     }
 }

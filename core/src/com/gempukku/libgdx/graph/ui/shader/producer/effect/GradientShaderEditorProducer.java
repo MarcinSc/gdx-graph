@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.effect;
 
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.config.common.effect.GradientShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
@@ -20,6 +21,7 @@ public class GradientShaderEditorProducer extends GdxGraphNodeEditorProducer {
                 new GradientEditorPart("points", "gdx-graph"));
         graphNodeEditor.addGraphEditorPart(
                 new EnumSelectEditorPart<>("Clamp method:", "clamp",
-                        new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", ClampMethod.values()));
+                        ClampMethod.Normal,
+                        new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(ClampMethod.values())));
     }
 }

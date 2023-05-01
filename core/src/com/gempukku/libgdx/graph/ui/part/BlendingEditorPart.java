@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.ui.part;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
@@ -75,12 +76,12 @@ public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart 
     private EnumSelectEditorPart<BasicShader.BlendingFactor> destinationFactorSelect;
 
     public BlendingEditorPart() {
-        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, new ToStringEnum<>(),
+        this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, Blending.disabled, new ToStringEnum<>(),
                 "gdx-graph-property-label", "gdx-graph-property",
-                Blending.values());
+                new Array<>(Blending.values()));
 
-        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.BlendingFactor.values());
-        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", BasicShader.BlendingFactor.values());
+        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", BasicShader.BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BasicShader.BlendingFactor.values()));
+        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", BasicShader.BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BasicShader.BlendingFactor.values()));
 
         this.blendingSelect.addListener(
                 new ChangeListener() {
