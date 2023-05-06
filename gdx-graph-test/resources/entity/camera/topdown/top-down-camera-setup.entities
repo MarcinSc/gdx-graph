@@ -2,7 +2,7 @@
   "entities": [
     {
       "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
-        "pipelinePath": "test/top-down-camera-test.json",
+        "pipelinePath": "examples-assets/top-down-camera-test.json",
         "cameraDefinitions": [
           {
             "cameraProperty": "Camera",

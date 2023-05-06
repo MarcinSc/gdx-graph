@@ -39,17 +39,19 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     private AssistantApplication application;
     private MenuManager menuManager;
     private TabManager tabManager;
+    private final AssistantProject assistantProject;
 
     private InputValidator graphNameValidator;
 
     private boolean dirty;
 
-    public GdxGraphProject(AssistantApplication application) {
-        this(application, null);
+    public GdxGraphProject(AssistantApplication application, AssistantProject assistantProject) {
+        this(application, assistantProject, null);
     }
 
-    public GdxGraphProject(AssistantApplication application, JsonValue data) {
+    public GdxGraphProject(AssistantApplication application, AssistantProject assistantProject, JsonValue data) {
         this.application = application;
+        this.assistantProject = assistantProject;
         this.menuManager = application.getMenuManager();
         this.tabManager = application.getTabManager();
         if (data == null) {
@@ -76,8 +78,10 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
             if (graphType instanceof UIGraphType) {
                 UIGraphType type = (UIGraphType) graphType;
+                menuManager.addPopupMenu("Graph", "New", type.getPresentableName());
+                menuManager.setPopupMenuDisabled("Graph", "New", type.getPresentableName(),
+                        type.getGraphTemplates() == null);
                 if (type.getGraphTemplates() != null) {
-                    menuManager.addPopupMenu("Graph", "New", type.getPresentableName());
                     for (GraphTemplate graphTemplate : type.getGraphTemplates()) {
                         menuManager.addMenuItem("Graph", "New" + "/" + type.getPresentableName(), graphTemplate.getTitle(),
                                 new Runnable() {
@@ -92,6 +96,13 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         }
 
         menuManager.setPopupMenuDisabled("Graph", null, "Open", gdxGraphProjectData.getGraphs().isEmpty());
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                menuManager.addPopupMenu("Graph", "Open", type.getPresentableName());
+                menuManager.setPopupMenuDisabled("Graph", "Open", type.getPresentableName(), true);
+            }
+        }
 
         menuManager.setPopupMenuDisabled("Graph", null, "Import", false);
         for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
@@ -151,7 +162,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                             errorDialog.setModal(true);
                             application.addWindow(errorDialog.fadeIn());
                         } else {
-                            GraphShader graphShader = GraphShaderBuilder.buildShader(graph);
+                            GraphShader graphShader = GraphShaderBuilder.buildShader(graph, application.getAssetResolver());
                             ShaderCodeWindow shaderCodeWindow = new ShaderCodeWindow(graphShader);
                             shaderCodeWindow.setCenterOnAdd(true);
                             application.addWindow(shaderCodeWindow.fadeIn());
@@ -176,7 +187,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
     private void newGraph(UIGraphType graphType, JsonValue graph) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.SAVE);
-        fileChooser.setDirectory(application.getProjectFolder());
+        fileChooser.setDirectory(assistantProject.getAssetFolder());
         fileChooser.setFileTypeFilter(createGraphFileFilter(graphType, false));
         fileChooser.setModal(true);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
@@ -222,34 +233,28 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
     private void loadGraphIntoProject(JsonReader jsonReader, GdxGraphData graph) {
         UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getGraphType());
-        FileHandle graphPath = application.getProjectFolder().child(graph.getPath());
+        FileHandle graphPath = assistantProject.getAssetFolder().child(graph.getPath());
         loadGraphIntoProject(jsonReader, graph.getName(), graphType, graphPath);
     }
 
     private void loadGraphIntoProject(JsonReader jsonReader, String graphName, UIGraphType graphType, FileHandle graphPath) {
-        mainGraphs.put(graphName, jsonReader.parse(graphPath));
-        menuManager.addMenuItem("Graph", "Open", graphName,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        openGraphTab(graphName, graphType);
-                    }
-                });
+        loadGraphIntoProject(graphName, graphType, jsonReader.parse(graphPath));
     }
 
     private void loadGraphIntoProject(String graphName, UIGraphType graphType, JsonValue graph) {
         mainGraphs.put(graphName, graph);
-        menuManager.addMenuItem("Graph", "Open", graphName,
+        menuManager.addMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphName,
                 new Runnable() {
                     @Override
                     public void run() {
                         openGraphTab(graphName, graphType);
                     }
                 });
+        menuManager.setPopupMenuDisabled("Graph", "Open", graphType.getPresentableName(), false);
     }
 
     private String toProjectChildPath(FileHandle file) {
-        String projectFolderPath = application.getProjectFolder().path() + "/";
+        String projectFolderPath = assistantProject.getAssetFolder().path() + "/";
         if (!file.path().startsWith(projectFolderPath)) {
             return null;
         } else {
@@ -271,7 +276,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
     private void importGraph(UIGraphType graphType) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-        fileChooser.setDirectory(application.getProjectFolder());
+        fileChooser.setDirectory(assistantProject.getAssetFolder());
         fileChooser.setFileTypeFilter(createGraphFileFilter(graphType, true));
         fileChooser.setModal(true);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
@@ -386,7 +391,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             JsonValue serializedGraph = openGraphEntry.value.serializeGraph();
             mainGraphs.put(graphId, serializedGraph);
             GdxGraphData graphData = getGraphDataById(graphId);
-            FileHandle graphFile = application.getProjectFolder().child(graphData.getPath());
+            FileHandle graphFile = assistantProject.getAssetFolder().child(graphData.getPath());
             graphFile.writeString(serializedGraph.toJson(JsonWriter.OutputType.json), false);
         }
 

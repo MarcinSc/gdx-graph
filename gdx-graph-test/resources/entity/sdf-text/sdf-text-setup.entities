@@ -2,7 +2,7 @@
   "entities": [
     {
       "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
-        "pipelinePath": "test/sdf-text-shader-test.json",
+        "pipelinePath": "examples-assets/sdf-text-shader-test.json",
         "cameraDefinitions": [
           {
             "cameraProperty": "Camera",

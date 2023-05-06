@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.ui.shader.producer.effect;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.config.common.effect.GradientShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.ui.ColorPickerSupplier;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
@@ -18,7 +19,7 @@ public class GradientShaderEditorProducer extends GdxGraphNodeEditorProducer {
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         graphNodeEditor.addGraphEditorPart(
-                new GradientEditorPart("points", "gdx-graph"));
+                new GradientEditorPart(ColorPickerSupplier.instance, "points", "gdx-graph"));
         graphNodeEditor.addGraphEditorPart(
                 new EnumSelectEditorPart<>("Clamp method:", "clamp",
                         ClampMethod.Normal,

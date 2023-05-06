@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.pipeline.producer.node;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.pipeline.PipelinePropertySource;
 import com.gempukku.libgdx.graph.pipeline.impl.BufferCopyHelper;
 import com.gempukku.libgdx.graph.pipeline.impl.TextureFrameBufferCache;
@@ -19,6 +20,8 @@ public interface PipelineDataProvider {
     TimeProvider getTimeProvider();
 
     FullScreenRender getFullScreenRender();
+
+    FileHandleResolver getAssetResolver();
 
     WhitePixel getWhitePixel();
 }

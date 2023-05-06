@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.boneanimation.design;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.boneanimation.config.SkinningShaderNodeConfiguration;
@@ -10,7 +11,8 @@ import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 
 public class UIBoneAnimationPlugin implements UIGdxGraphPlugin {
-    public void initialize() {
+    @Override
+    public void initialize(FileHandleResolver assetResolver) {
         // Register property types
         UIModelShaderConfiguration.registerPropertyType(
                 new BoneWeightPropertyEditorDefinition());

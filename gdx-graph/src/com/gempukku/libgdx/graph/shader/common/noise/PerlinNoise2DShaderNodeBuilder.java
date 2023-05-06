@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.noise;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -21,7 +22,7 @@ public class PerlinNoise2DShaderNodeBuilder extends ConfigurationCommonShaderNod
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput uvValue = inputs.get("uv");
         FieldOutput progressValue = inputs.get("progress");
         FieldOutput scaleValue = inputs.get("scale");
@@ -34,8 +35,8 @@ public class PerlinNoise2DShaderNodeBuilder extends ConfigurationCommonShaderNod
         commonShaderBuilder.addMainLine("// Perlin noise 2D node");
 
         if (progressValue != null) {
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/common");
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/perlinNoise3d");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/common");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/perlinNoise3d");
 
             if (uvValue.getFieldType().getName().equals(ShaderFieldType.Vector2)) {
                 output = "perlinNoise3d(vec3(" + uvValue.getRepresentation() + " * " + scale + ", " + progressValue.getRepresentation() + "))";
@@ -43,8 +44,8 @@ public class PerlinNoise2DShaderNodeBuilder extends ConfigurationCommonShaderNod
                 output = "perlinNoise3d(vec3(" + uvValue.getRepresentation() + " * " + scale + ", 0.0, " + progressValue.getRepresentation() + "))";
             }
         } else {
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/common");
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/perlinNoise2d");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/common");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/perlinNoise2d");
 
             if (uvValue.getFieldType().getName().equals(ShaderFieldType.Vector2)) {
                 output = "perlinNoise2d(" + uvValue.getRepresentation() + " * " + scale + ")";

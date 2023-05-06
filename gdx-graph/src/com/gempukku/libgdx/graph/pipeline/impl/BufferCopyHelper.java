@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -10,10 +11,10 @@ import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 public class BufferCopyHelper {
     private final ShaderProgram shaderProgram;
 
-    public BufferCopyHelper() {
+    public BufferCopyHelper(FileHandleResolver assetsResolver) {
         shaderProgram = new ShaderProgram(
-                Gdx.files.classpath("shader/draw/drawTexture.vert"),
-                Gdx.files.classpath("shader/draw/drawTexture.frag")
+                assetsResolver.resolve("shader/draw/drawTexture.vert"),
+                assetsResolver.resolve("shader/draw/drawTexture.frag")
         );
     }
 

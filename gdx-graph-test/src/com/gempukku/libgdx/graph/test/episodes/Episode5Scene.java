@@ -168,7 +168,7 @@ public class Episode5Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("episodes/episode5.json"), timeKeeper);
+        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode5.json"), timeKeeper);
         pipelineRenderer.setPipelineProperty("Camera", camera);
         pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
         return pipelineRenderer;

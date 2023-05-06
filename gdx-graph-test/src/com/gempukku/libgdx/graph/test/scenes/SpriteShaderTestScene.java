@@ -106,7 +106,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("test/sprite-shader-test.json"), timeKeeper);
+        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/sprite-shader-test.json"), timeKeeper);
         pipelineRenderer.setPipelineProperty("Camera", camera);
         return pipelineRenderer;
     }

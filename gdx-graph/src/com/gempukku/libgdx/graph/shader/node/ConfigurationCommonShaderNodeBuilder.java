@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.node;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -15,16 +16,26 @@ public abstract class ConfigurationCommonShaderNodeBuilder extends Configuration
         super(configuration);
     }
 
-    protected abstract ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                                CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader);
+    protected abstract ObjectMap<String, ? extends FieldOutput> buildCommonNode(
+            boolean designTime, String nodeId, JsonValue data,
+            ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
+            CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver);
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        return buildCommonNode(designTime, nodeId, data, inputs, producedOutputs, vertexShaderBuilder, graphShaderContext, graphShader);
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(
+            boolean designTime, String nodeId, JsonValue data,
+            ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
+            VertexShaderBuilder vertexShaderBuilder,
+            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+        return buildCommonNode(designTime, nodeId, data, inputs, producedOutputs, vertexShaderBuilder, graphShaderContext, graphShader, assetResolver);
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
-        return buildCommonNode(designTime, nodeId, data, inputs, producedOutputs, fragmentShaderBuilder, graphShaderContext, graphShader);
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(
+            boolean designTime, String nodeId, JsonValue data,
+            ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
+            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
+            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+        return buildCommonNode(designTime, nodeId, data, inputs, producedOutputs, fragmentShaderBuilder, graphShaderContext, graphShader, assetResolver);
     }
 }

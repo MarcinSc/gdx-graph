@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.shader.builder;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.LibGDXCollections;
@@ -8,29 +8,29 @@ import com.gempukku.libgdx.common.LibGDXCollections;
 import java.nio.charset.StandardCharsets;
 
 public class GLSLFragmentReader {
-    private static final ObjectMap<String, String> map = new ObjectMap<String, String>();
+    private static final ObjectMap<String, String> map = new ObjectMap<>();
 
     private GLSLFragmentReader() {
     }
 
-    public static String getFragment(String fragmentName) {
-        return getFragment(fragmentName, LibGDXCollections.<String, String>emptyMap());
+    public static String getFragment(FileHandleResolver assetResolver, String fragmentName) {
+        return getFragment(assetResolver, fragmentName, LibGDXCollections.<String, String>emptyMap());
     }
 
-    public static String getFragment(String fragmentName, ObjectMap<String, String> replacements) {
-        String fragment = readFragment(fragmentName);
+    public static String getFragment(FileHandleResolver assetResolver, String fragmentName, ObjectMap<String, String> replacements) {
+        String fragment = readFragment(assetResolver, fragmentName);
         for (ObjectMap.Entry<String, String> replacement : replacements.entries())
             fragment = fragment.replace(replacement.key, replacement.value);
 
         return fragment;
     }
 
-    private static String readFragment(String fragmentName) {
+    private static String readFragment(FileHandleResolver assetResolver, String fragmentName) {
         String result = map.get(fragmentName);
         if (result != null)
             return result;
 
-        FileHandle fileHandle = Gdx.files.classpath("glsl/fragment/" + fragmentName + ".glsl");
+        FileHandle fileHandle = assetResolver.resolve("glsl/fragment/" + fragmentName + ".glsl");
         String fragment = new String(fileHandle.readBytes(), StandardCharsets.UTF_8);
         map.put(fragmentName, fragment);
 

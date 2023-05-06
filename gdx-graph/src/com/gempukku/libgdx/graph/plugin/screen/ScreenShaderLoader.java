@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.screen;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
@@ -12,6 +14,10 @@ import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 
 public class ScreenShaderLoader {
     public static GraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture) {
+        return loadShader(jsonGraph, tag, defaultTexture, new InternalFileHandleResolver());
+    }
+
+    public static GraphShader loadShader(JsonValue jsonGraph, String tag, Texture defaultTexture, FileHandleResolver assetResolver) {
         GraphType graphType = GraphTypeRegistry.findGraphType(ScreenShaderGraphType.TYPE);
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
@@ -19,6 +25,6 @@ public class ScreenShaderLoader {
         if (graphType.getGraphValidator().validateGraph(graph, graphType.getStartNodeIdForValidation()).hasErrors())
             throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
-        return GraphShaderBuilder.buildScreenShader(tag, defaultTexture, graph, false);
+        return GraphShaderBuilder.buildScreenShader(tag, defaultTexture, assetResolver, graph, false);
     }
 }

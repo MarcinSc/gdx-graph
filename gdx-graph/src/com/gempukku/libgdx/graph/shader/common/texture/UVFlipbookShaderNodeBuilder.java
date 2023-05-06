@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.texture;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -19,7 +20,7 @@ public class UVFlipbookShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput uvValue = inputs.get("uv");
         FieldOutput tileCountValue = inputs.get("tileCount");
         FieldOutput indexValue = inputs.get("index");
@@ -28,7 +29,7 @@ public class UVFlipbookShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
             loopingValue = new DefaultFieldOutput(ShaderFieldType.Float, "1.0");
         }
 
-        loadFragmentIfNotDefined(commonShaderBuilder, "uvFlipbook");
+        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "uvFlipbook");
 
         commonShaderBuilder.addMainLine("// UV Flipbook Node");
         boolean invertX = data.getBoolean("invertX");

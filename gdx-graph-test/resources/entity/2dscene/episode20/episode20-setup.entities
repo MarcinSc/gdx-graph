@@ -2,7 +2,7 @@
   "entities": [
     {
       "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
-        "pipelinePath": "episodes/episode20.json",
+        "pipelinePath": "examples-assets/episode20.json",
         "cameraDefinitions": [
           {
             "cameraProperty": "Camera",

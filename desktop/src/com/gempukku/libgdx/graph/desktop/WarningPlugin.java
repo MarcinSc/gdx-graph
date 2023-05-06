@@ -4,13 +4,15 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.gdx.assistant.plugin.AssistantApplication;
 import com.gempukku.gdx.assistant.plugin.AssistantPlugin;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
+import com.gempukku.gdx.assistant.plugin.AssistantProject;
 import com.gempukku.gdx.plugins.PluginEnvironment;
 import com.gempukku.gdx.plugins.PluginVersion;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 
 public class WarningPlugin implements AssistantPlugin {
+
     @Override
-    public AssistantPluginProject newProjectCreated() {
+    public AssistantPluginProject newProjectCreated(AssistantProject assistantProject) {
         return new AssistantPluginProject() {
             @Override
             public boolean isProjectDirty() {
@@ -40,8 +42,8 @@ public class WarningPlugin implements AssistantPlugin {
     }
 
     @Override
-    public AssistantPluginProject projectOpened(JsonValue jsonValue) {
-        return newProjectCreated();
+    public AssistantPluginProject projectOpened(AssistantProject assistantProject, JsonValue pluginData) {
+        return newProjectCreated(assistantProject);
     }
 
     @Override

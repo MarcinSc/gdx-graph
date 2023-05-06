@@ -182,7 +182,7 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("test/shadow-shader-test.json"), timeKeeper);
+        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/shadow-shader-test.json"), timeKeeper);
         pipelineRenderer.setPipelineProperty("Camera", camera);
         pipelineRenderer.getPluginData(RenderCallbackPublicData.class).setRenderCallback(
                 "Callback", new RenderCallback() {

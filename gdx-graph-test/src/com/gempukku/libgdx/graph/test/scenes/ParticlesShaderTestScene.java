@@ -96,7 +96,7 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("test/particles-shader-test.json"), timeKeeper);
+        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/particles-shader-test.json"), timeKeeper);
         pipelineRenderer.setPipelineProperty("Camera", camera);
         return pipelineRenderer;
     }

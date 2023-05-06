@@ -21,6 +21,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
+import com.gempukku.libgdx.graph.ui.AssetResolver;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
 import com.gempukku.libgdx.graph.ui.shader.GraphShaderRenderingWidget;
@@ -99,7 +100,7 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
 
     private void createShader(final GraphWithProperties graph) {
         try {
-            graphShader = GraphShaderBuilder.buildScreenShader("Test", WhitePixel.sharedInstance.texture, graph, true);
+            graphShader = GraphShaderBuilder.buildScreenShader("Test", WhitePixel.sharedInstance.texture, AssetResolver.instance, graph, true);
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {

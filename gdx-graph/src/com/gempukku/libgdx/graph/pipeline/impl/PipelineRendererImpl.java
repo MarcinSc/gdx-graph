@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline.impl;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
@@ -37,7 +39,7 @@ public class PipelineRendererImpl implements PipelineRenderer {
             this.resources = resources;
         } else {
             ownsResources = true;
-            this.resources = new PipelineRendererResources();
+            this.resources = new PipelineRendererResources(new InternalFileHandleResolver());
         }
         pipelineRenderingContext = new PipelineRenderingContextImpl();
 
@@ -180,6 +182,11 @@ public class PipelineRendererImpl implements PipelineRenderer {
         @Override
         public FullScreenRender getFullScreenRender() {
             return resources.getFullScreenRender();
+        }
+
+        @Override
+        public FileHandleResolver getAssetResolver() {
+            return resources.getAssetResolver();
         }
 
         @Override

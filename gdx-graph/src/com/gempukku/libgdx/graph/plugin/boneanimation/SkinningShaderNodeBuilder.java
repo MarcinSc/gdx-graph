@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.boneanimation;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -20,7 +21,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     }
 
     @Override
-    protected ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    protected ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput boneWeights = inputs.get("boneWeights");
         BoneWeightFieldType boneWeightFieldType = (BoneWeightFieldType) boneWeights.getFieldType();
         FieldOutput boneTransformations = inputs.get("boneTransformations");
@@ -82,7 +83,7 @@ public class SkinningShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     }
 
     @Override
-    protected ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    protected ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput boneWeights = inputs.get("boneWeights");
         FieldOutput boneTransformations = inputs.get("boneTransformations");
         BoneTransformFieldType boneTransformFieldType = (BoneTransformFieldType) boneTransformations.getFieldType();

@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
+import com.gempukku.libgdx.graph.ui.ColorPickerSupplier;
 import com.gempukku.libgdx.graph.util.WhitePixel;
-import com.gempukku.libgdx.ui.DisposableTable;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.undo.DefaultUndoableAction;
@@ -24,7 +24,6 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 
 public class ValueColorEditorProducer extends ValueGraphEditorProducer {
     private VisImage image;
-    private ColorPicker picker;
     private Color oldColor;
 
     public ValueColorEditorProducer(MenuNodeConfiguration configuration) {
@@ -52,32 +51,24 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
                 new ClickListener(Input.Buttons.LEFT) {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        picker.setColor(oldColor);
+                        ColorPicker colorPicker = ColorPickerSupplier.instance.get();
+                        colorPicker.setColor(oldColor);
+                        colorPicker.setListener(
+                                new ColorPickerAdapter() {
+                                    @Override
+                                    public void finished(Color newColor) {
+                                        if (!oldColor.equals(newColor)) {
+                                            setPickedColor(newColor);
+                                        }
+                                    }
+                                });
                         //displaying picker with fade in animation
-                        image.getStage().addActor(picker.fadeIn());
+                        image.getStage().addActor(colorPicker.fadeIn());
                     }
                 });
 
 
-        VisTable table = new DisposableTable() {
-            @Override
-            protected void initializeWidget() {
-                picker = new ColorPicker(new ColorPickerAdapter() {
-                    @Override
-                    public void finished(Color newColor) {
-                        if (!oldColor.equals(newColor)) {
-                            setPickedColor(newColor);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            protected void disposeWidget() {
-                picker.dispose();
-                picker = null;
-            }
-        };
+        VisTable table = new VisTable();
         table.add(new VisLabel("Color", "gdx-graph-property-label")).growX();
         table.add(image).fillY();
         table.row();
@@ -92,7 +83,7 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
             @Override
             public void initialize(JsonValue data) {
                 if (data != null)
-                    image.setColor(Color.valueOf(data.getString("color", "FFFFFFFF")));
+                    setPickedColor(Color.valueOf(data.getString("color", "FFFFFFFF")));
             }
         };
         colorPart.setOutputConnector(GraphNodeOutputSide.Right, configuration.getNodeOutputs().get("value"));

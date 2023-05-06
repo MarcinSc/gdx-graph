@@ -2,7 +2,7 @@
   "entities": [
     {
       "com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererComponent": {
-        "pipelinePath": "test/stylized-shading-shader-test.json",
+        "pipelinePath": "examples-assets/stylized-shading-shader-test.json",
         "cameraDefinitions": [
           {
             "cameraProperty": "Camera",

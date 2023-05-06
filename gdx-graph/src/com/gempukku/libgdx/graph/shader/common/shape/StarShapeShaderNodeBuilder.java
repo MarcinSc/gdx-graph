@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.shape;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -18,14 +19,14 @@ public class StarShapeShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
     }
 
     @Override
-    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput uvValue = inputs.get("uv");
         FieldOutput armsValue = inputs.get("arms");
         FieldOutput minDepthValue = inputs.get("minDepth");
         FieldOutput maxDepthValue = inputs.get("maxDepth");
         FieldOutput curveValue = inputs.get("curve");
 
-        loadFragmentIfNotDefined(commonShaderBuilder, "shape/starShape");
+        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "shape/starShape");
         String uv = uvValue.getRepresentation();
         String arms = armsValue.getRepresentation();
         String minDepth = minDepthValue != null ? minDepthValue.getRepresentation() : "0.5";

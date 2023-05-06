@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.noise;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -19,7 +20,7 @@ public class VoronoiBorder3DShaderNodeBuilder extends ConfigurationCommonShaderN
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput pointValue = inputs.get("point");
         FieldOutput scaleValue = inputs.get("scale");
         FieldOutput progressValue = inputs.get("progress");
@@ -27,7 +28,7 @@ public class VoronoiBorder3DShaderNodeBuilder extends ConfigurationCommonShaderN
         String scale = (scaleValue != null) ? scaleValue.getRepresentation() : "1.0";
         String progress = (progressValue != null) ? progressValue.getRepresentation() : "0.0";
 
-        loadFragmentIfNotDefined(commonShaderBuilder, "voronoiBorder3d");
+        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "voronoiBorder3d");
 
         commonShaderBuilder.addMainLine("// Voronoi border 3D node");
         String name = "result_" + nodeId;

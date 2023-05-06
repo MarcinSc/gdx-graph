@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.particles.particle;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -21,7 +22,7 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         vertexShaderBuilder.addAttributeVariable("a_birthTime", 1, "float", "Particle birth-time");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
@@ -34,7 +35,7 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         VertexAttribute attribute = new VertexAttribute(1024, 1, "a_birthTime");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");

@@ -1,8 +1,10 @@
 eclipse.project.name = "gdx-graph-assistant"
 
-sourceSets.main.resources.srcDirs = ["../core/assets", "../gdx-graph/resources"]
-
 sourceCompatibility = 1.8
+
+configurations {
+    jarLibs
+}
 
 dependencies {
     api project(":core")
@@ -20,9 +22,14 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+    // Don't need to include VisUI, as gdx-assistant already has it, but that's how one would do it
+//    jarLibs("com.kotcrab.vis:vis-ui:$visUiVersion") {
+//        exclude group: "com.badlogicgames.gdx"
+//    }
 }
 
 jar {
+    // Package classes from this project ("checking they are directories")
     from {
         configurations.compileClasspath.filter {
             it.exists() && it.isDirectory()
@@ -30,6 +37,17 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+    // Package dependencies (marked with jarLibs configuration)
+    from {
+        configurations.jarLibs.filter {
+            it.exists()
+        }.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    // Package assets
+    from("../core/assets")
+    from("../gdx-graph/resources")
 
     manifest {
         attributes(

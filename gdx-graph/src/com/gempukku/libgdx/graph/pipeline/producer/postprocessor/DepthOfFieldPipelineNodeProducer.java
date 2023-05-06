@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.pipeline.producer.postprocessor;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -32,29 +32,36 @@ public class DepthOfFieldPipelineNodeProducer extends SingleInputsPipelineNodePr
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
         float maxBlurFloat = data.getFloat("maxBlur");
         final int maxBlur = MathUtils.round(maxBlurFloat);
-        boolean blurBackground = data.getBoolean("blurBackground", false);
-
-        String viewToScreenCoords = getShader("viewToScreenCoords.vert");
-        String depthOfField = getShader("depthOfField.frag");
-        depthOfField = depthOfField.replaceAll("MAX_BLUR", String.valueOf(maxBlur));
-        depthOfField = depthOfField.replaceAll("UNPACK_FUNCTION;", GLSLFragmentReader.getFragment("unpackVec3ToFloat"));
-        depthOfField = depthOfField.replaceAll("BLUR_BACKGROUND", String.valueOf(blurBackground));
-
-        final ShaderProgram shaderProgram = new ShaderProgram(
-                viewToScreenCoords, depthOfField);
-        if (!shaderProgram.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shaderProgram.getLog());
+        final boolean blurBackground = data.getBoolean("blurBackground", false);
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
         return new SingleInputsPipelineNode(result) {
+            private ShaderProgram shaderProgram;
             private FullScreenRender fullScreenRender;
 
             @Override
             public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+                FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
+                String viewToScreenCoords = getShader(assetResolver, "viewToScreenCoords.vert");
+                String depthOfField = getShader(assetResolver, "depthOfField.frag");
+                depthOfField = depthOfField.replaceAll("MAX_BLUR", String.valueOf(maxBlur));
+                depthOfField = depthOfField.replaceAll("UNPACK_FUNCTION;", GLSLFragmentReader.getFragment(assetResolver, "unpackVec3ToFloat"));
+                depthOfField = depthOfField.replaceAll("BLUR_BACKGROUND", String.valueOf(blurBackground));
+
+                shaderProgram = new ShaderProgram(
+                        viewToScreenCoords, depthOfField);
+                if (!shaderProgram.isCompiled())
+                    throw new IllegalArgumentException("Error compiling shader: " + shaderProgram.getLog());
+
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
+            }
+
+            private String getShader(FileHandleResolver assetResolver, String shaderName) {
+                FileHandle fileHandle = assetResolver.resolve("shader/" + shaderName);
+                return new String(fileHandle.readBytes(), StandardCharsets.UTF_8);
             }
 
             @Override
@@ -113,11 +120,6 @@ public class DepthOfFieldPipelineNodeProducer extends SingleInputsPipelineNodePr
                 shaderProgram.dispose();
             }
         };
-    }
-
-    private String getShader(String shaderName) {
-        FileHandle fileHandle = Gdx.files.classpath("shader/" + shaderName);
-        return new String(fileHandle.readBytes(), StandardCharsets.UTF_8);
     }
 
     private RenderPipelineBuffer executeBlur(ShaderProgram shaderProgram, RenderPipeline renderPipeline, RenderPipelineBuffer depthBuffer, RenderPipelineBuffer sourceBuffer,

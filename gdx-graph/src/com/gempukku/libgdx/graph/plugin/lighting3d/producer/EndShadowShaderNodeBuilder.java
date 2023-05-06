@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -18,7 +19,7 @@ public class EndShadowShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(
             boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-            VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+            VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         // Dummy node
         return null;
     }
@@ -26,7 +27,7 @@ public class EndShadowShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(
             boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         // Dummy node
         return null;
     }

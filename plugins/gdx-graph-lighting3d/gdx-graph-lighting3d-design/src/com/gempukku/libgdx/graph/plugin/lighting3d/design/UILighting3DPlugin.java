@@ -1,18 +1,22 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.producer.*;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ApplyNormalMapShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
+import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 import com.gempukku.libgdx.graph.ui.shader.UICommonShaderConfiguration;
 
 public class UILighting3DPlugin implements UIGdxGraphPlugin {
-    public void initialize() {
+    @Override
+    public void initialize(FileHandleResolver assetResolver) {
         // Register graph type
-        GraphTypeRegistry.registerType(new UIShadowShaderGraphType());
+        UIShadowShaderGraphType graphType = new UIShadowShaderGraphType();
+        GraphTypeRegistry.registerType(graphType);
 
         // Register node editors
         UICommonShaderConfiguration.register(new EndShadowShaderEditorProducer());
@@ -31,5 +35,8 @@ public class UILighting3DPlugin implements UIGdxGraphPlugin {
 
         // Register runtime plugin
         Lighting3DPluginRuntimeInitializer.register();
+
+        ShadowTemplateRegistry.register(
+                new FileGraphTemplate(graphType, "Empty shadow shader", assetResolver.resolve("template/shadow/empty-shadow-shader.json")));
     }
 }

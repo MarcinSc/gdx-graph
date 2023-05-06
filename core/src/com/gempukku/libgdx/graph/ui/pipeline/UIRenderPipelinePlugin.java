@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui.pipeline;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineRuntimeInitializer;
@@ -21,6 +22,7 @@ import com.gempukku.libgdx.graph.pipeline.config.rendering.StartPipelineNodeConf
 import com.gempukku.libgdx.graph.pipeline.config.value.*;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
+import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
 import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldEditorProducer;
@@ -35,9 +37,10 @@ import com.kotcrab.vis.ui.VisUI;
 
 public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
     @Override
-    public void initialize() {
+    public void initialize(FileHandleResolver assetResolver) {
         // Register graph type
-        GraphTypeRegistry.registerType(new UIRenderPipelineGraphType(VisUI.getSkin().getDrawable("graph-render-pipeline-icon")));
+        UIRenderPipelineGraphType graphType = new UIRenderPipelineGraphType(VisUI.getSkin().getDrawable("graph-render-pipeline-icon"));
+        GraphTypeRegistry.registerType(graphType);
 
         // Register node editors
         GdxGraphNodeEditorProducer endProducer = new GdxGraphNodeEditorProducer(new EndPipelineNodeConfiguration());
@@ -125,5 +128,10 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
         UIRenderPipelineConfiguration.registerPropertyType(new PipelinePropertyEditorDefinitionImpl("New Camera", "Camera"));
 
         RuntimePluginRegistry.register(RenderPipelineRuntimeInitializer.class);
+
+        RenderPipelineTemplateRegistry.register(
+                new FileGraphTemplate(graphType, "Empty pipeline",
+                        assetResolver.resolve("template/model/empty-model-shader.json")));
+
     }
 }

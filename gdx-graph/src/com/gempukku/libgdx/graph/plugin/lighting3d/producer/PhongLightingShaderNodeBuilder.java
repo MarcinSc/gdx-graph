@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -27,12 +28,12 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         throw new UnsupportedOperationException("At the moment light calculation is not available in vertex shader");
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, final GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, final GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         String environmentId = data.getString("id", "");
 
         fragmentShaderBuilder.addStructure("Lighting",
@@ -48,11 +49,11 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
         variables.put("NODE_ID", nodeId);
 
         if (maxNumberOfDirectionalLights > 0)
-            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables);
+            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
         if (maxNumberOfPointLights > 0)
-            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables);
+            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
         if (maxNumberOfSpotlights > 0)
-            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables);
+            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
 
         FieldOutput positionValue = inputs.get("position");
         FieldOutput normalValue = inputs.get("normal");
@@ -113,33 +114,33 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
         return sb.toString();
     }
 
-    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables) {
+    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
         Lighting3DUtils.configureSpotLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfSpotlights);
 
         fragmentShaderBuilder.addFunction("getSpotPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment("phong/spotLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "phong/spotLightContribution", variables));
     }
 
-    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables) {
+    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
         Lighting3DUtils.configurePointLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfPointLights);
 
         fragmentShaderBuilder.addFunction("getPointPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment("phong/pointLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "phong/pointLightContribution", variables));
     }
 
-    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables) {
+    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
         Lighting3DUtils.configureDirectionalLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights);
 
         fragmentShaderBuilder.addFunction("getDirectionalPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment("phong/directionalLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "phong/directionalLightContribution", variables));
     }
 }

@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.pipeline;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.pipeline.impl.BufferCopyHelper;
 import com.gempukku.libgdx.graph.pipeline.impl.TextureFrameBufferCache;
@@ -9,9 +10,11 @@ public class PipelineRendererResources implements Disposable {
     private final BufferCopyHelper bufferCopyHelper;
     private final TextureFrameBufferCache textureFrameBufferCache;
     private final FullScreenRenderImpl fullScreenRender;
+    private final FileHandleResolver assetResolver;
 
-    public PipelineRendererResources() {
-        bufferCopyHelper = new BufferCopyHelper();
+    public PipelineRendererResources(FileHandleResolver assetResolver) {
+        this.assetResolver = assetResolver;
+        bufferCopyHelper = new BufferCopyHelper(assetResolver);
         textureFrameBufferCache = new TextureFrameBufferCache();
         fullScreenRender = new FullScreenRenderImpl();
     }
@@ -34,6 +37,10 @@ public class PipelineRendererResources implements Disposable {
 
     public FullScreenRenderImpl getFullScreenRender() {
         return fullScreenRender;
+    }
+
+    public FileHandleResolver getAssetResolver() {
+        return assetResolver;
     }
 
     @Override

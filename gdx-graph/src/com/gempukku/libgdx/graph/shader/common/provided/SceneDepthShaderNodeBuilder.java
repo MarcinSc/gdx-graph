@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.provided;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -20,13 +21,13 @@ public class SceneDepthShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         throw new UnsupportedOperationException("Sampling of textures is not available in vertex shader in OpenGL ES");
     }
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         graphShader.setUsingDepthTexture(true);
         if (designTime) {
             return LibGDXCollections.singletonMap("depth", new DefaultFieldOutput(ShaderFieldType.Float, "0.0"));
@@ -37,7 +38,7 @@ public class SceneDepthShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
             commonShaderBuilder.addUniformVariable("u_sceneDepthTexture", "sampler2D", true, UniformSetters.depthTexture,
                     "Scene depth texture");
 
-            loadFragmentIfNotDefined(commonShaderBuilder, "unpackVec3ToFloat");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "unpackVec3ToFloat");
 
             FieldOutput screenPosition = inputs.get("screenPosition");
             String screenPositionValue = screenPosition != null ? screenPosition.getRepresentation() : "gl_FragCoord";

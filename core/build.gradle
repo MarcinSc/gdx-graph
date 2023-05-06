@@ -1,5 +1,7 @@
 eclipse.project.name = appName + "-core"
 
+sourceSets.main.resources.srcDirs = ["assets/"]
+
 sourceCompatibility = 1.8
 
 dependencies {
@@ -18,17 +20,19 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 
 tasks.register('texturePacking') {
-    if (project.ext.has('texturePacker')) {
-        TexturePacker.Settings settings = new TexturePacker.Settings()
-        settings.grid = false
-        settings.maxWidth = 2048
-        settings.maxHeight = 2048
-        settings.filterMin = Texture.TextureFilter.Nearest
-        settings.filterMag = Texture.TextureFilter.Nearest
+    doLast {
+        if (project.ext.has('texturePacker')) {
+            TexturePacker.Settings settings = new TexturePacker.Settings()
+            settings.grid = false
+            settings.maxWidth = 2048
+            settings.maxHeight = 2048
+            settings.filterMin = Texture.TextureFilter.Nearest
+            settings.filterMag = Texture.TextureFilter.Nearest
 
-        for (int i = 0; i < texturePacker.size(); i += 3) {
-            println("Calling TexturePacker: " + texturePacker[i + 2])
-            TexturePacker.process(settings, texturePacker[i + 0], texturePacker[i + 1], texturePacker[i + 2])
+            for (int i = 0; i < texturePacker.size(); i += 3) {
+                println("Calling TexturePacker: " + texturePacker[i + 2])
+                TexturePacker.process(settings, texturePacker[i + 0], texturePacker[i + 1], texturePacker[i + 2])
+            }
         }
     }
 }

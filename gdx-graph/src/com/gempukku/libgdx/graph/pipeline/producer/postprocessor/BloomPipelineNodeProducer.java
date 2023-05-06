@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.pipeline.producer.postprocessor;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -23,31 +23,35 @@ public class BloomPipelineNodeProducer extends SingleInputsPipelineNodeProducer 
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final ShaderProgram brightnessFilterPassProgram = new ShaderProgram(
-                Gdx.files.classpath("shader/viewToScreenCoords.vert"),
-                Gdx.files.classpath("shader/brightnessFilter.frag"));
-        if (!brightnessFilterPassProgram.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + brightnessFilterPassProgram.getLog());
-        final ShaderProgram gaussianBlurPassProgram = new ShaderProgram(
-                Gdx.files.classpath("shader/viewToScreenCoords.vert"),
-                Gdx.files.classpath("shader/gaussianBlur.frag"));
-        if (!gaussianBlurPassProgram.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + gaussianBlurPassProgram.getLog());
-        final ShaderProgram bloomSumProgram = new ShaderProgram(
-                Gdx.files.classpath("shader/viewToScreenCoords.vert"),
-                Gdx.files.classpath("shader/bloomSum.frag"));
-        if (!bloomSumProgram.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + bloomSumProgram.getLog());
-
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
         return new SingleInputsPipelineNode(result) {
             private FullScreenRender fullScreenRender;
+            private ShaderProgram bloomSumProgram;
+            private ShaderProgram gaussianBlurPassProgram;
+            private ShaderProgram brightnessFilterPassProgram;
 
             @Override
             public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+                FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
+                brightnessFilterPassProgram = new ShaderProgram(
+                        assetResolver.resolve("shader/viewToScreenCoords.vert"),
+                        assetResolver.resolve("shader/brightnessFilter.frag"));
+                if (!brightnessFilterPassProgram.isCompiled())
+                    throw new IllegalArgumentException("Error compiling shader: " + brightnessFilterPassProgram.getLog());
+                gaussianBlurPassProgram = new ShaderProgram(
+                        assetResolver.resolve("shader/viewToScreenCoords.vert"),
+                        assetResolver.resolve("shader/gaussianBlur.frag"));
+                if (!gaussianBlurPassProgram.isCompiled())
+                    throw new IllegalArgumentException("Error compiling shader: " + gaussianBlurPassProgram.getLog());
+                bloomSumProgram = new ShaderProgram(
+                        assetResolver.resolve("shader/viewToScreenCoords.vert"),
+                        assetResolver.resolve("shader/bloomSum.frag"));
+                if (!bloomSumProgram.isCompiled())
+                    throw new IllegalArgumentException("Error compiling shader: " + bloomSumProgram.getLog());
+
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
             }
 

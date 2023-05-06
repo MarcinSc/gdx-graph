@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.texture;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -19,17 +20,17 @@ public class Sampler2DShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         throw new UnsupportedOperationException("Sampling of textures is not available in vertex shader in OpenGL ES");
     }
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         TextureFieldOutput textureValue = (TextureFieldOutput) inputs.get("texture");
         FieldOutput uvValue = inputs.get("uv");
 
-        loadFragmentIfNotDefined(commonShaderBuilder, "textureWrap");
+        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "textureWrap");
 
         commonShaderBuilder.addMainLine("// Sampler2D Node");
         ObjectMap<String, FieldOutput> result = new ObjectMap<>();

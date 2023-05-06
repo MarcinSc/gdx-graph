@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -11,10 +12,10 @@ public class UIGdxGraphPluginRegistry {
         plugins.add(clazz);
     }
 
-    public static void initializePlugins() throws ReflectionException {
+    public static void initializePlugins(FileHandleResolver assetResolver) throws ReflectionException {
         for (Class<? extends UIGdxGraphPlugin> plugin : plugins) {
             UIGdxGraphPlugin gdxGraphPlugin = ClassReflection.newInstance(plugin);
-            gdxGraphPlugin.initialize();
+            gdxGraphPlugin.initialize(assetResolver);
         }
     }
 }

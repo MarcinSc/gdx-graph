@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.noise;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -24,7 +25,7 @@ public class VoronoiDistance3DShaderNodeBuilder extends ConfigurationCommonShade
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput pointValue = inputs.get("point");
         FieldOutput scaleValue = inputs.get("scale");
         FieldOutput progressValue = inputs.get("progress");
@@ -33,7 +34,7 @@ public class VoronoiDistance3DShaderNodeBuilder extends ConfigurationCommonShade
         String scale = (scaleValue != null) ? scaleValue.getRepresentation() : "1.0";
         String progress = (progressValue != null) ? progressValue.getRepresentation() : "0.0";
 
-        loadFragmentIfNotDefined(commonShaderBuilder, "voronoiDistance3d");
+        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "voronoiDistance3d");
 
         commonShaderBuilder.addMainLine("// Voronoi distance 3D node");
         String name = "result_" + nodeId;

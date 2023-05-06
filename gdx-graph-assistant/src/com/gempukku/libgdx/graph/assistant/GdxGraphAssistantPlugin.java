@@ -1,16 +1,12 @@
 package com.gempukku.libgdx.graph.assistant;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.gempukku.gdx.assistant.plugin.AssistantApplication;
-import com.gempukku.gdx.assistant.plugin.AssistantPlugin;
-import com.gempukku.gdx.assistant.plugin.AssistantPluginProject;
-import com.gempukku.gdx.assistant.plugin.MenuManager;
+import com.gempukku.gdx.assistant.plugin.*;
 import com.gempukku.gdx.plugins.PluginEnvironment;
 import com.gempukku.gdx.plugins.PluginVersion;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.UIBoneAnimationPlugin;
@@ -21,11 +17,14 @@ import com.gempukku.libgdx.graph.plugin.models.design.UIModelsPlugin;
 import com.gempukku.libgdx.graph.plugin.particles.design.UIParticlesPlugin;
 import com.gempukku.libgdx.graph.plugin.screen.design.UIScreenPlugin;
 import com.gempukku.libgdx.graph.plugin.ui.design.UIUserInterfacePlugin;
+import com.gempukku.libgdx.graph.ui.AssetResolver;
+import com.gempukku.libgdx.graph.ui.ColorPickerSupplier;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPluginRegistry;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelinePlugin;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.input.KeyCombination;
+import com.kotcrab.vis.ui.VisUI;
 
 public class GdxGraphAssistantPlugin implements AssistantPlugin {
     private AssistantApplication assistantApplication;
@@ -55,20 +54,21 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
     public void initializePlugin(AssistantApplication assistantApplication) {
         this.assistantApplication = assistantApplication;
 
-        Skin skin = assistantApplication.getApplicationSkin();
+        Skin skin = VisUI.getSkin();
 
-        gdxGraphTextureAtlas = new TextureAtlas(Gdx.files.internal("skin/gdx-graph/uiskin.atlas"));
+        gdxGraphTextureAtlas = new TextureAtlas(assistantApplication.getAssetResolver().resolve("skin/gdx-graph/uiskin.atlas"));
         skin.addRegions(gdxGraphTextureAtlas);
-        skin.load(Gdx.files.internal("skin/gdx-graph/uiskin.json"));
+        skin.load(assistantApplication.getAssetResolver().resolve("skin/gdx-graph/uiskin.json"));
 
         WhitePixel.initializeShared();
-        PatternTextures.initializeShared();
+        PatternTextures.initializeShared(assistantApplication.getAssetResolver());
         try {
-            UIGdxGraphPluginRegistry.initializePlugins();
+            UIGdxGraphPluginRegistry.initializePlugins(assistantApplication.getAssetResolver());
         } catch (ReflectionException exp) {
             throw new GdxRuntimeException("Unable to initialize plugins", exp);
         }
-
+        ColorPickerSupplier.initialize();
+        AssetResolver.initialize(assistantApplication.getAssetResolver());
 
         MenuManager menuManager = assistantApplication.getMenuManager();
 
@@ -106,18 +106,20 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public void deregisterPlugin() {
+        AssetResolver.dispose();
+        ColorPickerSupplier.dispose();
         gdxGraphTextureAtlas.dispose();
         WhitePixel.disposeShared();
         PatternTextures.disposeShared();
     }
 
     @Override
-    public AssistantPluginProject newProjectCreated() {
-        return new GdxGraphProject(assistantApplication);
+    public AssistantPluginProject newProjectCreated(AssistantProject assistantProject) {
+        return new GdxGraphProject(assistantApplication, assistantProject);
     }
 
     @Override
-    public AssistantPluginProject projectOpened(JsonValue projectData) {
-        return new GdxGraphProject(assistantApplication, projectData);
+    public AssistantPluginProject projectOpened(AssistantProject assistantProject, JsonValue projectData) {
+        return new GdxGraphProject(assistantApplication, assistantProject, projectData);
     }
 }

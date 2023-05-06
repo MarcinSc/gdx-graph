@@ -42,7 +42,7 @@ public class Episode1Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("episodes/episode1.json"), timeKeeper);
+        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode1.json"), timeKeeper);
         pipelineRenderer.setPipelineProperty("Background Color", Color.ORANGE);
         return pipelineRenderer;
     }

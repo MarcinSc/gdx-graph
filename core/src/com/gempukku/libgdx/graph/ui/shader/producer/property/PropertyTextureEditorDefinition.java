@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.property;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
@@ -41,7 +42,7 @@ public class PropertyTextureEditorDefinition implements PropertyEditorDefinition
                 new TextureFilterDisplayText(), new Array<>(Texture.TextureFilter.values())));
         result.addPropertyEditorPart(new EnumSelectEditorPart<>("Mag filter ", "magFilter", Texture.TextureFilter.Nearest,
                 new TextureFilterDisplayText(), new Array<>(Texture.TextureFilter.values())));
-        result.addPropertyEditorPart(new FileSelectorEditorPart("Preview texture ", "previewPath"));
+        result.addPropertyEditorPart(new FileSelectorEditorPart("Preview texture ", "previewPath", Gdx.files.local(".")));
         result.initialize(jsonObject);
 
         return result;

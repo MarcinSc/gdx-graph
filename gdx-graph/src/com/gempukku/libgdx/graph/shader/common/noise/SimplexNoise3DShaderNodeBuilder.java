@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.common.noise;
 
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -21,7 +22,7 @@ public class SimplexNoise3DShaderNodeBuilder extends ConfigurationCommonShaderNo
 
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader) {
+                                                                       CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput pointValue = inputs.get("point");
         FieldOutput progressValue = inputs.get("progress");
         FieldOutput scaleValue = inputs.get("scale");
@@ -34,13 +35,13 @@ public class SimplexNoise3DShaderNodeBuilder extends ConfigurationCommonShaderNo
         commonShaderBuilder.addMainLine("// Simplex noise 3D node");
 
         if (progressValue != null) {
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/common");
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/simplexNoise4d");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/common");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/simplexNoise4d");
 
             output = "simplexNoise4d(vec4(" + pointValue.getRepresentation() + " * " + scale + ", " + progressValue.getRepresentation() + "))";
         } else {
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/common");
-            loadFragmentIfNotDefined(commonShaderBuilder, "noise/simplexNoise3d");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/common");
+            loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "noise/simplexNoise3d");
 
             output = "simplexNoise3d(" + pointValue.getRepresentation() + " * " + scale + ")";
         }

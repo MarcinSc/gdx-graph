@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.pipeline.producer.postprocessor;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -22,21 +22,23 @@ public class GammaCorrectionPipelineNodeProducer extends SingleInputsPipelineNod
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final ShaderProgram shaderProgram = new ShaderProgram(
-                Gdx.files.classpath("shader/viewToScreenCoords.vert"),
-                Gdx.files.classpath("shader/gamma.frag"));
-        if (!shaderProgram.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shaderProgram.getLog());
-
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
         return new SingleInputsPipelineNode(result) {
+            private ShaderProgram shaderProgram;
             private FullScreenRender fullScreenRender;
 
             @Override
             public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+                FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
+                shaderProgram = new ShaderProgram(
+                        assetResolver.resolve("shader/viewToScreenCoords.vert"),
+                        assetResolver.resolve("shader/gamma.frag"));
+                if (!shaderProgram.isCompiled())
+                    throw new IllegalArgumentException("Error compiling shader: " + shaderProgram.getLog());
+
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
             }
 
