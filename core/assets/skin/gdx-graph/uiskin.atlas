@@ -11,6 +11,62 @@ Consolas
   orig: 103, 102
   offset: 0, 0
   index: -1
+connector-bottom
+  rotate: false
+  xy: 182, 240
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-bottom-required
+  rotate: false
+  xy: 40, 6
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-left
+  rotate: false
+  xy: 107, 76
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-left-required
+  rotate: false
+  xy: 195, 240
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-right
+  rotate: false
+  xy: 53, 6
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-right-required
+  rotate: false
+  xy: 107, 63
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-top
+  rotate: false
+  xy: 208, 240
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
+connector-top-required
+  rotate: false
+  xy: 66, 6
+  size: 11, 11
+  orig: 11, 11
+  offset: 0, 0
+  index: -1
 graph-background
   rotate: false
   xy: 2, 123
@@ -78,7 +134,7 @@ graph-slider-knob-over
   index: -1
 graph-tick
   rotate: false
-  xy: 182, 242
+  xy: 161, 206
   size: 9, 9
   orig: 9, 9
   offset: 0, 0

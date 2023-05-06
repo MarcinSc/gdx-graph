@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.ui.graph;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Supplier;
@@ -11,6 +12,7 @@ import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.*;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 
@@ -46,23 +48,39 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
         return configuration;
     }
 
+    protected Drawable getInputDrawable(GraphNodeInput input, boolean valid) {
+        boolean required = input.isRequired();
+        String side = (input.getSide() == GraphNodeInputSide.Left) ? "left" : "top";
+        String drawable = "connector-" + side + (required ? "-required" : "") + (valid ? "" : "-invalid");
+        return VisUI.getSkin().getDrawable(drawable);
+    }
+
+    protected Drawable getOutputDrawable(GraphNodeOutput output, boolean valid) {
+        String side = (output.getSide() == GraphNodeOutputSide.Right) ? "right" : "bottom";
+        String drawable = "connector-" + side + (valid ? "" : "-invalid");
+        return VisUI.getSkin().getDrawable(drawable);
+    }
+
     public void addTopConnector(GraphNodeInput graphNodeInput) {
+        boolean required = graphNodeInput.isRequired();
+        String drawable = "connector-top" + (required ? "-required" : "");
         inputConnectors.put(graphNodeInput.getFieldId(), new DefaultGraphNodeEditorInput(GraphNodeInputSide.Top, new Supplier<Float>() {
             @Override
             public Float get() {
                 return getWidth() / 2f;
             }
-        }, graphNodeInput.getFieldId()));
+        }, graphNodeInput.getFieldId(), getInputDrawable(graphNodeInput, true), getInputDrawable(graphNodeInput, false)));
     }
 
     public void addBottomConnector(GraphNodeOutput graphNodeOutput) {
+        String drawable = "connector-bottom";
         outputConnectors.put(graphNodeOutput.getFieldId(), new DefaultGraphNodeEditorOutput(GraphNodeOutputSide.Bottom,
                 new Supplier<Float>() {
                     @Override
                     public Float get() {
                         return getWidth() / 2f;
                     }
-                }, graphNodeOutput.getFieldId()));
+                }, graphNodeOutput.getFieldId(), getOutputDrawable(graphNodeOutput, true), getOutputDrawable(graphNodeOutput, false)));
     }
 
     public void addTwoSideGraphPart(GraphNodeInput graphNodeInput,
@@ -75,8 +93,8 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
         table.row();
 
         DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
-        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
-        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
+        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput, getInputDrawable(graphNodeInput, true), getInputDrawable(graphNodeInput, false));
+        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput, getOutputDrawable(graphNodeOutput, true), getOutputDrawable(graphNodeOutput, false));
         addGraphEditorPart(graphEditorPart);
     }
 
@@ -85,7 +103,7 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
         table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow().row();
 
         DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
-        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput);
+        graphEditorPart.setInputConnector(GraphNodeInputSide.Left, graphNodeInput, getInputDrawable(graphNodeInput, true), getInputDrawable(graphNodeInput, false));
         addGraphEditorPart(graphEditorPart);
     }
 
@@ -97,7 +115,7 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
         table.add(outputLabel).grow().row();
 
         DefaultGraphNodeEditorPart graphEditorPart = new DefaultGraphNodeEditorPart(table, null);
-        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput);
+        graphEditorPart.setOutputConnector(GraphNodeOutputSide.Right, graphNodeOutput, getOutputDrawable(graphNodeOutput, true), getOutputDrawable(graphNodeOutput, false));
         addGraphEditorPart(graphEditorPart);
     }
 
@@ -115,7 +133,7 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
                                     return actor.getY() + actor.getHeight() / 2f;
                                 }
                             },
-                            inputConnector.getFieldId()));
+                            inputConnector.getFieldId(), inputConnector.getConnectorDrawable(true), inputConnector.getConnectorDrawable(false)));
         }
         final GraphNodeEditorOutput outputConnector = graphEditorPart.getOutputConnector();
         if (outputConnector != null) {
@@ -127,7 +145,7 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
                                     return actor.getY() + actor.getHeight() / 2f;
                                 }
                             },
-                            outputConnector.getFieldId()));
+                            outputConnector.getFieldId(), outputConnector.getConnectorDrawable(true), outputConnector.getConnectorDrawable(false)));
         }
     }
 

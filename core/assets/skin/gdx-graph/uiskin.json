@@ -94,6 +94,38 @@
         "b": 0.25,
         "a": 0.7
       }
+    },
+    "connector-top-invalid": {
+      "name": "connector-top",
+      "color": "gdx-graph-error"
+    },
+    "connector-right-invalid": {
+      "name": "connector-right",
+      "color": "gdx-graph-error"
+    },
+    "connector-bottom-invalid": {
+      "name": "connector-bottom",
+      "color": "gdx-graph-error"
+    },
+    "connector-left-invalid": {
+      "name": "connector-left",
+      "color": "gdx-graph-error"
+    }
+    "connector-top-required-invalid": {
+      "name": "connector-top-required",
+      "color": "gdx-graph-error"
+    },
+    "connector-right-required-invalid": {
+      "name": "connector-right-required",
+      "color": "gdx-graph-error"
+    },
+    "connector-bottom-required-invalid": {
+      "name": "connector-bottom-required",
+      "color": "gdx-graph-error"
+    },
+    "connector-left-required-invalid": {
+      "name": "connector-left-required",
+      "color": "gdx-graph-error"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -225,11 +257,8 @@
       "groupGap": 6,
       "groupNameFont": "gdx-graph-small-font",
       "groupNameColor": "gdx-graph-white",
-      "connectorLength": 10,
-      "connectorRadius": 4,
       "connectionColor": "gdx-graph-white",
-      "connectorColor": "gdx-graph-white",
-      "invalidConnectorColor": "gdx-graph-error"
+      "invalidConnectionColor": "gdx-graph-error"
     }
   }
 }

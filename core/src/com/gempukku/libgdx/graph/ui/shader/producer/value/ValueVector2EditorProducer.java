@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.ui.shader.producer.value;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -41,7 +42,8 @@ public class ValueVector2EditorProducer extends ValueGraphEditorProducer {
                 }
             }
         };
-        colorPart.setOutputConnector(GraphNodeOutputSide.Right, configuration.getNodeOutputs().get("value"));
+        GraphNodeOutput output = configuration.getNodeOutputs().get("value");
+        colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;
     }
 }

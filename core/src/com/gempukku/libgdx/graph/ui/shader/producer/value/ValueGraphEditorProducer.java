@@ -1,12 +1,14 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.value;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.kotcrab.vis.ui.VisUI;
 
 public abstract class ValueGraphEditorProducer implements MenuGraphNodeEditorProducer {
     protected MenuNodeConfiguration configuration;
@@ -49,6 +51,19 @@ public abstract class ValueGraphEditorProducer implements MenuGraphNodeEditorPro
             graphNodeEditor.initialize(data);
 
         return graphNodeEditor;
+    }
+
+    protected Drawable getInputDrawable(GraphNodeInput input, boolean valid) {
+        boolean required = input.isRequired();
+        String side = (input.getSide() == GraphNodeInputSide.Left) ? "left" : "top";
+        String drawable = "connector-" + side + (required ? "-required" : "") + (valid ? "" : "-invalid");
+        return VisUI.getSkin().getDrawable(drawable);
+    }
+
+    protected Drawable getOutputDrawable(GraphNodeOutput output, boolean valid) {
+        String side = (output.getSide() == GraphNodeOutputSide.Right) ? "right" : "bottom";
+        String drawable = "connector-" + side + (valid ? "" : "-invalid");
+        return VisUI.getSkin().getDrawable(drawable);
     }
 
     protected abstract GraphNodeEditorPart createValuePart();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.ColorPickerSupplier;
 import com.gempukku.libgdx.graph.util.WhitePixel;
+import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.undo.DefaultUndoableAction;
@@ -86,7 +87,8 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
                     setPickedColor(Color.valueOf(data.getString("color", "FFFFFFFF")));
             }
         };
-        colorPart.setOutputConnector(GraphNodeOutputSide.Right, configuration.getNodeOutputs().get("value"));
+        GraphNodeOutput output = configuration.getNodeOutputs().get("value");
+        colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;
     }
 
