@@ -14,6 +14,7 @@ import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.*;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
+import com.gempukku.libgdx.undo.DecoratedUndoableAction;
 import com.gempukku.libgdx.undo.UndoManager;
 import com.gempukku.libgdx.undo.UndoableAction;
 import com.gempukku.libgdx.undo.event.UndoableEvent;
@@ -26,6 +27,7 @@ public class GraphTab implements AssistantPluginTab, TabControl {
     private final ObjectMap<String, JsonValue> serializedSubGraphs = new ObjectMap<>();
 
     private boolean dirty = false;
+    private boolean closed = false;
 
     public GraphTab(TabControl tabControl, StatusManager statusManager, UndoManager undoManager, GraphWithProperties graph) {
         this.tabControl = tabControl;
@@ -37,7 +39,7 @@ public class GraphTab implements AssistantPluginTab, TabControl {
                     public void undoable(UndoableEvent undoableEvent) {
                         UndoableAction undoableAction = undoableEvent.getUndoableAction();
                         if (undoableAction != null)
-                            undoManager.addUndoableAction(undoableAction);
+                            undoManager.addUndoableAction(new TabUndoableAction(undoableAction));
                     }
                 });
         graphWithPropertiesEditor.addListener(
@@ -205,5 +207,35 @@ public class GraphTab implements AssistantPluginTab, TabControl {
         }
         subTabs.clear();
         tabControl.tabClosed(this);
+        closed = true;
+    }
+
+    private class TabUndoableAction extends DecoratedUndoableAction {
+        private final UndoableAction decorated;
+
+        public TabUndoableAction(UndoableAction decorated) {
+            super(decorated);
+            this.decorated = decorated;
+
+            Runnable switchToTabRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    tabControl.switchToTab(GraphTab.this);
+                }
+            };
+
+            setBeforeRedo(switchToTabRunnable);
+            setBeforeUndo(switchToTabRunnable);
+        }
+
+        @Override
+        public boolean canUndo() {
+            return !closed && decorated.canUndo();
+        }
+
+        @Override
+        public boolean canRedo() {
+            return !closed && decorated.canRedo();
+        }
     }
 }
