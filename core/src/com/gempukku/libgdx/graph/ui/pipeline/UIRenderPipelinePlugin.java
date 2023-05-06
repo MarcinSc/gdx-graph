@@ -121,7 +121,7 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
                 new Supplier<GraphNodeEditorPart>() {
                     @Override
                     public GraphNodeEditorPart get() {
-                        return new CheckboxEditorPart("Value", "value", false);
+                        return new CheckboxEditorPart("Value", "value", false, "gdx-graph-property-label");
                     }
                 });
         UIRenderPipelineConfiguration.registerPropertyType(booleanProperty);

@@ -30,10 +30,10 @@ public class DefaultPropertyEditor extends VisTable implements PropertyEditor {
             locationPart = new EnumSelectEditorPart<>("Location", "location", selectedLocation, new ToStringEnum<>(), new Array<>(propertyLocations));
         }
 
-        nameField = new UndoableTextField(name);
+        nameField = new UndoableTextField(name, "gdx-graph-property");
         this.propertyLocations = propertyLocations;
         VisTable headerTable = new VisTable();
-        headerTable.add(new VisLabel("Name: "));
+        headerTable.add(new VisLabel("Name: ", "gdx-graph-property-label"));
         headerTable.add(nameField).growX();
         headerTable.row();
         add(headerTable).growX().row();

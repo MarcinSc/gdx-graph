@@ -28,7 +28,10 @@ import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.gempukku.libgdx.ui.preview.PreviewWidget;
+import com.gempukku.libgdx.undo.DefaultUndoableAction;
 import com.gempukku.libgdx.undo.UndoableAction;
+import com.gempukku.libgdx.undo.event.UndoableChangeEvent;
+import com.gempukku.libgdx.undo.event.UndoableChangeListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
@@ -37,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class GraphWithPropertiesEditor extends VisTable  {
+public class GraphWithPropertiesEditor extends VisTable {
     private final UIGraphType type;
     private final Skin skin;
 
@@ -53,6 +56,18 @@ public class GraphWithPropertiesEditor extends VisTable  {
         this.skin = VisUI.getSkin();
 
         pipelineProperties = createPropertiesUI();
+        pipelineProperties.addListener(
+                new UndoableChangeListener() {
+                    @Override
+                    public void changed(UndoableChangeEvent event) {
+                        GraphChangedEvent graphChangedEvent = Pools.obtain(GraphChangedEvent.class);
+                        graphChangedEvent.setData(true);
+                        graphChangedEvent.setUndoableAction(event.getUndoableAction());
+                        pipelineProperties.fire(graphChangedEvent);
+                        Pools.free(graphChangedEvent);
+                        event.stop();
+                    }
+                });
 
         graphEditor = new GraphEditor(graph,
                 new Function<String, GraphNodeEditorProducer>() {
@@ -91,9 +106,25 @@ public class GraphWithPropertiesEditor extends VisTable  {
 
 
         VisTable leftTable = new VisTable();
+        VisTable headerTable = new VisTable();
+        headerTable.pad(2);
+        headerTable.add(new VisLabel("Properties", "gdx-graph-property-label")).growX();
+        final VisTextButton newPropertyButton = new VisTextButton("Add", "gdx-graph-property-label");
+        newPropertyButton.addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        PopupMenu popupMenu = createPropertyPopupMenu();
+                        popupMenu.showMenu(pipelineProperties.getStage(), newPropertyButton);
+                    }
+                });
+        headerTable.add(newPropertyButton);
+        headerTable.row();
+        leftTable.add(headerTable).growX().row();
 
         VisScrollPane propertiesScroll = new VisScrollPane(pipelineProperties);
         propertiesScroll.setFadeScrollBars(false);
+        propertiesScroll.setScrollingDisabled(true, false);
 
         leftTable.add(propertiesScroll).grow().row();
         PreviewWidget previewWidget = new PreviewWidget(graphEditor, "gdx-graph");
@@ -335,30 +366,15 @@ public class GraphWithPropertiesEditor extends VisTable  {
     private VerticalGroup createPropertiesUI() {
         final VerticalGroup pipelineProperties = new VerticalGroup();
         pipelineProperties.grow();
-        VisTable headerTable = new VisTable();
-        headerTable.setBackground(skin.getDrawable("vis-blue"));
-        headerTable.add(new VisLabel("Properties")).growX();
-        final VisTextButton newPropertyButton = new VisTextButton("Add", "menu-bar");
-        newPropertyButton.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        PopupMenu popupMenu = createPropertyPopupMenu();
-                        popupMenu.showMenu(pipelineProperties.getStage(), newPropertyButton);
-                    }
-                });
-        headerTable.add(newPropertyButton);
-        headerTable.row();
-        pipelineProperties.addActor(headerTable);
         return pipelineProperties;
     }
 
     public void addPropertyEditor(String type, final PropertyEditor propertyEditor) {
-        propertyEditors.add(propertyEditor);
         final Actor actor = propertyEditor.getActor();
 
         final VisTable table = new VisTable();
-        final Drawable window = skin.getDrawable("window");
+        table.pad(2);
+        final Drawable window = skin.getDrawable("graph-window-selected");
         BaseDrawable wrapper = new BaseDrawable(window) {
             @Override
             public void draw(Batch batch, float x, float y, float width, float height) {
@@ -367,8 +383,8 @@ public class GraphWithPropertiesEditor extends VisTable  {
         };
         wrapper.setTopHeight(3);
         table.setBackground(wrapper);
-        table.add(new VisLabel(type)).growX();
-        VisImageButton removeButton = new VisImageButton("close-window");
+        table.add(new VisLabel(type, "gdx-graph-property-label")).growX();
+        VisImageButton removeButton = new VisImageButton("gdx-graph-window-close");
         removeButton.addListener(
                 new ChangeListener() {
                     @Override
@@ -380,16 +396,74 @@ public class GraphWithPropertiesEditor extends VisTable  {
         table.row();
         table.add(actor).colspan(2).growX();
         table.row();
-        pipelineProperties.addActor(table);
 
-        graphChanged(true, false, null);
+        int index = pipelineProperties.getChildren().size;
+        AddPropertyEditorAction addPropertyAction = new AddPropertyEditorAction(propertyEditor, table, index);
+        addPropertyAction.doAction();
+
+        graphChanged(true, false, addPropertyAction);
     }
 
     private void removePropertyEditor(PropertyEditor propertyEditor) {
         Actor actor = propertyEditor.getActor();
-        propertyEditors.remove(propertyEditor);
-        pipelineProperties.removeActor(actor.getParent());
+        VisTable parent = (VisTable) actor.getParent();
 
-        graphChanged(true, false, null);
+        int index = propertyEditors.indexOf(propertyEditor);
+        RemovePropertyEditorAction removePropertyAction = new RemovePropertyEditorAction(propertyEditor, parent, index);
+        removePropertyAction.doAction();
+
+        graphChanged(true, false, removePropertyAction);
+    }
+
+    private class AddPropertyEditorAction extends DefaultUndoableAction {
+        private PropertyEditor propertyEditor;
+        private VisTable ui;
+        private int index;
+
+        public AddPropertyEditorAction(PropertyEditor propertyEditor, VisTable ui, int index) {
+            this.propertyEditor = propertyEditor;
+            this.ui = ui;
+            this.index = index;
+        }
+
+        @Override
+        public void undoAction() {
+            pipelineProperties.removeActor(ui);
+            propertyEditors.remove(propertyEditor);
+            graphChanged(true, false, null);
+        }
+
+        @Override
+        public void redoAction() {
+            propertyEditors.add(propertyEditor);
+            pipelineProperties.addActorAt(index, ui);
+            graphChanged(true, false, null);
+        }
+    }
+
+    private class RemovePropertyEditorAction extends DefaultUndoableAction {
+        private PropertyEditor propertyEditor;
+        private VisTable ui;
+        private int index;
+
+        public RemovePropertyEditorAction(PropertyEditor propertyEditor, VisTable ui, int index) {
+            this.propertyEditor = propertyEditor;
+            this.ui = ui;
+            this.index = index;
+        }
+
+        @Override
+        public void undoAction() {
+            propertyEditors.add(propertyEditor);
+            pipelineProperties.addActorAt(index, ui);
+            graphChanged(true, false, null);
+        }
+
+        @Override
+        public void redoAction() {
+            pipelineProperties.removeActor(ui);
+            propertyEditors.remove(propertyEditor);
+            graphChanged(true, false, null);
+        }
     }
 }
