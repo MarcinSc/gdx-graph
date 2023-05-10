@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.property;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.impl.WritablePipelineProperty;
+import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineProperty;
 
 import java.util.function.Supplier;
 
@@ -14,10 +14,10 @@ public class Vector2PipelinePropertyProducer implements PipelinePropertyProducer
     }
 
     @Override
-    public WritablePipelineProperty createProperty(JsonValue data) {
+    public DefaultPipelineProperty createProperty(JsonValue data) {
         final float x = data.getFloat("x");
         final float y = data.getFloat("y");
-        return new WritablePipelineProperty(PipelineFieldType.Vector2,
+        return new DefaultPipelineProperty(PipelineFieldType.Vector2,
                 new Supplier<Vector2>() {
                     @Override
                     public Vector2 get() {

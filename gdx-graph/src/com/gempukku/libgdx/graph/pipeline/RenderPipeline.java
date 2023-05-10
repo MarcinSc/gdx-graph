@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.pipeline;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 
 public interface RenderPipeline {

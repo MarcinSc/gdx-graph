@@ -23,6 +23,9 @@ import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.property.GraphShaderPropertyProducer;
+import com.gempukku.libgdx.graph.shader.setting.BlendingFactor;
+import com.gempukku.libgdx.graph.shader.setting.Culling;
+import com.gempukku.libgdx.graph.shader.setting.DepthTesting;
 import com.gempukku.libgdx.ui.graph.data.GraphConnection;
 import com.gempukku.libgdx.ui.graph.data.GraphNode;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
@@ -93,8 +96,8 @@ public class GraphShaderBuilder {
                 break;
             case Screen:
                 buildScreenFragmentShader(graph, designTime, graphShader, assetResolver, vertexShaderBuilder, fragmentShaderBuilder, configurations);
-                graphShader.setCulling(BasicShader.Culling.back);
-                graphShader.setDepthTesting(BasicShader.DepthTesting.disabled);
+                graphShader.setCulling(Culling.back);
+                graphShader.setDepthTesting(DepthTesting.disabled);
                 graphShader.setDepthWriting(false);
                 break;
             case Depth:
@@ -189,11 +192,11 @@ public class GraphShaderBuilder {
 
         String cullingValue = data.getString("culling", null);
         if (cullingValue != null)
-            graphShader.setCulling(BasicShader.Culling.valueOf(cullingValue));
+            graphShader.setCulling(Culling.valueOf(cullingValue));
 
         String depthTest = data.getString("depthTest", null);
         if (depthTest != null)
-            graphShader.setDepthTesting(BasicShader.DepthTesting.valueOf(depthTest.replace(' ', '_')));
+            graphShader.setDepthTesting(DepthTesting.valueOf(depthTest.replace(' ', '_')));
 
         boolean depthWrite = data.getBoolean("depthWrite", false);
         graphShader.setDepthWriting(depthWrite);
@@ -203,11 +206,11 @@ public class GraphShaderBuilder {
 
         String blendingSourceFactor = data.getString("blendingSourceFactor", null);
         if (blendingSourceFactor != null)
-            graphShader.setBlendingSourceFactor(BasicShader.BlendingFactor.valueOf(blendingSourceFactor.replace(' ', '_')));
+            graphShader.setBlendingSourceFactor(BlendingFactor.valueOf(blendingSourceFactor.replace(' ', '_')));
 
         String blendingDestinationFactor = data.getString("blendingDestinationFactor", null);
         if (blendingDestinationFactor != null)
-            graphShader.setBlendingDestinationFactor(BasicShader.BlendingFactor.valueOf(blendingDestinationFactor.replace(' ', '_')));
+            graphShader.setBlendingDestinationFactor(BlendingFactor.valueOf(blendingDestinationFactor.replace(' ', '_')));
     }
 
     private static void debugShaders(String type, String vertexShader, String fragmentShader) {

@@ -44,12 +44,12 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
         populateNodeOutputTypes(endNodeId, nodeOutputTypes);
 
         ObjectMap<String, PipelineNode> pipelineNodeMap = new ObjectMap<>();
-        populatePipelineNodes(endNodeId, pipelineNodeMap, nodeOutputTypes);
+        populatePipelineNodes(endNodeId, pipelineNodeMap, nodeOutputTypes, pipelineDataProvider);
 
         endPipelineNode = (EndPipelineNode) pipelineNodeMap.get(endNodeId);
 
         for (PipelineNode value : pipelineNodeMap.values()) {
-            value.initializePipeline(pipelineDataProvider);
+            value.initializePipeline();
         }
 
         // Populate callbacks for "main" nodes
@@ -218,8 +218,10 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
         return false;
     }
 
-    private void populatePipelineNodes(String nodeId, ObjectMap<String, PipelineNode> pipelineNodeMap,
-                                       ObjectMap<String, ObjectMap<String, String>> pipelineNodeOutputTypes) {
+    private void populatePipelineNodes(
+            String nodeId, ObjectMap<String, PipelineNode> pipelineNodeMap,
+            ObjectMap<String, ObjectMap<String, String>> pipelineNodeOutputTypes,
+            PipelineDataProvider pipelineDataProvider) {
         PipelineNode pipelineNode = pipelineNodeMap.get(nodeId);
         if (pipelineNode != null)
             return;
@@ -238,14 +240,14 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
 
             Array<String> fieldTypes = new Array<>();
             for (GraphConnection graphConnection : graphConnections) {
-                populatePipelineNodes(graphConnection.getNodeFrom(), pipelineNodeMap, pipelineNodeOutputTypes);
+                populatePipelineNodes(graphConnection.getNodeFrom(), pipelineNodeMap, pipelineNodeOutputTypes, pipelineDataProvider);
                 ObjectMap<String, String> outputTypes = pipelineNodeOutputTypes.get(graphConnection.getNodeFrom());
                 String fieldType = outputTypes.get(graphConnection.getFieldFrom());
                 fieldTypes.add(fieldType);
             }
             inputTypes.put(inputName, fieldTypes);
         }
-        pipelineNode = nodeProducer.createNode(nodeInfo.getData(), inputTypes, pipelineNodeOutputTypes.get(nodeId));
+        pipelineNode = nodeProducer.createNode(nodeInfo.getData(), inputTypes, pipelineNodeOutputTypes.get(nodeId), pipelineDataProvider);
         pipelineNodeMap.put(nodeId, pipelineNode);
     }
 

@@ -15,21 +15,19 @@ public class RenderCallbackPipelineNodeProducer extends SingleInputsPipelineNode
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final String callbackId = data.getString("callbackId", null);
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result) {
-            private PipelineDataProvider pipelineDataProvider;
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private RenderCallbackPrivateData renderCallbackData;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 renderCallbackData = pipelineDataProvider.getPrivatePluginData(RenderCallbackPrivateData.class);
-                this.pipelineDataProvider = pipelineDataProvider;
             }
 
             @Override

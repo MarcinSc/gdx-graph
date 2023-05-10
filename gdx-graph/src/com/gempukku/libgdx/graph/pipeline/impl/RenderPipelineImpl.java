@@ -3,11 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.impl;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
-import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
-import com.gempukku.libgdx.graph.pipeline.RenderPipelineBufferImpl;
-import com.gempukku.libgdx.graph.pipeline.TextureFrameBuffer;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 
 public class RenderPipelineImpl implements RenderPipeline {
@@ -22,7 +18,7 @@ public class RenderPipelineImpl implements RenderPipeline {
 
     @Override
     public RenderPipelineBufferImpl initializeDefaultBuffer(int width, int height, Pixmap.Format format, Color bgColor) {
-        defaultBuffer.setColorBuffer(textureFrameBufferCache.getOrCreateFrameBuffer(width, height, format), bgColor);
+        defaultBuffer.setColorBuffer(textureFrameBufferCache.obtainFrameBuffer(width, height, format), bgColor);
         return defaultBuffer;
     }
 
@@ -35,7 +31,7 @@ public class RenderPipelineImpl implements RenderPipeline {
     public void enrichWithDepthBuffer(RenderPipelineBuffer renderPipelineBuffer) {
         RenderPipelineBufferImpl buffer = (RenderPipelineBufferImpl) renderPipelineBuffer;
         if (buffer.getDepthBuffer() == null) {
-            TextureFrameBuffer depthBuffer = textureFrameBufferCache.getOrCreateFrameBuffer(
+            TextureFrameBuffer depthBuffer = textureFrameBufferCache.obtainFrameBuffer(
                     buffer.getWidth(), buffer.getHeight(),
                     renderPipelineBuffer.getColorBufferTexture().getTextureData().getFormat());
             buffer.setDepthBuffer(depthBuffer, Color.WHITE);
@@ -51,7 +47,7 @@ public class RenderPipelineImpl implements RenderPipeline {
 
     @Override
     public RenderPipelineBufferImpl getNewFrameBuffer(int width, int height, Pixmap.Format format, Color bgColor) {
-        TextureFrameBuffer frameBuffer = textureFrameBufferCache.getOrCreateFrameBuffer(width, height, format);
+        TextureFrameBuffer frameBuffer = textureFrameBufferCache.obtainFrameBuffer(width, height, format);
         RenderPipelineBufferImpl renderPipelineBuffer = new RenderPipelineBufferImpl();
         renderPipelineBuffer.setColorBuffer(frameBuffer, bgColor);
         return renderPipelineBuffer;
@@ -60,10 +56,10 @@ public class RenderPipelineImpl implements RenderPipeline {
     @Override
     public void returnFrameBuffer(RenderPipelineBuffer frameBuffer) {
         RenderPipelineBufferImpl buffer = (RenderPipelineBufferImpl) frameBuffer;
-        textureFrameBufferCache.returnBuffer(buffer.getColorBuffer());
+        textureFrameBufferCache.freeFrameBuffer(buffer.getColorBuffer());
         TextureFrameBuffer depthBuffer = buffer.getDepthBuffer();
         if (depthBuffer != null) {
-            textureFrameBufferCache.returnBuffer(depthBuffer);
+            textureFrameBufferCache.freeFrameBuffer(depthBuffer);
             buffer.setDepthBuffer(null, null);
         }
     }

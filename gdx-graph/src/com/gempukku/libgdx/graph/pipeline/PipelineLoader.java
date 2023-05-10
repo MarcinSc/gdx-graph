@@ -9,9 +9,8 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
-import com.gempukku.libgdx.graph.pipeline.impl.PipelineRendererImpl;
+import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.impl.PreparedRenderingPipelineImpl;
-import com.gempukku.libgdx.graph.pipeline.impl.WritablePipelineProperty;
 import com.gempukku.libgdx.graph.pipeline.property.PipelinePropertyProducer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.time.TimeProvider;
@@ -49,7 +48,7 @@ public class PipelineLoader {
             if (validationResult.hasErrors())
                 throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
-            ObjectMap<String, WritablePipelineProperty> propertyMap = new ObjectMap<>();
+            ObjectMap<String, PipelineProperty> propertyMap = new ObjectMap<>();
             for (GraphProperty property : graph.getProperties()) {
                 PipelinePropertyProducer propertyProducer = RendererPipelineConfiguration.findPropertyProducer(property.getType());
                 if (propertyProducer == null)
@@ -57,7 +56,7 @@ public class PipelineLoader {
                 propertyMap.put(property.getName(), propertyProducer.createProperty(property.getData()));
             }
 
-            return new PipelineRendererImpl(pluginRegistry, timeProvider,
+            return new DefaultPipelineRenderer(pluginRegistry, timeProvider,
                     new PreparedRenderingPipelineImpl(graph, "end"), propertyMap, resources);
         } catch (ReflectionException exp) {
             throw new GdxRuntimeException("Unable to initialize plugins", exp);

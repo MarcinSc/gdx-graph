@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Disposable;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 
 public class FullScreenRenderImpl implements FullScreenRender, Disposable {
     private final Mesh mesh;

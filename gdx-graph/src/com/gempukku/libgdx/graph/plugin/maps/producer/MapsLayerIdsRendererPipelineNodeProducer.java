@@ -19,7 +19,7 @@ public class MapsLayerIdsRendererPipelineNodeProducer extends SingleInputsPipeli
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(final JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(final JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final String mapId = data.getString("id");
         final String[] layerIds = data.getString("layers").split(",");
         final int[] ids = new int[layerIds.length];
@@ -31,11 +31,11 @@ public class MapsLayerIdsRendererPipelineNodeProducer extends SingleInputsPipeli
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private MapsPluginPrivateData mapsPluginData;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 mapsPluginData = pipelineDataProvider.getPrivatePluginData(MapsPluginPrivateData.class);
             }
 

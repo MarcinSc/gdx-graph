@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GLTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
@@ -14,167 +13,16 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
-
-import static com.badlogic.gdx.graphics.GL20.*;
+import com.gempukku.libgdx.graph.shader.setting.BlendingFactor;
+import com.gempukku.libgdx.graph.shader.setting.Culling;
+import com.gempukku.libgdx.graph.shader.setting.DepthTesting;
 
 public abstract class BasicShader implements UniformRegistry, Disposable {
-    public enum Culling {
-        back(GL_BACK, "back"), front(GL_FRONT, "front"), none(GL_NONE, "none");
-
-        private final int cullFace;
-        private final String text;
-
-        Culling(int cullFace, String text) {
-            this.cullFace = cullFace;
-            this.text = text;
-        }
-
-        public void setCullFace(OpenGLContext renderContext) {
-            renderContext.setCullFace(cullFace);
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
-    public enum BlendingFactor {
-        zero(GL_ZERO, "zero"), one(GL_ONE, "one"),
-        source_alpha(GL_SRC_ALPHA, "src alpha"), one_minus_source_alpha(GL_ONE_MINUS_SRC_ALPHA, "1-src alpha"),
-        destination_alpha(GL_DST_ALPHA, "dst alpha"), one_minus_destination_alpha(GL_ONE_MINUS_DST_ALPHA, "1-dst alpha"),
-        source_color(GL_SRC_COLOR, "src color"), one_mius_source_color(GL_ONE_MINUS_SRC_COLOR, "1-src color"),
-        destination_color(GL_DST_COLOR, "dst color"), one_minus_destination_color(GL_ONE_MINUS_DST_COLOR, "1-dst color");
-
-        private final int factor;
-        private final String text;
-
-        BlendingFactor(int factor, String text) {
-            this.factor = factor;
-            this.text = text;
-        }
-
-        public int getFactor() {
-            return factor;
-        }
-
-        public String toString() {
-            return text;
-        }
-    }
-
-    public enum DepthTesting {
-        less(GL20.GL_LESS, "less"), less_or_equal(GL20.GL_LEQUAL, "less or equal"),
-        equal(GL20.GL_EQUAL, "equal"), not_equal(GL20.GL_NOTEQUAL, "not equal"), greater_or_equal(GL20.GL_GEQUAL, "greater or equal"),
-        greater(GL20.GL_GREATER, "greater"), never(GL20.GL_NEVER, "never"), always(GL20.GL_ALWAYS, "always"),
-        disabled(0, "disabled");
-
-        private final int depthFunction;
-        private final String text;
-
-        DepthTesting(int depthFunction, String text) {
-            this.depthFunction = depthFunction;
-            this.text = text;
-        }
-
-        void setDepthTest(OpenGLContext renderContext, float depthNear, float depthFar) {
-            renderContext.setDepthTest(depthFunction, depthNear, depthFar);
-        }
-
-        public String toString() {
-            return text;
-        }
-    }
-
-    public static class Attribute {
-        private final String alias;
-        private final int componentCount;
-        private int location = -1;
-
-        public Attribute(String alias, int componentCount) {
-            this.alias = alias;
-            this.componentCount = componentCount;
-        }
-
-        private void setLocation(int location) {
-            this.location = location;
-        }
-
-        public int getLocation() {
-            return location;
-        }
-
-        public int getComponentCount() {
-            return componentCount;
-        }
-    }
-
-    protected static class Uniform {
-        private final String alias;
-        private final UniformSetter setter;
-        private int location = -1;
-
-        public Uniform(String alias, UniformSetter setter) {
-            this.alias = alias;
-            this.setter = setter;
-        }
-
-        private void setUniformLocation(int location) {
-            this.location = location;
-        }
-
-        public UniformSetter getSetter() {
-            return setter;
-        }
-
-        public int getLocation() {
-            return location;
-        }
-    }
-
-    protected static class StructArrayUniform {
-        private final String alias;
-        private final String[] fieldNames;
-        private final StructArrayUniformSetter setter;
-        private int startIndex;
-        private int size;
-        private int[] fieldOffsets;
-
-        public StructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
-            this.alias = alias;
-            this.fieldNames = new String[fieldNames.length];
-            System.arraycopy(fieldNames, 0, this.fieldNames, 0, fieldNames.length);
-            this.setter = setter;
-        }
-
-        private void setUniformLocations(int startIndex, int size, int[] fieldOffsets) {
-            this.startIndex = startIndex;
-            this.size = size;
-            this.fieldOffsets = fieldOffsets;
-        }
-
-        public StructArrayUniformSetter getSetter() {
-            return setter;
-        }
-
-        public int getStartIndex() {
-            return startIndex;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public int[] getFieldOffsets() {
-            return fieldOffsets;
-        }
-    }
-
     protected final ObjectMap<String, Attribute> attributes = new ObjectMap<>();
-    protected final ObjectMap<String, Uniform> globalUniforms = new ObjectMap<String, Uniform>();
-    protected final ObjectMap<String, Uniform> localUniforms = new ObjectMap<String, Uniform>();
-    protected final ObjectMap<String, StructArrayUniform> globalStructArrayUniforms = new ObjectMap<String, StructArrayUniform>();
-    protected final ObjectMap<String, StructArrayUniform> localStructArrayUniforms = new ObjectMap<String, StructArrayUniform>();
+    protected final ObjectMap<String, Uniform> globalUniforms = new ObjectMap<>();
+    protected final ObjectMap<String, Uniform> localUniforms = new ObjectMap<>();
+    protected final ObjectMap<String, StructArrayUniform> globalStructArrayUniforms = new ObjectMap<>();
+    protected final ObjectMap<String, StructArrayUniform> localStructArrayUniforms = new ObjectMap<>();
 
     protected ShaderProgram program;
     private OpenGLContext context;
@@ -487,5 +335,89 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
 
     public void setUniformVector3Array(final int location, float[] values) {
         program.setUniform3fv(location, values, 0, values.length);
+    }
+
+    public static class Attribute {
+        private final String alias;
+        private final int componentCount;
+        private int location = -1;
+
+        public Attribute(String alias, int componentCount) {
+            this.alias = alias;
+            this.componentCount = componentCount;
+        }
+
+        private void setLocation(int location) {
+            this.location = location;
+        }
+
+        public int getLocation() {
+            return location;
+        }
+
+        public int getComponentCount() {
+            return componentCount;
+        }
+    }
+
+    protected static class Uniform {
+        private final String alias;
+        private final UniformSetter setter;
+        private int location = -1;
+
+        public Uniform(String alias, UniformSetter setter) {
+            this.alias = alias;
+            this.setter = setter;
+        }
+
+        private void setUniformLocation(int location) {
+            this.location = location;
+        }
+
+        public UniformSetter getSetter() {
+            return setter;
+        }
+
+        public int getLocation() {
+            return location;
+        }
+    }
+
+    protected static class StructArrayUniform {
+        private final String alias;
+        private final String[] fieldNames;
+        private final StructArrayUniformSetter setter;
+        private int startIndex;
+        private int size;
+        private int[] fieldOffsets;
+
+        public StructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
+            this.alias = alias;
+            this.fieldNames = new String[fieldNames.length];
+            System.arraycopy(fieldNames, 0, this.fieldNames, 0, fieldNames.length);
+            this.setter = setter;
+        }
+
+        private void setUniformLocations(int startIndex, int size, int[] fieldOffsets) {
+            this.startIndex = startIndex;
+            this.size = size;
+            this.fieldOffsets = fieldOffsets;
+        }
+
+        public StructArrayUniformSetter getSetter() {
+            return setter;
+        }
+
+        public int getStartIndex() {
+            return startIndex;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public int[] getFieldOffsets() {
+            return fieldOffsets;
+        }
     }
 }

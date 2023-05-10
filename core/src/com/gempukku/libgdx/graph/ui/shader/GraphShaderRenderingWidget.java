@@ -15,13 +15,15 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.ui.DisposableWidget;
 
 public class GraphShaderRenderingWidget extends DisposableWidget {
     private final DefaultShaderContext shaderContext;
     private final StateOpenGLContext renderContext;
-    private ObjectMap<Class<?>, Object> privatePluginData = new ObjectMap<>();
+    private final MapWritablePropertyContainer rootPropertyContainer = new MapWritablePropertyContainer();
+    private final ObjectMap<Class<?>, Object> privatePluginData = new ObjectMap<>();
 
     private boolean initialized;
     private FrameBuffer frameBuffer;
@@ -31,7 +33,7 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
     private RenderableModel renderableModel;
 
     public GraphShaderRenderingWidget() {
-        shaderContext = new DefaultShaderContext(
+        shaderContext = new DefaultShaderContext(rootPropertyContainer,
                 new PluginPrivateDataSource() {
                     @Override
                     public <T> T getPrivatePluginData(Class<T> clazz) {

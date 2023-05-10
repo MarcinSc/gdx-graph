@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.shader;
+package com.gempukku.libgdx.graph.shader.setting;
 
 public enum ClampMethod {
     Normal("Normal"), Repeat("Repeat"), PingPong("Ping-pong");

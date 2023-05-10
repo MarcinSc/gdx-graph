@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.property;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.impl.WritablePipelineProperty;
+import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineProperty;
 
 import java.util.function.Supplier;
 
@@ -14,8 +14,8 @@ public class CameraPipelinePropertyProducer implements PipelinePropertyProducer 
     }
 
     @Override
-    public WritablePipelineProperty createProperty(JsonValue data) {
-        return new WritablePipelineProperty(PipelineFieldType.Camera,
+    public DefaultPipelineProperty createProperty(JsonValue data) {
+        return new DefaultPipelineProperty(PipelineFieldType.Camera,
                 new Supplier<Camera>() {
                     @Override
                     public Camera get() {

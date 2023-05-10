@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 
 public interface PipelineNode extends Disposable {
-    void initializePipeline(PipelineDataProvider pipelineDataProvider);
+    void initializePipeline();
 
     ObjectMap<String, FieldOutput<?>> getOutputs();
 

@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.ui.shader.producer.effect;
 
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.config.common.effect.GradientShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.setting.ClampMethod;
 import com.gempukku.libgdx.graph.ui.ColorPickerSupplier;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;

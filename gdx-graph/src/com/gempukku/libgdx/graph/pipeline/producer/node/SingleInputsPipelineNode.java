@@ -4,10 +4,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public abstract class SingleInputsPipelineNode extends AbstractPipelineNode {
-    public ObjectMap<String, FieldOutput<?>> inputs = new ObjectMap<>();
+    protected final PipelineDataProvider pipelineDataProvider;
+    protected ObjectMap<String, FieldOutput<?>> inputs = new ObjectMap<>();
 
-    public SingleInputsPipelineNode(ObjectMap<String, FieldOutput<?>> outputs) {
+    public SingleInputsPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineDataProvider pipelineDataProvider) {
         super(outputs);
+        this.pipelineDataProvider = pipelineDataProvider;
     }
 
     @Override

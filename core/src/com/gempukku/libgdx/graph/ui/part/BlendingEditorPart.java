@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.graph.shader.BasicShader;
+import com.gempukku.libgdx.graph.shader.setting.BlendingFactor;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
@@ -13,19 +13,19 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart {
     public enum Blending {
-        disabled("Disabled", false, false, BasicShader.BlendingFactor.zero, BasicShader.BlendingFactor.one),
-        alpha("Alpha", false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one_minus_source_alpha),
-        additive("Additive", false, true, BasicShader.BlendingFactor.source_alpha, BasicShader.BlendingFactor.one),
-        multiplicative("Multiplicative", false, true, BasicShader.BlendingFactor.destination_color, BasicShader.BlendingFactor.zero),
+        disabled("Disabled", false, false, BlendingFactor.zero, BlendingFactor.one),
+        alpha("Alpha", false, true, BlendingFactor.source_alpha, BlendingFactor.one_minus_source_alpha),
+        additive("Additive", false, true, BlendingFactor.source_alpha, BlendingFactor.one),
+        multiplicative("Multiplicative", false, true, BlendingFactor.destination_color, BlendingFactor.zero),
         custom("Custom", true, true, null, null);
 
         private final String text;
         private final boolean customBlending;
         private final boolean enabled;
-        private final BasicShader.BlendingFactor sourceFactor;
-        private final BasicShader.BlendingFactor destinationFactor;
+        private final BlendingFactor sourceFactor;
+        private final BlendingFactor destinationFactor;
 
-        Blending(String text, boolean customBlending, boolean enabled, BasicShader.BlendingFactor sourceFactor, BasicShader.BlendingFactor destinationFactor) {
+        Blending(String text, boolean customBlending, boolean enabled, BlendingFactor sourceFactor, BlendingFactor destinationFactor) {
             this.text = text;
             this.customBlending = customBlending;
             this.enabled = enabled;
@@ -41,15 +41,15 @@ public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart 
             return enabled;
         }
 
-        public BasicShader.BlendingFactor getSourceFactor() {
+        public BlendingFactor getSourceFactor() {
             return sourceFactor;
         }
 
-        public BasicShader.BlendingFactor getDestinationFactor() {
+        public BlendingFactor getDestinationFactor() {
             return destinationFactor;
         }
 
-        public boolean isBlending(boolean enabled, BasicShader.BlendingFactor sourceFactor, BasicShader.BlendingFactor destinationFactor) {
+        public boolean isBlending(boolean enabled, BlendingFactor sourceFactor, BlendingFactor destinationFactor) {
             if (this.customBlending)
                 return false;
             if (!enabled && !this.enabled)
@@ -57,7 +57,7 @@ public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart 
             return this.sourceFactor == sourceFactor && this.destinationFactor == destinationFactor;
         }
 
-        public static Blending findBlending(boolean enabled, BasicShader.BlendingFactor sourceFactor, BasicShader.BlendingFactor destinationFactor) {
+        public static Blending findBlending(boolean enabled, BlendingFactor sourceFactor, BlendingFactor destinationFactor) {
             for (Blending value : Blending.values()) {
                 if (value.isBlending(enabled, sourceFactor, destinationFactor))
                     return value;
@@ -72,16 +72,16 @@ public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart 
     }
 
     private EnumSelectEditorPart<Blending> blendingSelect;
-    private EnumSelectEditorPart<BasicShader.BlendingFactor> sourceFactorSelect;
-    private EnumSelectEditorPart<BasicShader.BlendingFactor> destinationFactorSelect;
+    private EnumSelectEditorPart<BlendingFactor> sourceFactorSelect;
+    private EnumSelectEditorPart<BlendingFactor> destinationFactorSelect;
 
     public BlendingEditorPart() {
         this.blendingSelect = new EnumSelectEditorPart<>("Blending: ", null, Blending.disabled, new ToStringEnum<>(),
                 "gdx-graph-property-label", "gdx-graph-property",
                 new Array<>(Blending.values()));
 
-        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", BasicShader.BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BasicShader.BlendingFactor.values()));
-        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", BasicShader.BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BasicShader.BlendingFactor.values()));
+        this.sourceFactorSelect = new EnumSelectEditorPart<>("Blend Source: ", "blendingSourceFactor", BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BlendingFactor.values()));
+        this.destinationFactorSelect = new EnumSelectEditorPart<>("Blend Destination: ", "blendingDestinationFactor", BlendingFactor.zero, new ToStringEnum<>(), "gdx-graph-property-label", "gdx-graph-property", new Array<>(BlendingFactor.values()));
 
         this.blendingSelect.addListener(
                 new ChangeListener() {
@@ -111,10 +111,10 @@ public class BlendingEditorPart extends VisTable implements GraphNodeEditorPart 
             boolean blending = object.getBoolean("blending", false);
             String blendingSourceFactor = object.getString("blendingSourceFactor", null);
             String blendingDestinationFactor = object.getString("blendingDestinationFactor", null);
-            BasicShader.BlendingFactor sourceFactor = blendingSourceFactor != null ?
-                    BasicShader.BlendingFactor.valueOf(blendingSourceFactor.replace(' ', '_')) : null;
-            BasicShader.BlendingFactor destinationFactor = blendingDestinationFactor != null ?
-                    BasicShader.BlendingFactor.valueOf(blendingDestinationFactor.replace(' ', '_')) : null;
+            BlendingFactor sourceFactor = blendingSourceFactor != null ?
+                    BlendingFactor.valueOf(blendingSourceFactor.replace(' ', '_')) : null;
+            BlendingFactor destinationFactor = blendingDestinationFactor != null ?
+                    BlendingFactor.valueOf(blendingDestinationFactor.replace(' ', '_')) : null;
 
             Blending resultBlending = Blending.findBlending(blending, sourceFactor, destinationFactor);
             if (resultBlending != null) {

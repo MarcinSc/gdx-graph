@@ -10,7 +10,7 @@ public abstract class AbstractPipelineNode implements PipelineNode {
     }
 
     @Override
-    public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+    public void initializePipeline() {
 
     }
 

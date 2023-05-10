@@ -36,8 +36,8 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pluginPrivateDataSource);
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource);
 
         final ObjectMap<String, GraphShader> shaders = new ObjectMap<>();
         final Array<String> allShaderTags = new Array<>();
@@ -64,14 +64,14 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private Lighting3DPrivateData lighting;
             private TimeProvider timeProvider;
             private GraphModelsImpl models;
             private RenderPipeline pipeline;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 lighting = pipelineDataProvider.getPrivatePluginData(Lighting3DPrivateData.class);
                 timeProvider = pipelineDataProvider.getTimeProvider();
                 models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);

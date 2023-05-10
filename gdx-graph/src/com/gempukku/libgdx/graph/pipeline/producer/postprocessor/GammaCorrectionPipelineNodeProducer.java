@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.config.postprocessor.GammaCorrectionPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 
@@ -21,17 +21,17 @@ public class GammaCorrectionPipelineNodeProducer extends SingleInputsPipelineNod
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private ShaderProgram shaderProgram;
             private FullScreenRender fullScreenRender;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
                 shaderProgram = new ShaderProgram(
                         assetResolver.resolve("shader/viewToScreenCoords.vert"),

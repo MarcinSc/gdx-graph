@@ -8,10 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.config.math.value.MergePipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
+import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 
 public class MergePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     public MergePipelineNodeProducer() {
@@ -19,7 +16,7 @@ public class MergePipelineNodeProducer extends SingleInputsPipelineNodeProducer 
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final Vector2 v2 = new Vector2();
         final Vector3 v3 = new Vector3();
         final Color color = new Color();
@@ -36,7 +33,7 @@ public class MergePipelineNodeProducer extends SingleInputsPipelineNodeProducer 
         result.put("v3", v3Output);
         result.put("color", colorOutput);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             @Override
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
                 float xValue = getInputValue("x", 0f);

@@ -18,14 +18,14 @@ public class StartPipelineNode extends SingleInputsPipelineNode {
     private final DefaultFieldOutput<RenderPipeline> output;
     private RenderPipelineImpl renderPipeline;
 
-    public StartPipelineNode(ObjectMap<String, FieldOutput<?>> outputs) {
-        super(outputs);
+    public StartPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineDataProvider pipelineDataProvider) {
+        super(outputs, pipelineDataProvider);
         output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         outputs.put("output", output);
     }
 
     @Override
-    public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+    public void initializePipeline() {
         renderPipeline = new RenderPipelineImpl(pipelineDataProvider.getBufferCopyHelper(),
                 pipelineDataProvider.getTextureBufferCache());
 

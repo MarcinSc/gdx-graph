@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.DefaultShaderContext;
@@ -28,8 +28,8 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pluginPrivateDataSource);
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource);
 
         final Array<GraphShader> particleShaders = new Array<>();
         final JsonValue shaderDefinitions = data.get("shaders");
@@ -38,13 +38,13 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private FullScreenRender fullScreenRender;
             private TimeProvider timeProvider;
             private GraphModelsImpl particleEffects;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
                 timeProvider = pipelineDataProvider.getTimeProvider();
                 particleEffects = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);

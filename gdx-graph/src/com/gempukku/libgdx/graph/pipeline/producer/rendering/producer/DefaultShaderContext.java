@@ -16,12 +16,14 @@ public class DefaultShaderContext implements ShaderContext {
     private Texture depthTexture;
     private Texture colorTexture;
     private TimeProvider timeProvider;
+    private final PropertyContainer pipelinePropertyContainer;
     private PropertyContainer globalPropertyContainer;
     private PropertyContainer localPropertyContainer;
 
     private final PluginPrivateDataSource pluginPrivateDataSource;
 
-    public DefaultShaderContext(PluginPrivateDataSource pluginPrivateDataSource) {
+    public DefaultShaderContext(PropertyContainer pipelinePropertyContainer, PluginPrivateDataSource pluginPrivateDataSource) {
+        this.pipelinePropertyContainer = pipelinePropertyContainer;
         this.pluginPrivateDataSource = pluginPrivateDataSource;
     }
 
@@ -98,12 +100,21 @@ public class DefaultShaderContext implements ShaderContext {
 
     @Override
     public Object getGlobalProperty(String name) {
-        return globalPropertyContainer.getValue(name);
+        Object value = globalPropertyContainer.getValue(name);
+        if (value != null)
+            return value;
+        return pipelinePropertyContainer.getValue(name);
     }
 
     @Override
     public Object getLocalProperty(String name) {
-        return localPropertyContainer.getValue(name);
+        Object value = localPropertyContainer.getValue(name);
+        if (value != null)
+            return value;
+        value = globalPropertyContainer.getValue(name);
+        if (value != null)
+            return value;
+        return pipelinePropertyContainer.getValue(name);
     }
 
     @Override

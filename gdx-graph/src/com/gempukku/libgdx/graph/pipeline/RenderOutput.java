@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.pipeline;
 
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 
 public interface RenderOutput {

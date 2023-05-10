@@ -9,10 +9,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.config.math.arithmetic.AddPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 
 public class AddPipelineNodeProducer extends AbstractPipelineNodeProducer {
     public AddPipelineNodeProducer() {
@@ -20,7 +17,7 @@ public class AddPipelineNodeProducer extends AbstractPipelineNodeProducer {
     }
 
     @Override
-    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final String resultType = outputTypes.get("output");
         final Object resultValue = createDefaultValue(resultType);
 

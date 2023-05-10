@@ -8,10 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.config.math.geometric.DotProductPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
+import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 
 public class DotProductPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     public DotProductPipelineNodeProducer() {
@@ -19,7 +16,7 @@ public class DotProductPipelineNodeProducer extends SingleInputsPipelineNodeProd
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final String resultType = inputTypes.get("a");
         final Object resultValue = createResult(resultType);
 
@@ -27,7 +24,7 @@ public class DotProductPipelineNodeProducer extends SingleInputsPipelineNodeProd
         final DefaultFieldOutput resultOutput = new DefaultFieldOutput(resultType);
         result.put("output", resultOutput);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             @Override
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
                 FieldOutput<?> aFunction = inputs.get("a");

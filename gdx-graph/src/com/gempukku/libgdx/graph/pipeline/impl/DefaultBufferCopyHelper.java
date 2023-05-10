@@ -6,22 +6,25 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.BufferCopyHelper;
+import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 
-public class BufferCopyHelper {
+public class DefaultBufferCopyHelper implements BufferCopyHelper {
     private final ShaderProgram shaderProgram;
 
-    public BufferCopyHelper(FileHandleResolver assetsResolver) {
+    public DefaultBufferCopyHelper(FileHandleResolver assetsResolver) {
         shaderProgram = new ShaderProgram(
                 assetsResolver.resolve("shader/draw/drawTexture.vert"),
                 assetsResolver.resolve("shader/draw/drawTexture.frag")
         );
     }
 
+    @Override
     public void copy(FrameBuffer from, FrameBuffer to, OpenGLContext renderContext, FullScreenRender fullScreenRender) {
         copy(from, to, renderContext, fullScreenRender, 0, 0, getBufferWidth(to), getBufferHeight(to));
     }
 
+    @Override
     public void copy(FrameBuffer from, FrameBuffer to, OpenGLContext renderContext, FullScreenRender fullScreenRender, float x, float y, float width, float height) {
         if (to != null) {
             to.begin();

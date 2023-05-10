@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.pipeline.TextureFrameBuffer;
+import com.gempukku.libgdx.graph.pipeline.TextureFrameBufferCache;
 
 import java.util.Iterator;
 
-public class TextureFrameBufferCache implements Disposable {
+public class DefaultTextureFrameBufferCache implements TextureFrameBufferCache, Disposable {
     private final Array<TextureFrameBuffer> oldFrameBuffers = new Array<>();
     private final Array<TextureFrameBuffer> newFrameBuffers = new Array<>();
 
@@ -37,7 +38,8 @@ public class TextureFrameBufferCache implements Disposable {
         newFrameBuffers.clear();
     }
 
-    public TextureFrameBuffer getOrCreateFrameBuffer(int width, int height, Pixmap.Format format) {
+    @Override
+    public TextureFrameBuffer obtainFrameBuffer(int width, int height, Pixmap.Format format) {
         TextureFrameBuffer buffer = extractFrameBuffer(width, height, this.newFrameBuffers);
         if (buffer != null)
             return buffer;
@@ -48,7 +50,8 @@ public class TextureFrameBufferCache implements Disposable {
         return new TextureFrameBuffer(width, height, format);
     }
 
-    public void returnBuffer(TextureFrameBuffer buffer) {
+    @Override
+    public void freeFrameBuffer(TextureFrameBuffer buffer) {
         newFrameBuffers.add(buffer);
     }
 

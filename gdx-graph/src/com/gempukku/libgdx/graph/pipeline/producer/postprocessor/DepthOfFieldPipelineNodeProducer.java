@@ -11,11 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.config.postprocessor.DepthOfFieldPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
@@ -29,7 +29,7 @@ public class DepthOfFieldPipelineNodeProducer extends SingleInputsPipelineNodePr
 
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         float maxBlurFloat = data.getFloat("maxBlur");
         final int maxBlur = MathUtils.round(maxBlurFloat);
         final boolean blurBackground = data.getBoolean("blurBackground", false);
@@ -38,12 +38,12 @@ public class DepthOfFieldPipelineNodeProducer extends SingleInputsPipelineNodePr
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private ShaderProgram shaderProgram;
             private FullScreenRender fullScreenRender;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
                 String viewToScreenCoords = getShader(assetResolver, "viewToScreenCoords.vert");
                 String depthOfField = getShader(assetResolver, "depthOfField.frag");

@@ -15,7 +15,7 @@ public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final DefaultFieldOutput<Float> timeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
         final DefaultFieldOutput<Float> sinTimeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
         final DefaultFieldOutput<Float> cosTimeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
@@ -27,11 +27,11 @@ public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
         result.put("cosTime", cosTimeFieldOutput);
         result.put("deltaTime", deltaTimeFieldOutput);
 
-        return new SingleInputsPipelineNode(result) {
+        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
             private TimeProvider timeProvider;
 
             @Override
-            public void initializePipeline(PipelineDataProvider pipelineDataProvider) {
+            public void initializePipeline() {
                 timeProvider = pipelineDataProvider.getTimeProvider();
             }
 

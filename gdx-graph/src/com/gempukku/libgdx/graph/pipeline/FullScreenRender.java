@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.pipeline.producer;
+package com.gempukku.libgdx.graph.pipeline;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 

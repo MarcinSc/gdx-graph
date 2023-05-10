@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.pipeline;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 
 public class RenderToTextureOutput implements RenderOutput {

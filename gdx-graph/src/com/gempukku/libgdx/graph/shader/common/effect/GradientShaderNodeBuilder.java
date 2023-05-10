@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.LibGDXCollections;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
-import com.gempukku.libgdx.graph.shader.ClampMethod;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
@@ -16,6 +15,7 @@ import com.gempukku.libgdx.graph.shader.config.common.effect.GradientShaderNodeC
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.shader.setting.ClampMethod;
 
 public class GradientShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder {
     public GradientShaderNodeBuilder() {

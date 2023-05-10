@@ -12,5 +12,6 @@ public interface PipelineNodeProducer {
 
     ObjectMap<String, String> getOutputTypes(JsonValue data, ObjectMap<String, Array<String>> inputTypes);
 
-    PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes);
+    PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes,
+                            PipelineDataProvider pipelineDataProvider);
 }

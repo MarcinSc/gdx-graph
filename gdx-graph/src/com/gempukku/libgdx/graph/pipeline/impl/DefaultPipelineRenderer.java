@@ -8,26 +8,32 @@ import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldTypeRegistry;
-import com.gempukku.libgdx.graph.pipeline.producer.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.graph.util.WhitePixel;
 
-public class PipelineRendererImpl implements PipelineRenderer {
+public class DefaultPipelineRenderer implements PipelineRenderer {
     private final TimeProvider timeProvider;
     private PreparedRenderingPipeline preparedRenderingPipeline;
-    private final ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap;
+    private final ObjectMap<String, ? extends PipelineProperty> pipelinePropertyMap;
     private final PipelineRenderingContextImpl pipelineRenderingContext;
     private final RuntimePluginRegistry pluginRegistry;
     private final boolean ownsResources;
     private final PipelineRendererResources resources;
     private final WhitePixel whitePixel;
 
-    public PipelineRendererImpl(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
-                                PreparedRenderingPipeline preparedRenderingPipeline, ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap,
-                                PipelineRendererResources resources) {
+    public DefaultPipelineRenderer(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
+                                   PreparedRenderingPipeline preparedRenderingPipeline, ObjectMap<String, DefaultPipelineProperty> pipelinePropertyMap) {
+        this(pluginRegistry, timeProvider, preparedRenderingPipeline, pipelinePropertyMap, null);
+    }
+
+    public DefaultPipelineRenderer(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
+                                   PreparedRenderingPipeline preparedRenderingPipeline,
+                                   ObjectMap<String, ? extends PipelineProperty> pipelinePropertyMap,
+                                   PipelineRendererResources resources) {
         whitePixel = new WhitePixel();
 
         this.pluginRegistry = pluginRegistry;
@@ -39,27 +45,22 @@ public class PipelineRendererImpl implements PipelineRenderer {
             this.resources = resources;
         } else {
             ownsResources = true;
-            this.resources = new PipelineRendererResources(new InternalFileHandleResolver());
+            this.resources = new DefaultPipelineRendererResources(new InternalFileHandleResolver());
         }
         pipelineRenderingContext = new PipelineRenderingContextImpl();
 
         preparedRenderingPipeline.initialize(pipelineRenderingContext);
     }
 
-    public PipelineRendererImpl(RuntimePluginRegistry pluginRegistry, TimeProvider timeProvider,
-                                PreparedRenderingPipeline preparedRenderingPipeline, ObjectMap<String, WritablePipelineProperty> pipelinePropertyMap) {
-        this(pluginRegistry, timeProvider, preparedRenderingPipeline, pipelinePropertyMap, null);
-    }
-
     @Override
     public void setPipelineProperty(String property, Object value) {
-        WritablePipelineProperty propertyValue = pipelinePropertyMap.get(property);
-        if (propertyValue == null)
-            throw new IllegalArgumentException("Property with name not found: " + property);
-        PipelineFieldType fieldType = PipelineFieldTypeRegistry.findPipelineFieldType(propertyValue.getType());
-        if (!fieldType.accepts(value))
-            throw new IllegalArgumentException("Property value not accepted, property: " + property);
-        propertyValue.setValue(value);
+        PipelineProperty propertyValue = pipelinePropertyMap.get(property);
+        if (propertyValue != null) {
+            PipelineFieldType fieldType = PipelineFieldTypeRegistry.findPipelineFieldType(propertyValue.getType());
+            if (!fieldType.accepts(value))
+                throw new IllegalArgumentException("Property value not accepted, property: " + property);
+        }
+        resources.getRootPropertyContainer().setValue(property, value);
     }
 
     @Override
@@ -69,10 +70,7 @@ public class PipelineRendererImpl implements PipelineRenderer {
 
     @Override
     public void unsetPipelineProperty(String property) {
-        WritablePipelineProperty propertyValue = pipelinePropertyMap.get(property);
-        if (propertyValue == null)
-            throw new IllegalArgumentException("Property with name not found: " + property);
-        propertyValue.unsetValue();
+        resources.getRootPropertyContainer().remove(property);
     }
 
     @Override
@@ -96,8 +94,9 @@ public class PipelineRendererImpl implements PipelineRenderer {
         // a Render Buffer with a dimension of 0
         if (renderOutput.getRenderWidth() != 0 && renderOutput.getRenderHeight() != 0) {
             pipelineRenderingContext.setRenderOutput(renderOutput);
-            if (ownsResources)
-                resources.startFrame();
+            if (ownsResources) {
+                ((DefaultPipelineRendererResources) resources).startFrame();
+            }
 
             preparedRenderingPipeline.startFrame();
 
@@ -113,8 +112,9 @@ public class PipelineRendererImpl implements PipelineRenderer {
 
             preparedRenderingPipeline.endFrame();
 
-            if (ownsResources)
-                resources.endFrame();
+            if (ownsResources) {
+                ((DefaultPipelineRendererResources) resources).endFrame();
+            }
         }
     }
 
@@ -123,7 +123,7 @@ public class PipelineRendererImpl implements PipelineRenderer {
         whitePixel.dispose();
         preparedRenderingPipeline.dispose();
         if (ownsResources)
-            resources.dispose();
+            ((DefaultPipelineRendererResources) resources).dispose();
         pluginRegistry.dispose();
     }
 
@@ -166,7 +166,7 @@ public class PipelineRendererImpl implements PipelineRenderer {
 
         @Override
         public PipelinePropertySource getPipelinePropertySource() {
-            return PipelineRendererImpl.this;
+            return DefaultPipelineRenderer.this;
         }
 
         @Override
@@ -187,6 +187,11 @@ public class PipelineRendererImpl implements PipelineRenderer {
         @Override
         public FileHandleResolver getAssetResolver() {
             return resources.getAssetResolver();
+        }
+
+        @Override
+        public PropertyContainer getRootPropertyContainer() {
+            return resources.getRootPropertyContainer();
         }
 
         @Override
