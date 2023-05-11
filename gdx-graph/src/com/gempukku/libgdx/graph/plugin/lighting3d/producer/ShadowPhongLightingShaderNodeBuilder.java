@@ -15,6 +15,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.util.WhitePixel;
 
 public class ShadowPhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     private final int maxNumberOfDirectionalLights;
@@ -46,7 +47,7 @@ public class ShadowPhongLightingShaderNodeBuilder extends ConfigurationShaderNod
                 "  vec3 diffuse;\n" +
                         "  vec3 specular;\n");
 
-        Lighting3DUtils.configureShadowInformation(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, graphShader.getDefaultTexture());
+        Lighting3DUtils.configureShadowInformation(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, WhitePixel.sharedInstance.textureRegion);
 
         Lighting3DUtils.configureAmbientLighting(fragmentShaderBuilder, nodeId, environmentId);
 

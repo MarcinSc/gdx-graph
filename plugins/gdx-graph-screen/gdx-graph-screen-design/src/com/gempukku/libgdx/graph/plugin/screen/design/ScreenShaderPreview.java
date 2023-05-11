@@ -100,7 +100,7 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
 
     private void createShader(final GraphWithProperties graph) {
         try {
-            graphShader = GraphShaderBuilder.buildScreenShader("Test", WhitePixel.sharedInstance.texture, AssetResolver.instance, graph, true);
+            graphShader = GraphShaderBuilder.buildScreenShader("Test", AssetResolver.instance, graph, true);
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {

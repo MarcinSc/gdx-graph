@@ -17,6 +17,7 @@ import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.ui.DisposableWidget;
 
 public class GraphShaderRenderingWidget extends DisposableWidget {
@@ -39,7 +40,7 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
                     public <T> T getPrivatePluginData(Class<T> clazz) {
                         return (T) privatePluginData.get(clazz);
                     }
-                });
+                }, WhitePixel.sharedInstance.textureRegion);
         renderContext = new StateOpenGLContext();
     }
 

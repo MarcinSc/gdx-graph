@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -141,7 +142,7 @@ public class Lighting3DUtils {
                 }, "Directional lights");
     }
 
-    public static void configureShadowInformation(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights, final Texture whiteTexture) {
+    public static void configureShadowInformation(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights, final TextureRegion whiteTexture) {
         final float[] shadowCameras = new float[16 * maxNumberOfDirectionalLights];
         commonShaderBuilder.addArrayUniformVariable("u_shadowCamera_" + nodeId, maxNumberOfDirectionalLights, "mat4", false,
                 new UniformRegistry.UniformSetter() {
@@ -259,10 +260,10 @@ public class Lighting3DUtils {
                                 if (shadowFrameBuffer != null) {
                                     textureDescriptor.texture = shadowFrameBuffer.getColorBufferTexture();
                                 } else {
-                                    textureDescriptor.texture = whiteTexture;
+                                    textureDescriptor.texture = whiteTexture.getTexture();
                                 }
                             } else {
-                                textureDescriptor.texture = whiteTexture;
+                                textureDescriptor.texture = whiteTexture.getTexture();
                             }
                             shader.setUniform(location, textureDescriptor);
                         }

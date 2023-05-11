@@ -187,7 +187,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
 
     private void createShader(final GraphWithProperties graph) {
         try {
-            graphShader = GraphShaderBuilder.buildParticlesShader("Test", WhitePixel.sharedInstance.texture, AssetResolver.instance, graph, true);
+            graphShader = GraphShaderBuilder.buildParticlesShader("Test", AssetResolver.instance, graph, true);
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {

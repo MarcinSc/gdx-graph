@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.shader;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -21,8 +20,8 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
     private String fragmentShaderProgram;
     private ShaderProgram shaderProgram;
 
-    public GraphShader(String tag, Texture defaultTexture) {
-        super(tag, defaultTexture);
+    public GraphShader(String tag) {
+        super(tag);
     }
 
     public void setProgram(String vertexShaderProgram, String fragmentShaderProgram) {

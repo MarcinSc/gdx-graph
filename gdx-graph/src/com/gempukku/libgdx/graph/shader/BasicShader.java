@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GLTexture;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix3;
@@ -27,7 +26,6 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
     protected ShaderProgram program;
     private OpenGLContext context;
     private final String tag;
-    private final Texture defaultTexture;
     private Culling culling = Culling.back;
     private boolean blending = false;
     private BlendingFactor blendingSourceFactor = BlendingFactor.source_alpha;
@@ -40,17 +38,12 @@ public abstract class BasicShader implements UniformRegistry, Disposable {
 
     private boolean initialized = false;
 
-    public BasicShader(String tag, Texture defaultTexture) {
+    public BasicShader(String tag) {
         this.tag = tag;
-        this.defaultTexture = defaultTexture;
     }
 
     public String getTag() {
         return tag;
-    }
-
-    public Texture getDefaultTexture() {
-        return defaultTexture;
     }
 
     public boolean isUsingDepthTexture() {

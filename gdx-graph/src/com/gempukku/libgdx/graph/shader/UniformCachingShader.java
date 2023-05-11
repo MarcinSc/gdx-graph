@@ -2,19 +2,18 @@ package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GLTexture;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.IntMap;
 
 public abstract class UniformCachingShader extends BasicShader {
-    private final ObjectMap<Integer, Object> uniformCache = new ObjectMap<Integer, Object>();
+    private final IntMap<Object> uniformCache = new IntMap<>();
 
-    public UniformCachingShader(String tag, Texture defaultTexture) {
-        super(tag, defaultTexture);
+    public UniformCachingShader(String tag) {
+        super(tag);
     }
 
     private boolean shouldSet(int location, Object value) {

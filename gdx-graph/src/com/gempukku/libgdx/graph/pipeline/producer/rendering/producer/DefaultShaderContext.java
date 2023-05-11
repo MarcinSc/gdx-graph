@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.pipeline.producer.rendering.producer;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
@@ -21,10 +22,13 @@ public class DefaultShaderContext implements ShaderContext {
     private PropertyContainer localPropertyContainer;
 
     private final PluginPrivateDataSource pluginPrivateDataSource;
+    private final TextureRegion defaultTexture;
 
-    public DefaultShaderContext(PropertyContainer pipelinePropertyContainer, PluginPrivateDataSource pluginPrivateDataSource) {
+    public DefaultShaderContext(PropertyContainer pipelinePropertyContainer, PluginPrivateDataSource pluginPrivateDataSource,
+                                TextureRegion defaultTexture) {
         this.pipelinePropertyContainer = pipelinePropertyContainer;
         this.pluginPrivateDataSource = pluginPrivateDataSource;
+        this.defaultTexture = defaultTexture;
     }
 
     @Override
@@ -79,6 +83,11 @@ public class DefaultShaderContext implements ShaderContext {
 
     public void setColorTexture(Texture colorTexture) {
         this.colorTexture = colorTexture;
+    }
+
+    @Override
+    public TextureRegion getDefaultTexture() {
+        return defaultTexture;
     }
 
     @Override

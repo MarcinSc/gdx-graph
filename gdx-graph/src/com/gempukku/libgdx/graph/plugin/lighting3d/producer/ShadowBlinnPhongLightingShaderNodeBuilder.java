@@ -22,6 +22,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.util.WhitePixel;
 
 public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
     private final int maxNumberOfDirectionalLights;
@@ -156,10 +157,10 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
                                 if (shadowFrameBuffer != null) {
                                     textureDescriptor.texture = shadowFrameBuffer.getColorBufferTexture();
                                 } else {
-                                    textureDescriptor.texture = graphShader.getDefaultTexture();
+                                    textureDescriptor.texture = WhitePixel.sharedInstance.texture;
                                 }
                             } else {
-                                textureDescriptor.texture = graphShader.getDefaultTexture();
+                                textureDescriptor.texture = WhitePixel.sharedInstance.texture;
                             }
                             shader.setUniform(location, textureDescriptor);
                         }

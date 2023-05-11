@@ -29,7 +29,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource, pipelineDataProvider.getWhitePixel().textureRegion);
 
         final Array<GraphShader> particleShaders = new Array<>();
         final JsonValue shaderDefinitions = data.get("shaders");
@@ -53,7 +53,7 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
                     String tag = shaderDefinition.getString("tag");
                     JsonValue shaderGraph = shaderDefinition.get("shader");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final GraphShader graphShader = ParticleShaderLoader.loadShader(shaderGraph, tag, pipelineDataProvider.getWhitePixel().texture);
+                    final GraphShader graphShader = ParticleShaderLoader.loadShader(shaderGraph, tag);
                     particleShaders.add(graphShader);
                 }
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -37,7 +36,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource, pipelineDataProvider.getWhitePixel().textureRegion);
 
         final ObjectMap<String, GraphShader> shaders = new ObjectMap<>();
         final Array<String> allShaderTags = new Array<>();
@@ -77,7 +76,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                 models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
-                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition, pipelineDataProvider.getWhitePixel().texture);
+                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition);
 
                     allShaderTags.add(depthGraphShader.getTag());
                     shaders.put(depthGraphShader.getTag(), depthGraphShader);
@@ -212,11 +211,11 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         throw new IllegalStateException("Unrecognized RenderOrder: " + renderOrder.name());
     }
 
-    private static GraphShader createDepthShader(JsonValue shaderDefinition, Texture defaultTexture) {
+    private static GraphShader createDepthShader(JsonValue shaderDefinition) {
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ShadowShaderLoader.loadShader(shaderGraph, tag, defaultTexture);
+        return ShadowShaderLoader.loadShader(shaderGraph, tag);
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {

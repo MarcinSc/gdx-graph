@@ -142,7 +142,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
 
     private void createShader(final GraphWithProperties graph) {
         try {
-            graphShader = GraphShaderBuilder.buildModelShader("Test", WhitePixel.sharedInstance.texture, AssetResolver.instance, graph, true);
+            graphShader = GraphShaderBuilder.buildModelShader("Test", AssetResolver.instance, graph, true);
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {

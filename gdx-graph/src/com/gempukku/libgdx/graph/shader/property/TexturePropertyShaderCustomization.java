@@ -41,7 +41,7 @@ public class TexturePropertyShaderCustomization implements PropertyShaderCustomi
                                 Object value = shaderContext.getLocalProperty(name);
                                 value = shaderPropertySource.getValueToUse(value);
                                 if (value == null)
-                                    value = new TextureRegion(shader.getDefaultTexture());
+                                    value = shaderContext.getDefaultTexture();
                                 TextureRegion region = (TextureRegion) value;
                                 shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
                             }
@@ -56,7 +56,7 @@ public class TexturePropertyShaderCustomization implements PropertyShaderCustomi
                                 Object value = shaderContext.getGlobalProperty(name);
                                 value = shaderPropertySource.getValueToUse(value);
                                 if (value == null)
-                                    value = new TextureRegion(shader.getDefaultTexture());
+                                    value = shaderContext.getDefaultTexture();
                                 TextureRegion region = (TextureRegion) value;
                                 shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
                             }
@@ -90,7 +90,7 @@ public class TexturePropertyShaderCustomization implements PropertyShaderCustomi
                                 Object value = shaderContext.getLocalProperty(name);
                                 value = shaderPropertySource.getValueToUse(value);
                                 if (value == null)
-                                    value = new TextureRegion(shader.getDefaultTexture());
+                                    value = shaderContext.getDefaultTexture();
                                 TextureRegion region = (TextureRegion) value;
                                 shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
                             }
@@ -105,7 +105,7 @@ public class TexturePropertyShaderCustomization implements PropertyShaderCustomi
                                 Object value = shaderContext.getGlobalProperty(name);
                                 value = shaderPropertySource.getValueToUse(value);
                                 if (value == null)
-                                    value = new TextureRegion(shader.getDefaultTexture());
+                                    value = shaderContext.getDefaultTexture();
                                 TextureRegion region = (TextureRegion) value;
                                 shader.setUniform(location, (float) region.getRegionWidth(), (float) region.getRegionHeight());
                             }

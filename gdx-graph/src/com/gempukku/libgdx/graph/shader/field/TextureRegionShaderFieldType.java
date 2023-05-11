@@ -74,7 +74,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderContext.getGlobalProperty(name);
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }
@@ -86,7 +86,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderContext.getGlobalProperty(name);
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         TextureRegion region = (TextureRegion) value;
                         shader.setUniform(location,
                                 region.getU(), region.getV(),
@@ -124,7 +124,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderContext.getLocalProperty(name);
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }
@@ -136,7 +136,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderContext.getLocalProperty(name);
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         TextureRegion region = (TextureRegion) value;
                         shader.setUniform(location,
                                 region.getU(), region.getV(),
@@ -172,7 +172,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderPropertySource.getPropertyName();
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }
@@ -208,7 +208,7 @@ public class TextureRegionShaderFieldType implements ShaderFieldType {
                         Object value = shaderContext.getLocalProperty(shaderPropertySource.getPropertyName());
                         value = shaderPropertySource.getValueToUse(value);
                         if (value == null)
-                            value = new TextureRegion(shader.getDefaultTexture());
+                            value = shaderContext.getDefaultTexture();
                         textureDescriptor.texture = ((TextureRegion) value).getTexture();
                         shader.setUniform(location, textureDescriptor);
                     }

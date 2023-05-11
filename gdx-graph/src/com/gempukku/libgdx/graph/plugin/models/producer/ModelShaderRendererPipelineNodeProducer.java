@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.plugin.models.producer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
@@ -25,7 +24,6 @@ import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
 import com.gempukku.libgdx.graph.plugin.models.strategy.*;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.time.TimeProvider;
-import com.gempukku.libgdx.graph.util.WhitePixel;
 
 public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     private final PluginPrivateDataSource pluginPrivateDataSource;
@@ -37,7 +35,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource, pipelineDataProvider.getWhitePixel().textureRegion);
 
         final ObjectMap<String, ShaderGroup> shaderGroups = new ObjectMap<>();
 
@@ -73,18 +71,16 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
             private FullScreenRender fullScreenRender;
             private TimeProvider timeProvider;
             private GraphModelsImpl models;
-            private WhitePixel whitePixel;
 
             @Override
             public void initializePipeline() {
                 fullScreenRender = pipelineDataProvider.getFullScreenRender();
                 timeProvider = pipelineDataProvider.getTimeProvider();
                 models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
-                whitePixel = pipelineDataProvider.getWhitePixel();
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
                     ShaderGroup shaderGroup = new ShaderGroup(shaderDefinition);
-                    shaderGroup.initialize(whitePixel);
+                    shaderGroup.initialize();
 
                     allShaderTags.add(shaderGroup.getTag());
                     shaderGroups.put(shaderGroup.getTag(), shaderGroup);
@@ -101,7 +97,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
             private void initializeDepthShaders() {
                 for (String depthDrawingShaderTag : depthDrawingShaderTags) {
-                    shaderGroups.get(depthDrawingShaderTag).initializeDepthShader(whitePixel);
+                    shaderGroups.get(depthDrawingShaderTag).initializeDepthShader();
                 }
             }
 
@@ -219,18 +215,18 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         throw new IllegalStateException("Unrecognized RenderOrder: " + renderOrder.name());
     }
 
-    private static GraphShader createColorShader(JsonValue shaderDefinition, Texture defaultTexture) {
+    private static GraphShader createColorShader(JsonValue shaderDefinition) {
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ModelShaderLoader.loadShader(shaderGraph, tag, false, defaultTexture);
+        return ModelShaderLoader.loadShader(shaderGraph, tag, false);
     }
 
-    private static GraphShader createDepthShader(JsonValue shaderDefinition, Texture defaultTexture) {
+    private static GraphShader createDepthShader(JsonValue shaderDefinition) {
         JsonValue shaderGraph = shaderDefinition.get("shader");
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ModelShaderLoader.loadShader(shaderGraph, tag, true, defaultTexture);
+        return ModelShaderLoader.loadShader(shaderGraph, tag, true);
     }
 
     private static class ShaderGroup implements Disposable {
@@ -242,13 +238,13 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
             this.shaderDefinition = shaderDefinition;
         }
 
-        public void initialize(WhitePixel whitePixel) {
-            colorShader = ModelShaderRendererPipelineNodeProducer.createColorShader(shaderDefinition, whitePixel.texture);
+        public void initialize() {
+            colorShader = ModelShaderRendererPipelineNodeProducer.createColorShader(shaderDefinition);
         }
 
-        public void initializeDepthShader(WhitePixel whitePixel) {
+        public void initializeDepthShader() {
             if (depthShader == null && colorShader.isDepthWriting()) {
-                depthShader = ModelShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition, whitePixel.texture);
+                depthShader = ModelShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition);
             }
         }
 

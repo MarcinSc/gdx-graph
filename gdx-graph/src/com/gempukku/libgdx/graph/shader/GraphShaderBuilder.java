@@ -2,7 +2,6 @@ package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
@@ -36,7 +35,7 @@ public class GraphShaderBuilder {
     }
 
     public static GraphShader buildShader(GraphWithProperties graph, FileHandleResolver assetResolver) {
-        GraphShader graphShader = new GraphShader("", null);
+        GraphShader graphShader = new GraphShader("");
         ShaderType shaderType = getShaderType(graph.getType());
         buildShader(graph, shaderType, false, graphShader, assetResolver);
         return graphShader;
@@ -126,10 +125,10 @@ public class GraphShaderBuilder {
         graphShader.setProgram(vertexShader, fragmentShader);
     }
 
-    public static GraphShader buildModelShader(String tag, Texture defaultTexture, FileHandleResolver assetResolver,
+    public static GraphShader buildModelShader(String tag, FileHandleResolver assetResolver,
                                                GraphWithProperties graph,
                                                boolean designTime) {
-        GraphShader graphShader = new GraphShader(tag, defaultTexture);
+        GraphShader graphShader = new GraphShader(tag);
 
         buildShader(graph, ShaderType.Model, designTime, graphShader, assetResolver);
         graphShader.init();
@@ -137,10 +136,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static GraphShader buildParticlesShader(String tag, Texture defaultTexture, FileHandleResolver assetResolver,
+    public static GraphShader buildParticlesShader(String tag, FileHandleResolver assetResolver,
                                                    GraphWithProperties graph,
                                                    boolean designTime) {
-        GraphShader graphShader = new GraphShader(tag, defaultTexture);
+        GraphShader graphShader = new GraphShader(tag);
 
         buildShader(graph, ShaderType.Particles, designTime, graphShader, assetResolver);
         graphShader.init();
@@ -148,10 +147,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static GraphShader buildScreenShader(String tag, Texture defaultTexture, FileHandleResolver assetResolver,
+    public static GraphShader buildScreenShader(String tag, FileHandleResolver assetResolver,
                                                 GraphWithProperties graph,
                                                 boolean designTime) {
-        GraphShader graphShader = new GraphShader(tag, defaultTexture);
+        GraphShader graphShader = new GraphShader(tag);
 
         buildShader(graph, ShaderType.Screen, designTime, graphShader, assetResolver);
         graphShader.init();
@@ -159,10 +158,10 @@ public class GraphShaderBuilder {
         return graphShader;
     }
 
-    public static GraphShader buildModelDepthShader(String tag, Texture defaultTexture, FileHandleResolver assetResolver,
+    public static GraphShader buildModelDepthShader(String tag, FileHandleResolver assetResolver,
                                                     GraphWithProperties graph,
                                                     boolean designTime) {
-        GraphShader graphShader = new GraphShader(tag, defaultTexture);
+        GraphShader graphShader = new GraphShader(tag);
 
         buildShader(graph, ShaderType.Depth, designTime, graphShader, assetResolver);
         graphShader.init();
