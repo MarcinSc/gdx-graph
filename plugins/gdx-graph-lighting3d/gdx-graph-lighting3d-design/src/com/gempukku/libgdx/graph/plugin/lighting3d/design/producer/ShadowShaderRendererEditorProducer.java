@@ -1,10 +1,14 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
+import com.gempukku.libgdx.graph.plugin.lighting3d.ShadowShaderGraphType;
 import com.gempukku.libgdx.graph.plugin.lighting3d.producer.ShadowShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.ShaderGraphEditorPart;
+import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
@@ -24,7 +28,7 @@ public class ShadowShaderRendererEditorProducer extends GdxGraphNodeEditorProduc
         StringEditorPart envId = new StringEditorPart("Env id: ", "id", "", "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphEditorPart(envId);
 
-        ShadowShadersEditorPart graphBoxPart = new ShadowShadersEditorPart();
+        ShaderGraphEditorPart graphBoxPart = new ShaderGraphEditorPart((UIGraphType) GraphTypeRegistry.findGraphType(ShadowShaderGraphType.TYPE));
         graphNodeEditor.addGraphEditorPart(graphBoxPart);
     }
 }

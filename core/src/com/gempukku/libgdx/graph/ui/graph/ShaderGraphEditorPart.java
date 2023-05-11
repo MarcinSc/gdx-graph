@@ -22,13 +22,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public abstract class ShaderGraphEditorPart extends VisTable implements GraphNodeEditorPart {
+public class ShaderGraphEditorPart extends VisTable implements GraphNodeEditorPart {
     private static final int EDIT_WIDTH = 40;
     private static final int REMOVE_WIDTH = 60;
     private final VerticalGroup shaderGroup;
-    private ArrayList<ShaderInfo> shaders = new ArrayList<>();
+    private final UIGraphType graphType;
+    private final ArrayList<ShaderInfo> shaders = new ArrayList<>();
 
-    public ShaderGraphEditorPart() {
+    public ShaderGraphEditorPart(UIGraphType graphType) {
+        this.graphType = graphType;
         shaderGroup = new VerticalGroup();
         shaderGroup.top();
         shaderGroup.grow();
@@ -44,61 +46,7 @@ public abstract class ShaderGraphEditorPart extends VisTable implements GraphNod
         table.add(scrollPane).grow().row();
 
         final VisTextButton newShader = new VisTextButton("New Shader", "gdx-graph-property-label");
-        newShader.addListener(
-                new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        UIGraphType graphType = getGraphType();
-                        PopupMenu popupMenu = new PopupMenu();
-                        for (final GraphTemplate graphTemplate : graphType.getGraphTemplates()) {
-                            MenuItem menuItem = new MenuItem(graphTemplate.getTitle());
-                            popupMenu.addItem(menuItem);
-                            menuItem.addListener(
-                                    new ChangeListener() {
-                                        @Override
-                                        public void changed(ChangeEvent event, Actor actor) {
-                                            String id = UUID.randomUUID().toString().replace("-", "");
-                                            addShaderGraph(id, "", graphTemplate.getGraph());
-                                        }
-                                    });
-                        }
-                        popupMenu.addSeparator();
-
-                        MenuItem loadFromFile = new MenuItem("From file...");
-                        popupMenu.addItem(loadFromFile);
-                        loadFromFile.addListener(
-                                new ChangeListener() {
-                                    @Override
-                                    public void changed(ChangeEvent event, Actor actor) {
-                                        FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-                                        fileChooser.setModal(true);
-                                        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-                                        fileChooser.setListener(new FileChooserAdapter() {
-                                            @Override
-                                            public void selected(Array<FileHandle> file) {
-                                                FileHandle selectedFile = file.get(0);
-                                                JsonReader parser = new JsonReader();
-                                                try {
-                                                    InputStream is = selectedFile.read();
-                                                    try {
-                                                        JsonValue shader = parser.parse(new InputStreamReader(is));
-                                                        String id = UUID.randomUUID().toString().replace("-", "");
-                                                        addShaderGraph(id, selectedFile.nameWithoutExtension(), shader);
-                                                    } finally {
-                                                        is.close();
-                                                    }
-                                                } catch (IOException exp) {
-                                                    // Ignored
-                                                }
-                                            }
-                                        });
-                                        getStage().addActor(fileChooser.fadeIn());
-                                    }
-                                });
-
-                        popupMenu.showMenu(getStage(), newShader);
-                    }
-                });
+        newShader.addListener(new NewShaderListener());
 
         VisTable buttons = new VisTable();
         buttons.add(newShader);
@@ -106,8 +54,6 @@ public abstract class ShaderGraphEditorPart extends VisTable implements GraphNod
 
         add(table).grow().row();
     }
-
-    protected abstract UIGraphType getGraphType();
 
     @Override
     public float getPrefWidth() {
@@ -204,6 +150,60 @@ public abstract class ShaderGraphEditorPart extends VisTable implements GraphNod
         object.addChild("shaders", shaderArray);
     }
 
+    private class NewShaderListener extends ChangeListener {
+        @Override
+        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            PopupMenu popupMenu = new PopupMenu();
+            for (final GraphTemplate graphTemplate : graphType.getGraphTemplates()) {
+                MenuItem menuItem = new MenuItem(graphTemplate.getTitle());
+                popupMenu.addItem(menuItem);
+                menuItem.addListener(
+                        new ChangeListener() {
+                            @Override
+                            public void changed(ChangeEvent event, Actor actor) {
+                                String id = UUID.randomUUID().toString().replace("-", "");
+                                addShaderGraph(id, "", graphTemplate.getGraph());
+                            }
+                        });
+            }
+            popupMenu.addSeparator();
+
+            MenuItem loadFromFile = new MenuItem("From file...");
+            popupMenu.addItem(loadFromFile);
+            loadFromFile.addListener(
+                    new ChangeListener() {
+                        @Override
+                        public void changed(ChangeEvent event, Actor actor) {
+                            FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                            fileChooser.setModal(true);
+                            fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+                            fileChooser.setListener(new FileChooserAdapter() {
+                                @Override
+                                public void selected(Array<FileHandle> file) {
+                                    FileHandle selectedFile = file.get(0);
+                                    JsonReader parser = new JsonReader();
+                                    try {
+                                        InputStream is = selectedFile.read();
+                                        try {
+                                            JsonValue shader = parser.parse(new InputStreamReader(is));
+                                            String id = UUID.randomUUID().toString().replace("-", "");
+                                            addShaderGraph(id, selectedFile.nameWithoutExtension(), shader);
+                                        } finally {
+                                            is.close();
+                                        }
+                                    } catch (IOException exp) {
+                                        // Ignored
+                                    }
+                                }
+                            });
+                            getStage().addActor(fileChooser.fadeIn());
+                        }
+                    });
+
+            popupMenu.showMenu(getStage(), actor);
+        }
+    }
+
     private class ShaderInfo {
         private String id;
         private JsonValue initialShaderJson;
@@ -242,7 +242,7 @@ public abstract class ShaderGraphEditorPart extends VisTable implements GraphNod
                     new ChangeListener() {
                         @Override
                         public void changed(ChangeEvent event, Actor actor) {
-                            editButton.fire(new RequestGraphOpen(id, "Shader - " + textField.getText(), initialShaderJson, getGraphType()));
+                            editButton.fire(new RequestGraphOpen(id, "Shader - " + textField.getText(), initialShaderJson, graphType));
                         }
                     });
             table.add(editButton).width(EDIT_WIDTH);
