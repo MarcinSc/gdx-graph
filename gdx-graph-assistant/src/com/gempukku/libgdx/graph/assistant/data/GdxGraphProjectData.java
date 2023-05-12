@@ -10,6 +10,14 @@ public class GdxGraphProjectData implements GraphResolver {
         return graphs;
     }
 
+    public GdxGraphData findGraphByName(String name) {
+        for (GdxGraphData graph : graphs) {
+            if (graph.getName().equals(name))
+                return graph;
+        }
+        return null;
+    }
+
     @Override
     public GdxGraphData findGraphByPath(String path) {
         for (GdxGraphData graph : graphs) {

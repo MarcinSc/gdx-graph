@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.kotcrab.vis.ui.util.dialog.OptionDialogListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
@@ -72,7 +73,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             @Override
             public boolean validateInput(String input) {
                 input = input.trim();
-                return !input.isEmpty() && !mainGraphs.containsKey(input);
+                return !input.isEmpty() && gdxGraphProjectData.findGraphByName(input) == null;
             }
         };
 
@@ -120,6 +121,15 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             }
         }
 
+        menuManager.setPopupMenuDisabled("Graph", null, "Remove", gdxGraphProjectData.getGraphs().isEmpty());
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                menuManager.addPopupMenu("Graph", "Remove", type.getPresentableName());
+                menuManager.setPopupMenuDisabled("Graph", "Remove", type.getPresentableName(), true);
+            }
+        }
+
         menuManager.updateMenuItemListener("Graph", null, "Create group",
                 new Runnable() {
                     @Override
@@ -129,14 +139,16 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                                 new InputValidator() {
                                     @Override
                                     public boolean validateInput(String input) {
-                                        return input.trim().length() > 0;
+                                        String groupName = input.trim();
+                                        return groupName.length() > 0;
                                     }
                                 },
                                 new InputDialogListener() {
                                     @Override
                                     public void finished(String input) {
+                                        String groupName = input.trim();
                                         GraphTab activeTab = getActiveGraphTab();
-                                        activeTab.createGroup(input.trim());
+                                        activeTab.createGroup(groupName);
                                     }
 
                                     @Override
@@ -254,6 +266,57 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                     }
                 });
         menuManager.setPopupMenuDisabled("Graph", "Open", graphType.getPresentableName(), false);
+        menuManager.addMenuItem("Graph", "Remove/" + graphType.getPresentableName(), graphName,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        removeGraph(graphPath, graphName, graphType);
+                    }
+                });
+        menuManager.setPopupMenuDisabled("Graph", "Remove", graphType.getPresentableName(), false);
+    }
+
+    private void removeGraph(String graphPath, String graphName, UIGraphType graphType) {
+        Dialogs.OptionDialog optionDialog = new Dialogs.OptionDialog("Delete graph", "Would you like to also delete the file from disk?",
+                Dialogs.OptionDialogType.YES_NO,
+                new OptionDialogListener() {
+                    @Override
+                    public void yes() {
+                        doRemoveGraph(graphPath, true);
+                    }
+
+                    @Override
+                    public void no() {
+                        doRemoveGraph(graphPath, false);
+                    }
+
+                    @Override
+                    public void cancel() {
+
+                    }
+                });
+        application.addWindow(optionDialog);
+    }
+
+    private void doRemoveGraph(String graphPath, boolean deleteFile) {
+        mainGraphs.remove(graphPath);
+        GraphTab tab = mainGraphTabs.remove(graphPath);
+
+        GdxGraphData graphData = gdxGraphProjectData.findGraphByPath(graphPath);
+        gdxGraphProjectData.getGraphs().removeValue(graphData, true);
+
+        UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graphData.getGraphType());
+
+        menuManager.removeMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphData.getName());
+        menuManager.removeMenuItem("Graph", "Remove/" + graphType.getPresentableName(), graphData.getName());
+
+        if (tab != null) {
+            tabManager.closeTab(tab);
+        }
+        if (deleteFile) {
+            FileHandle graphFile = assistantProject.getAssetFolder().child(graphPath);
+            graphFile.delete();
+        }
     }
 
     private String toProjectChildPath(FileHandle file) {
@@ -399,10 +462,9 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     @Override
     public JsonValue saveProject() {
         for (ObjectMap.Entry<String, GraphTab> openGraphEntry : mainGraphTabs.entries()) {
-            String graphPath = openGraphEntry.key;
+            GdxGraphData graphData = gdxGraphProjectData.findGraphByPath(openGraphEntry.key);
             JsonValue serializedGraph = openGraphEntry.value.serializeGraph();
-            mainGraphs.put(graphPath, serializedGraph);
-            GdxGraphData graphData = gdxGraphProjectData.findGraphByPath(graphPath);
+            mainGraphs.put(graphData.getPath(), serializedGraph);
             FileHandle graphFile = assistantProject.getAssetFolder().child(graphData.getPath());
             graphFile.writeString(serializedGraph.toJson(JsonWriter.OutputType.json), false);
         }
