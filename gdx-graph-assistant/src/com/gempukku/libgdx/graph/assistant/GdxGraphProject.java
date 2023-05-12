@@ -188,7 +188,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     }
 
     private void newGraph(UIGraphType graphType, JsonValue graph) {
-        FileChooser fileChooser = new FileChooser(FileChooser.Mode.SAVE);
+        FileChooser fileChooser = new FileChooser("Create graph in the project", FileChooser.Mode.SAVE);
         fileChooser.setDirectory(assistantProject.getAssetFolder());
         fileChooser.setFileTypeFilter(createGraphFileFilter(graphType, false));
         fileChooser.setModal(true);
@@ -290,24 +290,24 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                 FileHandle selectedFile = file.get(0);
                 String filePath = toProjectChildPath(selectedFile);
                 if (filePath == null) {
-                    Dialogs.DetailsDialog error = new Dialogs.DetailsDialog("Can't create a graph outside of the folder the project is in", "Error", null);
-                    application.addWindow(error.fadeIn());
-                    return;
+                    JsonValue graph = new JsonReader().parse(selectedFile);
+                    newGraph(graphType, graph);
+                } else {
+                    Dialogs.InputDialog inputDialog = new Dialogs.InputDialog("Choose graph name", "Name the graph", true,
+                            graphNameValidator,
+                            new InputDialogAdapter() {
+                                @Override
+                                public void finished(String input) {
+                                    String graphName = input.trim();
+                                    GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
+                                    loadGraphIntoProject(new JsonReader(), graphData);
+                                    gdxGraphProjectData.getGraphs().add(graphData);
+                                    dirty = true;
+                                    openGraphTab(filePath, graphName, graphType);
+                                }
+                            });
+                    application.addWindow(inputDialog.fadeIn());
                 }
-                Dialogs.InputDialog inputDialog = new Dialogs.InputDialog("Choose graph name", "Name the graph", true,
-                        graphNameValidator,
-                        new InputDialogAdapter() {
-                            @Override
-                            public void finished(String input) {
-                                String graphName = input.trim();
-                                GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
-                                loadGraphIntoProject(new JsonReader(), graphData);
-                                gdxGraphProjectData.getGraphs().add(graphData);
-                                dirty = true;
-                                openGraphTab(filePath, graphName, graphType);
-                            }
-                        });
-                application.addWindow(inputDialog.fadeIn());
             }
         });
         application.addWindow(fileChooser.fadeIn());
