@@ -1,0 +1,143 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "72be9695e45949ccb5f449dbacdfd619",
+      "type": "Property",
+      "x": 0.0,
+      "y": 765.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 362.0,
+      "y": 944.0
+    },
+    {
+      "id": "bc585d5e3ef14ae5951652650062120f",
+      "type": "FullScreenShaderRenderer",
+      "x": 258.0,
+      "y": 225.0,
+      "data": {
+        "shaders": [
+          {
+            "path": "examples-assets/screen/crt-monitor.scs",
+            "tag": "CRT Monitor"
+          }
+        ]
+      }
+    },
+    {
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 113.0,
+      "y": 958.0,
+      "data": {
+        "color": "5c5c5cff"
+      }
+    },
+    {
+      "id": "dffb152d405a49d38792e850749129b2",
+      "type": "UIRenderer",
+      "x": 327.0,
+      "y": 87.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "e520957c03c34f25adef23981763f99b",
+      "type": "Property",
+      "x": 2.0,
+      "y": 507.0,
+      "data": {
+        "name": "Distort",
+        "type": "Boolean"
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 362.0,
+      "y": 0.0
+    },
+    {
+      "id": "ff6f63af3181472da525343236652acd",
+      "type": "GraphShaderRenderer",
+      "x": 256.0,
+      "y": 582.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/texture-and-color.mds",
+            "tag": "Default"
+          }
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "ff6f63af3181472da525343236652acd",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "ff6f63af3181472da525343236652acd",
+      "toField": "input"
+    },
+    {
+      "fromNode": "bc585d5e3ef14ae5951652650062120f",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
+    {
+      "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
+      "fromField": "value",
+      "toNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "toField": "background"
+    },
+    {
+      "fromNode": "dffb152d405a49d38792e850749129b2",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "e520957c03c34f25adef23981763f99b",
+      "fromField": "value",
+      "toNode": "bc585d5e3ef14ae5951652650062120f",
+      "toField": "enabled"
+    },
+    {
+      "fromNode": "ff6f63af3181472da525343236652acd",
+      "fromField": "output",
+      "toNode": "bc585d5e3ef14ae5951652650062120f",
+      "toField": "input"
+    }
+  ],
+  "groups": [],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    },
+    {
+      "name": "Distort",
+      "type": "Boolean",
+      "data": {
+        "value": false
+      }
+    }
+  ]
+}

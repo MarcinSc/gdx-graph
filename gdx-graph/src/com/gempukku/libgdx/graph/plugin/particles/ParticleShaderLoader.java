@@ -2,7 +2,9 @@ package com.gempukku.libgdx.graph.plugin.particles;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
@@ -12,8 +14,17 @@ import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 
 public class ParticleShaderLoader {
+    public static GraphShader loadShader(FileHandle shaderFile, String tag) {
+        return loadShader(shaderFile, tag, new InternalFileHandleResolver());
+    }
+
     public static GraphShader loadShader(JsonValue jsonGraph, String tag) {
         return loadShader(jsonGraph, tag, new InternalFileHandleResolver());
+    }
+
+    public static GraphShader loadShader(FileHandle shaderFile, String tag, FileHandleResolver assetResolver) {
+        JsonValue graph = new JsonReader().parse(shaderFile);
+        return loadShader(graph, tag, assetResolver);
     }
 
     public static GraphShader loadShader(JsonValue jsonGraph, String tag, FileHandleResolver assetResolver) {

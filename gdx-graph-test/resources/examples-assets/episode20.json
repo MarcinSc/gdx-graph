@@ -1,0 +1,158 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "1c5c57e4e5174c0e845b18a212be6aa1",
+      "type": "GaussianBlur",
+      "x": 585.0,
+      "y": 668.0
+    },
+    {
+      "id": "2025987d85be4b71bdcac35c0f460e9b",
+      "type": "ValueFloat",
+      "x": 374.0,
+      "y": 667.0,
+      "data": {
+        "v1": 10.0
+      }
+    },
+    {
+      "id": "72be9695e45949ccb5f449dbacdfd619",
+      "type": "Property",
+      "x": 50.0,
+      "y": 870.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 586.0,
+      "y": 1201.0
+    },
+    {
+      "id": "c15b7f3a484246a89c6c773dbc5b7848",
+      "type": "GraphShaderRenderer",
+      "x": 478.0,
+      "y": 847.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/parallax-background.mds",
+            "tag": "Background"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ce7263bb711843b590f125cc3f49f1e9",
+      "type": "GraphShaderRenderer",
+      "x": 478.0,
+      "y": 253.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/sprites-tiled.mds",
+            "tag": "Tiled"
+          },
+          {
+            "path": "examples-assets/model/sprites-animated.mds",
+            "tag": "Animated"
+          }
+        ]
+      }
+    },
+    {
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 341.0,
+      "y": 1224.0,
+      "data": {
+        "color": "638c99ff"
+      }
+    },
+    {
+      "id": "dffb152d405a49d38792e850749129b2",
+      "type": "UIRenderer",
+      "x": 549.0,
+      "y": 134.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 584.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "1c5c57e4e5174c0e845b18a212be6aa1",
+      "fromField": "output",
+      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "toField": "input"
+    },
+    {
+      "fromNode": "2025987d85be4b71bdcac35c0f460e9b",
+      "fromField": "value",
+      "toNode": "1c5c57e4e5174c0e845b18a212be6aa1",
+      "toField": "blurRadius"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "c15b7f3a484246a89c6c773dbc5b7848",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "c15b7f3a484246a89c6c773dbc5b7848",
+      "toField": "input"
+    },
+    {
+      "fromNode": "c15b7f3a484246a89c6c773dbc5b7848",
+      "fromField": "output",
+      "toNode": "1c5c57e4e5174c0e845b18a212be6aa1",
+      "toField": "input"
+    },
+    {
+      "fromNode": "ce7263bb711843b590f125cc3f49f1e9",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
+    {
+      "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
+      "fromField": "value",
+      "toNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "toField": "background"
+    },
+    {
+      "fromNode": "dffb152d405a49d38792e850749129b2",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.models.producer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
@@ -79,7 +81,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
                 models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
-                    ShaderGroup shaderGroup = new ShaderGroup(shaderDefinition);
+                    ShaderGroup shaderGroup = new ShaderGroup(pipelineDataProvider.getAssetResolver(), shaderDefinition);
                     shaderGroup.initialize();
 
                     allShaderTags.add(shaderGroup.getTag());
@@ -215,36 +217,38 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         throw new IllegalStateException("Unrecognized RenderOrder: " + renderOrder.name());
     }
 
-    private static GraphShader createColorShader(JsonValue shaderDefinition) {
-        JsonValue shaderGraph = shaderDefinition.get("shader");
+    private static GraphShader createColorShader(FileHandleResolver assetResolver, JsonValue shaderDefinition) {
+        FileHandle graphFile = assetResolver.resolve(shaderDefinition.getString("path"));
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ModelShaderLoader.loadShader(shaderGraph, tag, false);
+        return ModelShaderLoader.loadShader(graphFile, tag, false, assetResolver);
     }
 
-    private static GraphShader createDepthShader(JsonValue shaderDefinition) {
-        JsonValue shaderGraph = shaderDefinition.get("shader");
+    private static GraphShader createDepthShader(FileHandleResolver assetResolver, JsonValue shaderDefinition) {
+        FileHandle graphFile = assetResolver.resolve(shaderDefinition.getString("path"));
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ModelShaderLoader.loadShader(shaderGraph, tag, true);
+        return ModelShaderLoader.loadShader(graphFile, tag, true, assetResolver);
     }
 
     private static class ShaderGroup implements Disposable {
+        private final FileHandleResolver assetResolver;
         private final JsonValue shaderDefinition;
         private GraphShader colorShader;
         private GraphShader depthShader;
 
-        public ShaderGroup(JsonValue shaderDefinition) {
+        public ShaderGroup(FileHandleResolver assetResolver, JsonValue shaderDefinition) {
+            this.assetResolver = assetResolver;
             this.shaderDefinition = shaderDefinition;
         }
 
         public void initialize() {
-            colorShader = ModelShaderRendererPipelineNodeProducer.createColorShader(shaderDefinition);
+            colorShader = ModelShaderRendererPipelineNodeProducer.createColorShader(assetResolver, shaderDefinition);
         }
 
         public void initializeDepthShader() {
             if (depthShader == null && colorShader.isDepthWriting()) {
-                depthShader = ModelShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition);
+                depthShader = ModelShaderRendererPipelineNodeProducer.createDepthShader(assetResolver, shaderDefinition);
             }
         }
 

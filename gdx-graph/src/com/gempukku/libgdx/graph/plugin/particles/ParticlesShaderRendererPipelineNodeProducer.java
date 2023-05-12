@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.particles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
@@ -51,9 +52,9 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
                     String tag = shaderDefinition.getString("tag");
-                    JsonValue shaderGraph = shaderDefinition.get("shader");
+                    FileHandle shaderPath = pipelineDataProvider.getAssetResolver().resolve(shaderDefinition.getString("path"));
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final GraphShader graphShader = ParticleShaderLoader.loadShader(shaderGraph, tag);
+                    final GraphShader graphShader = ParticleShaderLoader.loadShader(shaderPath, tag, pipelineDataProvider.getAssetResolver());
                     particleShaders.add(graphShader);
                 }
 

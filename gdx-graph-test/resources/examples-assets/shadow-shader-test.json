@@ -1,0 +1,107 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "2438eb24ec664bb08ee09413fb8af6f5",
+      "type": "UIRenderer",
+      "x": 481.0,
+      "y": 156.0,
+      "data": {
+        "id": "Stage"
+      }
+    },
+    {
+      "id": "3b905d68bdf64e2185c7491d9e64ea9d",
+      "type": "ShadowShaderRenderer",
+      "x": 403.0,
+      "y": 765.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "id": "Scene",
+        "shaders": [
+          {
+            "path": "examples-assets/shadow/basic-shadow.sds",
+            "tag": "Color Shadow"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5096ed346e1a47b29731c0cfb25aa50c",
+      "type": "PipelineStart",
+      "x": 509.0,
+      "y": 1119.0
+    },
+    {
+      "id": "50d2766eadca4cdfbffd10c0ded5eb03",
+      "type": "Property",
+      "x": 50.0,
+      "y": 694.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "c9ef57a330554c3f84100178cefda237",
+      "type": "GraphShaderRenderer",
+      "x": 402.0,
+      "y": 383.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/lighted-color-model.mds",
+            "tag": "Color"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 525.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "2438eb24ec664bb08ee09413fb8af6f5",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "3b905d68bdf64e2185c7491d9e64ea9d",
+      "fromField": "output",
+      "toNode": "c9ef57a330554c3f84100178cefda237",
+      "toField": "input"
+    },
+    {
+      "fromNode": "5096ed346e1a47b29731c0cfb25aa50c",
+      "fromField": "output",
+      "toNode": "3b905d68bdf64e2185c7491d9e64ea9d",
+      "toField": "input"
+    },
+    {
+      "fromNode": "50d2766eadca4cdfbffd10c0ded5eb03",
+      "fromField": "value",
+      "toNode": "c9ef57a330554c3f84100178cefda237",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "c9ef57a330554c3f84100178cefda237",
+      "fromField": "output",
+      "toNode": "2438eb24ec664bb08ee09413fb8af6f5",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

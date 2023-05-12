@@ -1,0 +1,276 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "01926fba985c4f4ca2954e208be519c6",
+      "type": "Multiply",
+      "x": 766.0,
+      "y": 729.0
+    },
+    {
+      "id": "03de229617fa4a9aa914bd492d95654d",
+      "type": "CameraPosition",
+      "x": 253.0,
+      "y": 1074.0
+    },
+    {
+      "id": "0ff765750e284c0bb3c9c5811ad3d0c3",
+      "type": "Property",
+      "x": 765.0,
+      "y": 658.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "26eed6d494c84e17af45bbffe04cd939",
+      "type": "ValueColor",
+      "x": 524.0,
+      "y": 366.0,
+      "data": {
+        "color": "638c99ff"
+      }
+    },
+    {
+      "id": "3420e575772a45afb14f8a072dd5b6d8",
+      "type": "RemapVector",
+      "x": 473.0,
+      "y": 980.0,
+      "data": {
+        "x": "X",
+        "y": "Y",
+        "z": "0.0",
+        "w": "W"
+      }
+    },
+    {
+      "id": "498cfd87426a423b88880d787a2a2a35",
+      "type": "Mix",
+      "x": 767.0,
+      "y": 538.0
+    },
+    {
+      "id": "4b089a76c7e24b6eb5735082fb0e8744",
+      "type": "Property",
+      "x": 284.0,
+      "y": 535.0,
+      "data": {
+        "name": "Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "4f21e4e2b67b4e87a00b6156317acf45",
+      "type": "Add",
+      "x": 963.0,
+      "y": 697.0
+    },
+    {
+      "id": "7d0730b48fe843da9060520bed0d82b2",
+      "type": "ValueFloat",
+      "x": 247.0,
+      "y": 714.0,
+      "data": {
+        "v1": -0.009999999776482582
+      }
+    },
+    {
+      "id": "8052737482fb4373a2da2604a85321af",
+      "type": "Multiply",
+      "x": 476.0,
+      "y": 860.0
+    },
+    {
+      "id": "a0f35277cbeb456bbea35aa48db83d0c",
+      "type": "Sampler2D",
+      "x": 524.0,
+      "y": 431.0
+    },
+    {
+      "id": "deee4e6140144410bec4a7616f5b25b2",
+      "type": "Property",
+      "x": 284.0,
+      "y": 472.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 1156.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "blending": false,
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    },
+    {
+      "id": "f032cd28aba846d4859d4c7b9360ec57",
+      "type": "Property",
+      "x": 50.0,
+      "y": 859.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "f3adc86c989149fc926a9c7f8a3193b4",
+      "type": "Split",
+      "x": 248.0,
+      "y": 790.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "01926fba985c4f4ca2954e208be519c6",
+      "fromField": "output",
+      "toNode": "4f21e4e2b67b4e87a00b6156317acf45",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "03de229617fa4a9aa914bd492d95654d",
+      "fromField": "position",
+      "toNode": "3420e575772a45afb14f8a072dd5b6d8",
+      "toField": "input"
+    },
+    {
+      "fromNode": "0ff765750e284c0bb3c9c5811ad3d0c3",
+      "fromField": "value",
+      "toNode": "4f21e4e2b67b4e87a00b6156317acf45",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "26eed6d494c84e17af45bbffe04cd939",
+      "fromField": "value",
+      "toNode": "498cfd87426a423b88880d787a2a2a35",
+      "toField": "b"
+    },
+    {
+      "fromNode": "3420e575772a45afb14f8a072dd5b6d8",
+      "fromField": "v3",
+      "toNode": "01926fba985c4f4ca2954e208be519c6",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "498cfd87426a423b88880d787a2a2a35",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "4b089a76c7e24b6eb5735082fb0e8744",
+      "fromField": "value",
+      "toNode": "a0f35277cbeb456bbea35aa48db83d0c",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "4f21e4e2b67b4e87a00b6156317acf45",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "7d0730b48fe843da9060520bed0d82b2",
+      "fromField": "value",
+      "toNode": "8052737482fb4373a2da2604a85321af",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "8052737482fb4373a2da2604a85321af",
+      "fromField": "output",
+      "toNode": "01926fba985c4f4ca2954e208be519c6",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "8052737482fb4373a2da2604a85321af",
+      "fromField": "output",
+      "toNode": "498cfd87426a423b88880d787a2a2a35",
+      "toField": "t"
+    },
+    {
+      "fromNode": "a0f35277cbeb456bbea35aa48db83d0c",
+      "fromField": "a",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "a0f35277cbeb456bbea35aa48db83d0c",
+      "fromField": "color",
+      "toNode": "498cfd87426a423b88880d787a2a2a35",
+      "toField": "a"
+    },
+    {
+      "fromNode": "deee4e6140144410bec4a7616f5b25b2",
+      "fromField": "value",
+      "toNode": "a0f35277cbeb456bbea35aa48db83d0c",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "f032cd28aba846d4859d4c7b9360ec57",
+      "fromField": "value",
+      "toNode": "f3adc86c989149fc926a9c7f8a3193b4",
+      "toField": "input"
+    },
+    {
+      "fromNode": "f3adc86c989149fc926a9c7f8a3193b4",
+      "fromField": "z",
+      "toNode": "8052737482fb4373a2da2604a85321af",
+      "toField": "inputs"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Texture",
+      "type": "TextureRegion",
+      "location": "Attribute",
+      "data": {
+        "previewPath": null
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Parallax Factor",
+      "nodes": [
+        "7d0730b48fe843da9060520bed0d82b2",
+        "8052737482fb4373a2da2604a85321af",
+        "f032cd28aba846d4859d4c7b9360ec57",
+        "f3adc86c989149fc926a9c7f8a3193b4"
+      ]
+    },
+    {
+      "name": "Camera XY",
+      "nodes": [
+        "03de229617fa4a9aa914bd492d95654d",
+        "3420e575772a45afb14f8a072dd5b6d8"
+      ]
+    }
+  ]
+}

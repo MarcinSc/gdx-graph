@@ -1,0 +1,181 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "273d1a567f094fb3b336147538354a71",
+      "type": "Property",
+      "x": 208.0,
+      "y": 620.0,
+      "data": {
+        "uWrap": "Repeat",
+        "vWrap": "Repeat",
+        "name": "Tile Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "683e23aae2e6489d8bfd22cfdcaaa242",
+      "type": "Property",
+      "x": 56.0,
+      "y": 415.0,
+      "data": {
+        "name": "Tile Offset",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "866d186a9be04fe98276b71cd71c734b",
+      "type": "Sampler2D",
+      "x": 464.0,
+      "y": 547.0
+    },
+    {
+      "id": "8cf526a4606e449fab19bc45f33d1f6f",
+      "type": "UVTilingOffset",
+      "x": 252.0,
+      "y": 507.0
+    },
+    {
+      "id": "9442cdae85be4d94ad90cfa98bac29dc",
+      "type": "Property",
+      "x": 52.0,
+      "y": 560.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "d7d83ca9797e4534a2cf0a869028eaf9",
+      "type": "Property",
+      "x": 471.0,
+      "y": 737.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "e47fe68a79ef45ad8dbad8c20c21adaa",
+      "type": "Property",
+      "x": 50.0,
+      "y": 494.0,
+      "data": {
+        "name": "Tile Repeat",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 702.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "blending": false,
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "273d1a567f094fb3b336147538354a71",
+      "fromField": "value",
+      "toNode": "866d186a9be04fe98276b71cd71c734b",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "683e23aae2e6489d8bfd22cfdcaaa242",
+      "fromField": "value",
+      "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+      "toField": "offset"
+    },
+    {
+      "fromNode": "866d186a9be04fe98276b71cd71c734b",
+      "fromField": "a",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "866d186a9be04fe98276b71cd71c734b",
+      "fromField": "color",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "8cf526a4606e449fab19bc45f33d1f6f",
+      "fromField": "output",
+      "toNode": "866d186a9be04fe98276b71cd71c734b",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "9442cdae85be4d94ad90cfa98bac29dc",
+      "fromField": "value",
+      "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "d7d83ca9797e4534a2cf0a869028eaf9",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "e47fe68a79ef45ad8dbad8c20c21adaa",
+      "fromField": "value",
+      "toNode": "8cf526a4606e449fab19bc45f33d1f6f",
+      "toField": "tiling"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Tile Repeat",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 1.0,
+        "y": 1.0
+      }
+    },
+    {
+      "name": "Tile Texture",
+      "type": "TextureRegion",
+      "location": "Attribute",
+      "data": {
+        "previewPath": null
+      }
+    },
+    {
+      "name": "Tile Offset",
+      "type": "Vector2",
+      "location": "Uniform",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

@@ -1,0 +1,147 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "fe89242b93514b40841bf847352b8b5a",
+      "type": "ValueColor",
+      "x": 286.0,
+      "y": 531.0,
+      "data": {
+        "color": "000000ff"
+      }
+    },
+    {
+      "id": "204edf00fb974211bc1e6a22d23844d6",
+      "type": "Property",
+      "x": 528.0,
+      "y": 665.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "210c5de818fd4ba4983c9d747077f320",
+      "type": "CheckerboardShape",
+      "x": 256.0,
+      "y": 427.0
+    },
+    {
+      "id": "2029fbc85b864ec59b8268026d23307e",
+      "type": "Property",
+      "x": 50.0,
+      "y": 478.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "7beeab44e092449688eb89427083bd3a",
+      "type": "Mix",
+      "x": 526.0,
+      "y": 490.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 747.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthWrite": false,
+        "blending": true,
+        "blendingSourceFactor": "source alpha",
+        "blendingDestinationFactor": "one minus source alpha",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "a3536fb248cd47e2931ee33db5a54209",
+      "type": "ValueColor",
+      "x": 285.0,
+      "y": 592.0,
+      "data": {
+        "color": "ffffffff"
+      }
+    },
+    {
+      "id": "beaa7ece343241e3964451b4d25b4509",
+      "type": "ValueVector2",
+      "x": 51.0,
+      "y": 372.0,
+      "data": {
+        "v1": 5.0,
+        "v2": 5.0
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "beaa7ece343241e3964451b4d25b4509",
+      "fromField": "value",
+      "toNode": "210c5de818fd4ba4983c9d747077f320",
+      "toField": "repeat"
+    },
+    {
+      "fromNode": "a3536fb248cd47e2931ee33db5a54209",
+      "fromField": "value",
+      "toNode": "7beeab44e092449688eb89427083bd3a",
+      "toField": "a"
+    },
+    {
+      "fromNode": "fe89242b93514b40841bf847352b8b5a",
+      "fromField": "value",
+      "toNode": "7beeab44e092449688eb89427083bd3a",
+      "toField": "b"
+    },
+    {
+      "fromNode": "210c5de818fd4ba4983c9d747077f320",
+      "fromField": "output",
+      "toNode": "7beeab44e092449688eb89427083bd3a",
+      "toField": "t"
+    },
+    {
+      "fromNode": "7beeab44e092449688eb89427083bd3a",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "204edf00fb974211bc1e6a22d23844d6",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "2029fbc85b864ec59b8268026d23307e",
+      "fromField": "value",
+      "toNode": "210c5de818fd4ba4983c9d747077f320",
+      "toField": "uv"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

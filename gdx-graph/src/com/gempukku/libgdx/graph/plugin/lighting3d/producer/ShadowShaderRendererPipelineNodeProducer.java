@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.producer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -76,7 +78,7 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                 models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
-                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(shaderDefinition);
+                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(pipelineDataProvider.getAssetResolver(), shaderDefinition);
 
                     allShaderTags.add(depthGraphShader.getTag());
                     shaders.put(depthGraphShader.getTag(), depthGraphShader);
@@ -211,11 +213,11 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         throw new IllegalStateException("Unrecognized RenderOrder: " + renderOrder.name());
     }
 
-    private static GraphShader createDepthShader(JsonValue shaderDefinition) {
-        JsonValue shaderGraph = shaderDefinition.get("shader");
+    private static GraphShader createDepthShader(FileHandleResolver assetResolver, JsonValue shaderDefinition) {
+        FileHandle shaderFile = assetResolver.resolve(shaderDefinition.getString("path"));
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ShadowShaderLoader.loadShader(shaderGraph, tag);
+        return ShadowShaderLoader.loadShader(shaderFile, tag, assetResolver);
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {

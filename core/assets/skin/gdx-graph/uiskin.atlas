@@ -13,56 +13,56 @@ Consolas
   index: -1
 connector-bottom
   rotate: false
-  xy: 182, 240
+  xy: 198, 240
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-bottom-required
   rotate: false
-  xy: 40, 6
+  xy: 132, 143
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-left
   rotate: false
-  xy: 107, 76
+  xy: 56, 6
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-left-required
   rotate: false
-  xy: 195, 240
+  xy: 211, 240
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-right
   rotate: false
-  xy: 53, 6
+  xy: 132, 130
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-right-required
   rotate: false
-  xy: 107, 63
+  xy: 69, 6
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-top
   rotate: false
-  xy: 208, 240
+  xy: 224, 240
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
   index: -1
 connector-top-required
   rotate: false
-  xy: 66, 6
+  xy: 82, 6
   size: 11, 11
   orig: 11, 11
   offset: 0, 0
@@ -72,6 +72,34 @@ graph-background
   xy: 2, 123
   size: 128, 128
   orig: 128, 128
+  offset: 0, 0
+  index: -1
+graph-icon-delete
+  rotate: false
+  xy: 161, 220
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+graph-icon-down
+  rotate: false
+  xy: 182, 237
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+graph-icon-edit
+  rotate: false
+  xy: 132, 156
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+graph-icon-up
+  rotate: false
+  xy: 40, 3
+  size: 14, 14
+  orig: 14, 14
   offset: 0, 0
   index: -1
 graph-model-shader-icon
@@ -120,21 +148,21 @@ graph-screen-shader-icon
   index: -1
 graph-slider-knob
   rotate: false
-  xy: 161, 217
+  xy: 107, 70
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 graph-slider-knob-over
   rotate: false
-  xy: 132, 153
+  xy: 161, 201
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 graph-tick
   rotate: false
-  xy: 161, 206
+  xy: 107, 59
   size: 9, 9
   orig: 9, 9
   offset: 0, 0

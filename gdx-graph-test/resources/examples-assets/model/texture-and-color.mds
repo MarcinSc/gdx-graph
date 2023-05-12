@@ -1,0 +1,160 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "6c663ce7b9384fdc8511ccd3c642956c",
+      "type": "Property",
+      "x": 452.00006103515625,
+      "y": 516.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "ed1d588e101a40fb953a3f2efe70abca",
+      "type": "Multiply",
+      "x": 443.0,
+      "y": 346.0
+    },
+    {
+      "id": "ffd366ddd51246b29171086b39f91ace",
+      "type": "Sampler2D",
+      "x": 249.0,
+      "y": 220.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 706.0000610351562,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthWrite": true,
+        "blending": false,
+        "blendingSourceFactor": "zero",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "df2e3b023bd546159c7f24ca289d6687",
+      "type": "Property",
+      "x": 50.0,
+      "y": 346.0,
+      "data": {
+        "name": "Diffuse Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "3919c84eef1147f5838e02bf3966ec9a",
+      "type": "Property",
+      "x": 249.0,
+      "y": 371.0,
+      "data": {
+        "name": "Diffuse Color",
+        "type": "Vector4"
+      }
+    },
+    {
+      "id": "21ee5dc9998642238779de88d21ca5d9",
+      "type": "Property",
+      "x": 50.0,
+      "y": 286.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "ffd366ddd51246b29171086b39f91ace",
+      "fromField": "color",
+      "toNode": "ed1d588e101a40fb953a3f2efe70abca",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "ed1d588e101a40fb953a3f2efe70abca",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "6c663ce7b9384fdc8511ccd3c642956c",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "21ee5dc9998642238779de88d21ca5d9",
+      "fromField": "value",
+      "toNode": "ffd366ddd51246b29171086b39f91ace",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "df2e3b023bd546159c7f24ca289d6687",
+      "fromField": "value",
+      "toNode": "ffd366ddd51246b29171086b39f91ace",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "3919c84eef1147f5838e02bf3966ec9a",
+      "fromField": "value",
+      "toNode": "ed1d588e101a40fb953a3f2efe70abca",
+      "toField": "inputs"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Diffuse Texture",
+      "type": "TextureRegion",
+      "location": "Uniform",
+      "data": {
+        "previewPath": null
+      }
+    },
+    {
+      "name": "Diffuse Color",
+      "type": "Vector4",
+      "location": "Uniform",
+      "data": {
+        "color": "ffffffff"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Diffuse",
+      "nodes": [
+        "ffd366ddd51246b29171086b39f91ace",
+        "ed1d588e101a40fb953a3f2efe70abca",
+        "3919c84eef1147f5838e02bf3966ec9a",
+        "21ee5dc9998642238779de88d21ca5d9",
+        "df2e3b023bd546159c7f24ca289d6687"
+      ]
+    }
+  ]
+}

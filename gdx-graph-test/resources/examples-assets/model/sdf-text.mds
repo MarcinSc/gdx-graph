@@ -1,0 +1,278 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "0d1a4bf7a99c4c16982e35e09a639a89",
+      "type": "Property",
+      "x": 1224.0,
+      "y": 775.0,
+      "data": {
+        "name": "Color",
+        "type": "Vector4"
+      }
+    },
+    {
+      "id": "1b186a30d6144283be79026a013ff2ea",
+      "type": "Property",
+      "x": 52.0,
+      "y": 261.0,
+      "data": {
+        "uWrap": "ClampToEdge",
+        "vWrap": "ClampToEdge",
+        "name": "Font-Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "43caea8507a14e2ab325ac0db7d11d34",
+      "type": "Property",
+      "x": 306.0,
+      "y": 410.0,
+      "data": {
+        "name": "Edge",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "4e329b6226394da48566075265f845e4",
+      "type": "OneMinus",
+      "x": 483.0,
+      "y": 286.0
+    },
+    {
+      "id": "566c98363cb844f99457ba280e4b4017",
+      "type": "OneMinus",
+      "x": 975.0,
+      "y": 464.0
+    },
+    {
+      "id": "6410e636f7d7451686b8390bcdb998fe",
+      "type": "Smoothstep",
+      "x": 757.0,
+      "y": 415.0
+    },
+    {
+      "id": "7b2d39b178e249a59d5369670bf70a74",
+      "type": "Property",
+      "x": 1218.0,
+      "y": 859.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "90ce0a6704634fa68a85aee7813ae73b",
+      "type": "Property",
+      "x": 306.0,
+      "y": 481.0,
+      "data": {
+        "name": "Width",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "a98aff7e22194602a8809b127710f8c9",
+      "type": "Add",
+      "x": 526.0,
+      "y": 414.0
+    },
+    {
+      "id": "b177244e8ab74c7a91ff4305af8c29d0",
+      "type": "Property",
+      "x": 50.0,
+      "y": 199.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "dc6d7997eb5a48e8af39e30419d05826",
+      "type": "ValueFloat",
+      "x": 1158.0,
+      "y": 280.0,
+      "data": {
+        "v1": 0.0010000000474974513
+      }
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 1559.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "World space",
+        "culling": "back",
+        "blending": true,
+        "blendingSourceFactor": "source_alpha",
+        "blendingDestinationFactor": "one_minus_source_alpha",
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    },
+    {
+      "id": "f89452c0366a48ad90d682014325acf2",
+      "type": "Sampler2D",
+      "x": 276.0,
+      "y": 192.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "0d1a4bf7a99c4c16982e35e09a639a89",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "1b186a30d6144283be79026a013ff2ea",
+      "fromField": "value",
+      "toNode": "f89452c0366a48ad90d682014325acf2",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "43caea8507a14e2ab325ac0db7d11d34",
+      "fromField": "value",
+      "toNode": "a98aff7e22194602a8809b127710f8c9",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "4e329b6226394da48566075265f845e4",
+      "fromField": "output",
+      "toNode": "6410e636f7d7451686b8390bcdb998fe",
+      "toField": "input"
+    },
+    {
+      "fromNode": "566c98363cb844f99457ba280e4b4017",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "6410e636f7d7451686b8390bcdb998fe",
+      "fromField": "output",
+      "toNode": "566c98363cb844f99457ba280e4b4017",
+      "toField": "input"
+    },
+    {
+      "fromNode": "7b2d39b178e249a59d5369670bf70a74",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "90ce0a6704634fa68a85aee7813ae73b",
+      "fromField": "value",
+      "toNode": "6410e636f7d7451686b8390bcdb998fe",
+      "toField": "edge0"
+    },
+    {
+      "fromNode": "90ce0a6704634fa68a85aee7813ae73b",
+      "fromField": "value",
+      "toNode": "a98aff7e22194602a8809b127710f8c9",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "a98aff7e22194602a8809b127710f8c9",
+      "fromField": "output",
+      "toNode": "6410e636f7d7451686b8390bcdb998fe",
+      "toField": "edge1"
+    },
+    {
+      "fromNode": "b177244e8ab74c7a91ff4305af8c29d0",
+      "fromField": "value",
+      "toNode": "f89452c0366a48ad90d682014325acf2",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "dc6d7997eb5a48e8af39e30419d05826",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "alphaClip"
+    },
+    {
+      "fromNode": "f89452c0366a48ad90d682014325acf2",
+      "fromField": "a",
+      "toNode": "4e329b6226394da48566075265f845e4",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Font-Texture",
+      "type": "TextureRegion",
+      "location": "Attribute",
+      "data": {
+        "minFilter": "Linear",
+        "magFilter": "Linear",
+        "previewPath": "C:/Users/marci/Desktop/sdf-test.png"
+      }
+    },
+    {
+      "name": "Width",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.5
+      }
+    },
+    {
+      "name": "Edge",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.029999999329447746
+      }
+    },
+    {
+      "name": "Color",
+      "type": "Vector4",
+      "location": "Attribute",
+      "data": {
+        "color": "ffffffff"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "SDF alpha",
+      "nodes": [
+        "1b186a30d6144283be79026a013ff2ea",
+        "4e329b6226394da48566075265f845e4",
+        "f89452c0366a48ad90d682014325acf2",
+        "b177244e8ab74c7a91ff4305af8c29d0"
+      ]
+    },
+    {
+      "name": "Calculate alpha",
+      "nodes": [
+        "6410e636f7d7451686b8390bcdb998fe",
+        "a98aff7e22194602a8809b127710f8c9",
+        "566c98363cb844f99457ba280e4b4017",
+        "43caea8507a14e2ab325ac0db7d11d34",
+        "90ce0a6704634fa68a85aee7813ae73b"
+      ]
+    }
+  ]
+}

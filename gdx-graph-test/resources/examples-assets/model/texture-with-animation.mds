@@ -1,0 +1,171 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "28cd99c3e14a483baae03864b2947aa9",
+      "type": "Property",
+      "x": 72.00003051757812,
+      "y": 595.0,
+      "data": {
+        "name": "Bone Weights",
+        "type": "BoneWeights"
+      }
+    },
+    {
+      "id": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+      "type": "Skinning",
+      "x": 315.0,
+      "y": 516.0
+    },
+    {
+      "id": "3e3873ce6e7e44e9a31331f308f77d50",
+      "type": "Property",
+      "x": 50.0,
+      "y": 356.0,
+      "data": {
+        "name": "Diffuse Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "41dff5b3f2364864b53585b3a6118520",
+      "type": "Property",
+      "x": 72.0,
+      "y": 514.0,
+      "data": {
+        "name": "Bone Transforms",
+        "type": "BoneTransforms"
+      }
+    },
+    {
+      "id": "9c9dbd938de54f8bab2c833482ea2866",
+      "type": "Property",
+      "x": 78.0,
+      "y": 659.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "d032d9108220435399a6e4c254410c4f",
+      "type": "Property",
+      "x": 51.0,
+      "y": 281.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "d8764cf2efd544638ddbc51f3dfd6504",
+      "type": "Sampler2D",
+      "x": 312.0,
+      "y": 284.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 600.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "blending": false,
+        "depthTest": "less",
+        "depthWrite": true
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "28cd99c3e14a483baae03864b2947aa9",
+      "fromField": "value",
+      "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+      "toField": "boneWeights"
+    },
+    {
+      "fromNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+      "fromField": "skinnedPosition",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "3e3873ce6e7e44e9a31331f308f77d50",
+      "fromField": "value",
+      "toNode": "d8764cf2efd544638ddbc51f3dfd6504",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "41dff5b3f2364864b53585b3a6118520",
+      "fromField": "value",
+      "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+      "toField": "boneTransformations"
+    },
+    {
+      "fromNode": "9c9dbd938de54f8bab2c833482ea2866",
+      "fromField": "value",
+      "toNode": "3ac9493cf3b34d89ac8a3b7e885fb88b",
+      "toField": "position"
+    },
+    {
+      "fromNode": "d032d9108220435399a6e4c254410c4f",
+      "fromField": "value",
+      "toNode": "d8764cf2efd544638ddbc51f3dfd6504",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "d8764cf2efd544638ddbc51f3dfd6504",
+      "fromField": "color",
+      "toNode": "end",
+      "toField": "color"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Diffuse Texture",
+      "type": "TextureRegion",
+      "location": "Uniform",
+      "data": {
+        "previewPath": null
+      }
+    },
+    {
+      "name": "Bone Weights",
+      "type": "BoneWeights",
+      "location": "Attribute",
+      "data": {
+        "maxBoneWeightCount": 4
+      }
+    },
+    {
+      "name": "Bone Transforms",
+      "type": "BoneTransforms",
+      "location": "Uniform",
+      "data": {
+        "maxBoneCount": 12
+      }
+    }
+  ],
+  "groups": []
+}

@@ -1,0 +1,85 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "0c1b2c6eca044f26923860e98a6242b8",
+      "type": "Property",
+      "x": 50.0,
+      "y": 691.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "69d8d35a07984695977f3e2e815d5472",
+      "type": "PipelineStart",
+      "x": 478.0,
+      "y": 810.0
+    },
+    {
+      "id": "998d761dedd04cc682fdb3491fd7fc56",
+      "type": "GraphShaderRenderer",
+      "x": 372.0,
+      "y": 438.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/sprites-textured.mds",
+            "tag": "Sprite"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 477.0,
+      "y": 50.0
+    },
+    {
+      "id": "f544e99c1d494e399df63fa4d723a860",
+      "type": "UIRenderer",
+      "x": 444.0,
+      "y": 227.0,
+      "data": {
+        "id": "Main"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "0c1b2c6eca044f26923860e98a6242b8",
+      "fromField": "value",
+      "toNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "69d8d35a07984695977f3e2e815d5472",
+      "fromField": "output",
+      "toNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "toField": "input"
+    },
+    {
+      "fromNode": "998d761dedd04cc682fdb3491fd7fc56",
+      "fromField": "output",
+      "toNode": "f544e99c1d494e399df63fa4d723a860",
+      "toField": "input"
+    },
+    {
+      "fromNode": "f544e99c1d494e399df63fa4d723a860",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

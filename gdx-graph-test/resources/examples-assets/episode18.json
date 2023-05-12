@@ -1,0 +1,126 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "3e7ce090af2a4abbbc187472adc25bcd",
+      "type": "GraphShaderRenderer",
+      "x": 312.0,
+      "y": 625.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/textured.mds",
+            "tag": "Default"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6fc2003ff7514ec689c1f007eb36c3d0",
+      "type": "ParticlesShaderRenderer",
+      "x": 311.0,
+      "y": 280.0,
+      "data": {
+        "shaders": [
+          {
+            "path": "examples-assets/particles/exhaust.pes",
+            "tag": "exhaust"
+          }
+        ]
+      }
+    },
+    {
+      "id": "72be9695e45949ccb5f449dbacdfd619",
+      "type": "Property",
+      "x": 50.0,
+      "y": 700.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 391.0,
+      "y": 943.0
+    },
+    {
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 188.0,
+      "y": 966.0,
+      "data": {
+        "color": "000000ff"
+      }
+    },
+    {
+      "id": "dffb152d405a49d38792e850749129b2",
+      "type": "UIRenderer",
+      "x": 391.0,
+      "y": 136.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 391.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "3e7ce090af2a4abbbc187472adc25bcd",
+      "fromField": "output",
+      "toNode": "6fc2003ff7514ec689c1f007eb36c3d0",
+      "toField": "input"
+    },
+    {
+      "fromNode": "6fc2003ff7514ec689c1f007eb36c3d0",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "3e7ce090af2a4abbbc187472adc25bcd",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "6fc2003ff7514ec689c1f007eb36c3d0",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "3e7ce090af2a4abbbc187472adc25bcd",
+      "toField": "input"
+    },
+    {
+      "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
+      "fromField": "value",
+      "toNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "toField": "background"
+    },
+    {
+      "fromNode": "dffb152d405a49d38792e850749129b2",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ],
+  "groups": []
+}

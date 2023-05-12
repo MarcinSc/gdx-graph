@@ -1,0 +1,375 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "896753d12f084299a6bed612cf50f018",
+      "type": "ValueFloat",
+      "x": 52.0,
+      "y": 269.0,
+      "data": {
+        "v1": -1.0
+      }
+    },
+    {
+      "id": "8e59fdbf22804a7a8309425a89d39cb0",
+      "type": "Property",
+      "x": 467.0,
+      "y": 343.0,
+      "data": {
+        "name": "Noise Scale",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "beb28fd8fc204fd9b61b1fd771a51b37",
+      "type": "Property",
+      "x": 50.0,
+      "y": 171.0,
+      "data": {
+        "name": "Noise Value",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "2332d4f623294847be9af2b2dda39ce3",
+      "type": "ValueFloat",
+      "x": 1106.0,
+      "y": 397.0,
+      "data": {
+        "v1": 1.0
+      }
+    },
+    {
+      "id": "a6ba5b6f2f1b494aa5055c20b790f5f4",
+      "type": "ValueVector3",
+      "x": 440.0,
+      "y": 119.0,
+      "data": {
+        "v1": 0.0,
+        "v2": 0.0,
+        "v3": -0.009999999776482582
+      }
+    },
+    {
+      "id": "3e4bcbd818ee47a0af0d324d2470033e",
+      "type": "ValueColor",
+      "x": 1242.0,
+      "y": 790.0,
+      "data": {
+        "color": "04ff00ff"
+      }
+    },
+    {
+      "id": "d4e0de396f3642af8f81bf1ec1661966",
+      "type": "SimplexNoise3D",
+      "x": 724.0,
+      "y": 220.0
+    },
+    {
+      "id": "d071ac1c4ee84c89b170fc0bbf811df8",
+      "type": "Property",
+      "x": 1478.0,
+      "y": 837.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "94f4e130302f466f8273c55b7a7a5db7",
+      "type": "Add",
+      "x": 926.0,
+      "y": 248.0
+    },
+    {
+      "id": "d9dfd7c6981141288c70534bf3313ac9",
+      "type": "Property",
+      "x": 773.0,
+      "y": 378.0,
+      "data": {
+        "name": "Dissolve",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "acd47eca88b44b509dbe4f1575bde8fb",
+      "type": "Property",
+      "x": 768.0,
+      "y": 687.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "292e9535d7404a6ba429d68bcd7b4276",
+      "type": "ValueVector3",
+      "x": 441.0,
+      "y": 50.0,
+      "data": {
+        "v1": 0.0,
+        "v2": 1.0,
+        "v3": 1.0
+      }
+    },
+    {
+      "id": "a7fe933d2be841c19be8ccd8ae26e2d1",
+      "type": "Merge",
+      "x": 471.0,
+      "y": 188.0
+    },
+    {
+      "id": "8cca6a4a19dc4e5a9b1274e3bb88384b",
+      "type": "Subtract",
+      "x": 1286.0,
+      "y": 333.0
+    },
+    {
+      "id": "931baa0d64204f0d90c57c75a2479d48",
+      "type": "Step",
+      "x": 1098.0,
+      "y": 296.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 1714.0,
+      "y": 176.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "none",
+        "depthWrite": true,
+        "blending": false,
+        "blendingSourceFactor": "zero",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "7705b76e9848414e969ad00552ad4742",
+      "type": "Split",
+      "x": 987.0,
+      "y": 638.0
+    },
+    {
+      "id": "f257af81b9bf41a482a65e890adff4b2",
+      "type": "WorldPosition",
+      "x": 406.0,
+      "y": 408.0
+    },
+    {
+      "id": "f3f25cea4f214a819bc26553fa0e2d9f",
+      "type": "Multiply",
+      "x": 251.0,
+      "y": 246.0
+    },
+    {
+      "id": "494b1edf290a476189ff919f304d4074",
+      "type": "ValueColor",
+      "x": 1242.0,
+      "y": 730.0,
+      "data": {
+        "color": "150bd6ff"
+      }
+    },
+    {
+      "id": "3017f12525b847fa928ac5e9d84ab884",
+      "type": "Mix",
+      "x": 1477.0,
+      "y": 707.0
+    },
+    {
+      "id": "eb4d5a5e3a0f4a68988a3556c83cc1c7",
+      "type": "DistancePlane",
+      "x": 709.0,
+      "y": 114.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "a6ba5b6f2f1b494aa5055c20b790f5f4",
+      "fromField": "value",
+      "toNode": "eb4d5a5e3a0f4a68988a3556c83cc1c7",
+      "toField": "planePoint"
+    },
+    {
+      "fromNode": "292e9535d7404a6ba429d68bcd7b4276",
+      "fromField": "value",
+      "toNode": "eb4d5a5e3a0f4a68988a3556c83cc1c7",
+      "toField": "planeNormal"
+    },
+    {
+      "fromNode": "d4e0de396f3642af8f81bf1ec1661966",
+      "fromField": "output",
+      "toNode": "94f4e130302f466f8273c55b7a7a5db7",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "eb4d5a5e3a0f4a68988a3556c83cc1c7",
+      "fromField": "output",
+      "toNode": "94f4e130302f466f8273c55b7a7a5db7",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "94f4e130302f466f8273c55b7a7a5db7",
+      "fromField": "output",
+      "toNode": "931baa0d64204f0d90c57c75a2479d48",
+      "toField": "input"
+    },
+    {
+      "fromNode": "2332d4f623294847be9af2b2dda39ce3",
+      "fromField": "value",
+      "toNode": "8cca6a4a19dc4e5a9b1274e3bb88384b",
+      "toField": "a"
+    },
+    {
+      "fromNode": "931baa0d64204f0d90c57c75a2479d48",
+      "fromField": "output",
+      "toNode": "8cca6a4a19dc4e5a9b1274e3bb88384b",
+      "toField": "b"
+    },
+    {
+      "fromNode": "d9dfd7c6981141288c70534bf3313ac9",
+      "fromField": "value",
+      "toNode": "931baa0d64204f0d90c57c75a2479d48",
+      "toField": "edge"
+    },
+    {
+      "fromNode": "494b1edf290a476189ff919f304d4074",
+      "fromField": "value",
+      "toNode": "3017f12525b847fa928ac5e9d84ab884",
+      "toField": "b"
+    },
+    {
+      "fromNode": "3e4bcbd818ee47a0af0d324d2470033e",
+      "fromField": "value",
+      "toNode": "3017f12525b847fa928ac5e9d84ab884",
+      "toField": "a"
+    },
+    {
+      "fromNode": "7705b76e9848414e969ad00552ad4742",
+      "fromField": "y",
+      "toNode": "3017f12525b847fa928ac5e9d84ab884",
+      "toField": "t"
+    },
+    {
+      "fromNode": "3017f12525b847fa928ac5e9d84ab884",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "8cca6a4a19dc4e5a9b1274e3bb88384b",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "8e59fdbf22804a7a8309425a89d39cb0",
+      "fromField": "value",
+      "toNode": "d4e0de396f3642af8f81bf1ec1661966",
+      "toField": "scale"
+    },
+    {
+      "fromNode": "beb28fd8fc204fd9b61b1fd771a51b37",
+      "fromField": "value",
+      "toNode": "f3f25cea4f214a819bc26553fa0e2d9f",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "896753d12f084299a6bed612cf50f018",
+      "fromField": "value",
+      "toNode": "f3f25cea4f214a819bc26553fa0e2d9f",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "f3f25cea4f214a819bc26553fa0e2d9f",
+      "fromField": "output",
+      "toNode": "a7fe933d2be841c19be8ccd8ae26e2d1",
+      "toField": "x"
+    },
+    {
+      "fromNode": "beb28fd8fc204fd9b61b1fd771a51b37",
+      "fromField": "value",
+      "toNode": "a7fe933d2be841c19be8ccd8ae26e2d1",
+      "toField": "y"
+    },
+    {
+      "fromNode": "a7fe933d2be841c19be8ccd8ae26e2d1",
+      "fromField": "v2",
+      "toNode": "d4e0de396f3642af8f81bf1ec1661966",
+      "toField": "range"
+    },
+    {
+      "fromNode": "d071ac1c4ee84c89b170fc0bbf811df8",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "acd47eca88b44b509dbe4f1575bde8fb",
+      "fromField": "value",
+      "toNode": "7705b76e9848414e969ad00552ad4742",
+      "toField": "input"
+    },
+    {
+      "fromNode": "f257af81b9bf41a482a65e890adff4b2",
+      "fromField": "output",
+      "toNode": "eb4d5a5e3a0f4a68988a3556c83cc1c7",
+      "toField": "point"
+    },
+    {
+      "fromNode": "f257af81b9bf41a482a65e890adff4b2",
+      "fromField": "output",
+      "toNode": "d4e0de396f3642af8f81bf1ec1661966",
+      "toField": "point"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Dissolve",
+      "type": "Float",
+      "location": "Uniform",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Noise Scale",
+      "type": "Float",
+      "location": "Uniform",
+      "data": {
+        "x": 3.0
+      }
+    },
+    {
+      "name": "Noise Value",
+      "type": "Float",
+      "location": "Uniform",
+      "data": {
+        "x": 1.5
+      }
+    },
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

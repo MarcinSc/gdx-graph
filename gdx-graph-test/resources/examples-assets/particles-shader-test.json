@@ -1,0 +1,69 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "af6199d861ae48508890dfe2e7013394",
+      "type": "PipelineStart",
+      "x": 313.0,
+      "y": 446.0
+    },
+    {
+      "id": "c61c4e7d7fcc4a5c8b470e5c03560aef",
+      "type": "Property",
+      "x": 0.0,
+      "y": 286.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "ddd2a1da9c9644d987e62dd657d451e6",
+      "type": "ParticlesShaderRenderer",
+      "x": 209.0,
+      "y": 86.0,
+      "data": {
+        "shaders": [
+          {
+            "path": "examples-assets/particles/particle-test.pes",
+            "tag": "Test"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 313.0,
+      "y": 0.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "af6199d861ae48508890dfe2e7013394",
+      "fromField": "output",
+      "toNode": "ddd2a1da9c9644d987e62dd657d451e6",
+      "toField": "input"
+    },
+    {
+      "fromNode": "c61c4e7d7fcc4a5c8b470e5c03560aef",
+      "fromField": "value",
+      "toNode": "ddd2a1da9c9644d987e62dd657d451e6",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "ddd2a1da9c9644d987e62dd657d451e6",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "groups": [],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ]
+}

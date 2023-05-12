@@ -1,0 +1,113 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "7f5d769d181f41699d13e754dab18f9c",
+      "type": "Property",
+      "x": 303.0,
+      "y": 591.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "b19b16ee98e142a0ab262738f80461ba",
+      "type": "Property",
+      "x": 50.0,
+      "y": 453.0,
+      "data": {
+        "name": "Diffuse Texture",
+        "type": "TextureRegion"
+      }
+    },
+    {
+      "id": "42d16dd8e5274e27b7981df9b5cb7d48",
+      "type": "Property",
+      "x": 52.0,
+      "y": 374.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "aa4a1c592eb0466ba51cf271272a1ce8",
+      "type": "Sampler2D",
+      "x": 306.9999694824219,
+      "y": 353.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 594.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthWrite": true,
+        "blending": false,
+        "blendingSourceFactor": "zero",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "aa4a1c592eb0466ba51cf271272a1ce8",
+      "fromField": "color",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "7f5d769d181f41699d13e754dab18f9c",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "42d16dd8e5274e27b7981df9b5cb7d48",
+      "fromField": "value",
+      "toNode": "aa4a1c592eb0466ba51cf271272a1ce8",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "b19b16ee98e142a0ab262738f80461ba",
+      "fromField": "value",
+      "toNode": "aa4a1c592eb0466ba51cf271272a1ce8",
+      "toField": "texture"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Diffuse Texture",
+      "type": "TextureRegion",
+      "location": "Uniform",
+      "data": {
+        "previewPath": null
+      }
+    }
+  ],
+  "groups": []
+}

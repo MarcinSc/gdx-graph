@@ -1,0 +1,222 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "e28134dbd58c4f1cb8e9b9a11aca846a",
+      "type": "ValueVector2",
+      "x": 519.0,
+      "y": 50.0,
+      "data": {
+        "v1": 0.0,
+        "v2": 1.0
+      }
+    },
+    {
+      "id": "64971c2d56bd4beca461ae6fe665eb53",
+      "type": "ValueColor",
+      "x": 818.0,
+      "y": 529.0,
+      "data": {
+        "color": "141414ff"
+      }
+    },
+    {
+      "id": "d9bf5c6a399f4581b31002ab030ed014",
+      "type": "Step",
+      "x": 927.0,
+      "y": 280.0
+    },
+    {
+      "id": "38c13d7d5e5e40ed8c2f4f4f0dad5b6b",
+      "type": "ValueFloat",
+      "x": 716.0,
+      "y": 391.0,
+      "data": {
+        "v1": 0.9100000262260437
+      }
+    },
+    {
+      "id": "57ef2877fd1c498d8b21397c50f0b1c1",
+      "type": "WorldPosition",
+      "x": 50.0,
+      "y": 275.0
+    },
+    {
+      "id": "66d11c08208840fbbf0c41a59f70871d",
+      "type": "SimplexNoise3D",
+      "x": 716.0,
+      "y": 211.0
+    },
+    {
+      "id": "e6aea429f88d4c668bf13ddcfb4d735e",
+      "type": "Mix",
+      "x": 1111.0,
+      "y": 411.0
+    },
+    {
+      "id": "d7ea5b5c350549cf8b57b4036e5f8a6d",
+      "type": "ValueColor",
+      "x": 818.0,
+      "y": 467.0,
+      "data": {
+        "color": "ffffffff"
+      }
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 1301.0,
+      "y": 57.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "front",
+        "depthWrite": true,
+        "blending": false,
+        "blendingSourceFactor": "zero",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "a68f990d858143d7b97ed39b7c0b87c1",
+      "type": "CameraPosition",
+      "x": 102.0,
+      "y": 191.0
+    },
+    {
+      "id": "36eb8253f9304286a04cf7135f0f961c",
+      "type": "ValueFloat",
+      "x": 519.0,
+      "y": 109.0,
+      "data": {
+        "v1": 150.0
+      }
+    },
+    {
+      "id": "4226fa04b5f047b4ba45088bc53cc52c",
+      "type": "Subtract",
+      "x": 300.0,
+      "y": 256.0
+    },
+    {
+      "id": "308855cce04b41dcad85159ae1923d4f",
+      "type": "Normalize",
+      "x": 495.0,
+      "y": 279.0
+    },
+    {
+      "id": "226754cf90fb4cd0bb32d2395ddd4136",
+      "type": "Property",
+      "x": 1108.0,
+      "y": 544.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "a68f990d858143d7b97ed39b7c0b87c1",
+      "fromField": "position",
+      "toNode": "4226fa04b5f047b4ba45088bc53cc52c",
+      "toField": "b"
+    },
+    {
+      "fromNode": "4226fa04b5f047b4ba45088bc53cc52c",
+      "fromField": "output",
+      "toNode": "308855cce04b41dcad85159ae1923d4f",
+      "toField": "input"
+    },
+    {
+      "fromNode": "308855cce04b41dcad85159ae1923d4f",
+      "fromField": "output",
+      "toNode": "66d11c08208840fbbf0c41a59f70871d",
+      "toField": "point"
+    },
+    {
+      "fromNode": "36eb8253f9304286a04cf7135f0f961c",
+      "fromField": "value",
+      "toNode": "66d11c08208840fbbf0c41a59f70871d",
+      "toField": "scale"
+    },
+    {
+      "fromNode": "e28134dbd58c4f1cb8e9b9a11aca846a",
+      "fromField": "value",
+      "toNode": "66d11c08208840fbbf0c41a59f70871d",
+      "toField": "range"
+    },
+    {
+      "fromNode": "64971c2d56bd4beca461ae6fe665eb53",
+      "fromField": "value",
+      "toNode": "e6aea429f88d4c668bf13ddcfb4d735e",
+      "toField": "a"
+    },
+    {
+      "fromNode": "d7ea5b5c350549cf8b57b4036e5f8a6d",
+      "fromField": "value",
+      "toNode": "e6aea429f88d4c668bf13ddcfb4d735e",
+      "toField": "b"
+    },
+    {
+      "fromNode": "e6aea429f88d4c668bf13ddcfb4d735e",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "38c13d7d5e5e40ed8c2f4f4f0dad5b6b",
+      "fromField": "value",
+      "toNode": "d9bf5c6a399f4581b31002ab030ed014",
+      "toField": "edge"
+    },
+    {
+      "fromNode": "66d11c08208840fbbf0c41a59f70871d",
+      "fromField": "output",
+      "toNode": "d9bf5c6a399f4581b31002ab030ed014",
+      "toField": "input"
+    },
+    {
+      "fromNode": "d9bf5c6a399f4581b31002ab030ed014",
+      "fromField": "output",
+      "toNode": "e6aea429f88d4c668bf13ddcfb4d735e",
+      "toField": "t"
+    },
+    {
+      "fromNode": "226754cf90fb4cd0bb32d2395ddd4136",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "57ef2877fd1c498d8b21397c50f0b1c1",
+      "fromField": "output",
+      "toNode": "4226fa04b5f047b4ba45088bc53cc52c",
+      "toField": "a"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Sky direction",
+      "nodes": [
+        "57ef2877fd1c498d8b21397c50f0b1c1",
+        "4226fa04b5f047b4ba45088bc53cc52c",
+        "308855cce04b41dcad85159ae1923d4f",
+        "a68f990d858143d7b97ed39b7c0b87c1"
+      ]
+    }
+  ]
+}

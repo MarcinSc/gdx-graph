@@ -1,0 +1,67 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "f5ef97f386a44afda8f88a7cdc09147d",
+      "type": "ValueColor",
+      "x": 50.0,
+      "y": 378.0,
+      "data": {
+        "color": "ffffffff"
+      }
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 458.0,
+      "y": 50.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthWrite": true,
+        "blending": false,
+        "blendingSourceFactor": "zero",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "5fa73489866d43b994f85fbbc26bbcc2",
+      "type": "Property",
+      "x": 68.0,
+      "y": 486.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "f5ef97f386a44afda8f88a7cdc09147d",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "5fa73489866d43b994f85fbbc26bbcc2",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

@@ -6,6 +6,12 @@
     }
   },
   "com.badlogic.gdx.graphics.Color": {
+    "gdx-graph-disabled": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5,
+      "a": 1
+    },
     "gdx-graph-white": {
       "r": 1,
       "b": 1,
@@ -94,6 +100,14 @@
         "b": 0.25,
         "a": 0.7
       }
+    },
+    "graph-icon-up-disabled": {
+      "name": "graph-icon-up",
+      "color": "gdx-graph-disabled"
+    },
+    "graph-icon-down-disabled": {
+      "name": "graph-icon-down",
+      "color": "gdx-graph-disabled"
     },
     "connector-top-invalid": {
       "name": "connector-top",

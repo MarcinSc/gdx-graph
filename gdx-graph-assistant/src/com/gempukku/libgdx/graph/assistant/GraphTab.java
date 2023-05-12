@@ -9,10 +9,12 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.gdx.assistant.plugin.StatusManager;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.loader.GraphSerializer;
 import com.gempukku.libgdx.graph.ui.TabControl;
-import com.gempukku.libgdx.graph.ui.graph.*;
+import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
+import com.gempukku.libgdx.graph.ui.graph.GraphWithPropertiesEditor;
+import com.gempukku.libgdx.graph.ui.graph.RequestGraphOpen;
+import com.gempukku.libgdx.graph.ui.graph.RequestTabOpen;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.undo.DecoratedUndoableAction;
 import com.gempukku.libgdx.undo.UndoManager;
@@ -24,7 +26,6 @@ public class GraphTab implements AssistantPluginTab, TabControl {
     private final TabControl tabControl;
     private final GraphWithPropertiesEditor graphWithPropertiesEditor;
     private final ObjectMap<String, AssistantPluginTab> subTabs = new ObjectMap<>();
-    private final ObjectMap<String, JsonValue> serializedSubGraphs = new ObjectMap<>();
 
     private boolean dirty = false;
     private boolean closed = false;
@@ -48,34 +49,8 @@ public class GraphTab implements AssistantPluginTab, TabControl {
                     public boolean handle(Event event) {
                         if (event instanceof RequestGraphOpen) {
                             RequestGraphOpen requestGraphOpen = (RequestGraphOpen) event;
-                            String graphId = requestGraphOpen.getId();
-                            AssistantPluginTab subGraphTab = subTabs.get(graphId);
-                            if (subGraphTab != null) {
-                                tabControl.switchToTab(subGraphTab);
-                            } else {
-                                JsonValue jsonObject = requestGraphOpen.getJsonObject();
-                                if (serializedSubGraphs.containsKey(graphId))
-                                    jsonObject = serializedSubGraphs.get(graphId);
-
-                                UIGraphType graphType = (UIGraphType) requestGraphOpen.getType();
-                                GraphWithProperties subGraph = GraphLoader.loadGraph(graphType.getType(), jsonObject);
-                                GraphTab graphTab = new GraphTab(GraphTab.this, statusManager, undoManager, subGraph);
-                                tabControl.addTab(requestGraphOpen.getTitle(), graphType.getIcon(), graphTab.getContent(), graphTab);
-                                subTabs.put(graphId, graphTab);
-                                tabControl.switchToTab(graphTab);
-                            }
-                            return true;
-                        } else if (event instanceof GraphRemoved) {
-                            GraphRemoved graphRemoved = (GraphRemoved) event;
-                            serializedSubGraphs.remove(graphRemoved.getId());
-                            AssistantPluginTab graphTab = subTabs.get(graphRemoved.getId());
-                            if (graphTab != null) {
-                                tabControl.closeTab(graphTab);
-                            }
-                            return true;
-                        } else if (event instanceof GetSerializedGraph) {
-                            GetSerializedGraph getSerializedGraph = (GetSerializedGraph) event;
-                            getSerializedGraph.setGraph(serializedSubGraphs.get(getSerializedGraph.getId()));
+                            String path = requestGraphOpen.getPath();
+                            tabControl.openProjectGraph(path);
                             return true;
                         } else if (event instanceof GraphChangedEvent) {
                             dirty = true;
@@ -104,12 +79,6 @@ public class GraphTab implements AssistantPluginTab, TabControl {
     }
 
     public JsonValue serializeGraph() {
-        for (ObjectMap.Entry<String, AssistantPluginTab> subTab : subTabs) {
-            if (subTab.value instanceof GraphTab) {
-                JsonValue jsonValue = ((GraphTab) subTab.value).serializeGraph();
-                serializedSubGraphs.put(subTab.key, jsonValue);
-            }
-        }
         GraphWithProperties graph = graphWithPropertiesEditor.getGraph();
         return GraphSerializer.serializeGraphWithProperties(graph);
     }
@@ -183,6 +152,11 @@ public class GraphTab implements AssistantPluginTab, TabControl {
     @Override
     public void closeTab(AssistantPluginTab assistantPluginTab) {
         tabControl.closeTab(assistantPluginTab);
+    }
+
+    @Override
+    public void openProjectGraph(String path) {
+        tabControl.openProjectGraph(path);
     }
 
     @Override

@@ -16,7 +16,8 @@ import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
-import com.gempukku.libgdx.graph.shader.UniformRegistry;
+import com.gempukku.libgdx.graph.ui.GraphResolver;
+import com.gempukku.libgdx.graph.ui.GraphResolverHolder;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
@@ -31,17 +32,17 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
 public class GdxGraphProject implements AssistantPluginProject, TabControl {
-    private GdxGraphProjectData gdxGraphProjectData;
+    private final GdxGraphProjectData gdxGraphProjectData;
 
-    private ObjectMap<String, JsonValue> mainGraphs = new ObjectMap<>();
-    private ObjectMap<String, GraphTab> mainGraphTabs = new ObjectMap<>();
+    private final ObjectMap<String, JsonValue> mainGraphs = new ObjectMap<>();
+    private final ObjectMap<String, GraphTab> mainGraphTabs = new ObjectMap<>();
 
-    private AssistantApplication application;
-    private MenuManager menuManager;
-    private TabManager tabManager;
+    private final AssistantApplication application;
+    private final MenuManager menuManager;
+    private final TabManager tabManager;
     private final AssistantProject assistantProject;
 
-    private InputValidator graphNameValidator;
+    private final InputValidator graphNameValidator;
 
     private boolean dirty;
 
@@ -59,6 +60,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         } else {
             gdxGraphProjectData = new Json().readValue(GdxGraphProjectData.class, data);
         }
+        GraphResolverHolder.graphResolver = gdxGraphProjectData;
 
         try {
             RuntimePluginRegistry.initializePlugins();
@@ -220,12 +222,12 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                 new InputDialogAdapter() {
                     @Override
                     public void finished(String input) {
-                        String graphId = input.trim();
-                        GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
-                        loadGraphIntoProject(graphId, graphType, graph);
+                        String graphName = input.trim();
+                        GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
+                        loadGraphIntoProject(filePath, graphName, graphType, graph);
                         gdxGraphProjectData.getGraphs().add(graphData);
                         dirty = true;
-                        openGraphTab(graphId, graphType);
+                        openGraphTab(filePath, graphName, graphType);
                     }
                 });
         application.addWindow(inputDialog.fadeIn());
@@ -233,21 +235,22 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
     private void loadGraphIntoProject(JsonReader jsonReader, GdxGraphData graph) {
         UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getGraphType());
-        FileHandle graphPath = assistantProject.getAssetFolder().child(graph.getPath());
-        loadGraphIntoProject(jsonReader, graph.getName(), graphType, graphPath);
+        String graphPath = graph.getPath();
+        FileHandle graphFile = assistantProject.getAssetFolder().child(graphPath);
+        loadGraphIntoProject(jsonReader, graph.getName(), graphType, graphPath, graphFile);
     }
 
-    private void loadGraphIntoProject(JsonReader jsonReader, String graphName, UIGraphType graphType, FileHandle graphPath) {
-        loadGraphIntoProject(graphName, graphType, jsonReader.parse(graphPath));
+    private void loadGraphIntoProject(JsonReader jsonReader, String graphName, UIGraphType graphType, String graphPath, FileHandle graphFile) {
+        loadGraphIntoProject(graphPath, graphName, graphType, jsonReader.parse(graphFile));
     }
 
-    private void loadGraphIntoProject(String graphName, UIGraphType graphType, JsonValue graph) {
-        mainGraphs.put(graphName, graph);
+    private void loadGraphIntoProject(String graphPath, String graphName, UIGraphType graphType, JsonValue graph) {
+        mainGraphs.put(graphPath, graph);
         menuManager.addMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphName,
                 new Runnable() {
                     @Override
                     public void run() {
-                        openGraphTab(graphName, graphType);
+                        openGraphTab(graphPath, graphName, graphType);
                     }
                 });
         menuManager.setPopupMenuDisabled("Graph", "Open", graphType.getPresentableName(), false);
@@ -262,15 +265,16 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         }
     }
 
-    private void openGraphTab(String graphId, UIGraphType graphType) {
-        GraphTab graphTab = mainGraphTabs.get(graphId);
+    private void openGraphTab(String graphPath, String graphName, UIGraphType graphType) {
+        GraphTab graphTab = mainGraphTabs.get(graphPath);
         if (graphTab != null) {
             tabManager.switchToTab(graphTab);
         } else {
-            GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphId));
+            GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), mainGraphs.get(graphPath));
             graphTab = new GraphTab(GdxGraphProject.this, application.getStatusManager(), application.getUndoManager(), graph);
-            tabManager.addTab(graphId, graphType.getIcon(), graphTab.getContent(), graphTab);
-            mainGraphTabs.put(graphId, graphTab);
+            tabManager.addTab(graphName, graphType.getIcon(), graphTab.getContent(), graphTab);
+            tabManager.switchToTab(graphTab);
+            mainGraphTabs.put(graphPath, graphTab);
         }
     }
 
@@ -295,12 +299,12 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                         new InputDialogAdapter() {
                             @Override
                             public void finished(String input) {
-                                String graphId = input.trim();
-                                GdxGraphData graphData = new GdxGraphData(graphId, graphType.getType(), filePath);
+                                String graphName = input.trim();
+                                GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
                                 loadGraphIntoProject(new JsonReader(), graphData);
                                 gdxGraphProjectData.getGraphs().add(graphData);
                                 dirty = true;
-                                openGraphTab(graphId, graphType);
+                                openGraphTab(filePath, graphName, graphType);
                             }
                         });
                 application.addWindow(inputDialog.fadeIn());
@@ -342,6 +346,14 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     @Override
     public void closeTab(AssistantPluginTab tab) {
         tabManager.closeTab(tab);
+    }
+
+    @Override
+    public void openProjectGraph(String path) {
+        GraphResolver.GraphInformation graphByPath = gdxGraphProjectData.findGraphByPath(path);
+        if (graphByPath != null) {
+            openGraphTab(graphByPath.getPath(), graphByPath.getName(), (UIGraphType) GraphTypeRegistry.findGraphType(graphByPath.getGraphType()));
+        }
     }
 
     @Override
@@ -387,10 +399,10 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     @Override
     public JsonValue saveProject() {
         for (ObjectMap.Entry<String, GraphTab> openGraphEntry : mainGraphTabs.entries()) {
-            String graphId = openGraphEntry.key;
+            String graphPath = openGraphEntry.key;
             JsonValue serializedGraph = openGraphEntry.value.serializeGraph();
-            mainGraphs.put(graphId, serializedGraph);
-            GdxGraphData graphData = getGraphDataById(graphId);
+            mainGraphs.put(graphPath, serializedGraph);
+            GdxGraphData graphData = gdxGraphProjectData.findGraphByPath(graphPath);
             FileHandle graphFile = assistantProject.getAssetFolder().child(graphData.getPath());
             graphFile.writeString(serializedGraph.toJson(JsonWriter.OutputType.json), false);
         }
@@ -399,14 +411,6 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         Json json = new Json();
         String jsonString = json.toJson(gdxGraphProjectData, GdxGraphProjectData.class);
         return jsonReader.parse(jsonString);
-    }
-
-    private GdxGraphData getGraphDataById(String graphId) {
-        for (GdxGraphData graph : gdxGraphProjectData.getGraphs()) {
-            if (graph.getName().equals(graphId))
-                return graph;
-        }
-        return null;
     }
 
     @Override
@@ -431,32 +435,6 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
         menuManager.setMenuItemDisabled("Graph", null, "View shader text", true);
-    }
-
-    private static class DummyUniformRegistry implements UniformRegistry {
-        @Override
-        public void registerAttribute(String alias, int componentCount) {
-
-        }
-
-        @Override
-        public void registerGlobalUniform(String alias, UniformSetter setter) {
-
-        }
-
-        @Override
-        public void registerLocalUniform(String alias, UniformSetter setter) {
-
-        }
-
-        @Override
-        public void registerGlobalStructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
-
-        }
-
-        @Override
-        public void registerLocalStructArrayUniform(String alias, String[] fieldNames, StructArrayUniformSetter setter) {
-
-        }
+        GraphResolverHolder.graphResolver = null;
     }
 }

@@ -1,0 +1,248 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "69c93c25fbb946c3a75e3d35554c1b20",
+      "type": "Subtract",
+      "x": 264.0,
+      "y": 433.0
+    },
+    {
+      "id": "0ed6ab35d0a24e6884b07dffcd6100e5",
+      "type": "Merge",
+      "x": 457.0,
+      "y": 387.0
+    },
+    {
+      "id": "d49e01ab3cd24082b39a914a9e834614",
+      "type": "Property",
+      "x": 51.0,
+      "y": 457.0,
+      "data": {
+        "name": "Focus Distance",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "ff6f63af3181472da525343236652acd",
+      "type": "GraphShaderRenderer",
+      "x": 676.0,
+      "y": 513.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/texture-and-color.mds",
+            "tag": "Default"
+          }
+        ]
+      }
+    },
+    {
+      "id": "c4b4b80ffb1645c9be1bfe6904d328ab",
+      "type": "ValueFloat",
+      "x": 558.0,
+      "y": 258.0,
+      "data": {
+        "v1": 100.0
+      }
+    },
+    {
+      "id": "72be9695e45949ccb5f449dbacdfd619",
+      "type": "Property",
+      "x": 421.0,
+      "y": 646.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "0141d0b368574fc387c164a588810473",
+      "type": "DepthOfField",
+      "x": 778.0,
+      "y": 279.0,
+      "data": {
+        "maxBlur": 60.0,
+        "blurBackground": true
+      }
+    },
+    {
+      "id": "e4348774b8d3471fa97b7b520dbbc695",
+      "type": "Property",
+      "x": 50.0,
+      "y": 392.0,
+      "data": {
+        "name": "Focus Range",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "dffb152d405a49d38792e850749129b2",
+      "type": "UIRenderer",
+      "x": 746.0,
+      "y": 137.0,
+      "data": {
+        "id": ""
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 781.0,
+      "y": 50.0
+    },
+    {
+      "id": "d54b356d4a1242cab5e6cb3f836b1930",
+      "type": "ValueColor",
+      "x": 534.0,
+      "y": 839.0,
+      "data": {
+        "color": "000000ff"
+      }
+    },
+    {
+      "id": "746da9b276d442f0bc74ed9847a26a4b",
+      "type": "PipelineStart",
+      "x": 783.0,
+      "y": 855.0
+    },
+    {
+      "id": "c6abe542e49e443f978406e7431a64f0",
+      "type": "Add",
+      "x": 263.0,
+      "y": 360.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "ff6f63af3181472da525343236652acd",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "fromField": "output",
+      "toNode": "ff6f63af3181472da525343236652acd",
+      "toField": "input"
+    },
+    {
+      "fromNode": "d54b356d4a1242cab5e6cb3f836b1930",
+      "fromField": "value",
+      "toNode": "746da9b276d442f0bc74ed9847a26a4b",
+      "toField": "background"
+    },
+    {
+      "fromNode": "dffb152d405a49d38792e850749129b2",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    },
+    {
+      "fromNode": "72be9695e45949ccb5f449dbacdfd619",
+      "fromField": "value",
+      "toNode": "0141d0b368574fc387c164a588810473",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "ff6f63af3181472da525343236652acd",
+      "fromField": "output",
+      "toNode": "0141d0b368574fc387c164a588810473",
+      "toField": "input"
+    },
+    {
+      "fromNode": "0141d0b368574fc387c164a588810473",
+      "fromField": "output",
+      "toNode": "dffb152d405a49d38792e850749129b2",
+      "toField": "input"
+    },
+    {
+      "fromNode": "c4b4b80ffb1645c9be1bfe6904d328ab",
+      "fromField": "value",
+      "toNode": "0141d0b368574fc387c164a588810473",
+      "toField": "farDistanceBlur"
+    },
+    {
+      "fromNode": "e4348774b8d3471fa97b7b520dbbc695",
+      "fromField": "value",
+      "toNode": "c6abe542e49e443f978406e7431a64f0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "d49e01ab3cd24082b39a914a9e834614",
+      "fromField": "value",
+      "toNode": "c6abe542e49e443f978406e7431a64f0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "c6abe542e49e443f978406e7431a64f0",
+      "fromField": "output",
+      "toNode": "0ed6ab35d0a24e6884b07dffcd6100e5",
+      "toField": "y"
+    },
+    {
+      "fromNode": "d49e01ab3cd24082b39a914a9e834614",
+      "fromField": "value",
+      "toNode": "69c93c25fbb946c3a75e3d35554c1b20",
+      "toField": "inputA"
+    },
+    {
+      "fromNode": "e4348774b8d3471fa97b7b520dbbc695",
+      "fromField": "value",
+      "toNode": "69c93c25fbb946c3a75e3d35554c1b20",
+      "toField": "inputB"
+    },
+    {
+      "fromNode": "69c93c25fbb946c3a75e3d35554c1b20",
+      "fromField": "output",
+      "toNode": "0ed6ab35d0a24e6884b07dffcd6100e5",
+      "toField": "x"
+    },
+    {
+      "fromNode": "0ed6ab35d0a24e6884b07dffcd6100e5",
+      "fromField": "v2",
+      "toNode": "0141d0b368574fc387c164a588810473",
+      "toField": "focusDistance"
+    },
+    {
+      "fromNode": "c4b4b80ffb1645c9be1bfe6904d328ab",
+      "fromField": "value",
+      "toNode": "0141d0b368574fc387c164a588810473",
+      "toField": "nearDistanceBlur"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    },
+    {
+      "name": "Focus Distance",
+      "type": "Float",
+      "data": {
+        "x": 0.5
+      }
+    },
+    {
+      "name": "Focus Range",
+      "type": "Float",
+      "data": {
+        "x": 0.0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Focus Range Calculation",
+      "nodes": [
+        "c6abe542e49e443f978406e7431a64f0",
+        "0ed6ab35d0a24e6884b07dffcd6100e5",
+        "d49e01ab3cd24082b39a914a9e834614",
+        "69c93c25fbb946c3a75e3d35554c1b20",
+        "e4348774b8d3471fa97b7b520dbbc695"
+      ]
+    }
+  ]
+}

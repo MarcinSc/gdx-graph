@@ -1,0 +1,603 @@
+{
+  "version": "0.5.0",
+  "type": "Particle_Effect",
+  "nodes": [
+    {
+      "id": "03b24550882f45debd05d05e6c12fbc3",
+      "type": "Multiply",
+      "x": 970.0,
+      "y": 1078.0
+    },
+    {
+      "id": "06786599e96d45b1bd3f8391f5771080",
+      "type": "Property",
+      "x": 524.0,
+      "y": 910.0,
+      "data": {
+        "name": "Y movement",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "12d983b9f09647b0b3af35f6421bcdeb",
+      "type": "Property",
+      "x": 52.0,
+      "y": 1325.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "1a82eb713a29428e9d73671fb79f951b",
+      "type": "Property",
+      "x": 264.0,
+      "y": 872.0,
+      "data": {
+        "name": "Parallax Random",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "205246e04fb84db188ea4d5b0d21e604",
+      "type": "ParticleLifePercentage",
+      "x": 1192.0,
+      "y": 546.0
+    },
+    {
+      "id": "260cbf68cc174901b89fcfaf129ba83e",
+      "type": "Modulo",
+      "x": 969.0,
+      "y": 1195.0
+    },
+    {
+      "id": "2a8cb7d9eed849cbaef70c427914c1a5",
+      "type": "Property",
+      "x": 1327.0,
+      "y": 751.0,
+      "data": {
+        "name": "Color Random",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "39c20782aba44979aa4a7d94e7e53305",
+      "type": "Merge",
+      "x": 753.0,
+      "y": 896.0
+    },
+    {
+      "id": "39c4b75be1fc49479ff973d93f523918",
+      "type": "ParticleLifePercentage",
+      "x": 758.0,
+      "y": 826.0
+    },
+    {
+      "id": "3a09a4401c7d434ea1b53bfe09407620",
+      "type": "EllipseShape",
+      "x": 1532.0,
+      "y": 185.0
+    },
+    {
+      "id": "3c9cdc7940e84cb894a2d0cc7e474b73",
+      "type": "BillboardSprite",
+      "x": 1858.0,
+      "y": 889.0
+    },
+    {
+      "id": "41b5c3b0d3fe478aa3e737f5562688e1",
+      "type": "RemapValue",
+      "x": 1380.0,
+      "y": 315.0,
+      "data": {
+        "points": [
+          "0.0,0.0",
+          "0.1013512,0.3061223",
+          "0.4966216,0.3061223",
+          "1.0,0.0"
+        ],
+        "clamp": "Normal"
+      }
+    },
+    {
+      "id": "41b70369527441ccaf79b05ab2b32fc6",
+      "type": "Multiply",
+      "x": 984.0,
+      "y": 961.0
+    },
+    {
+      "id": "486a467ad9134fceb2711eade0a64061",
+      "type": "ValueFloat",
+      "x": 741.0,
+      "y": 1070.0,
+      "data": {
+        "v1": -0.5
+      }
+    },
+    {
+      "id": "4aa8ff2d08c349649e68bd89b87280f6",
+      "type": "Property",
+      "x": 1514.0,
+      "y": 830.0,
+      "data": {
+        "name": "Size",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "576a8236e93145f1913361e79f975acb",
+      "type": "Add",
+      "x": 1647.0,
+      "y": 1165.0
+    },
+    {
+      "id": "57fdc5e13934419f95af9d0985d6485c",
+      "type": "Property",
+      "x": 1513.0,
+      "y": 901.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "644a17a218a141acb7b591387df9acc5",
+      "type": "Subtract",
+      "x": 746.0,
+      "y": 1229.0
+    },
+    {
+      "id": "6c1b17b8a96b42fe882e0246cbe288b1",
+      "type": "Property",
+      "x": 50.0,
+      "y": 1256.0,
+      "data": {
+        "name": "Wrap size",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "7567eef74feb41da8e199c66b06c1502",
+      "type": "RemapVector",
+      "x": 1228.0,
+      "y": 1157.0,
+      "data": {
+        "x": "0.0",
+        "y": "0.0",
+        "z": "Z",
+        "w": "W"
+      }
+    },
+    {
+      "id": "7630576ff07d4c42aad1722a36fcb92c",
+      "type": "Gradient",
+      "x": 1570.0,
+      "y": 650.0,
+      "data": {
+        "points": [
+          "ffffffff,0.0",
+          "5fadadff,0.4965277",
+          "8890bfff,1.0"
+        ],
+        "clamp": "Normal"
+      }
+    },
+    {
+      "id": "7959604be7404b10ae1720e5f30a9cf0",
+      "type": "Add",
+      "x": 1224.0,
+      "y": 1032.0
+    },
+    {
+      "id": "817fc4865c5a44c698c83d262d226dc1",
+      "type": "Property",
+      "x": 1288.0,
+      "y": 230.0,
+      "data": {
+        "name": "UV",
+        "type": "Vector2"
+      }
+    },
+    {
+      "id": "818ea9b1b0104ed7a08f27d56f5995ba",
+      "type": "Property",
+      "x": 742.0,
+      "y": 1139.0,
+      "data": {
+        "name": "Wrap size",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "871ae01087d94bc295e317688e8dcfc4",
+      "type": "CameraPosition",
+      "x": 52.0,
+      "y": 1058.0
+    },
+    {
+      "id": "933f0665ab47483d90c12b255b256723",
+      "type": "Property",
+      "x": 970.0,
+      "y": 1284.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "983c62ab572a480eb638333ac1a161d9",
+      "type": "Property",
+      "x": 519.0,
+      "y": 981.0,
+      "data": {
+        "name": "X movement",
+        "type": "Float"
+      }
+    },
+    {
+      "id": "9c7653ee35904f69b13373074a348038",
+      "type": "RemapVector",
+      "x": 1452.0,
+      "y": 977.0,
+      "data": {
+        "x": "X",
+        "y": "Y",
+        "z": "0.0",
+        "w": "W"
+      }
+    },
+    {
+      "id": "b1f488388d1b4e1982a15416a52368d1",
+      "type": "RemapVector",
+      "x": 262.0,
+      "y": 941.0,
+      "data": {
+        "x": "X",
+        "y": "Y",
+        "z": "Z",
+        "w": "W"
+      }
+    },
+    {
+      "id": "c1ea1075a25b43bc844476c6bb00f9f4",
+      "type": "RemapVector",
+      "x": 497.0,
+      "y": 1191.0,
+      "data": {
+        "x": "X",
+        "y": "Y",
+        "z": "Z",
+        "w": "W"
+      }
+    },
+    {
+      "id": "d7333d03ab1b43cc9d6b8b6a357e78ac",
+      "type": "ValueFloat",
+      "x": 1304.0,
+      "y": 133.0,
+      "data": {
+        "v1": 0.800000011920929
+      }
+    },
+    {
+      "id": "end",
+      "type": "ParticlesShaderEnd",
+      "x": 2111.0,
+      "y": 50.0,
+      "data": {
+        "culling": "back",
+        "blending": true,
+        "blendingSourceFactor": "source_alpha",
+        "blendingDestinationFactor": "one",
+        "depthTest": "less",
+        "depthWrite": false
+      }
+    },
+    {
+      "id": "f8c2ba04e74c4cb4b7c14fa2cbc2f387",
+      "type": "Multiply",
+      "x": 1768.0,
+      "y": 559.0
+    },
+    {
+      "id": "fd22a54a4d4947da904fadc7005a80a5",
+      "type": "Multiply",
+      "x": 265.0,
+      "y": 1297.0
+    },
+    {
+      "id": "ff65bc53559f42a5ba88460cf31dcb5a",
+      "type": "Multiply",
+      "x": 498.0,
+      "y": 1101.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "03b24550882f45debd05d05e6c12fbc3",
+      "fromField": "output",
+      "toNode": "7959604be7404b10ae1720e5f30a9cf0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "06786599e96d45b1bd3f8391f5771080",
+      "fromField": "value",
+      "toNode": "39c20782aba44979aa4a7d94e7e53305",
+      "toField": "y"
+    },
+    {
+      "fromNode": "12d983b9f09647b0b3af35f6421bcdeb",
+      "fromField": "value",
+      "toNode": "fd22a54a4d4947da904fadc7005a80a5",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "1a82eb713a29428e9d73671fb79f951b",
+      "fromField": "value",
+      "toNode": "ff65bc53559f42a5ba88460cf31dcb5a",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "205246e04fb84db188ea4d5b0d21e604",
+      "fromField": "percentage",
+      "toNode": "41b5c3b0d3fe478aa3e737f5562688e1",
+      "toField": "input"
+    },
+    {
+      "fromNode": "260cbf68cc174901b89fcfaf129ba83e",
+      "fromField": "output",
+      "toNode": "7959604be7404b10ae1720e5f30a9cf0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "2a8cb7d9eed849cbaef70c427914c1a5",
+      "fromField": "value",
+      "toNode": "7630576ff07d4c42aad1722a36fcb92c",
+      "toField": "input"
+    },
+    {
+      "fromNode": "39c20782aba44979aa4a7d94e7e53305",
+      "fromField": "v2",
+      "toNode": "41b70369527441ccaf79b05ab2b32fc6",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "39c4b75be1fc49479ff973d93f523918",
+      "fromField": "percentage",
+      "toNode": "41b70369527441ccaf79b05ab2b32fc6",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "3a09a4401c7d434ea1b53bfe09407620",
+      "fromField": "output",
+      "toNode": "f8c2ba04e74c4cb4b7c14fa2cbc2f387",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "41b5c3b0d3fe478aa3e737f5562688e1",
+      "fromField": "output",
+      "toNode": "f8c2ba04e74c4cb4b7c14fa2cbc2f387",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "41b70369527441ccaf79b05ab2b32fc6",
+      "fromField": "output",
+      "toNode": "7959604be7404b10ae1720e5f30a9cf0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "486a467ad9134fceb2711eade0a64061",
+      "fromField": "value",
+      "toNode": "03b24550882f45debd05d05e6c12fbc3",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "4aa8ff2d08c349649e68bd89b87280f6",
+      "fromField": "value",
+      "toNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
+      "toField": "size"
+    },
+    {
+      "fromNode": "576a8236e93145f1913361e79f975acb",
+      "fromField": "output",
+      "toNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
+      "toField": "position"
+    },
+    {
+      "fromNode": "57fdc5e13934419f95af9d0985d6485c",
+      "fromField": "value",
+      "toNode": "3c9cdc7940e84cb894a2d0cc7e474b73",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "644a17a218a141acb7b591387df9acc5",
+      "fromField": "output",
+      "toNode": "260cbf68cc174901b89fcfaf129ba83e",
+      "toField": "a"
+    },
+    {
+      "fromNode": "6c1b17b8a96b42fe882e0246cbe288b1",
+      "fromField": "value",
+      "toNode": "fd22a54a4d4947da904fadc7005a80a5",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "7567eef74feb41da8e199c66b06c1502",
+      "fromField": "v3",
+      "toNode": "576a8236e93145f1913361e79f975acb",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "7630576ff07d4c42aad1722a36fcb92c",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "7959604be7404b10ae1720e5f30a9cf0",
+      "fromField": "output",
+      "toNode": "9c7653ee35904f69b13373074a348038",
+      "toField": "input"
+    },
+    {
+      "fromNode": "817fc4865c5a44c698c83d262d226dc1",
+      "fromField": "value",
+      "toNode": "3a09a4401c7d434ea1b53bfe09407620",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "818ea9b1b0104ed7a08f27d56f5995ba",
+      "fromField": "value",
+      "toNode": "03b24550882f45debd05d05e6c12fbc3",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "818ea9b1b0104ed7a08f27d56f5995ba",
+      "fromField": "value",
+      "toNode": "260cbf68cc174901b89fcfaf129ba83e",
+      "toField": "b"
+    },
+    {
+      "fromNode": "871ae01087d94bc295e317688e8dcfc4",
+      "fromField": "position",
+      "toNode": "b1f488388d1b4e1982a15416a52368d1",
+      "toField": "input"
+    },
+    {
+      "fromNode": "933f0665ab47483d90c12b255b256723",
+      "fromField": "value",
+      "toNode": "7567eef74feb41da8e199c66b06c1502",
+      "toField": "input"
+    },
+    {
+      "fromNode": "983c62ab572a480eb638333ac1a161d9",
+      "fromField": "value",
+      "toNode": "39c20782aba44979aa4a7d94e7e53305",
+      "toField": "x"
+    },
+    {
+      "fromNode": "9c7653ee35904f69b13373074a348038",
+      "fromField": "v3",
+      "toNode": "576a8236e93145f1913361e79f975acb",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "b1f488388d1b4e1982a15416a52368d1",
+      "fromField": "v2",
+      "toNode": "7959604be7404b10ae1720e5f30a9cf0",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "b1f488388d1b4e1982a15416a52368d1",
+      "fromField": "v2",
+      "toNode": "ff65bc53559f42a5ba88460cf31dcb5a",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "c1ea1075a25b43bc844476c6bb00f9f4",
+      "fromField": "v2",
+      "toNode": "644a17a218a141acb7b591387df9acc5",
+      "toField": "a"
+    },
+    {
+      "fromNode": "d7333d03ab1b43cc9d6b8b6a357e78ac",
+      "fromField": "value",
+      "toNode": "3a09a4401c7d434ea1b53bfe09407620",
+      "toField": "border"
+    },
+    {
+      "fromNode": "f8c2ba04e74c4cb4b7c14fa2cbc2f387",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "alpha"
+    },
+    {
+      "fromNode": "fd22a54a4d4947da904fadc7005a80a5",
+      "fromField": "output",
+      "toNode": "c1ea1075a25b43bc844476c6bb00f9f4",
+      "toField": "input"
+    },
+    {
+      "fromNode": "ff65bc53559f42a5ba88460cf31dcb5a",
+      "fromField": "output",
+      "toNode": "644a17a218a141acb7b591387df9acc5",
+      "toField": "b"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "UV",
+      "type": "Vector2",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    {
+      "name": "Color Random",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Wrap size",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 2000.0
+      }
+    },
+    {
+      "name": "Parallax Random",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.800000011920929
+      }
+    },
+    {
+      "name": "Size",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.10000000149011612
+      }
+    },
+    {
+      "name": "X movement",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    },
+    {
+      "name": "Y movement",
+      "type": "Float",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0
+      }
+    }
+  ],
+  "groups": []
+}

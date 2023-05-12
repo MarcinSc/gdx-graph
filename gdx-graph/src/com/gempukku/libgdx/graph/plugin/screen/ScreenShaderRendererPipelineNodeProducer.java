@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
@@ -51,10 +52,10 @@ public class ScreenShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                 graphScreenShaders = pipelineDataProvider.getPrivatePluginData(GraphScreenShadersImpl.class);
 
                 for (JsonValue shaderDefinition : shaderDefinitions) {
-                    JsonValue shaderGraph = shaderDefinition.get("shader");
+                    FileHandle shaderFile = pipelineDataProvider.getAssetResolver().resolve(shaderDefinition.getString("path"));
                     String tag = shaderDefinition.getString("tag");
                     Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-                    final GraphShader shader = ScreenShaderLoader.loadShader(shaderGraph, tag);
+                    final GraphShader shader = ScreenShaderLoader.loadShader(shaderFile, tag, pipelineDataProvider.getAssetResolver());
                     shaderArray.add(shader);
                 }
 

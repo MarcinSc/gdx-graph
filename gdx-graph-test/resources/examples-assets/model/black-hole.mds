@@ -1,0 +1,354 @@
+{
+  "version": "0.5.0",
+  "type": "Model_Shader",
+  "nodes": [
+    {
+      "id": "728664a885e048ed8a2754e2c94eb214",
+      "type": "Mix",
+      "x": 1855.0,
+      "y": 451.0
+    },
+    {
+      "id": "93573dd2a66d40b0acb3d2da20755fd5",
+      "type": "SceneColor",
+      "x": 1240.0,
+      "y": 645.0
+    },
+    {
+      "id": "edb6b54228cf4551821efb4f3e7cfa0e",
+      "type": "Multiply",
+      "x": 1221.0,
+      "y": 567.0
+    },
+    {
+      "id": "e8f50c4adad14199ba7e1b6f68aa7990",
+      "type": "ObjectNormalToWorld",
+      "x": 300.0,
+      "y": 231.0
+    },
+    {
+      "id": "d307a81b92ce422c8582f87f5dfb4e40",
+      "type": "Step",
+      "x": 1339.0,
+      "y": 191.0
+    },
+    {
+      "id": "270bdc955ea2426da124e8f025d3daf4",
+      "type": "ScreenPosition",
+      "x": 1220.0,
+      "y": 504.0
+    },
+    {
+      "id": "7c84a08395c04215be02753a4526efac",
+      "type": "Property",
+      "x": 50.0,
+      "y": 219.0,
+      "data": {
+        "name": "Normal",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "a9466cdddd8d4f95a47db13718f6c821",
+      "type": "ValueFloat",
+      "x": 392.0,
+      "y": 50.0,
+      "data": {
+        "v1": 1.0
+      }
+    },
+    {
+      "id": "672456b565ca4d7b90b6b67bdfdab3ef",
+      "type": "Mix",
+      "x": 1425.0,
+      "y": 490.0
+    },
+    {
+      "id": "ab8c77d2247b476ba2ea0f1248a046cc",
+      "type": "ValueVector2",
+      "x": 1011.0,
+      "y": 246.0,
+      "data": {
+        "v1": 0.0,
+        "v2": 1.0
+      }
+    },
+    {
+      "id": "286c649ad9574805aefa1ea812723748",
+      "type": "ModelFragmentCoordinate",
+      "x": 928.0,
+      "y": 604.0
+    },
+    {
+      "id": "06f70cfdeff84a2682c406587b3d130a",
+      "type": "CameraPosition",
+      "x": 207.0,
+      "y": 146.0
+    },
+    {
+      "id": "e0604dc260f84729ae66a2374c40aaf1",
+      "type": "Subtract",
+      "x": 394.0,
+      "y": 118.0
+    },
+    {
+      "id": "8a4b644f979345669e5d025f48c4f47b",
+      "type": "ValueFloat",
+      "x": 1147.0,
+      "y": 150.0,
+      "data": {
+        "v1": 0.20000000298023224
+      }
+    },
+    {
+      "id": "367b5a313dc14b64b600f0e8b303d7d4",
+      "type": "PixelSize",
+      "x": 1003.0,
+      "y": 499.0
+    },
+    {
+      "id": "33f08354a9f44ceb8ecdf3c3bce8eb37",
+      "type": "Remap",
+      "x": 1220.0,
+      "y": 378.0
+    },
+    {
+      "id": "67637093ec714a12b6df3097868302d5",
+      "type": "WorldPosition",
+      "x": 153.0,
+      "y": 76.0
+    },
+    {
+      "id": "end",
+      "type": "ShaderEnd",
+      "x": 2058.0,
+      "y": 156.0,
+      "data": {
+        "positionType": "Object space",
+        "culling": "back",
+        "depthWrite": false,
+        "blending": true,
+        "blendingSourceFactor": "source alpha",
+        "blendingDestinationFactor": "one minus source alpha",
+        "depthTest": "less"
+      }
+    },
+    {
+      "id": "9213ab0189774c20a00bbef146c3667f",
+      "type": "ValueVector2",
+      "x": 1014.0,
+      "y": 312.0,
+      "data": {
+        "v1": 0.20000000298023224,
+        "v2": 1.0
+      }
+    },
+    {
+      "id": "ede17779665747188d256ec4875d99df",
+      "type": "Property",
+      "x": 1855.0,
+      "y": 593.0,
+      "data": {
+        "name": "Position",
+        "type": "Vector3"
+      }
+    },
+    {
+      "id": "6503700c40c145da832c6e9b68a816d2",
+      "type": "ValueColor",
+      "x": 1594.0,
+      "y": 723.0,
+      "data": {
+        "color": "000000ff"
+      }
+    },
+    {
+      "id": "6c04a1de247146deb8a713cfab9c486a",
+      "type": "Sampler2D",
+      "x": 1607.0,
+      "y": 514.0
+    },
+    {
+      "id": "87b0b5f230044c48af05f8ea204e217b",
+      "type": "FresnelEffect",
+      "x": 605.0,
+      "y": 184.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "06f70cfdeff84a2682c406587b3d130a",
+      "fromField": "position",
+      "toNode": "e0604dc260f84729ae66a2374c40aaf1",
+      "toField": "a"
+    },
+    {
+      "fromNode": "e0604dc260f84729ae66a2374c40aaf1",
+      "fromField": "output",
+      "toNode": "87b0b5f230044c48af05f8ea204e217b",
+      "toField": "viewDir"
+    },
+    {
+      "fromNode": "a9466cdddd8d4f95a47db13718f6c821",
+      "fromField": "value",
+      "toNode": "87b0b5f230044c48af05f8ea204e217b",
+      "toField": "power"
+    },
+    {
+      "fromNode": "87b0b5f230044c48af05f8ea204e217b",
+      "fromField": "output",
+      "toNode": "d307a81b92ce422c8582f87f5dfb4e40",
+      "toField": "input"
+    },
+    {
+      "fromNode": "8a4b644f979345669e5d025f48c4f47b",
+      "fromField": "value",
+      "toNode": "d307a81b92ce422c8582f87f5dfb4e40",
+      "toField": "edge"
+    },
+    {
+      "fromNode": "d307a81b92ce422c8582f87f5dfb4e40",
+      "fromField": "output",
+      "toNode": "728664a885e048ed8a2754e2c94eb214",
+      "toField": "t"
+    },
+    {
+      "fromNode": "6503700c40c145da832c6e9b68a816d2",
+      "fromField": "value",
+      "toNode": "728664a885e048ed8a2754e2c94eb214",
+      "toField": "a"
+    },
+    {
+      "fromNode": "728664a885e048ed8a2754e2c94eb214",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "color"
+    },
+    {
+      "fromNode": "93573dd2a66d40b0acb3d2da20755fd5",
+      "fromField": "texture",
+      "toNode": "6c04a1de247146deb8a713cfab9c486a",
+      "toField": "texture"
+    },
+    {
+      "fromNode": "6c04a1de247146deb8a713cfab9c486a",
+      "fromField": "color",
+      "toNode": "728664a885e048ed8a2754e2c94eb214",
+      "toField": "b"
+    },
+    {
+      "fromNode": "286c649ad9574805aefa1ea812723748",
+      "fromField": "output",
+      "toNode": "edb6b54228cf4551821efb4f3e7cfa0e",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "367b5a313dc14b64b600f0e8b303d7d4",
+      "fromField": "size",
+      "toNode": "edb6b54228cf4551821efb4f3e7cfa0e",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "edb6b54228cf4551821efb4f3e7cfa0e",
+      "fromField": "output",
+      "toNode": "672456b565ca4d7b90b6b67bdfdab3ef",
+      "toField": "a"
+    },
+    {
+      "fromNode": "270bdc955ea2426da124e8f025d3daf4",
+      "fromField": "output",
+      "toNode": "672456b565ca4d7b90b6b67bdfdab3ef",
+      "toField": "b"
+    },
+    {
+      "fromNode": "672456b565ca4d7b90b6b67bdfdab3ef",
+      "fromField": "output",
+      "toNode": "6c04a1de247146deb8a713cfab9c486a",
+      "toField": "uv"
+    },
+    {
+      "fromNode": "87b0b5f230044c48af05f8ea204e217b",
+      "fromField": "output",
+      "toNode": "33f08354a9f44ceb8ecdf3c3bce8eb37",
+      "toField": "input"
+    },
+    {
+      "fromNode": "9213ab0189774c20a00bbef146c3667f",
+      "fromField": "value",
+      "toNode": "33f08354a9f44ceb8ecdf3c3bce8eb37",
+      "toField": "from"
+    },
+    {
+      "fromNode": "ab8c77d2247b476ba2ea0f1248a046cc",
+      "fromField": "value",
+      "toNode": "33f08354a9f44ceb8ecdf3c3bce8eb37",
+      "toField": "to"
+    },
+    {
+      "fromNode": "33f08354a9f44ceb8ecdf3c3bce8eb37",
+      "fromField": "output",
+      "toNode": "672456b565ca4d7b90b6b67bdfdab3ef",
+      "toField": "t"
+    },
+    {
+      "fromNode": "ede17779665747188d256ec4875d99df",
+      "fromField": "value",
+      "toNode": "end",
+      "toField": "position"
+    },
+    {
+      "fromNode": "67637093ec714a12b6df3097868302d5",
+      "fromField": "output",
+      "toNode": "e0604dc260f84729ae66a2374c40aaf1",
+      "toField": "b"
+    },
+    {
+      "fromNode": "7c84a08395c04215be02753a4526efac",
+      "fromField": "value",
+      "toNode": "e8f50c4adad14199ba7e1b6f68aa7990",
+      "toField": "input"
+    },
+    {
+      "fromNode": "e8f50c4adad14199ba7e1b6f68aa7990",
+      "fromField": "output",
+      "toNode": "87b0b5f230044c48af05f8ea204e217b",
+      "toField": "normal"
+    }
+  ],
+  "properties": [
+    {
+      "name": "Position",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    {
+      "name": "Normal",
+      "type": "Vector3",
+      "location": "Attribute",
+      "data": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "Fresnel",
+      "nodes": [
+        "e8f50c4adad14199ba7e1b6f68aa7990",
+        "87b0b5f230044c48af05f8ea204e217b",
+        "06f70cfdeff84a2682c406587b3d130a",
+        "a9466cdddd8d4f95a47db13718f6c821",
+        "e0604dc260f84729ae66a2374c40aaf1",
+        "7c84a08395c04215be02753a4526efac",
+        "67637093ec714a12b6df3097868302d5"
+      ]
+    }
+  ]
+}

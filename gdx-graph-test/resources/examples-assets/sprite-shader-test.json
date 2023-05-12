@@ -1,0 +1,70 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "0d20cf81bc904788bba724256f24ed31",
+      "type": "PipelineStart",
+      "x": 376.0,
+      "y": 563.0
+    },
+    {
+      "id": "373daf59a1384ae787bb665e66935a8f",
+      "type": "Property",
+      "x": 0.0,
+      "y": 159.0,
+      "data": {
+        "name": "Camera",
+        "type": "Camera"
+      }
+    },
+    {
+      "id": "6ceff71398c749daa8fc6131c636f992",
+      "type": "GraphShaderRenderer",
+      "x": 270.0,
+      "y": 133.0,
+      "data": {
+        "renderOrder": "Shader_Unordered",
+        "shaders": [
+          {
+            "path": "examples-assets/model/sprites-color-test.mds",
+            "tag": "Test"
+          }
+        ]
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 310.0,
+      "y": 0.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "0d20cf81bc904788bba724256f24ed31",
+      "fromField": "output",
+      "toNode": "6ceff71398c749daa8fc6131c636f992",
+      "toField": "input"
+    },
+    {
+      "fromNode": "373daf59a1384ae787bb665e66935a8f",
+      "fromField": "value",
+      "toNode": "6ceff71398c749daa8fc6131c636f992",
+      "toField": "camera"
+    },
+    {
+      "fromNode": "6ceff71398c749daa8fc6131c636f992",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "groups": [],
+  "properties": [
+    {
+      "name": "Camera",
+      "type": "Camera"
+    }
+  ]
+}
