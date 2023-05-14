@@ -120,16 +120,16 @@ public class PatchworkSystem extends BaseEntitySystem {
                                         patchwork.getIndexCapacityPerPage(), patchwork.getVertexCapacityPerPage(), patchSerializer);
                         GdxMeshRenderableModel meshModel =
                                 new GdxMeshRenderableModel(
-                                        patchwork.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer);
+                                        patchwork.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer, tag);
                         DefaultMultiPartRenderableModel<RenderablePatch, PatchReference> model =
                                 new DefaultMultiPartRenderableModel<>(multiPartMemoryMesh, meshModel);
-                        graphModels.addModel(tag, model);
+                        graphModels.addModel(model);
                         return model;
                     }
 
                     @Override
                     public void dispose(MultiPartRenderableModel<RenderablePatch, PatchReference> model) {
-                        graphModels.removeModel(tag, model);
+                        graphModels.removeModel(model);
                         model.dispose();
                     }
                 };

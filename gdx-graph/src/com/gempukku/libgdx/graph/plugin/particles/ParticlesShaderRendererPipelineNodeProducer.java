@@ -119,8 +119,10 @@ public class ParticlesShaderRendererPipelineNodeProducer extends SingleInputsPip
                         String tag = particleShader.getTag();
                         shaderContext.setGlobalPropertyContainer(particleEffects.getGlobalProperties(tag));
                         particleShader.begin(shaderContext, pipelineRenderingContext.getRenderContext());
-                        for (RenderableModel model : particleEffects.getModels(tag)) {
-                            particleShader.render(shaderContext, model);
+                        for (RenderableModel model : particleEffects.getModels()) {
+                            if (model.isRendered(particleShader, shaderContext.getCamera())) {
+                                particleShader.render(shaderContext, model);
+                            }
                         }
                         particleShader.end();
                     }

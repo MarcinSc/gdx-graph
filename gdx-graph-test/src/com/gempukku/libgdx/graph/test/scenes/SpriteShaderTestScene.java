@@ -61,11 +61,11 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         SpriteSlotMemoryMesh<RenderableSprite> sprites = new SpriteSlotMemoryMesh<>(
                 2, spriteModel, spriteSerializer);
 
-        GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(true, sprites, vertexAttributes, new MapWritablePropertyContainer());
+        GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(true, sprites, vertexAttributes, new MapWritablePropertyContainer(), tag);
 
         spriteBatch = new DefaultMultiPartRenderableModel<>(sprites, gdxMesh);
 
-        graphModels.addModel(tag, spriteBatch);
+        graphModels.addModel(spriteBatch);
 
         DefaultRenderableSprite sprite1 = new DefaultRenderableSprite();
         sprite1.setValue("Position", new Vector3(0, 0, -10));

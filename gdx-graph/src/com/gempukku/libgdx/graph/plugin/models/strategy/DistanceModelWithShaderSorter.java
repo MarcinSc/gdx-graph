@@ -2,11 +2,10 @@ package com.gempukku.libgdx.graph.plugin.models.strategy;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 
 import java.util.Comparator;
 
-public class DistanceModelSorter implements Comparator<RenderableModel> {
+public class DistanceModelWithShaderSorter implements Comparator<ModelWithShader> {
     public enum Order {
         Front_To_Back, Back_To_Front;
 
@@ -21,19 +20,19 @@ public class DistanceModelSorter implements Comparator<RenderableModel> {
     private Vector3 cameraPosition;
     private final Order order;
 
-    public DistanceModelSorter(Order order) {
+    public DistanceModelWithShaderSorter(Order order) {
         this.order = order;
     }
 
-    public void sort(Vector3 cameraPosition, Array<RenderableModel> renderables) {
+    public void sort(Vector3 cameraPosition, Array<ModelWithShader> renderables) {
         this.cameraPosition = cameraPosition;
         renderables.sort(this);
     }
 
     @Override
-    public int compare(RenderableModel o1, RenderableModel o2) {
-        Vector3 position1 = o1.getPosition();
-        Vector3 position2 = o2.getPosition();
+    public int compare(ModelWithShader o1, ModelWithShader o2) {
+        Vector3 position1 = o1.getRenderableModel().getPosition();
+        Vector3 position2 = o2.getRenderableModel().getPosition();
         final float dst = (int) (1000f * cameraPosition.dst2(position1)) - (int) (1000f * cameraPosition.dst2(position2));
         return order.result(dst);
     }

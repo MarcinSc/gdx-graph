@@ -11,11 +11,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.BasicShader;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
@@ -26,6 +28,7 @@ import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 public class MeshBasedRenderableModel implements RenderableModel, Disposable {
     private final int vertexCount;
     private final short[] indices;
+    private final ObjectSet<String> tags = new ObjectSet<>();
     private PropertiesRenderableModel propertiesRenderableModel;
     private HierarchicalPropertyContainer hierarchicalPropertyContainer;
 
@@ -37,6 +40,14 @@ public class MeshBasedRenderableModel implements RenderableModel, Disposable {
 
         this.hierarchicalPropertyContainer = new HierarchicalPropertyContainer();
         fillPropertyContainerBasedOnMesh(hierarchicalPropertyContainer, mesh);
+    }
+
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        tags.remove(tag);
     }
 
     private static void fillPropertyContainerBasedOnMesh(WritablePropertyContainer propertyContainer, Mesh mesh) {
@@ -113,8 +124,8 @@ public class MeshBasedRenderableModel implements RenderableModel, Disposable {
     }
 
     @Override
-    public boolean isRendered(Camera camera) {
-        return propertiesRenderableModel.isRendered(camera);
+    public boolean isRendered(GraphShader graphShader, Camera camera) {
+        return tags.contains(graphShader.getTag()) && propertiesRenderableModel.isRendered(graphShader, camera);
     }
 
     @Override

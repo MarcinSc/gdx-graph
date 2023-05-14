@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
@@ -78,7 +79,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     }
 
     @Override
-    public boolean isRendered(Camera camera) {
+    public boolean isRendered(GraphShader graphShader, Camera camera) {
         return true;
     }
 

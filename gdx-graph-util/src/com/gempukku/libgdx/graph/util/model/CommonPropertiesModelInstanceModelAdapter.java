@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -18,6 +19,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
@@ -25,9 +27,13 @@ import com.gempukku.libgdx.graph.util.culling.CullingTest;
 public class CommonPropertiesModelInstanceModelAdapter {
     private ModelInstance modelInstance;
     private GraphModels graphModels;
-    private ObjectMap<String, ObjectSet<RenderableModel>> graphModelsByTag = new ObjectMap<>();
+
+    private final ObjectSet<String> tags = new ObjectSet<>();
+    private final Array<RenderableModel> registeredModels = new Array<>();
+
     private WritablePropertyContainer propertyContainer;
     private CullingTest cullingTest;
+    private ObjectMap<IntMapping<String>, int[]> locationMappingCache = new ObjectMap<>();
 
     public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, GraphModels graphModels) {
         this(modelInstance, graphModels, new MapWritablePropertyContainer());
@@ -44,34 +50,32 @@ public class CommonPropertiesModelInstanceModelAdapter {
     }
 
     public boolean hasTag(String tag) {
-        return graphModelsByTag.containsKey(tag);
+        return tags.contains(tag);
     }
 
     public void addTag(String tag) {
-        if (graphModelsByTag.containsKey(tag))
+        if (tags.contains(tag))
             throw new IllegalArgumentException("This model instance is already registered for this tag");
 
-        ObjectSet<RenderableModel> models = new ObjectSet<>();
-
-        for (Node node : modelInstance.nodes) {
-            registerNodeForTag(models, node, tag);
+        if (tags.isEmpty()) {
+            for (Node node : modelInstance.nodes) {
+                registerNode(node);
+            }
         }
-
-
-        graphModelsByTag.put(tag, models);
+        tags.add(tag);
     }
 
-    private void registerNodeForTag(ObjectSet<RenderableModel> models, Node node, String tag) {
+    private void registerNode(Node node) {
         if (node.parts.size > 0) {
             for (NodePart nodePart : node.parts) {
                 NodePartRenderableModel renderableModel = new NodePartRenderableModel(node, nodePart);
-                graphModels.addModel(tag, renderableModel);
-                models.add(renderableModel);
+                graphModels.addModel(renderableModel);
+                registeredModels.add(renderableModel);
             }
         }
 
         for (Node child : node.getChildren()) {
-            registerNodeForTag(models, child, tag);
+            registerNode(child);
         }
     }
 
@@ -79,12 +83,14 @@ public class CommonPropertiesModelInstanceModelAdapter {
         if (!hasTag(tag))
             throw new IllegalArgumentException("This model instance does not have this tag");
 
-        ObjectSet<RenderableModel> models = graphModelsByTag.get(tag);
-        for (RenderableModel graphModel : models) {
-            graphModels.removeModel(tag, graphModel);
-        }
+        tags.remove(tag);
 
-        graphModelsByTag.remove(tag);
+        if (tags.isEmpty()) {
+            for (RenderableModel registeredModel : registeredModels) {
+                graphModels.removeModel(registeredModel);
+            }
+            registeredModels.clear();
+        }
     }
 
     public WritablePropertyContainer getPropertyContainer() {
@@ -96,7 +102,6 @@ public class CommonPropertiesModelInstanceModelAdapter {
         private NodePart nodePart;
         private Vector3 tmpVector = new Vector3();
         private Matrix4 worldTransform = new Matrix4();
-        private int[] attributeLocations;
 
         public NodePartRenderableModel(Node node, NodePart nodePart) {
             this.node = node;
@@ -125,8 +130,8 @@ public class CommonPropertiesModelInstanceModelAdapter {
         }
 
         @Override
-        public boolean isRendered(Camera camera) {
-            return nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
+        public boolean isRendered(GraphShader graphShader, Camera camera) {
+            return tags.contains(graphShader.getTag()) && nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
         }
 
         @Override
@@ -143,6 +148,7 @@ public class CommonPropertiesModelInstanceModelAdapter {
         }
 
         private int[] getAttributeLocations(Mesh mesh, IntMapping<String> propertyLocationMapping) {
+            int[] attributeLocations = locationMappingCache.get(propertyLocationMapping);
             if (attributeLocations == null) {
                 VertexAttributes attributes = mesh.getVertexAttributes();
                 IntArray result = new IntArray();
@@ -151,6 +157,7 @@ public class CommonPropertiesModelInstanceModelAdapter {
                     result.add(propertyLocationMapping.map(getAttributeName(vertexAttribute.alias)));
                 }
                 attributeLocations = result.shrink();
+                locationMappingCache.put(propertyLocationMapping, attributeLocations);
             }
             return attributeLocations;
         }

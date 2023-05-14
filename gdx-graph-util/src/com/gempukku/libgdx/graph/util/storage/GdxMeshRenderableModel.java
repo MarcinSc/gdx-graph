@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
@@ -24,6 +25,7 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpda
 
     private final Mesh mesh;
     private final VertexAttributes vertexAttributes;
+    private final String tag;
     private final MeshRenderer meshRenderer;
 
     private ShaderProgram shaderProgram;
@@ -34,18 +36,19 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpda
     public GdxMeshRenderableModel(
             boolean staticBatch, MemoryMesh memoryMesh,
             VertexAttributes vertexAttributes,
-            WritablePropertyContainer propertyContainer) {
-        this(staticBatch, memoryMesh, vertexAttributes, propertyContainer, new TrianglesMeshRenderer());
+            WritablePropertyContainer propertyContainer, String tag) {
+        this(staticBatch, memoryMesh, vertexAttributes, propertyContainer, tag, new TrianglesMeshRenderer());
     }
 
     public GdxMeshRenderableModel(
             boolean staticBatch, MemoryMesh memoryMesh,
             VertexAttributes vertexAttributes,
-            WritablePropertyContainer propertyContainer, MeshRenderer meshRenderer) {
+            WritablePropertyContainer propertyContainer, String tag, MeshRenderer meshRenderer) {
         this.propertyContainer = propertyContainer;
         this.memoryMesh = memoryMesh;
 
         this.vertexAttributes = vertexAttributes;
+        this.tag = tag;
         this.meshRenderer = meshRenderer;
 
         mesh = new Mesh(staticBatch, true,
@@ -85,8 +88,8 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpda
     }
 
     @Override
-    public boolean isRendered(Camera camera) {
-        return !memoryMesh.isEmpty() && !isCulled(camera);
+    public boolean isRendered(GraphShader graphShader, Camera camera) {
+        return graphShader.getTag().equals(tag) && !memoryMesh.isEmpty() && !isCulled(camera);
     }
 
     private boolean isCulled(Camera camera) {

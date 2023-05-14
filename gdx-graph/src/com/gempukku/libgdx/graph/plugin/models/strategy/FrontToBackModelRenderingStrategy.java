@@ -6,28 +6,30 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 
 public class FrontToBackModelRenderingStrategy implements ModelRenderingStrategy {
-    private static final Pool<ModelWithTag> pool = Pools.get(ModelWithTag.class);
-    private final Array<ModelWithTag> orderingArray = new Array<>();
-    private final DistanceModelSorter modelSorter = new DistanceModelSorter(DistanceModelSorter.Order.Front_To_Back);
+    private static final Pool<ModelWithShader> pool = Pools.get(ModelWithShader.class);
+    private final Array<ModelWithShader> orderingArray = new Array<>();
+    private final DistanceModelWithShaderSorter modelSorter = new DistanceModelWithShaderSorter(DistanceModelWithShaderSorter.Order.Front_To_Back);
 
     @Override
-    public void processModels(GraphModelsImpl models, Array<String> tags, Camera camera, StrategyCallback callback) {
+    public void processModels(GraphModelsImpl models, Array<GraphShader> shaders, Camera camera, StrategyCallback callback) {
         callback.begin();
         clearSortingArray();
-        for (String tag : tags) {
-            for (RenderableModel model : models.getModels(tag))
-                if (model.isRendered(camera)) {
-                    ModelWithTag modelWithTag = pool.obtain();
-                    modelWithTag.setTag(tag);
-                    modelWithTag.setRenderableModel(model);
-                    orderingArray.add(modelWithTag);
+        for (RenderableModel model : models.getModels()) {
+            for (GraphShader shader : shaders) {
+                if (model.isRendered(shader, camera)) {
+                    ModelWithShader modelWithShader = pool.obtain();
+                    modelWithShader.setShader(shader);
+                    modelWithShader.setRenderableModel(model);
+                    orderingArray.add(modelWithShader);
                 }
+            }
         }
         modelSorter.sort(camera.position, orderingArray);
-        for (ModelWithTag model : orderingArray) {
-            callback.process(model.getRenderableModel(), model.getTag());
+        for (ModelWithShader model : orderingArray) {
+            callback.process(model.getRenderableModel(), model.getShader());
         }
         callback.end();
     }

@@ -241,7 +241,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
             spriteMesh = new SpriteSlotMemoryMesh<>((256 * 256 - 1) / 4,
                     spriteModel,
                     new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel));
-            particleModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, localPropertyContainer);
+            particleModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, localPropertyContainer, "");
             graphShaderRenderingWidget.setRenderableModel(particleModel);
 
             particleGenerator.initialCreateParticles(timeKeeper.getTime(),

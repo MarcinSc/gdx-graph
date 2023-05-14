@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
@@ -39,31 +38,19 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
         final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource, pipelineDataProvider.getWhitePixel().textureRegion);
 
-        final ObjectMap<String, ShaderGroup> shaderGroups = new ObjectMap<>();
-
-        final Array<String> allShaderTags = new Array<>();
-        final Array<String> depthDrawingShaderTags = new Array<>();
+        final Array<ShaderGroup> shaderGroups = new Array<>();
+        final Array<GraphShader> colorShaders = new Array<>();
+        final Array<ShaderGroup> depthDrawingShaderGroups = new Array<>();
+        final Array<GraphShader> depthShaders = new Array<>();
 
         final JsonValue shaderDefinitions = data.get("shaders");
 
         RenderOrder renderOrder = RenderOrder.valueOf(data.getString("renderOrder", "Shader_Unordered"));
         final ModelRenderingStrategy renderingStrategy = createRenderingStrategy(renderOrder);
 
-        final RenderingStrategyCallback colorStrategyCallback = new RenderingStrategyCallback(
-                shaderContext, new Function<String, GraphShader>() {
-            @Override
-            public GraphShader evaluate(String s) {
-                return shaderGroups.get(s).getColorShader();
-            }
-        });
+        final RenderingStrategyCallback colorStrategyCallback = new RenderingStrategyCallback(shaderContext);
 
-        final RenderingStrategyCallback depthStrategyCallback = new RenderingStrategyCallback(
-                shaderContext, new Function<String, GraphShader>() {
-            @Override
-            public GraphShader evaluate(String s) {
-                return shaderGroups.get(s).getDepthShader();
-            }
-        });
+        final RenderingStrategyCallback depthStrategyCallback = new RenderingStrategyCallback(shaderContext);
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
@@ -84,38 +71,36 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
                     ShaderGroup shaderGroup = new ShaderGroup(pipelineDataProvider.getAssetResolver(), shaderDefinition);
                     shaderGroup.initialize();
 
-                    allShaderTags.add(shaderGroup.getTag());
-                    shaderGroups.put(shaderGroup.getTag(), shaderGroup);
+                    shaderGroups.add(shaderGroup);
+                    colorShaders.add(shaderGroup.getColorShader());
+                    models.registerTag(shaderGroup.getTag(), shaderGroup.getColorShader());
 
-                    if (shaderGroup.getColorShader().isDepthWriting())
-                        depthDrawingShaderTags.add(shaderGroup.getTag());
-                }
-
-                for (ShaderGroup shaderGroup : shaderGroups.values()) {
-                    GraphShader shader = shaderGroup.getColorShader();
-                    models.registerTag(shader.getTag(), shader);
+                    if (shaderGroup.getColorShader().isDepthWriting()) {
+                        depthDrawingShaderGroups.add(shaderGroup);
+                    }
                 }
             }
 
             private void initializeDepthShaders() {
-                for (String depthDrawingShaderTag : depthDrawingShaderTags) {
-                    shaderGroups.get(depthDrawingShaderTag).initializeDepthShader();
+                for (ShaderGroup depthDrawingShaderGroup : depthDrawingShaderGroups) {
+                    depthDrawingShaderGroup.initializeDepthShader();
+                    depthShaders.add(depthDrawingShaderGroup.getDepthShader());
                 }
             }
 
             private boolean needsDepth() {
-                for (ShaderGroup shaderGroup : shaderGroups.values()) {
+                for (ShaderGroup shaderGroup : shaderGroups) {
                     GraphShader colorShader = shaderGroup.getColorShader();
-                    if (colorShader.isUsingDepthTexture() && models.hasModelWithTag(colorShader.getTag()))
+                    if (colorShader.isUsingDepthTexture())
                         return true;
                 }
                 return false;
             }
 
             private boolean isRequiringSceneColor() {
-                for (ShaderGroup shaderGroup : shaderGroups.values()) {
+                for (ShaderGroup shaderGroup : shaderGroups) {
                     GraphShader colorShader = shaderGroup.getColorShader();
-                    if (colorShader.isUsingColorTexture() && models.hasModelWithTag(colorShader.getTag()))
+                    if (colorShader.isUsingColorTexture())
                         return true;
                 }
                 return false;
@@ -166,14 +151,14 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
                     // Drawing models on color buffer
                     colorStrategyCallback.prepare(pipelineRenderingContext, models);
                     currentBuffer.beginColor();
-                    renderingStrategy.processModels(models, allShaderTags, camera, colorStrategyCallback);
+                    renderingStrategy.processModels(models, colorShaders, camera, colorStrategyCallback);
                     currentBuffer.endColor();
 
                     if (needsToDrawDepth) {
                         // Drawing models on depth buffer
                         depthStrategyCallback.prepare(pipelineRenderingContext, models);
                         currentBuffer.beginDepth();
-                        renderingStrategy.processModels(models, depthDrawingShaderTags, camera, depthStrategyCallback);
+                        renderingStrategy.processModels(models, depthShaders, camera, depthStrategyCallback);
                         currentBuffer.endDepth();
                     }
 
@@ -194,7 +179,7 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
             @Override
             public void dispose() {
-                for (ShaderGroup shaderGroup : shaderGroups.values()) {
+                for (ShaderGroup shaderGroup : shaderGroups) {
                     shaderGroup.dispose();
                 }
             }
@@ -274,15 +259,13 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {
         private final DefaultShaderContext shaderContext;
-        private final Function<String, GraphShader> shaderResolver;
 
         private GraphModelsImpl graphModels;
         private PipelineRenderingContext context;
         private GraphShader runningShader = null;
 
-        public RenderingStrategyCallback(DefaultShaderContext shaderContext, Function<String, GraphShader> shaderResolver) {
+        public RenderingStrategyCallback(DefaultShaderContext shaderContext) {
             this.shaderContext = shaderContext;
-            this.shaderResolver = shaderResolver;
         }
 
         public void prepare(PipelineRenderingContext context, GraphModelsImpl graphModels) {
@@ -296,12 +279,11 @@ public class ModelShaderRendererPipelineNodeProducer extends SingleInputsPipelin
         }
 
         @Override
-        public void process(RenderableModel model, String tag) {
-            GraphShader shader = shaderResolver.evaluate(tag);
+        public void process(RenderableModel model, GraphShader shader) {
             if (runningShader != shader) {
                 endCurrentShader();
 
-                shaderContext.setGlobalPropertyContainer(graphModels.getGlobalProperties(tag));
+                shaderContext.setGlobalPropertyContainer(graphModels.getGlobalProperties(shader.getTag()));
                 shader.begin(shaderContext, context.getRenderContext());
                 runningShader = shader;
             }

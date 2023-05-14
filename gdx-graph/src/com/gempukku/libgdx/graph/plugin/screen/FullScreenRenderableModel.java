@@ -8,6 +8,7 @@ import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 
@@ -25,7 +26,7 @@ public class FullScreenRenderableModel implements RenderableModel {
     }
 
     @Override
-    public boolean isRendered(Camera camera) {
+    public boolean isRendered(GraphShader graphShader, Camera camera) {
         return true;
     }
 

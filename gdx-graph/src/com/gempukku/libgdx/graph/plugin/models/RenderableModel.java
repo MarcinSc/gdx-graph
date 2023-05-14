@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 
 public interface RenderableModel {
@@ -24,7 +25,7 @@ public interface RenderableModel {
      * @param camera
      * @return
      */
-    boolean isRendered(Camera camera);
+    boolean isRendered(GraphShader graphShader, Camera camera);
 
     /**
      * Should return a world transform to use with the given 'tag' (shader).

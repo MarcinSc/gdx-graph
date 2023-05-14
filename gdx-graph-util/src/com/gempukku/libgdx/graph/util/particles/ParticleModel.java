@@ -110,18 +110,18 @@ public class ParticleModel implements Disposable {
                     new SpriteSlotMemoryMesh<>(spriteCapacity,
                             spriteModel, spriteSerializer);
             GdxMeshRenderableModel gdxMesh = new GdxMeshRenderableModel(false, meshModel,
-                    vertexAttributes, propertyContainer);
+                    vertexAttributes, propertyContainer, tag);
             ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model =
                     new ParticleMultiPartRenderableModelGdx<>(meshModel, gdxMesh);
             lastSpriteModel = model;
             models.add(model);
-            graphModels.addModel(tag, model);
+            graphModels.addModel(model);
             return model;
         }
 
         @Override
         public void dispose(ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model) {
-            graphModels.removeModel(tag, model);
+            graphModels.removeModel(model);
             model.dispose();
             models.remove(model);
         }

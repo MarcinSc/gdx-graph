@@ -13,24 +13,19 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.time.TimeProvider;
 
 public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
-    private final ObjectMap<String, ObjectSet<RenderableModel>> modelsByTag = new ObjectMap<>();
+    private final ObjectSet<RenderableModel> models = new ObjectSet<>();
     private final ObjectMap<String, GraphShader> shaderByTag = new ObjectMap<>();
     private final ObjectMap<String, MapWritablePropertyContainer> propertiesForTag = new ObjectMap<>();
 
     public void registerTag(String tag, GraphShader shader) {
-        if (modelsByTag.containsKey(tag))
+        if (shaderByTag.containsKey(tag))
             throw new IllegalStateException("There is already a shader with tag: " + tag);
-        modelsByTag.put(tag, new ObjectSet<RenderableModel>());
         shaderByTag.put(tag, shader);
         propertiesForTag.put(tag, new MapWritablePropertyContainer());
     }
 
-    public Iterable<? extends RenderableModel> getModels(String tag) {
-        return modelsByTag.get(tag);
-    }
-
-    public boolean hasModelWithTag(String tag) {
-        return !modelsByTag.get(tag).isEmpty();
+    public Iterable<? extends RenderableModel> getModels() {
+        return models;
     }
 
     public PropertyContainer getGlobalProperties(String tag) {
@@ -54,13 +49,13 @@ public class GraphModelsImpl implements GraphModels, RuntimePipelinePlugin {
     }
 
     @Override
-    public void addModel(String tag, RenderableModel model) {
-        modelsByTag.get(tag).add(model);
+    public void addModel(RenderableModel model) {
+        models.add(model);
     }
 
     @Override
-    public void removeModel(String tag, RenderableModel model) {
-        modelsByTag.get(tag).remove(model);
+    public void removeModel(RenderableModel model) {
+        models.remove(model);
     }
 
     @Override

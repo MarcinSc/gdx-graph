@@ -9,20 +9,18 @@ import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
  */
 public interface GraphModels {
     /**
-     * Adds a provided model to be rendered with the provided 'tag' (shader).
+     * Adds a provided model to be rendered.
      *
-     * @param tag
      * @param model
      */
-    void addModel(String tag, RenderableModel model);
+    void addModel(RenderableModel model);
 
     /**
      * Removes the provided model from being rendered.
      *
-     * @param tag
      * @param model
      */
-    void removeModel(String tag, RenderableModel model);
+    void removeModel(RenderableModel model);
 
     /**
      * Returns a definition of shader properties for a given 'tag' (shader).

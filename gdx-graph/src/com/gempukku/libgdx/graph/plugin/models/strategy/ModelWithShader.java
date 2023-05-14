@@ -2,10 +2,11 @@ package com.gempukku.libgdx.graph.plugin.models.strategy;
 
 import com.badlogic.gdx.utils.Pool;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 
-public class ModelWithTag implements Pool.Poolable {
+public class ModelWithShader implements Pool.Poolable {
     private RenderableModel renderableModel;
-    private String tag;
+    private GraphShader shader;
 
     public RenderableModel getRenderableModel() {
         return renderableModel;
@@ -15,17 +16,17 @@ public class ModelWithTag implements Pool.Poolable {
         this.renderableModel = renderableModel;
     }
 
-    public String getTag() {
-        return tag;
+    public GraphShader getShader() {
+        return shader;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setShader(GraphShader shader) {
+        this.shader = shader;
     }
 
     @Override
     public void reset() {
         renderableModel = null;
-        tag = null;
+        shader = null;
     }
 }

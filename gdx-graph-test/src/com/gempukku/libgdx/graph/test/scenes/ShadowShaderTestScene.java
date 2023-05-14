@@ -85,7 +85,6 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
         sphereAdapter.getPropertyContainer().setValue("Color", Color.RED);
 
         wallAdapter.addTag("Color");
-        wallAdapter.addTag("Color Shadow");
         sphereAdapter.addTag("Color");
         sphereAdapter.addTag("Color Shadow");
 

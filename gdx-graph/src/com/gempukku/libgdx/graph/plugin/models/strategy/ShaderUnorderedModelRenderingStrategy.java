@@ -4,15 +4,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.plugin.models.impl.GraphModelsImpl;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 
 public class ShaderUnorderedModelRenderingStrategy implements ModelRenderingStrategy {
     @Override
-    public void processModels(GraphModelsImpl models, Array<String> tags, Camera camera, StrategyCallback callback) {
+    public void processModels(GraphModelsImpl models, Array<GraphShader> shaders, Camera camera, StrategyCallback callback) {
         callback.begin();
-        for (String tag : tags) {
-            for (RenderableModel model : models.getModels(tag)) {
-                if (model.isRendered(camera)) {
-                    callback.process(model, tag);
+        for (GraphShader shader : shaders) {
+            for (RenderableModel model : models.getModels()) {
+                if (model.isRendered(shader, camera)) {
+                    callback.process(model, shader);
                 }
             }
         }
