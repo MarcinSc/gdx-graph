@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
@@ -18,20 +17,10 @@ public class ModelShaderLoader {
         return loadShader(fileHandle, tag, depthShader, new InternalFileHandleResolver());
     }
 
-    public static GraphShader loadShader(JsonValue jsonGraph, String tag, boolean depthShader) {
-        return loadShader(jsonGraph, tag, depthShader, new InternalFileHandleResolver());
-    }
-
     public static GraphShader loadShader(FileHandle fileHandle, String tag, boolean depthShader, FileHandleResolver assetResolver) {
-        JsonReader jsonReader = new JsonReader();
-        JsonValue graph = jsonReader.parse(fileHandle);
-        return loadShader(graph, tag, depthShader, assetResolver);
-    }
-
-    public static GraphShader loadShader(JsonValue jsonGraph, String tag, boolean depthShader, FileHandleResolver assetResolver) {
         GraphType graphType = GraphTypeRegistry.findGraphType(ModelShaderGraphType.TYPE);
 
-        GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), jsonGraph);
+        GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), new JsonReader().parse(fileHandle));
 
         if (graphType.getGraphValidator().validateGraph(graph, graphType.getStartNodeIdForValidation()).hasErrors())
             throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");

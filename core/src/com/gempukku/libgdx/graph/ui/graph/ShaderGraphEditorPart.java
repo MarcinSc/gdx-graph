@@ -35,7 +35,6 @@ public class ShaderGraphEditorPart extends VisTable implements GraphNodeEditorPa
         shaderGroup.grow();
 
         VisTable table = new VisTable();
-        table.setDebug(true);
         table.add(new VisLabel("Tag", "gdx-graph-property-label")).width(TAG_WIDTH);
         table.add(new VisLabel("Name", "gdx-graph-property-label")).width(NAME_WIDTH);
         table.add(new VisLabel("Actions", "gdx-graph-property-label")).width(BUTTONS_WIDTH);
