@@ -31,7 +31,8 @@ public class PropertyVector3EditorDefinition implements PropertyEditorDefinition
         result.addPropertyEditorPart(new Vector3EditorPart("Vector3",
                 "x", "y", "z",
                 0, 0, 0,
-                null, null, null));
+                null, null, null,
+                "gdx-graph-property-label", "gdx-graph-property"));
         result.initialize(jsonObject);
         return result;
     }

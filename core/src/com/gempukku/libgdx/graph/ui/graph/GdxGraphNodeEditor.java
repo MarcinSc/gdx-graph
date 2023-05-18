@@ -24,13 +24,19 @@ import java.util.Map;
 public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEditor, GraphChangedAware {
     private static final String ioLabelStyle = "gdx-graph-io-label";
 
+    private String nodeId;
     private NodeConfiguration configuration;
     private List<GraphNodeEditorPart> editorParts = new LinkedList<>();
     private Map<String, GraphNodeEditorInput> inputConnectors = new HashMap<>();
     private Map<String, GraphNodeEditorOutput> outputConnectors = new HashMap<>();
 
-    public GdxGraphNodeEditor(NodeConfiguration configuration) {
+    public GdxGraphNodeEditor(String nodeId, NodeConfiguration configuration) {
+        this.nodeId = nodeId;
         this.configuration = configuration;
+    }
+
+    public String getNodeId() {
+        return nodeId;
     }
 
     @Override

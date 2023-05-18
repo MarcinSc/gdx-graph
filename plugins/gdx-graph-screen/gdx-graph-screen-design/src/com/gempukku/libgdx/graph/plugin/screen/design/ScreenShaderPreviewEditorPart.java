@@ -10,6 +10,7 @@ import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.shader.builder.ScreenGraphShaderRecipe;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
 import com.gempukku.libgdx.graph.ui.graph.RequestTabOpen;
@@ -46,8 +47,9 @@ public class ScreenShaderPreviewEditorPart implements GraphNodeEditorPart, Graph
                     }
                 });
 
-        shaderPreviewWidget = new ScreenShaderPreview();
-        tabShaderPreviewWidget = new ScreenShaderPreview();
+        ScreenGraphShaderRecipe screenShaderRecipe = new ScreenGraphShaderRecipe();
+        shaderPreviewWidget = new ScreenShaderPreview(screenShaderRecipe);
+        tabShaderPreviewWidget = new ScreenShaderPreview(screenShaderRecipe);
 
         localTable.add(maximizeButton).right().row();
         localTable.add(shaderPreviewWidget).width(300).height(300).row();

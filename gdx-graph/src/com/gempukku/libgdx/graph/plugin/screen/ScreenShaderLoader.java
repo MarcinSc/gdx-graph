@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
+import com.gempukku.libgdx.graph.shader.builder.GraphShaderBuilder;
 
 public class ScreenShaderLoader {
     public static GraphShader loadShader(FileHandle graphFile, String tag) {

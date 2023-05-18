@@ -43,8 +43,8 @@ public abstract class ValueGraphEditorProducer implements MenuGraphNodeEditorPro
     }
 
     @Override
-    public GraphNodeEditor createNodeEditor(JsonValue data) {
-        GdxGraphNodeEditor graphNodeEditor = new GdxGraphNodeEditor(configuration);
+    public GraphNodeEditor createNodeEditor(String nodeId, JsonValue data) {
+        GdxGraphNodeEditor graphNodeEditor = new GdxGraphNodeEditor(nodeId, configuration);
         graphNodeEditor.addGraphEditorPart(createValuePart());
 
         if (data != null)

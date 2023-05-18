@@ -12,6 +12,7 @@ import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.shader.builder.ParticlesGraphShaderRecipe;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
 import com.gempukku.libgdx.graph.ui.graph.RequestTabOpen;
@@ -120,13 +121,14 @@ public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, Gr
         tabResetButton = new VisTextButton("Reset particles", "gdx-graph-property-label");
         tabResetButton.padLeft(10).padRight(10);
 
-        shaderPreviewWidget = new ParticlesShaderPreview();
+        ParticlesGraphShaderRecipe particlesShaderRecipe = new ParticlesGraphShaderRecipe();
+        shaderPreviewWidget = new ParticlesShaderPreview(particlesShaderRecipe);
         shaderPreviewWidget.setModel(ParticlesShaderPreview.ShaderPreviewModel.Point);
         shaderPreviewWidget.setCameraDistance(1f);
         shaderPreviewWidget.setLifetime(3f);
         shaderPreviewWidget.setInitialCount(0);
         shaderPreviewWidget.setParticlesPerSecond(10f);
-        tabShaderPreviewWidget = new ParticlesShaderPreview();
+        tabShaderPreviewWidget = new ParticlesShaderPreview(particlesShaderRecipe);
         tabShaderPreviewWidget.setModel(ParticlesShaderPreview.ShaderPreviewModel.Point);
         tabShaderPreviewWidget.setCameraDistance(1f);
         tabShaderPreviewWidget.setLifetime(3f);

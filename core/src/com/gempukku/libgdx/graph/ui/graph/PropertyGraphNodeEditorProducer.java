@@ -41,10 +41,10 @@ public class PropertyGraphNodeEditorProducer implements MenuGraphNodeEditorProdu
     }
 
     @Override
-    public GdxGraphNodeEditor createNodeEditor(JsonValue data) {
+    public GdxGraphNodeEditor createNodeEditor(String nodeId, JsonValue data) {
         final String name = data.getString("name");
         final String propertyType = data.getString("type");
-        GdxGraphNodeEditor result = new GdxGraphNodeEditor(new PropertyNodeConfiguration(name, propertyType)) {
+        GdxGraphNodeEditor result = new GdxGraphNodeEditor(nodeId, new PropertyNodeConfiguration(name, propertyType)) {
             @Override
             public JsonValue getData() {
                 JsonValue result = super.getData();

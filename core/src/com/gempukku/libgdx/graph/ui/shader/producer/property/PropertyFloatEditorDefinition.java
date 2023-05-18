@@ -29,7 +29,7 @@ public class PropertyFloatEditorDefinition implements PropertyEditorDefinition {
     @Override
     public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue data, PropertyLocation[] propertyLocations) {
         DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.Float, location, propertyLocations);
-        result.addPropertyEditorPart(new FloatEditorPart("Value", "x", 0, null));
+        result.addPropertyEditorPart(new FloatEditorPart("Value", "x", 0, null, "gdx-graph-property-label", "gdx-graph-property"));
         if (data != null)
             result.initialize(data);
 

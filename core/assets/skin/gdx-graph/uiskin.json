@@ -124,7 +124,7 @@
     "connector-left-invalid": {
       "name": "connector-left",
       "color": "gdx-graph-error"
-    }
+    },
     "connector-top-required-invalid": {
       "name": "connector-top-required",
       "color": "gdx-graph-error"

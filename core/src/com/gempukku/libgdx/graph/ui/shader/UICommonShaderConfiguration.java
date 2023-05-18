@@ -22,6 +22,7 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetS
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.PreviewShaderGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderEditorProducer;
@@ -121,14 +122,14 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new GdxGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
         register(new GradientShaderEditorProducer());
 
-        register(new GdxGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration(), "output", 150, 150));
 
         register(new GdxGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration()));
         register(new GdxGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration()));

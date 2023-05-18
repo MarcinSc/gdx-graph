@@ -10,6 +10,10 @@ public class GraphTypeRegistry {
         return types.get(name);
     }
 
+    public static <T extends GraphType> T findGraphType(String name, Class<T> clazz) {
+        return (T) types.get(name);
+    }
+
     public static Iterable<? extends GraphType> getAllGraphTypes() {
         return types.values();
     }

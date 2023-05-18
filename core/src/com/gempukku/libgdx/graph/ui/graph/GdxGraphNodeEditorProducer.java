@@ -49,8 +49,8 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
     }
 
     @Override
-    public GraphNodeEditor createNodeEditor(JsonValue data) {
-        GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(configuration) {
+    public GraphNodeEditor createNodeEditor(String nodeId, JsonValue data) {
+        GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(nodeId, configuration) {
             @Override
             protected void initializeWidget() {
                 awareChildren.add(this);

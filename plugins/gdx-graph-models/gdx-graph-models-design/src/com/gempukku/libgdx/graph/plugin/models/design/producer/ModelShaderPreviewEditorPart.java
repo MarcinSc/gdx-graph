@@ -10,9 +10,11 @@ import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.shader.builder.ModelGraphShaderRecipe;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
 import com.gempukku.libgdx.graph.ui.graph.RequestTabOpen;
+import com.gempukku.libgdx.graph.ui.preview.ModelShaderPreview;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
@@ -55,8 +57,9 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
                     }
                 });
 
-        shaderPreviewWidget = new ModelShaderPreview();
-        tabShaderPreviewWidget = new ModelShaderPreview();
+        ModelGraphShaderRecipe modelShaderRecipe = new ModelGraphShaderRecipe();
+        shaderPreviewWidget = new ModelShaderPreview(modelShaderRecipe);
+        tabShaderPreviewWidget = new ModelShaderPreview(modelShaderRecipe);
 
         selectBox = new VisSelectBox<>("gdx-graph-property");
         selectBox.setItems(ModelShaderPreview.ShaderPreviewModel.values());

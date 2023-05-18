@@ -31,19 +31,19 @@ public class PropertyMatrix4EditorDefinition implements PropertyEditorDefinition
         result.addPropertyEditorPart(new Vector4EditorPart("",
                 "x1", "y1", "z1", "w1",
                 1, 0, 0, 0,
-                null, null, null, null));
+                null, null, null, null, "gdx-graph-property-label", "gdx-graph-property"));
         result.addPropertyEditorPart(new Vector4EditorPart("",
                 "x2", "y2", "z2", "w2",
                 0, 1, 0, 0,
-                null, null, null, null));
+                null, null, null, null, "gdx-graph-property-label", "gdx-graph-property"));
         result.addPropertyEditorPart(new Vector4EditorPart("",
                 "x3", "y3", "z3", "w3",
                 0, 0, 1, 0,
-                null, null, null, null));
+                null, null, null, null, "gdx-graph-property-label", "gdx-graph-property"));
         result.addPropertyEditorPart(new Vector4EditorPart("",
                 "x4", "y4", "z4", "w4",
                 0, 0, 0, 1,
-                null, null, null, null));
+                null, null, null, null, "gdx-graph-property-label", "gdx-graph-property"));
         result.initialize(jsonObject);
         return result;
     }

@@ -28,7 +28,8 @@ public class PropertyVector2EditorDefinition implements PropertyEditorDefinition
     @Override
     public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.Vector2, location, propertyLocations);
-        result.addPropertyEditorPart(new Vector2EditorPart("Vector2", "x", "y", 0, 0, null, null));
+        result.addPropertyEditorPart(new Vector2EditorPart("Vector2", "x", "y", 0, 0, null, null,
+                "gdx-graph-property-label", "gdx-graph-property"));
         result.initialize(jsonObject);
         return result;
     }

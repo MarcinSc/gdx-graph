@@ -1,6 +1,8 @@
 package com.gempukku.libgdx.graph.ui.graph.property;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
@@ -8,6 +10,7 @@ import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.gempukku.libgdx.ui.undo.UndoableTextField;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -27,7 +30,10 @@ public class DefaultPropertyEditor extends VisTable implements PropertyEditor {
         if (propertyLocations.length>0) {
             if (selectedLocation == null)
                 selectedLocation = propertyLocations[0];
-            locationPart = new EnumSelectEditorPart<>("Location", "location", selectedLocation, new ToStringEnum<>(), new Array<>(propertyLocations));
+            locationPart = new EnumSelectEditorPart<>("Location", "location", selectedLocation, new ToStringEnum<>(),
+                    VisUI.getSkin().get("gdx-graph-property-label", Label.LabelStyle.class),
+                    VisUI.getSkin().get("gdx-graph-property", SelectBox.SelectBoxStyle.class),
+                    new Array<>(propertyLocations));
         }
 
         nameField = new UndoableTextField(name, "gdx-graph-property");

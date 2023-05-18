@@ -29,7 +29,8 @@ public class BoneTransformPropertyEditorDefinition implements PropertyEditorDefi
     @Override
     public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyEditor result = new DefaultPropertyEditor(name, BoneTransformFieldType.type, location, propertyLocations);
-        result.addPropertyEditorPart(new IntegerEditorPart("Max bone count", "maxBoneCount", 12, new Validators.GreaterThanValidator(0)));
+        result.addPropertyEditorPart(new IntegerEditorPart("Max bone count", "maxBoneCount", 12, new Validators.GreaterThanValidator(0),
+                "gdx-graph-property-label", "gdx-graph-property"));
         result.initialize(jsonObject);
 
         return result;

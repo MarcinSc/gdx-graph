@@ -16,7 +16,7 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
 import com.gempukku.libgdx.graph.plugin.screen.FullScreenRenderableModel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
+import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 public class ScreenShaderPreview extends VisTable implements Disposable {
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
+    private final GraphShaderRecipe shaderRecipe;
 
     private GraphWithProperties graph;
 
@@ -45,7 +46,8 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
-    public ScreenShaderPreview() {
+    public ScreenShaderPreview(GraphShaderRecipe shaderRecipe) {
+        this.shaderRecipe = shaderRecipe;
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
@@ -100,7 +102,7 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
 
     private void createShader(final GraphWithProperties graph) {
         try {
-            graphShader = GraphShaderBuilder.buildScreenShader("Test", AssetResolver.instance, graph, true);
+            graphShader = shaderRecipe.buildGraphShader("Test", true, graph, AssetResolver.instance);
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {
