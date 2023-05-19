@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.ui.preview;
+package com.gempukku.libgdx.graph.plugin.models.design.producer;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Mesh;
@@ -15,17 +15,17 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.ui.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 
-public class MeshBasedRenderableModel implements RenderableModel, Disposable {
+public class MeshBasedRenderableModel implements PreviewRenderableModel, Disposable {
     private final int vertexCount;
     private final short[] indices;
     private final ObjectSet<String> tags = new ObjectSet<>();
@@ -104,6 +104,7 @@ public class MeshBasedRenderableModel implements RenderableModel, Disposable {
         return new ArrayValuePerVertex<>(result.toArray());
     }
 
+    @Override
     public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
                             ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
         if (propertiesRenderableModel != null)

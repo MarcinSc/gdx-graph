@@ -20,8 +20,13 @@ public class PreviewShaderGraphNodeEditorProducer extends GdxGraphNodeEditorProd
     @Override
     protected void buildNodeEditorAfterIO(GdxGraphNodeEditor graphNodeEditor, NodeConfiguration configuration) {
         PreviewShaderEditorPart previewShaderEditorPart = new PreviewShaderEditorPart(graphNodeEditor.getNodeId(), output, width, height);
-        graphNodeEditor.addGraphEditorPart(
-                new GraphAwareCollapsibleSectionEditorPart("preview.expanded", previewShaderEditorPart, "Preview",
-                "default", "default"));
+        GraphAwareCollapsibleSectionEditorPart sectionEditorPart = new GraphAwareCollapsibleSectionEditorPart("preview.expanded", previewShaderEditorPart, "Preview",
+                "gdx-graph-preview", "default") {
+            @Override
+            public float getPrefWidth() {
+                return width;
+            }
+        };
+        graphNodeEditor.addGraphEditorPart(sectionEditorPart);
     }
 }

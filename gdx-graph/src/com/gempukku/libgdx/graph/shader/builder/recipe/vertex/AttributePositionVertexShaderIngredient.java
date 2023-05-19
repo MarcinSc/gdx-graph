@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.shader.builder.recipe.vertex;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredient;
@@ -29,9 +28,7 @@ public class AttributePositionVertexShaderIngredient implements GraphShaderRecip
         vertexShaderBuilder.addVaryingVariable("v_position_world", "vec3");
         vertexShaderBuilder.addMainLine("v_position_world = positionWorld;");
 
-        vertexShaderBuilder.addUniformVariable("u_projViewTrans", "mat4", true, UniformSetters.projViewTrans,
-                "Project view transformation");
         vertexShaderBuilder.addMainLine("// End Graph Node");
-        vertexShaderBuilder.addMainLine("gl_Position = u_projViewTrans * vec4(positionWorld, 1.0);");
+        vertexShaderBuilder.addMainLine("gl_Position = vec4((positionWorld.xy * 2.0 - 1.0), 0.0, 1.0);");
     }
 }

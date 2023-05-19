@@ -109,6 +109,10 @@
       "name": "graph-icon-down",
       "color": "gdx-graph-disabled"
     },
+    "graph-icon-right-disabled": {
+      "name": "graph-icon-right",
+      "color": "gdx-graph-disabled"
+    },
     "connector-top-invalid": {
       "name": "connector-top",
       "color": "gdx-graph-error"
@@ -218,6 +222,19 @@
   },
   "com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle": {
     "gdx-graph-window-close": "assistant-tab-close"
+  },
+  "com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle": {
+    "gdx-graph-preview": {
+      "imageUp": "graph-icon-right-disabled",
+      "imageChecked": "graph-icon-down-disabled",
+      "down": "button-over",
+      "up": "button",
+      "over": "button-over",
+      "disabled": "button",
+      "font": "gdx-graph-small-font",
+      "fontColor": "gdx-graph-grey",
+      "disabledFontColor": "gdx-graph-grey"
+    }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
     "gdx-graph": {

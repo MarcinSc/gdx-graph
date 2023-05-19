@@ -31,7 +31,7 @@ public class PropertyColorEditorDefinition implements PropertyEditorDefinition {
     @Override
     public PropertyEditor createPropertyEditor(String name, PropertyLocation location, JsonValue jsonObject, PropertyLocation[] propertyLocations) {
         DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.Vector4, location, propertyLocations);
-        result.addPropertyEditorPart(new ColorEditorPart(ColorPickerSupplier.instance, "Color", "color", Color.WHITE, "gdx-graph-property"));
+        result.addPropertyEditorPart(new ColorEditorPart(ColorPickerSupplier.instance, "Color", "color", Color.WHITE, "gdx-graph-property-label"));
         result.initialize(jsonObject);
 
         return result;

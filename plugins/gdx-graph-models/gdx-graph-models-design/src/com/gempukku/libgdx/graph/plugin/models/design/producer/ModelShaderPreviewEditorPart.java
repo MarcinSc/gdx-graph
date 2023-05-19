@@ -4,7 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.libgdx.common.Function;
@@ -14,7 +13,6 @@ import com.gempukku.libgdx.graph.shader.builder.ModelGraphShaderRecipe;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
 import com.gempukku.libgdx.graph.ui.graph.RequestTabOpen;
-import com.gempukku.libgdx.graph.ui.preview.ModelShaderPreview;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
@@ -25,7 +23,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphChangedAware, Disposable {
+public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphChangedAware {
     private final String modelTypeProperty;
 
     private final ModelShaderPreview shaderPreviewWidget;
@@ -158,11 +156,5 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
             shaderPreviewWidget.graphChanged(hasErrors, graph);
             tabShaderPreviewWidget.graphChanged(hasErrors, graph);
         }
-    }
-
-    @Override
-    public void dispose() {
-        shaderPreviewWidget.dispose();
-        tabShaderPreviewWidget.dispose();
     }
 }

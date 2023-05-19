@@ -1,14 +1,12 @@
 package com.gempukku.libgdx.graph.ui.preview;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
@@ -26,21 +24,17 @@ import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
 import com.gempukku.libgdx.graph.ui.shader.GraphShaderRenderingWidget;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.WhitePixel;
-import com.kotcrab.vis.ui.widget.VisTable;
+import com.gempukku.libgdx.ui.DisposableTable;
 
-public class ModelShaderPreview extends VisTable implements Disposable {
+public class ShaderPreview extends DisposableTable {
     private final GraphShaderRecipe shaderRecipe;
-
-    public enum ShaderPreviewModel {
-        Sphere, Rectangle;
-    }
 
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
 
     private GraphWithProperties graph;
 
     private GraphShader graphShader;
-    private MeshBasedRenderableModel renderableModel;
+    private PreviewRenderableModel renderableModel;
 
     private final Camera camera;
     private final DefaultTimeKeeper timeKeeper;
@@ -48,12 +42,12 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
-    public ModelShaderPreview(GraphShaderRecipe shaderRecipe) {
+    public ShaderPreview(GraphShaderRecipe shaderRecipe) {
         this.shaderRecipe = shaderRecipe;
         camera = new PerspectiveCamera();
         camera.near = 0.1f;
         camera.far = 100f;
-        camera.position.set(-0.9f, 0f, 0f);
+        camera.position.set(0f, 0f, 0.9f);
         camera.up.set(0f, 1f, 0f);
         camera.lookAt(0, 0f, 0f);
         camera.update();
@@ -72,7 +66,6 @@ public class ModelShaderPreview extends VisTable implements Disposable {
         graphShaderRenderingWidget.setGlobalPropertyContainer(globalPropertyContainer);
         graphShaderRenderingWidget.setLocalPropertyContainer(localPropertyContainer);
 
-        renderableModel = createRenderableModel(ShaderPreviewModel.Sphere);
         graphShaderRenderingWidget.setRenderableModel(renderableModel);
 
         add(graphShaderRenderingWidget).grow();
@@ -82,7 +75,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
         Lighting3DEnvironment graphShaderLightingEnvironment = new Lighting3DEnvironment();
         graphShaderLightingEnvironment.setAmbientColor(new Color(0.1f, 0.1f, 0.1f, 1f));
         PointLight pointLight = new PointLight();
-        pointLight.set(Color.WHITE, -4f, 1.8f, 1.8f, 8f);
+        pointLight.set(Color.WHITE, 1.8f, 1.8f, 4f, 8f);
         graphShaderLightingEnvironment.addPointLight(new Point3DLight(pointLight));
 
         final Lighting3DPrivateData data = new Lighting3DPrivateData();
@@ -90,57 +83,24 @@ public class ModelShaderPreview extends VisTable implements Disposable {
         return data;
     }
 
-    private MeshBasedRenderableModel createRenderableModel(ShaderPreviewModel shaderPreviewModel) {
-        Model model = createModel(shaderPreviewModel);
-
-        MeshBasedRenderableModel result = new MeshBasedRenderableModel(model.meshes.get(0));
-        model.dispose();
-
-        return result;
-    }
-
-    private Model createModel(ShaderPreviewModel shaderPreviewModel) {
-        ModelBuilder modelBuilder = new ModelBuilder();
-        Material material = new Material();
-
-        switch (shaderPreviewModel) {
-            case Rectangle:
-                return modelBuilder.createRect(
-                        0, -0.5f, -0.5f,
-                        0, -0.5f, 0.5f,
-                        0, 0.5f, 0.5f,
-                        0, 0.5f, -0.5f,
-                        1, 0, 0,
-                        material,
-                        VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-            case Sphere:
-                float sphereDiameter = 0.8f;
-                return modelBuilder.createSphere(sphereDiameter, sphereDiameter, sphereDiameter, 50, 50,
-                        material,
-                        VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
-        }
-        return null;
-    }
-
-    public void setModel(ShaderPreviewModel model) {
-        if (renderableModel != null) {
-            renderableModel.dispose();
-        }
-        renderableModel = createRenderableModel(model);
+    public void setRenderableModel(PreviewRenderableModel renderableModel) {
+        this.renderableModel = renderableModel;
         if (graphShader != null) {
-            renderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+            this.renderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
         }
         graphShaderRenderingWidget.setRenderableModel(renderableModel);
     }
 
     @Override
-    protected void setStage(Stage stage) {
-        super.setStage(stage);
-        if (stage == null) {
-            destroyShader();
-        } else if (graphShader == null && graph != null) {
+    protected void initializeWidget() {
+        if (graphShader == null && graph != null) {
             createShader(graph);
         }
+    }
+
+    @Override
+    protected void disposeWidget() {
+        destroyShader();
     }
 
     private void createShader(final GraphWithProperties graph) {
@@ -191,7 +151,9 @@ public class ModelShaderPreview extends VisTable implements Disposable {
                 }
             }
 
-            renderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+            if (renderableModel != null) {
+                renderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+            }
 
             graphShaderRenderingWidget.setGraphShader(graphShader);
         } catch (Exception exp) {
@@ -209,14 +171,7 @@ public class ModelShaderPreview extends VisTable implements Disposable {
     }
 
     @Override
-    public void dispose() {
-        destroyShader();
-        renderableModel.dispose();
-    }
-
-    @Override
     public void act(float delta) {
-        // Update time keeper
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
         super.act(delta);
