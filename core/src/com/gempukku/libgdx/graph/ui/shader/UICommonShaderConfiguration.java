@@ -57,69 +57,69 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        register(new GdxGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration(), "color", 150, 150));
         register(new UVFlipbookShaderEditorProducer());
-        register(new GdxGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration(), "output", 150, 150));
         register(new GdxGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
 
-        register(new GdxGraphNodeEditorProducer(new AddShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SubtractShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new DivideShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new AddShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SubtractShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new DivideShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new PowerShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new PowerShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new SinShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new CosShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new TanShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ArccosShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ArctanShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new RadiansShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new DegreesShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new SinShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new CosShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new TanShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ArccosShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ArctanShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new RadiansShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new DegreesShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new AbsShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SignShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new FloorShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new CeilingShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ModuloShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new MinimumShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new MaximumShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new ClampShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SaturateShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new LerpShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new AbsShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SignShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new FloorShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new CeilingShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ModuloShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new MinimumShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new MaximumShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new ClampShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SaturateShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new LerpShaderNodeConfiguration(), "output", 150, 150));
         register(new ConditionalShaderEditorProducer());
-        register(new GdxGraphNodeEditorProducer(new StepShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new StepShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new LengthShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new DistanceShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new DotProductShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new LengthShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new DistanceShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new DotProductShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration(), "output", 150, 150));
 
         register(new GdxGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new MergeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new RemapShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new MergeShaderNodeConfiguration(), "color", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new RemapShaderNodeConfiguration(), "output", 150, 150));
         register(new RemapVectorShaderEditorProducer());
         register(new RemapValueShaderEditorProducer());
 
         register(new DitherShaderEditorProducer());
         register(new DitherColorShaderEditorProducer());
-        register(new GdxGraphNodeEditorProducer(new IntensityShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new IntensityShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration(), "output", 150, 150));
         register(new GradientShaderEditorProducer());
 
         register(new PreviewShaderGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration(), "output", 150, 150));
@@ -131,11 +131,11 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
         register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration(), "output", 150, 150));
         register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration(), "output", 150, 150));
 
-        register(new GdxGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration()));
-        register(new GdxGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration()));
+        register(new PreviewShaderGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new PreviewShaderGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration(), "output", 150, 150));
 
         register(new TimeShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));

@@ -24,9 +24,6 @@ import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 
 public class ValueColorEditorProducer extends ValueGraphEditorProducer {
-    private VisImage image;
-    private Color oldColor;
-
     public ValueColorEditorProducer(MenuNodeConfiguration configuration) {
         super(configuration);
     }
@@ -34,7 +31,7 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
     @Override
     protected DefaultGraphNodeEditorPart createValuePart() {
         Color color = Color.valueOf("FFFFFFFF");
-        oldColor = color;
+        Color oldColor = new Color(color);
 
         final TextureRegionDrawable drawable = new TextureRegionDrawable(WhitePixel.sharedInstance.texture);
         BaseDrawable baseDrawable = new BaseDrawable(drawable) {
@@ -45,7 +42,7 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
         };
         baseDrawable.setMinWidth(20);
 
-        image = new VisImage(baseDrawable);
+        VisImage image = new VisImage(baseDrawable);
         image.setColor(color);
 
         image.addListener(
@@ -59,7 +56,7 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
                                     @Override
                                     public void finished(Color newColor) {
                                         if (!oldColor.equals(newColor)) {
-                                            setPickedColor(newColor);
+                                            setPickedColor(image, oldColor, newColor);
                                         }
                                     }
                                 });
@@ -84,7 +81,7 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
             @Override
             public void initialize(JsonValue data) {
                 if (data != null)
-                    setPickedColor(Color.valueOf(data.getString("color", "FFFFFFFF")));
+                    setPickedColor(image, oldColor, Color.valueOf(data.getString("color", "FFFFFFFF")));
             }
         };
         GraphNodeOutput output = configuration.getNodeOutputs().get("value");
@@ -92,32 +89,34 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
         return colorPart;
     }
 
-    private void setPickedColor(Color color) {
+    private void setPickedColor(VisImage image, Color oldColor, Color color) {
         image.setColor(color);
         UndoableChangeEvent event = Pools.obtain(UndoableChangeEvent.class);
-        event.setUndoableAction(new SetColorAction(oldColor, color));
+        event.setUndoableAction(new SetColorAction(image, new Color(oldColor), new Color(color)));
         image.fire(event);
         Pools.free(event);
-        oldColor = color;
+        oldColor.set(color);
     }
 
     private class SetColorAction extends DefaultUndoableAction {
+        private final VisImage image;
         private final Color oldColor;
         private final Color newColor;
 
-        public SetColorAction(Color oldColor, Color newColor) {
+        public SetColorAction(VisImage image, Color oldColor, Color newColor) {
+            this.image = image;
             this.oldColor = oldColor;
             this.newColor = newColor;
         }
 
         @Override
         public void undoAction() {
-            setPickedColor(oldColor);
+            setPickedColor(image, newColor, oldColor);
         }
 
         @Override
         public void redoAction() {
-            setPickedColor(newColor);
+            setPickedColor(image, oldColor, newColor);
         }
     }
 }

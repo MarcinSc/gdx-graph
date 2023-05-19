@@ -42,6 +42,8 @@ public class ShaderPreview extends DisposableTable {
     private final MapWritablePropertyContainer globalPropertyContainer;
     private final MapWritablePropertyContainer localPropertyContainer;
 
+    private boolean initialized = false;
+
     public ShaderPreview(GraphShaderRecipe shaderRecipe) {
         this.shaderRecipe = shaderRecipe;
         camera = new PerspectiveCamera();
@@ -93,6 +95,7 @@ public class ShaderPreview extends DisposableTable {
 
     @Override
     protected void initializeWidget() {
+        initialized = true;
         if (graphShader == null && graph != null) {
             createShader(graph);
         }
@@ -101,6 +104,7 @@ public class ShaderPreview extends DisposableTable {
     @Override
     protected void disposeWidget() {
         destroyShader();
+        initialized = false;
     }
 
     private void createShader(final GraphWithProperties graph) {
@@ -183,7 +187,9 @@ public class ShaderPreview extends DisposableTable {
             this.graph = null;
         } else {
             this.graph = graph;
-            createShader(graph);
+            if (initialized) {
+                createShader(graph);
+            }
         }
     }
 }
