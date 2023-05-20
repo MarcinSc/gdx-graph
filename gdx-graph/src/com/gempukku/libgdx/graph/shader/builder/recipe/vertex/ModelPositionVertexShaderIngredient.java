@@ -8,15 +8,14 @@ import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.source.FieldOutputSource;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 
 public class ModelPositionVertexShaderIngredient implements GraphShaderRecipeIngredient {
-    private String inputNodeId;
-    private String inputProperty;
+    private final FieldOutputSource positionSource;
 
-    public ModelPositionVertexShaderIngredient(String inputNodeId, String inputProperty) {
-        this.inputNodeId = inputNodeId;
-        this.inputProperty = inputProperty;
+    public ModelPositionVertexShaderIngredient(FieldOutputSource positionSource) {
+        this.positionSource = positionSource;
     }
 
     @Override
@@ -24,9 +23,9 @@ public class ModelPositionVertexShaderIngredient implements GraphShaderRecipeIng
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
-        GraphShaderNodeBuilder.FieldOutput positionField = outputResolver.getSingleOutputForInput(inputNodeId, inputProperty);
+        GraphShaderNodeBuilder.FieldOutput positionField = positionSource.resolveOutput(outputResolver);
 
-        String positionType = graph.getNodeById(inputNodeId).getData().getString("positionType", "World space");
+        String positionType = positionSource.resolveNode(graph).getData().getString("positionType", "World space");
         if (positionType.equals("World space")) {
             vertexShaderBuilder.addMainLine("vec3 positionWorld = " + positionField.getRepresentation() + ";");
         } else if (positionType.equals("Object space")) {

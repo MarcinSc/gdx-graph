@@ -357,7 +357,7 @@ public class GraphWithPropertiesEditor extends VisTable {
         for (UIGraphConfiguration uiGraphConfiguration : type.getUIConfigurations()) {
             for (MenuGraphNodeEditorProducer graphNodeEditorProducer : uiGraphConfiguration.getGraphNodeEditorProducers()) {
                 if (graphNodeEditorProducer instanceof GraphChangedAware) {
-                    ((GraphChangedAware) graphNodeEditorProducer).graphChanged(event, validationResult.hasErrors(), graph);
+                    ((GraphChangedAware) graphNodeEditorProducer).graphChanged(event, graph);
                 }
             }
         }

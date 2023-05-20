@@ -27,9 +27,9 @@ public class GraphAwareCollapsibleSectionEditorPart extends CollapsibleSectionEd
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         if (graphNodeEditorPart instanceof GraphChangedAware) {
-            ((GraphChangedAware) graphNodeEditorPart).graphChanged(event, hasErrors, graph);
+            ((GraphChangedAware) graphNodeEditorPart).graphChanged(event, graph);
         }
     }
 }

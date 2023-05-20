@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.plugin.models.design.producer;
+package com.gempukku.libgdx.graph.ui.preview;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Mesh;
@@ -19,20 +19,19 @@ import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
-import com.gempukku.libgdx.graph.ui.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 
-public class MeshBasedRenderableModel implements PreviewRenderableModel, Disposable {
+public class MeshPreviewRenderableModel implements PreviewRenderableModel, Disposable {
     private final int vertexCount;
     private final short[] indices;
     private final ObjectSet<String> tags = new ObjectSet<>();
     private PropertiesRenderableModel propertiesRenderableModel;
     private HierarchicalPropertyContainer hierarchicalPropertyContainer;
 
-    public MeshBasedRenderableModel(Mesh mesh) {
+    public MeshPreviewRenderableModel(Mesh mesh) {
         this.vertexCount = mesh.getNumVertices();
 
         this.indices = new short[mesh.getNumIndices()];

@@ -6,20 +6,17 @@ import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.source.FieldOutputSource;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 
 public class ColorAlphaFragmentIngredient implements GraphShaderRecipeIngredient {
-    private String colorNodeId;
-    private String colorProperty;
-    private String alphaNodeId;
-    private String alphaProperty;
+    private final FieldOutputSource colorSource;
+    private final FieldOutputSource alphaSource;
 
-    public ColorAlphaFragmentIngredient(String colorNodeId, String colorProperty, String alphaNodeId, String alphaProperty) {
-        this.colorNodeId = colorNodeId;
-        this.colorProperty = colorProperty;
-        this.alphaNodeId = alphaNodeId;
-        this.alphaProperty = alphaProperty;
+    public ColorAlphaFragmentIngredient(FieldOutputSource colorSource, FieldOutputSource alphaSource) {
+        this.colorSource = colorSource;
+        this.alphaSource = alphaSource;
     }
 
     @Override
@@ -27,15 +24,19 @@ public class ColorAlphaFragmentIngredient implements GraphShaderRecipeIngredient
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
-        GraphShaderNodeBuilder.FieldOutput colorField = outputResolver.getSingleOutputForInput(colorNodeId, colorProperty);
-        GraphShaderNodeBuilder.FieldOutput alphaField = outputResolver.getSingleOutputForInput(alphaNodeId, alphaProperty);
+        GraphShaderNodeBuilder.FieldOutput colorField = colorSource.resolveOutput(outputResolver);
+        GraphShaderNodeBuilder.FieldOutput alphaField = alphaSource.resolveOutput(outputResolver);
         String alpha = (alphaField != null) ? alphaField.getRepresentation() : "1.0";
 
         String color;
         if (colorField == null) {
             color = "vec4(1.0, 1.0, 1.0, " + alpha + ")";
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector4)) {
-            color = "vec4(" + colorField.getRepresentation() + ".rgb, " + alpha + ")";
+            if (alphaField == null) {
+                color = colorField.getRepresentation();
+            } else {
+                color = "vec4(" + colorField.getRepresentation() + ".rgb, " + alpha + ")";
+            }
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector3)) {
             color = "vec4(" + colorField.getRepresentation() + ", " + alpha + ")";
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector2)) {

@@ -189,10 +189,10 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         for (GraphNodeEditorPart editorPart : editorParts) {
             if (editorPart instanceof GraphChangedAware) {
-                ((GraphChangedAware) editorPart).graphChanged(event, hasErrors, graph);
+                ((GraphChangedAware) editorPart).graphChanged(event, graph);
             }
         }
     }

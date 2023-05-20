@@ -151,10 +151,10 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         if (event.isStructure() || event.isData()) {
-            shaderPreviewWidget.graphChanged(hasErrors, graph);
-            tabShaderPreviewWidget.graphChanged(hasErrors, graph);
+            shaderPreviewWidget.graphChanged(graph);
+            tabShaderPreviewWidget.graphChanged(graph);
         }
     }
 }

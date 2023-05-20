@@ -17,12 +17,29 @@ import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 import com.gempukku.libgdx.ui.graph.data.GraphConnection;
 import com.gempukku.libgdx.ui.graph.data.GraphNode;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
+import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
 public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
+    private final String nodeStartForValidity;
+
     private final Array<GraphShaderRecipeIngredient> initIngredients = new Array<>();
     private final Array<GraphShaderRecipeIngredient> vertexShaderIngredients = new Array<>();
     private final Array<GraphShaderRecipeIngredient> fragmentShaderIngredients = new Array<>();
     private final Array<GraphShaderRecipeIngredient> finalizeIngredients = new Array<>();
+
+    public DefaultGraphShaderRecipe(String nodeStartForValidity) {
+        this.nodeStartForValidity = nodeStartForValidity;
+    }
+
+    @Override
+    public boolean isValid(GraphWithProperties graphWithProperties) {
+        if (nodeStartForValidity != null) {
+            ShaderGraphType shaderGraphType = GraphTypeRegistry.findGraphType(graphWithProperties.getType(), ShaderGraphType.class);
+            GraphValidationResult validationResult = shaderGraphType.getGraphValidator().validateGraph(graphWithProperties, nodeStartForValidity);
+            return !validationResult.hasErrors();
+        }
+        return true;
+    }
 
     @Override
     public GraphShader buildGraphShader(String tag, boolean designTime, GraphWithProperties graph, FileHandleResolver assetResolver) {

@@ -1,33 +1,34 @@
 package com.gempukku.libgdx.graph.ui.part;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.shader.builder.recipe.DefaultGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.InitializeShaderProgramIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.SetShaderProgramIngredient;
-import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.ColorFromOutputFragmentIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.ColorFragmentIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.InitializePropertyMapIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupFloatPrevisionIngredient;
-import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupOpenGLSettingsIngredient;
-import com.gempukku.libgdx.graph.shader.builder.recipe.vertex.AttributePositionVertexShaderIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.source.OutputSource;
+import com.gempukku.libgdx.graph.shader.builder.recipe.vertex.CameraAttributePositionVertexShaderIngredient;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
+import com.gempukku.libgdx.graph.ui.preview.MeshPreviewRenderableModel;
 import com.gempukku.libgdx.graph.ui.preview.ShaderPreview;
-import com.gempukku.libgdx.graph.ui.preview.SimplePreviewRenderableModel;
-import com.gempukku.libgdx.graph.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.ui.DisposableTable;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 
-public class PreviewShaderEditorPart extends DisposableTable implements GraphNodeEditorPart, GraphChangedAware {
+public class SpherePreviewShaderEditorPart extends DisposableTable implements GraphNodeEditorPart, GraphChangedAware {
     private final ShaderPreview modelShaderPreview;
-    private SimplePreviewRenderableModel renderableModel;
+    private MeshPreviewRenderableModel renderableModel;
 
-    public PreviewShaderEditorPart(String nodeId, String output, int width, int height) {
+    public SpherePreviewShaderEditorPart(String nodeId, String output, int width, int height) {
         DefaultGraphShaderRecipe recipe = createRecipe(nodeId, output);
 
         modelShaderPreview = new ShaderPreview(recipe);
@@ -36,14 +37,13 @@ public class PreviewShaderEditorPart extends DisposableTable implements GraphNod
     }
 
     private static DefaultGraphShaderRecipe createRecipe(String nodeId, String output) {
-        DefaultGraphShaderRecipe recipe = new DefaultGraphShaderRecipe();
+        DefaultGraphShaderRecipe recipe = new DefaultGraphShaderRecipe(nodeId);
         recipe.addInitIngredient(new InitializePropertyMapIngredient());
-        recipe.addInitIngredient(new SetupOpenGLSettingsIngredient("end"));
         recipe.addInitIngredient(new SetupFloatPrevisionIngredient());
 
-        recipe.addVertexShaderIngredient(new AttributePositionVertexShaderIngredient("Position"));
+        recipe.addVertexShaderIngredient(new CameraAttributePositionVertexShaderIngredient("Position"));
 
-        recipe.addFragmentShaderIngredient(new ColorFromOutputFragmentIngredient(nodeId, output));
+        recipe.addFragmentShaderIngredient(new ColorFragmentIngredient(new OutputSource(nodeId, output)));
 
         recipe.addFinalizeShaderIngredient(new SetShaderProgramIngredient());
         recipe.addFinalizeShaderIngredient(new InitializeShaderProgramIngredient());
@@ -76,27 +76,23 @@ public class PreviewShaderEditorPart extends DisposableTable implements GraphNod
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         if (event.isData() || event.isStructure()) {
-            modelShaderPreview.graphChanged(hasErrors, graph);
+            modelShaderPreview.graphChanged(graph);
         }
     }
 
     @Override
     protected void initializeWidget() {
-        renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
-        renderableModel.addProperty("Position", new ArrayValuePerVertex<>(
-                new Vector3(0, 0, 0),
-                new Vector3(0, 1, 0),
-                new Vector3(1, 1, 0),
-                new Vector3(1, 0, 0)
-        ));
-        renderableModel.addProperty("UV", new ArrayValuePerVertex<>(
-                new Vector2(0, 0),
-                new Vector2(0, 1),
-                new Vector2(1, 1),
-                new Vector2(1, 0)
-        ));
+        ModelBuilder modelBuilder = new ModelBuilder();
+        Material material = new Material();
+        float sphereDiameter = 0.8f;
+        Model model = modelBuilder.createSphere(sphereDiameter, sphereDiameter, sphereDiameter, 50, 50,
+                material,
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
+
+        renderableModel = new MeshPreviewRenderableModel(model.meshes.get(0));
+        model.dispose();
         modelShaderPreview.setRenderableModel(renderableModel);
     }
 

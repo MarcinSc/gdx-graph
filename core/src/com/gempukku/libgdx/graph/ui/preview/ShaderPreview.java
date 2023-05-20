@@ -181,15 +181,16 @@ public class ShaderPreview extends DisposableTable {
         super.act(delta);
     }
 
-    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphWithProperties graph) {
         destroyShader();
-        if (hasErrors) {
-            this.graph = null;
-        } else {
+        boolean valid = shaderRecipe.isValid(graph);
+        if (valid) {
             this.graph = graph;
             if (initialized) {
                 createShader(graph);
             }
+        } else {
+            this.graph = null;
         }
     }
 }

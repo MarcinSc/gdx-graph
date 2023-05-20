@@ -6,16 +6,15 @@ import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.source.FieldOutputSource;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 
-public class ColorFromOutputFragmentIngredient implements GraphShaderRecipeIngredient {
-    private String colorNodeId;
-    private String colorProperty;
+public class ColorFragmentIngredient implements GraphShaderRecipeIngredient {
+    private final FieldOutputSource colorSource;
 
-    public ColorFromOutputFragmentIngredient(String colorNodeId, String colorProperty) {
-        this.colorNodeId = colorNodeId;
-        this.colorProperty = colorProperty;
+    public ColorFragmentIngredient(FieldOutputSource colorSource) {
+        this.colorSource = colorSource;
     }
 
     @Override
@@ -23,14 +22,14 @@ public class ColorFromOutputFragmentIngredient implements GraphShaderRecipeIngre
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
-        GraphShaderNodeBuilder.FieldOutput colorField = outputResolver.getSingleOutput(colorNodeId, colorProperty);
+        GraphShaderNodeBuilder.FieldOutput colorField = colorSource.resolveOutput(outputResolver);
         String alpha = "1.0";
 
         String color;
         if (colorField == null) {
             color = "vec4(1.0, 1.0, 1.0, " + alpha + ")";
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector4)) {
-            color = "vec4(" + colorField.getRepresentation() + ".rgb, " + alpha + ")";
+            color = colorField.getRepresentation();
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector3)) {
             color = "vec4(" + colorField.getRepresentation() + ", " + alpha + ")";
         } else if (colorField.getFieldType().getName().equals(ShaderFieldType.Vector2)) {

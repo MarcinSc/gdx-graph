@@ -10,19 +10,21 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.DeadParticleDisc
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.InitializePropertyMapIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupFloatPrevisionIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupOpenGLSettingsIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.source.InputSource;
 import com.gempukku.libgdx.graph.shader.builder.recipe.vertex.ModelPositionVertexShaderIngredient;
 
 public class ParticlesGraphShaderRecipe extends DefaultGraphShaderRecipe {
     public ParticlesGraphShaderRecipe() {
+        super("end");
         addInitIngredient(new InitializePropertyMapIngredient());
         addInitIngredient(new SetupOpenGLSettingsIngredient("end"));
         addInitIngredient(new SetupFloatPrevisionIngredient());
 
-        addVertexShaderIngredient(new ModelPositionVertexShaderIngredient("end", "position"));
+        addVertexShaderIngredient(new ModelPositionVertexShaderIngredient(new InputSource("end", "position")));
 
         addFragmentShaderIngredient(new DeadParticleDiscardFragmentIngredient());
-        addFragmentShaderIngredient(new AlphaDiscardFragmentIngredient("end", "alpha", "end", "alphaClip"));
-        addFragmentShaderIngredient(new ColorAlphaFragmentIngredient("end", "color", "end", "alpha"));
+        addFragmentShaderIngredient(new AlphaDiscardFragmentIngredient(new InputSource("end", "alpha"), new InputSource("end", "alphaClip")));
+        addFragmentShaderIngredient(new ColorAlphaFragmentIngredient(new InputSource("end", "color"), new InputSource("end", "alpha")));
 
         addFinalizeShaderIngredient(new DebugShadersIngredient("particles"));
         addFinalizeShaderIngredient(new SetShaderProgramIngredient());

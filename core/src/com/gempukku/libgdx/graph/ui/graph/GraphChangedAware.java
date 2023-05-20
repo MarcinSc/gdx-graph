@@ -4,5 +4,5 @@ import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 
 public interface GraphChangedAware {
-    void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph);
+    void graphChanged(GraphChangedEvent event, GraphWithProperties graph);
 }

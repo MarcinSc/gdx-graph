@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
@@ -38,11 +36,11 @@ import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSerializer;
 import com.gempukku.libgdx.graph.util.sprite.storage.SpriteSlotMemoryMesh;
 import com.gempukku.libgdx.graph.util.storage.GdxMeshRenderableModel;
-import com.kotcrab.vis.ui.widget.VisTable;
+import com.gempukku.libgdx.ui.DisposableTable;
 
 import java.util.Iterator;
 
-public class ParticlesShaderPreview extends VisTable implements Disposable {
+public class ParticlesShaderPreview extends DisposableTable {
     private final GraphShaderRecipe shaderRecipe;
 
     public enum ShaderPreviewModel {
@@ -64,6 +62,7 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
 
     private GraphWithProperties graph;
 
+    private boolean initialized;
     private GraphShader graphShader;
     private GdxMeshRenderableModel particleModel;
 
@@ -177,15 +176,21 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         camera.update();
     }
 
-
     @Override
-    protected void setStage(Stage stage) {
-        super.setStage(stage);
-        if (stage == null) {
-            destroyShader();
-        } else if (graphShader == null && graph != null) {
+    protected void initializeWidget() {
+        initialized = true;
+        if (graphShader == null && graph != null) {
             createShader(graph);
         }
+    }
+
+    @Override
+    protected void disposeWidget() {
+        destroyShader();
+        if (particleModel != null) {
+            particleModel.dispose();
+        }
+        initialized = false;
     }
 
     private void createShader(final GraphWithProperties graph) {
@@ -268,14 +273,6 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
     }
 
     @Override
-    public void dispose() {
-        destroyShader();
-        if (particleModel != null) {
-            particleModel.dispose();
-        }
-    }
-
-    @Override
     public void act(float delta) {
         // Update time keeper
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
@@ -306,13 +303,16 @@ public class ParticlesShaderPreview extends VisTable implements Disposable {
         super.act(delta);
     }
 
-    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphWithProperties graph) {
         destroyShader();
-        if (hasErrors) {
-            this.graph = null;
-        } else {
+        boolean valid = shaderRecipe.isValid(graph);
+        if (valid) {
             this.graph = graph;
-            createShader(graph);
+            if (initialized) {
+                createShader(graph);
+            }
+        } else {
+            this.graph = null;
         }
     }
 }

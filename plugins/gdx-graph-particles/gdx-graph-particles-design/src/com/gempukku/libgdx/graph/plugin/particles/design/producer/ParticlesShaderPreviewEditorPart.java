@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.gdx.assistant.plugin.AssistantPluginTab;
 import com.gempukku.libgdx.common.Function;
@@ -23,7 +22,7 @@ import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
-public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, GraphChangedAware, Disposable {
+public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, GraphChangedAware {
     private final String cameraDistanceProperty;
     private final String lifetimeProperty;
     private final String initialCountProperty;
@@ -360,16 +359,10 @@ public class ParticlesShaderPreviewEditorPart implements GraphNodeEditorPart, Gr
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         if (event.isStructure() || event.isData()) {
-            shaderPreviewWidget.graphChanged(hasErrors, graph);
-            tabShaderPreviewWidget.graphChanged(hasErrors, graph);
+            shaderPreviewWidget.graphChanged(graph);
+            tabShaderPreviewWidget.graphChanged(graph);
         }
-    }
-
-    @Override
-    public void dispose() {
-        shaderPreviewWidget.dispose();
-        tabShaderPreviewWidget.dispose();
     }
 }

@@ -22,7 +22,7 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetS
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.graph.PreviewShaderGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.graph.ScreenPreviewShaderGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.shader.producer.effect.DitherColorShaderEditorProducer;
@@ -57,85 +57,85 @@ public class UICommonShaderConfiguration implements UIGraphConfiguration {
     }
 
     static {
-        register(new PreviewShaderGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration(), "color", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new Sampler2DShaderNodeConfiguration(), "color", 150, 150));
         register(new UVFlipbookShaderEditorProducer());
-        register(new PreviewShaderGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new UVTilingAndOffsetShaderNodeConfiguration(), "output", 150, 150));
         register(new GdxGraphNodeEditorProducer(new BorderDetectionShaderNodeConfiguration()));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new AddShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SubtractShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new DivideShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new AddShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SubtractShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new OneMinusShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new MultiplyShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DivideShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ReciprocalShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new PowerShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new PowerShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ExponentialShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ExponentialBase2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new NaturalLogarithmShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new LogarithmBase2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SquareRootShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new InverseSquareRootShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new SinShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new CosShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new TanShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ArccosShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ArctanShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new RadiansShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new DegreesShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SinShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new CosShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new TanShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ArcsinShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ArccosShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ArctanShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new Arctan2ShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new RadiansShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DegreesShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new AbsShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SignShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new FloorShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new CeilingShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ModuloShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new MinimumShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new MaximumShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new ClampShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SaturateShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new LerpShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new AbsShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SignShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new FloorShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new CeilingShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new FractionalPartShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ModuloShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new MinimumShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new MaximumShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new ClampShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SaturateShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new LerpShaderNodeConfiguration(), "output", 150, 150));
         register(new ConditionalShaderEditorProducer());
-        register(new PreviewShaderGraphNodeEditorProducer(new StepShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new StepShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SmoothstepShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new LengthShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new DistanceShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new DotProductShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new LengthShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DistanceShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DotProductShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new CrossProductShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new NormalizeShaderNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DistanceFromPlaneShaderNodeConfiguration(), "output", 150, 150));
 
         register(new GdxGraphNodeEditorProducer(new SplitShaderNodeConfiguration()));
-        register(new PreviewShaderGraphNodeEditorProducer(new MergeShaderNodeConfiguration(), "color", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new RemapShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new MergeShaderNodeConfiguration(), "color", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new RemapShaderNodeConfiguration(), "output", 150, 150));
         register(new RemapVectorShaderEditorProducer());
         register(new RemapValueShaderEditorProducer());
 
         register(new DitherShaderEditorProducer());
         register(new DitherColorShaderEditorProducer());
-        register(new PreviewShaderGraphNodeEditorProducer(new IntensityShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new IntensityShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new FresnelEffectShaderNodeConfiguration(), "output", 150, 150));
         register(new GradientShaderEditorProducer());
 
-        register(new PreviewShaderGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SimplexNoise2DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new SimplexNoise3DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new PerlinNoise2DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new PerlinNoise3DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new VoronoiDistance2DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new VoronoiDistance3DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new VoronoiBorder2DNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new VoronoiBorder3DNodeConfiguration(), "output", 150, 150));
 
-        register(new PreviewShaderGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration(), "output", 150, 150));
-        register(new PreviewShaderGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new DotShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new CheckerboardShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new EllipseShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new RectangleShapeShaderNodeConfiguration(), "output", 150, 150));
+        register(new ScreenPreviewShaderGraphNodeEditorProducer(new StarShapeShaderNodeConfiguration(), "output", 150, 150));
 
         register(new TimeShaderEditorProducer());
         register(new GdxGraphNodeEditorProducer(new CameraPositionShaderNodeConfiguration()));

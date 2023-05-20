@@ -116,9 +116,9 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
     }
 
     @Override
-    public void graphChanged(GraphChangedEvent event, boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
         for (GraphChangedAware awareChild : awareChildren) {
-            awareChild.graphChanged(event, hasErrors, graph);
+            awareChild.graphChanged(event, graph);
         }
     }
 }

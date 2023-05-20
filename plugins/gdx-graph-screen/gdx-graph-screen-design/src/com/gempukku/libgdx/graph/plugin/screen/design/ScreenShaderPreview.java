@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
@@ -28,17 +26,19 @@ import com.gempukku.libgdx.graph.ui.shader.GraphShaderRenderingWidget;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.FullScreenRenderImpl;
 import com.gempukku.libgdx.graph.util.WhitePixel;
-import com.kotcrab.vis.ui.widget.VisTable;
+import com.gempukku.libgdx.ui.DisposableTable;
 
-public class ScreenShaderPreview extends VisTable implements Disposable {
+public class ScreenShaderPreview extends DisposableTable {
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
     private final GraphShaderRecipe shaderRecipe;
 
     private GraphWithProperties graph;
 
     private GraphShader graphShader;
+    private boolean initialized;
+
     private final FullScreenRenderableModel renderableModel;
-    private final FullScreenRenderImpl fullScreenRender;
+    private FullScreenRenderImpl fullScreenRender;
 
     private final Camera camera;
     private final DefaultTimeKeeper timeKeeper;
@@ -91,13 +91,19 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
     }
 
     @Override
-    protected void setStage(Stage stage) {
-        super.setStage(stage);
-        if (stage == null) {
-            destroyShader();
-        } else if (graphShader == null && graph != null) {
+    protected void initializeWidget() {
+        initialized = true;
+        fullScreenRender = new FullScreenRenderImpl();
+        if (graphShader == null && graph != null) {
             createShader(graph);
         }
+    }
+
+    @Override
+    protected void disposeWidget() {
+        destroyShader();
+        fullScreenRender.dispose();
+        initialized = false;
     }
 
     private void createShader(final GraphWithProperties graph) {
@@ -143,12 +149,6 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
     }
 
     @Override
-    public void dispose() {
-        destroyShader();
-        fullScreenRender.dispose();
-    }
-
-    @Override
     public void act(float delta) {
         // Update time keeper
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
@@ -156,13 +156,16 @@ public class ScreenShaderPreview extends VisTable implements Disposable {
         super.act(delta);
     }
 
-    public void graphChanged(boolean hasErrors, GraphWithProperties graph) {
+    public void graphChanged(GraphWithProperties graph) {
         destroyShader();
-        if (hasErrors) {
-            this.graph = null;
-        } else {
+        boolean valid = shaderRecipe.isValid(graph);
+        if (valid) {
             this.graph = graph;
-            createShader(graph);
+            if (initialized) {
+                createShader(graph);
+            }
+        } else {
+            this.graph = null;
         }
     }
 }

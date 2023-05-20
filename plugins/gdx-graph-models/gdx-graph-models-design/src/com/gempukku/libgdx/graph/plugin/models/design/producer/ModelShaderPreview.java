@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipe;
+import com.gempukku.libgdx.graph.ui.preview.MeshPreviewRenderableModel;
 import com.gempukku.libgdx.graph.ui.preview.ShaderPreview;
 
 public class ModelShaderPreview extends ShaderPreview {
@@ -13,16 +14,16 @@ public class ModelShaderPreview extends ShaderPreview {
     }
 
     private ShaderPreviewModel previewModel = ShaderPreviewModel.Sphere;
-    private MeshBasedRenderableModel renderableModel;
+    private MeshPreviewRenderableModel renderableModel;
 
     public ModelShaderPreview(GraphShaderRecipe shaderRecipe) {
         super(shaderRecipe);
     }
 
-    private MeshBasedRenderableModel createRenderableModel(ShaderPreviewModel shaderPreviewModel) {
+    private MeshPreviewRenderableModel createRenderableModel(ShaderPreviewModel shaderPreviewModel) {
         Model model = createModel(shaderPreviewModel);
 
-        MeshBasedRenderableModel result = new MeshBasedRenderableModel(model.meshes.get(0));
+        MeshPreviewRenderableModel result = new MeshPreviewRenderableModel(model.meshes.get(0));
         model.dispose();
 
         return result;
