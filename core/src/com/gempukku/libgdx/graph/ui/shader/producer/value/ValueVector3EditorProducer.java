@@ -32,21 +32,21 @@ public class ValueVector3EditorProducer extends ValueGraphEditorProducer {
         DefaultGraphNodeEditorPart colorPart = new DefaultGraphNodeEditorPart(horizontalGroup,
                 new DefaultGraphNodeEditorPart.Callback() {
                     @Override
+                    public void initialize(JsonValue data) {
+                        if (data != null) {
+                            v1Input.setText(String.valueOf(data.getFloat("v1", 0)));
+                            v2Input.setText(String.valueOf(data.getFloat("v2", 0)));
+                            v3Input.setText(String.valueOf(data.getFloat("v3", 0)));
+                        }
+                    }
+
+                    @Override
                     public void serialize(JsonValue object) {
                         object.addChild("v1", new JsonValue(Float.parseFloat(v1Input.getText())));
                         object.addChild("v2", new JsonValue(Float.parseFloat(v2Input.getText())));
                         object.addChild("v3", new JsonValue(Float.parseFloat(v3Input.getText())));
                     }
-                }) {
-            @Override
-            public void initialize(JsonValue data) {
-                if (data != null) {
-                    v1Input.setText(String.valueOf(data.getFloat("v1", 0)));
-                    v2Input.setText(String.valueOf(data.getFloat("v2", 0)));
-                    v3Input.setText(String.valueOf(data.getFloat("v3", 0)));
-                }
-            }
-        };
+                });
         GraphNodeOutput output = configuration.getNodeOutputs().get("value");
         colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;

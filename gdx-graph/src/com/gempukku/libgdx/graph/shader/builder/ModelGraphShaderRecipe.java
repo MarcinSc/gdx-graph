@@ -4,8 +4,8 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.DefaultGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.DebugShadersIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.InitializeShaderProgramIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.SetShaderProgramIngredient;
-import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.AlphaDiscardFragmentIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.ColorAlphaFragmentIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.DiscardFragmentIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.InitializePropertyMapIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupFloatPrevisionIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupOpenGLSettingsIngredient;
@@ -21,7 +21,7 @@ public class ModelGraphShaderRecipe extends DefaultGraphShaderRecipe {
 
         addVertexShaderIngredient(new ModelPositionVertexShaderIngredient(new InputSource("end", "position")));
 
-        addFragmentShaderIngredient(new AlphaDiscardFragmentIngredient(new InputSource("end", "alpha"), new InputSource("end", "alphaClip")));
+        addFragmentShaderIngredient(new DiscardFragmentIngredient(new InputSource("end", "discardValue")));
         addFragmentShaderIngredient(new ColorAlphaFragmentIngredient(new InputSource("end", "color"), new InputSource("end", "alpha")));
 
         addFinalizeShaderIngredient(new DebugShadersIngredient("color"));

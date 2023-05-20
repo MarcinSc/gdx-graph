@@ -211,12 +211,6 @@
   ],
   "connections": [
     {
-      "fromNode": "031d723ecadc449e8cb1d13ea2e905b0",
-      "fromField": "value",
-      "toNode": "end",
-      "toField": "alphaClip"
-    },
-    {
       "fromNode": "037375b3cb2341d1ae899238a93ae089",
       "fromField": "value",
       "toNode": "5e0f1b8cbd614e8d8253deb86f0cfa0b",

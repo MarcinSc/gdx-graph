@@ -54,14 +54,14 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
         return configuration;
     }
 
-    protected Drawable getInputDrawable(GraphNodeInput input, boolean valid) {
+    public Drawable getInputDrawable(GraphNodeInput input, boolean valid) {
         boolean required = input.isRequired();
         String side = (input.getSide() == GraphNodeInputSide.Left) ? "left" : "top";
         String drawable = "connector-" + side + (required ? "-required" : "") + (valid ? "" : "-invalid");
         return VisUI.getSkin().getDrawable(drawable);
     }
 
-    protected Drawable getOutputDrawable(GraphNodeOutput output, boolean valid) {
+    public Drawable getOutputDrawable(GraphNodeOutput output, boolean valid) {
         String side = (output.getSide() == GraphNodeOutputSide.Right) ? "right" : "bottom";
         String drawable = "connector-" + side + (valid ? "" : "-invalid");
         return VisUI.getSkin().getDrawable(drawable);

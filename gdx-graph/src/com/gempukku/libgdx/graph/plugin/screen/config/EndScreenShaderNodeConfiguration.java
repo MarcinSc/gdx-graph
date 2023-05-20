@@ -14,6 +14,6 @@ public class EndScreenShaderNodeConfiguration extends DefaultMenuNodeConfigurati
         addNodeInput(
                 new DefaultGraphNodeInput("alpha", "Alpha", false, GraphNodeInputSide.Left, ShaderFieldType.Float));
         addNodeInput(
-                new DefaultGraphNodeInput("alphaClip", "Alpha clip", false, GraphNodeInputSide.Left, ShaderFieldType.Float));
+                new DefaultGraphNodeInput("discardValue", "Discard", false, GraphNodeInputSide.Left, ShaderFieldType.Float));
     }
 }

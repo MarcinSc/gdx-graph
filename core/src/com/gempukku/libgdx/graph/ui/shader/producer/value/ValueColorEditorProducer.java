@@ -73,17 +73,17 @@ public class ValueColorEditorProducer extends ValueGraphEditorProducer {
 
         DefaultGraphNodeEditorPart colorPart = new DefaultGraphNodeEditorPart(table,
                 new DefaultGraphNodeEditorPart.Callback() {
-                                @Override
+                    @Override
+                    public void initialize(JsonValue data) {
+                        if (data != null)
+                            setPickedColor(image, oldColor, Color.valueOf(data.getString("color", "FFFFFFFF")));
+                    }
+
+                    @Override
                     public void serialize(JsonValue object) {
                         object.addChild("color", new JsonValue(image.getColor().toString()));
                     }
-                }) {
-            @Override
-            public void initialize(JsonValue data) {
-                if (data != null)
-                    setPickedColor(image, oldColor, Color.valueOf(data.getString("color", "FFFFFFFF")));
-            }
-        };
+                });
         GraphNodeOutput output = configuration.getNodeOutputs().get("value");
         colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;

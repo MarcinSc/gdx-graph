@@ -41,24 +41,23 @@ public class RemapVectorShaderEditorProducer extends GdxGraphNodeEditorProducer 
                         table,
                         new DefaultGraphNodeEditorPart.Callback() {
                             @Override
+                            public void initialize(JsonValue data) {
+                                if (data != null) {
+                                    xBox.setSelected(data.getString("x", "X"));
+                                    yBox.setSelected(data.getString("y", "Y"));
+                                    zBox.setSelected(data.getString("z", "Z"));
+                                    wBox.setSelected(data.getString("w", "W"));
+                                }
+                            }
+
+                            @Override
                             public void serialize(JsonValue object) {
                                 object.addChild("x", new JsonValue(xBox.getSelected()));
                                 object.addChild("y", new JsonValue(yBox.getSelected()));
                                 object.addChild("z", new JsonValue(zBox.getSelected()));
                                 object.addChild("w", new JsonValue(wBox.getSelected()));
                             }
-                        }
-                ) {
-                    @Override
-                    public void initialize(JsonValue data) {
-                        if (data != null) {
-                            xBox.setSelected(data.getString("x", "X"));
-                            yBox.setSelected(data.getString("y", "Y"));
-                            zBox.setSelected(data.getString("z", "Z"));
-                            wBox.setSelected(data.getString("w", "W"));
-                        }
-                    }
-                });
+                        }));
     }
 
     private VisSelectBox<String> createSelectBox(String defaultValue) {

@@ -26,16 +26,16 @@ public class ValueBooleanEditorProducer extends ValueGraphEditorProducer {
         DefaultGraphNodeEditorPart colorPart = new DefaultGraphNodeEditorPart(horizontalGroup,
                 new DefaultGraphNodeEditorPart.Callback() {
                     @Override
+                    public void initialize(JsonValue data) {
+                        if (data != null)
+                            checkBox.setChecked(data.getBoolean("v", false));
+                    }
+
+                    @Override
                     public void serialize(JsonValue object) {
                         object.addChild("v", new JsonValue(checkBox.isChecked()));
                     }
-                }) {
-            @Override
-            public void initialize(JsonValue data) {
-                if (data != null)
-                    checkBox.setChecked(data != null && data.getBoolean("v", false));
-            }
-        };
+                });
         GraphNodeOutput output = configuration.getNodeOutputs().get("value");
         colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;

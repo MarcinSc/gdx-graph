@@ -295,12 +295,6 @@
       "toField": "texture"
     },
     {
-      "fromNode": "031d723ecadc449e8cb1d13ea2e905b0",
-      "fromField": "value",
-      "toNode": "end",
-      "toField": "alphaClip"
-    },
-    {
       "fromNode": "5df03da164b046af872b5a6db4eaffb6",
       "fromField": "value",
       "toNode": "49ad39d6e184499ebec92228552e5873",

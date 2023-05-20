@@ -4,8 +4,8 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.DefaultGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.DebugShadersIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.InitializeShaderProgramIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.SetShaderProgramIngredient;
-import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.AlphaDiscardFragmentIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.DepthFragmentIngredient;
+import com.gempukku.libgdx.graph.shader.builder.recipe.fragment.DiscardFragmentIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.InitializeDepthShaderIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.InitializePropertyMapIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupFloatPrevisionIngredient;
@@ -23,7 +23,7 @@ public class DepthGraphShaderRecipe extends DefaultGraphShaderRecipe {
 
         addVertexShaderIngredient(new ModelPositionVertexShaderIngredient(new InputSource("end", "position")));
 
-        addFragmentShaderIngredient(new AlphaDiscardFragmentIngredient(new InputSource("end", "alpha"), new InputSource("end", "alphaClip")));
+        addFragmentShaderIngredient(new DiscardFragmentIngredient(new InputSource("end", "discardValue")));
         addFragmentShaderIngredient(new DepthFragmentIngredient());
 
         addFinalizeShaderIngredient(new DebugShadersIngredient("depth"));

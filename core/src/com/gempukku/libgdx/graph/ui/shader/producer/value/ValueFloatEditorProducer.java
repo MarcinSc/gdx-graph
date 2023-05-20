@@ -26,6 +26,12 @@ public class ValueFloatEditorProducer extends ValueGraphEditorProducer {
         DefaultGraphNodeEditorPart colorPart = new DefaultGraphNodeEditorPart(horizontalGroup,
                 new DefaultGraphNodeEditorPart.Callback() {
                     @Override
+                    public void initialize(JsonValue data) {
+                        if (data != null)
+                            v1Input.setText(String.valueOf(data.getFloat("v1", 0)));
+                    }
+
+                    @Override
                     public void serialize(JsonValue object) {
                         float value;
                         try {
@@ -35,13 +41,7 @@ public class ValueFloatEditorProducer extends ValueGraphEditorProducer {
                         }
                         object.addChild("v1", new JsonValue(value));
                     }
-                }) {
-            @Override
-            public void initialize(JsonValue data) {
-                if (data != null)
-                    v1Input.setText(String.valueOf(data.getFloat("v1", 0)));
-            }
-        };
+                });
         GraphNodeOutput output = configuration.getNodeOutputs().get("value");
         colorPart.setOutputConnector(GraphNodeOutputSide.Right, output, getOutputDrawable(output, true), getOutputDrawable(output, false));
         return colorPart;

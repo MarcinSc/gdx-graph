@@ -187,12 +187,6 @@
       "toField": "uv"
     },
     {
-      "fromNode": "dc6d7997eb5a48e8af39e30419d05826",
-      "fromField": "value",
-      "toNode": "end",
-      "toField": "alphaClip"
-    },
-    {
       "fromNode": "f89452c0366a48ad90d682014325acf2",
       "fromField": "a",
       "toNode": "4e329b6226394da48566075265f845e4",

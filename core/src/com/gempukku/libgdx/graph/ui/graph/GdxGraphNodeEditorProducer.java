@@ -80,30 +80,34 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
 
     }
 
+    protected boolean skipFieldId(String fieldId) {
+        return false;
+    }
+
     protected void addConfigurationInputsAndOutputs(GdxGraphNodeEditor nodeEditor) {
+        addTopAndBottomConnectors(nodeEditor);
+        addLeftAndRightConnectors(nodeEditor);
+    }
+
+    private void addTopAndBottomConnectors(GdxGraphNodeEditor nodeEditor) {
+        for (GraphNodeInput input : configuration.getNodeInputs().values()) {
+            if (input.getSide() == GraphNodeInputSide.Top && !skipFieldId(input.getFieldId())) {
+                nodeEditor.addTopConnector(input);
+            }
+        }
+        for (GraphNodeOutput output : configuration.getNodeOutputs().values()) {
+            if (output.getSide() == GraphNodeOutputSide.Bottom && !skipFieldId(output.getFieldId())) {
+                nodeEditor.addBottomConnector(output);
+            }
+        }
+    }
+
+    private void addLeftAndRightConnectors(GdxGraphNodeEditor nodeEditor) {
         Iterator<GraphNodeInput> inputIterator = configuration.getNodeInputs().values().iterator();
         Iterator<GraphNodeOutput> outputIterator = configuration.getNodeOutputs().values().iterator();
         while (inputIterator.hasNext() || outputIterator.hasNext()) {
-            GraphNodeInput input = null;
-            GraphNodeOutput output = null;
-            while (inputIterator.hasNext()) {
-                input = inputIterator.next();
-                if (input.getSide() == GraphNodeInputSide.Top) {
-                    nodeEditor.addTopConnector(input);
-                    input = null;
-                } else {
-                    break;
-                }
-            }
-            while (outputIterator.hasNext()) {
-                output = outputIterator.next();
-                if (output.getSide() == GraphNodeOutputSide.Bottom) {
-                    nodeEditor.addBottomConnector(output);
-                    output = null;
-                } else {
-                    break;
-                }
-            }
+            GraphNodeInput input = getNextLeftInput(inputIterator);
+            GraphNodeOutput output = getNextRightOutput(outputIterator);
 
             if (input != null && output != null) {
                 nodeEditor.addTwoSideGraphPart(input, output);
@@ -113,6 +117,26 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
                 nodeEditor.addOutputGraphPart(output);
             }
         }
+    }
+
+    private GraphNodeInput getNextLeftInput(Iterator<GraphNodeInput> inputIterator) {
+        while (inputIterator.hasNext()) {
+            GraphNodeInput input = inputIterator.next();
+            if (input.getSide() == GraphNodeInputSide.Left && !skipFieldId(input.getFieldId())) {
+                return input;
+            }
+        }
+        return null;
+    }
+
+    private GraphNodeOutput getNextRightOutput(Iterator<GraphNodeOutput> outputIterator) {
+        while (outputIterator.hasNext()) {
+            GraphNodeOutput output = outputIterator.next();
+            if (output.getSide() == GraphNodeOutputSide.Right && !skipFieldId(output.getFieldId())) {
+                return output;
+            }
+        }
+        return null;
     }
 
     @Override

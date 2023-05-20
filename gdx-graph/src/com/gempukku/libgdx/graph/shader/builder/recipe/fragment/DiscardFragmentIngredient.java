@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.fragment;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -9,13 +10,11 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredie
 import com.gempukku.libgdx.graph.shader.builder.recipe.source.FieldOutputSource;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
 
-public class AlphaDiscardFragmentIngredient implements GraphShaderRecipeIngredient {
-    private final FieldOutputSource alphaSource;
-    private final FieldOutputSource alphaClipSource;
+public class DiscardFragmentIngredient implements GraphShaderRecipeIngredient {
+    private final FieldOutputSource discardValueSource;
 
-    public AlphaDiscardFragmentIngredient(FieldOutputSource alphaSource, FieldOutputSource alphaClipSource) {
-        this.alphaSource = alphaSource;
-        this.alphaClipSource = alphaClipSource;
+    public DiscardFragmentIngredient(FieldOutputSource discardValueSource) {
+        this.discardValueSource = discardValueSource;
     }
 
     @Override
@@ -23,14 +22,14 @@ public class AlphaDiscardFragmentIngredient implements GraphShaderRecipeIngredie
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
-        GraphShaderNodeBuilder.FieldOutput alphaField = alphaSource.resolveOutput(outputResolver);
-        String alpha = (alphaField != null) ? alphaField.getRepresentation() : "1.0";
-        GraphShaderNodeBuilder.FieldOutput alphaClipField = alphaClipSource.resolveOutput(outputResolver);
-        String alphaClip = (alphaClipField != null) ? alphaClipField.getRepresentation() : "0.0";
+        GraphShaderNodeBuilder.FieldOutput discardValueField = discardValueSource.resolveOutput(outputResolver);
+        if (discardValueField != null) {
+            String discardValue = discardValueField.getRepresentation();
+            String discardComparison = discardValueSource.resolveNode(graph).getData().getString("discardComparison", "<=");
+            float discardValueToCompareTo = discardValueSource.resolveNode(graph).getData().getFloat("discardValue", 0f);
 
-        if (alphaField != null || alphaClipField != null) {
             fragmentShaderBuilder.addMainLine("// End Graph Node");
-            fragmentShaderBuilder.addMainLine("if (" + alpha + " <= " + alphaClip + ")");
+            fragmentShaderBuilder.addMainLine("if (" + discardValue + " "+discardComparison+" " + SimpleNumberFormatter.format(discardValueToCompareTo) + ")");
             fragmentShaderBuilder.addMainLine("  discard;");
         }
     }
