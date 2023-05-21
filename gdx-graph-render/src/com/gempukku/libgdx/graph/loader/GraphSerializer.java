@@ -8,7 +8,6 @@ import com.gempukku.libgdx.graph.data.DefaultGraphProperty;
 import com.gempukku.libgdx.graph.data.DefaultGraphWithProperties;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.ui.graph.data.Graph;
 import com.gempukku.libgdx.ui.graph.data.GraphConnection;
 import com.gempukku.libgdx.ui.graph.data.GraphNode;
@@ -63,9 +62,7 @@ public class GraphSerializer {
             String type = property.getString("type");
             String name = property.getString("name");
             JsonValue data = property.get("data");
-            String location = property.getString("location", null);
-            PropertyLocation resolvedLocation = location != null ? PropertyLocation.valueOf(location) : null;
-            result.addGraphProperty(new DefaultGraphProperty(name, type, resolvedLocation, data));
+            result.addGraphProperty(new DefaultGraphProperty(name, type, data));
         }
         JsonValue groups = graph.get("groups");
         if (groups != null) {
@@ -90,10 +87,6 @@ public class GraphSerializer {
             JsonValue property = new JsonValue(JsonValue.ValueType.object);
             property.addChild("name", new JsonValue(graphProperty.getName()));
             property.addChild("type", new JsonValue(graphProperty.getType()));
-            PropertyLocation location = graphProperty.getLocation();
-            if (location != null)
-                property.addChild("location", new JsonValue(location.name()));
-
             JsonValue data = graphProperty.getData();
             if (data != null)
                 property.addChild("data", data);

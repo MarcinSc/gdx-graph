@@ -5,9 +5,9 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.BufferCopyHelper;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
 
 public class DefaultBufferCopyHelper implements BufferCopyHelper {
     private final ShaderProgram shaderProgram;

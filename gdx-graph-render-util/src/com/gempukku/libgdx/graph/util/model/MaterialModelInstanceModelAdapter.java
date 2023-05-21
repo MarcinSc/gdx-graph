@@ -17,12 +17,12 @@ import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class MaterialModelInstanceModelAdapter {

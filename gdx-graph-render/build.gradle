@@ -1,4 +1,3 @@
-archivesBaseName = "gdx-graph-render"
 eclipse.project.name = "gdx-graph-render"
 
 sourceCompatibility = 1.7

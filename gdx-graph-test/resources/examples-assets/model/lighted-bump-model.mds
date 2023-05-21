@@ -401,8 +401,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -411,8 +411,8 @@
     {
       "name": "Normal",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -421,8 +421,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -430,80 +430,80 @@
     {
       "name": "Alpha Test",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 0.0
       }
     },
     {
       "name": "Shininess",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 32.0
       }
     },
     {
       "name": "Diffuse Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Diffuse Color",
       "type": "Vector4",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "color": "ffffffff"
       }
     },
     {
       "name": "Emissive Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Emissive Color",
       "type": "Vector4",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "color": "000000ff"
       }
     },
     {
       "name": "Specular Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Specular Color",
       "type": "Vector4",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "color": "ffffffff"
       }
     },
     {
       "name": "Bump Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Tangent",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -512,8 +512,8 @@
     {
       "name": "Normal Map Strength",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 1.0
       }
     }

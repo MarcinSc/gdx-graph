@@ -197,8 +197,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -207,8 +207,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -216,8 +216,8 @@
     {
       "name": "Font-Texture",
       "type": "TextureRegion",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "minFilter": "Linear",
         "magFilter": "Linear",
         "previewPath": "C:/Users/marci/Desktop/sdf-test.png"
@@ -226,24 +226,24 @@
     {
       "name": "Width",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.5
       }
     },
     {
       "name": "Edge",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.029999999329447746
       }
     },
     {
       "name": "Color",
       "type": "Vector4",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "color": "ffffffff"
       }
     }

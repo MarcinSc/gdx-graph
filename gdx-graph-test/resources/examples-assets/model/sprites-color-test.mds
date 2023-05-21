@@ -112,8 +112,8 @@
     {
       "name": "Color",
       "type": "Vector2",
-      "location": "Global_Uniform",
       "data": {
+        "location": "Global_Uniform",
         "x": 1.0,
         "y": 1.0
       }
@@ -121,8 +121,8 @@
     {
       "name": "Vertex Color",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 1.0,
         "y": 1.0
       }
@@ -130,8 +130,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -140,8 +140,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }

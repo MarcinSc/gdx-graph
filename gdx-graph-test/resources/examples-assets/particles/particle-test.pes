@@ -238,8 +238,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -248,24 +248,24 @@
     {
       "name": "Size",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 0.30000001192092896
       }
     },
     {
       "name": "Color",
       "type": "Vector4",
-      "location": "Global_Uniform",
       "data": {
+        "location": "Global_Uniform",
         "color": "ffffffff"
       }
     },
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }

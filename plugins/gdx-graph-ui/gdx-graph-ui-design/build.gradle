@@ -3,6 +3,7 @@ eclipse.project.name = "gdx-graph-ui-design"
 sourceCompatibility = 1.8
 
 dependencies {
+    api project(":gdx-graph-ui")
     api project(":gdx-graph-render-design")
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"

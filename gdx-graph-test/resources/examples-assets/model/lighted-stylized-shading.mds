@@ -301,8 +301,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -311,16 +311,16 @@
     {
       "name": "Color",
       "type": "Vector4",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "color": "ffffffff"
       }
     },
     {
       "name": "Normal",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -329,8 +329,8 @@
     {
       "name": "Shading Texture",
       "type": "TextureRegion",
-      "location": "Global_Uniform",
       "data": {
+        "location": "Global_Uniform",
         "minFilter": "Linear",
         "magFilter": "Linear",
         "previewPath": "D:/dev/gdx-graph/gdx-graph-test/resources/image/circle-tiling.png"
@@ -339,8 +339,8 @@
     {
       "name": "Texture Scale",
       "type": "Float",
-      "location": "Global_Uniform",
       "data": {
+        "location": "Global_Uniform",
         "x": 1.0
       }
     }

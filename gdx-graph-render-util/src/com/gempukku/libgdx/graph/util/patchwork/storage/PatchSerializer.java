@@ -3,9 +3,9 @@ package com.gempukku.libgdx.graph.util.patchwork.storage;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
-import com.gempukku.libgdx.graph.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.util.patchwork.RenderablePatch;
 import com.gempukku.libgdx.graph.util.storage.MeshSerializer;
 

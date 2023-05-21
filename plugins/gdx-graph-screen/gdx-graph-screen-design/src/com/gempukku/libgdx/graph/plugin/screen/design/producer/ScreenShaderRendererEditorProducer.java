@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.screen.design.producer;
 
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.plugin.screen.ScreenShaderGraphType;
-import com.gempukku.libgdx.graph.plugin.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.screen.ScreenShaderGraphType;
+import com.gempukku.libgdx.graph.shader.screen.config.ScreenShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.ShaderGraphEditorPart;

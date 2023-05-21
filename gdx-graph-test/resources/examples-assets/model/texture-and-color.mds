@@ -112,8 +112,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -122,8 +122,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -131,16 +131,16 @@
     {
       "name": "Diffuse Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Diffuse Color",
       "type": "Vector4",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "color": "ffffffff"
       }
     }

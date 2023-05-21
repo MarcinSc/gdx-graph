@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.IntMapping;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.RenderableModel;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
-import com.gempukku.libgdx.graph.util.ValuePerVertex;
 
 public class PropertiesRenderableModel implements RenderableModel, Disposable {
     private final Vector3 position = new Vector3();

@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.util.particles.generator;
 
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 
 public interface ParticleGenerator {
     void initialCreateParticles(float currentTime, ParticleCreateCallback createCallback);

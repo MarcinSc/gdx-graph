@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 
 public interface PipelineRendererResources {
     BufferCopyHelper getBufferCopyHelper();

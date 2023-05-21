@@ -1,0 +1,39 @@
+eclipse.project.name = "gdx-graph-shader-design"
+
+sourceSets.main.resources.srcDirs = ["assets/"]
+
+sourceCompatibility = 1.8
+
+dependencies {
+    api project(":gdx-graph-shader")
+    api project(":gdx-graph-lighting3d")
+    api project(":gdx-graph-render-design")
+
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-common:$gdxGempLibVersion"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
+
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+    implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
+    implementation "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
+}
+
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
+tasks.register('texturePacking') {
+    doLast {
+        if (project.ext.has('texturePacker')) {
+            TexturePacker.Settings settings = new TexturePacker.Settings()
+            settings.grid = false
+            settings.maxWidth = 2048
+            settings.maxHeight = 2048
+            settings.filterMin = Texture.TextureFilter.Nearest
+            settings.filterMag = Texture.TextureFilter.Nearest
+
+            for (int i = 0; i < texturePacker.size(); i += 3) {
+                println("Calling TexturePacker: " + texturePacker[i + 2])
+                TexturePacker.process(settings, texturePacker[i + 0], texturePacker[i + 1], texturePacker[i + 2])
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.maps.design.producer;
 
 import com.badlogic.gdx.graphics.Color;
-import com.gempukku.libgdx.graph.plugin.maps.producer.MapsLayerIdsRendererPipelineNodeConfiguration;
+import com.gempukku.libgdx.graph.render.maps.producer.MapsLayerIdsRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;

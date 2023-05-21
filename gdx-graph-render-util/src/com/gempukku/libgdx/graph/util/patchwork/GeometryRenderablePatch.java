@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.util.patchwork;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 
 public class GeometryRenderablePatch extends MapWritablePropertyContainer implements RenderablePatch {
     private short[] indicesArray;

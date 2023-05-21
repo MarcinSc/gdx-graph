@@ -278,8 +278,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -288,8 +288,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -297,40 +297,40 @@
     {
       "name": "Animated Texture",
       "type": "TextureRegion",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "previewPath": "D:/dev/gdx-graph/gdx-graph-test/resources/image/SlimeOrange-outline.png"
       }
     },
     {
       "name": "Animation Start",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0
       }
     },
     {
       "name": "Animation Speed",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 20.0
       }
     },
     {
       "name": "Animation Looping",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 1.0
       }
     },
     {
       "name": "Sprite Count",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 6.0,
         "y": 5.0
       }
@@ -338,8 +338,8 @@
     {
       "name": "Outline",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 1.0
       }
     }

@@ -16,13 +16,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.plugin.boneanimation.BoneAnimationPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.models.ModelsPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.particles.ParticlesPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.screen.ScreenPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.render.callback.RenderCallbackPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.render.postprocess.PostprocessPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.render.ui.UIPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.ShaderPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.boneanimation.BoneAnimationPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.particles.ParticlesPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.screen.ScreenPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
 import com.gempukku.libgdx.graph.test.scenes.*;
 
@@ -48,8 +49,9 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         RuntimePluginRegistry.register(UIPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(ParticlesPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(ScreenPluginRuntimeInitializer.class);
-        RuntimePluginRegistry.register(ModelsPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(BoneAnimationPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(PostprocessPluginRuntimeInitializer.class);
         Lighting3DPluginRuntimeInitializer.register(
                 1, 0, 0,
                 0.2f, 5);

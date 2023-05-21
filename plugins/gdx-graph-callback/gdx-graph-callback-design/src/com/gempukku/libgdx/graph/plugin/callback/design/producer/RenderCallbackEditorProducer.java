@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.plugin.callback.design.producer;
 
-import com.gempukku.libgdx.graph.plugin.callback.producer.RenderCallbackPipelineNodeConfiguration;
+import com.gempukku.libgdx.graph.render.callback.producer.RenderCallbackPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;

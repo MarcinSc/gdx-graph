@@ -19,12 +19,12 @@ import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
-import com.gempukku.libgdx.graph.plugin.callback.RenderCallback;
-import com.gempukku.libgdx.graph.plugin.callback.RenderCallbackPublicData;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
+import com.gempukku.libgdx.graph.render.callback.RenderCallback;
+import com.gempukku.libgdx.graph.render.callback.RenderCallbackPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
-import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 
 public class Episode2Scene implements LibgdxGraphTestScene {

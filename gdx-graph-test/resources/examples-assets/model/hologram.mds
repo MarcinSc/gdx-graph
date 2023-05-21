@@ -479,56 +479,56 @@
     {
       "name": "Band Size",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 500.0
       }
     },
     {
       "name": "Color",
       "type": "Vector4",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "color": "6d7cedff"
       }
     },
     {
       "name": "Distrortion Noise Scale",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 1.0
       }
     },
     {
       "name": "Distrortion Frequency",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": -3.0
       }
     },
     {
       "name": "Distrortion Speed",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 100.0
       }
     },
     {
       "name": "Distortion Amplitude",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 0.30000001192092896
       }
     },
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -537,8 +537,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -546,8 +546,8 @@
     {
       "name": "Diffuse Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     }

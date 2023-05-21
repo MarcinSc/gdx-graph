@@ -134,8 +134,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -144,8 +144,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -153,8 +153,8 @@
     {
       "name": "Tile Repeat",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 1.0,
         "y": 1.0
       }
@@ -162,16 +162,16 @@
     {
       "name": "Tile Texture",
       "type": "TextureRegion",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "previewPath": null
       }
     },
     {
       "name": "Tile Offset",
       "type": "Vector2",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 0.0,
         "y": 0.0
       }

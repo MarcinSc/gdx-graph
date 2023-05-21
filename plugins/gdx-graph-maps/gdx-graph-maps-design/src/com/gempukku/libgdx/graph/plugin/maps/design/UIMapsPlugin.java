@@ -2,10 +2,10 @@ package com.gempukku.libgdx.graph.plugin.maps.design;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.plugin.maps.MapsPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.maps.design.producer.MapsLayerIdsRendererEditorProducer;
 import com.gempukku.libgdx.graph.plugin.maps.design.producer.MapsLayersRendererEditorProducer;
 import com.gempukku.libgdx.graph.plugin.maps.design.producer.MapsRendererEditorProducer;
+import com.gempukku.libgdx.graph.render.maps.MapsPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 

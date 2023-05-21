@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 
 public class RuntimePluginRegistry implements PluginRegistry, Disposable {
     private static final ObjectSet<Class<? extends PluginRuntimeInitializer>> plugins = new ObjectSet<>();

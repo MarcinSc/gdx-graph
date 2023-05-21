@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.util.DisposableProducer;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class PagedMultiPartBatchModel<T, U> implements MultiPartBatchModel<T, U> {

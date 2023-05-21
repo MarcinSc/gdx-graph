@@ -6,9 +6,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
+import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
+import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
 
 public class LightingSystem extends BaseSystem {
     private PipelineRendererSystem pipelineRendererSystem;

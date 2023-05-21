@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorProvider;

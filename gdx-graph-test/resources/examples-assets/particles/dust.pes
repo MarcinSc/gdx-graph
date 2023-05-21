@@ -534,8 +534,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -544,8 +544,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -553,48 +553,48 @@
     {
       "name": "Color Random",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0
       }
     },
     {
       "name": "Wrap size",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 2000.0
       }
     },
     {
       "name": "Parallax Random",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.800000011920929
       }
     },
     {
       "name": "Size",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.10000000149011612
       }
     },
     {
       "name": "X movement",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0
       }
     },
     {
       "name": "Y movement",
       "type": "Float",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0
       }
     }

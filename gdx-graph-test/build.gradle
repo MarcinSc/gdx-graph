@@ -2,6 +2,13 @@ eclipse.project.name = "gdx-graph-test"
 
 dependencies {
     api project(":gdx-graph-artemis")
+    api project(":gdx-graph-boneanimation")
+    api project(":gdx-graph-callback")
+    api project(":gdx-graph-lighting3d")
+    api project(":gdx-graph-particles")
+    api project(":gdx-graph-postprocess")
+    api project(":gdx-graph-screen")
+    api project(":gdx-graph-ui")
 
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

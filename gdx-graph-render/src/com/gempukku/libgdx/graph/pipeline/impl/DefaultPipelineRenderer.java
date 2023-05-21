@@ -3,17 +3,17 @@ package com.gempukku.libgdx.graph.pipeline.impl;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
-import com.gempukku.libgdx.graph.libgdx.context.StateOpenGLContext;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.shader.context.StateOpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.time.TimeProvider;
-import com.gempukku.libgdx.graph.util.WhitePixel;
 
 public class DefaultPipelineRenderer implements PipelineRenderer {
     private final TimeProvider timeProvider;

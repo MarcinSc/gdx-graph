@@ -2,11 +2,11 @@ package com.gempukku.libgdx.graph.pipeline.impl;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Disposable;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.BufferCopyHelper;
 import com.gempukku.libgdx.graph.pipeline.PipelineRendererResources;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.util.FullScreenRenderImpl;
+import com.gempukku.libgdx.graph.pipeline.util.FullScreenRenderImpl;
 
 public class DefaultPipelineRendererResources implements PipelineRendererResources, Disposable {
     private final WritablePropertyContainer propertyContainer;

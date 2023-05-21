@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.BasicShader;
+import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class GraphModelUtil {

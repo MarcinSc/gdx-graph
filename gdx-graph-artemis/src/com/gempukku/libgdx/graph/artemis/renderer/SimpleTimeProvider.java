@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.artemis.renderer;
 
-import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 
 public class SimpleTimeProvider implements TimeProvider {
     private float delta;

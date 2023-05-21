@@ -12,8 +12,8 @@ import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.impl.PreparedRenderingPipelineImpl;
 import com.gempukku.libgdx.graph.pipeline.property.PipelinePropertyProducer;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.time.TimeProvider;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
 import java.io.IOException;

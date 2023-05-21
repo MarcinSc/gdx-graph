@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.time.TimeKeeper;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 
 public class Episode1Scene implements LibgdxGraphTestScene {

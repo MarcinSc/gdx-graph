@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
-import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
@@ -48,10 +47,5 @@ public class RenderPipelineGraphType implements GraphType {
     @Override
     public GraphValidator getGraphValidator() {
         return graphValidator;
-    }
-
-    @Override
-    public PropertyLocation[] getPropertyLocations() {
-        return new PropertyLocation[0];
     }
 }

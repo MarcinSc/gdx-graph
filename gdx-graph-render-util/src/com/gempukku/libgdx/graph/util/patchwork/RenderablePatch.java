@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.util.patchwork;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 
 public interface RenderablePatch extends PropertyContainer {
     int getIndexCount();

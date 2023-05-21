@@ -17,7 +17,7 @@ import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;

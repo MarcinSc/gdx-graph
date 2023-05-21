@@ -3,11 +3,13 @@ package com.gempukku.libgdx.graph.plugin.particles.design;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.plugin.particles.ParticlesPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifePercentageShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.particles.config.ParticleLifetimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderEditorProducer;
 import com.gempukku.libgdx.graph.plugin.particles.design.producer.ParticlesShaderRendererEditorProducer;
+import com.gempukku.libgdx.graph.shader.UIModelShaderConfiguration;
+import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.particles.ParticlesPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.shader.particles.config.ParticleLifePercentageShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.particles.config.ParticleLifetimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -26,6 +28,9 @@ public class UIParticlesPlugin implements UIGdxGraphPlugin {
         UIParticlesShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
 
         UIRenderPipelineConfiguration.register(new ParticlesShaderRendererEditorProducer());
+
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Float, "Particle Birth");
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Float, "Particle Death");
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ParticlesPluginRuntimeInitializer.class);

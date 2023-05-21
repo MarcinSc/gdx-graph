@@ -4,13 +4,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelinePropertySource;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public class PropertyPipelineNodeProducer implements PipelineNodeProducer {

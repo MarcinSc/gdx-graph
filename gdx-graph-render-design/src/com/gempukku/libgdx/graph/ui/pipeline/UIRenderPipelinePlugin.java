@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.ui.pipeline;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineRuntimeInitializer;
 import com.gempukku.libgdx.graph.pipeline.config.math.arithmetic.*;
@@ -11,9 +10,6 @@ import com.gempukku.libgdx.graph.pipeline.config.math.geometric.*;
 import com.gempukku.libgdx.graph.pipeline.config.math.trigonometry.*;
 import com.gempukku.libgdx.graph.pipeline.config.math.value.MergePipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.math.value.SplitPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.pipeline.config.postprocessor.BloomPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.pipeline.config.postprocessor.GammaCorrectionPipelineNodeConfiguration;
-import com.gempukku.libgdx.graph.pipeline.config.postprocessor.GaussianBlurPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.provided.RenderSizePipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.provided.TimePipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.EndPipelineNodeConfiguration;
@@ -24,15 +20,8 @@ import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.PipelinePropertyEditorDefinitionImpl;
-import com.gempukku.libgdx.graph.ui.pipeline.producer.postprocessor.DepthOfFieldEditorProducer;
-import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyColorEditorDefinition;
-import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyFloatEditorDefinition;
-import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector2EditorDefinition;
-import com.gempukku.libgdx.graph.ui.shader.producer.property.PropertyVector3EditorDefinition;
-import com.gempukku.libgdx.graph.ui.shader.producer.value.*;
-import com.gempukku.libgdx.ui.graph.editor.part.CheckboxEditorPart;
-import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.gempukku.libgdx.graph.ui.pipeline.property.*;
+import com.gempukku.libgdx.graph.ui.pipeline.value.*;
 import com.kotcrab.vis.ui.VisUI;
 
 public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
@@ -106,26 +95,14 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new StartPipelineNodeConfiguration()));
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new PipelineRendererNodeConfiguration()));
 
-        UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new BloomPipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GaussianBlurPipelineNodeConfiguration()));
-        UIRenderPipelineConfiguration.register(new DepthOfFieldEditorProducer());
-        UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
-
         // Register property types
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyFloatEditorDefinition());
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyVector2EditorDefinition());
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyVector3EditorDefinition());
         UIRenderPipelineConfiguration.registerPropertyType(new PropertyColorEditorDefinition());
-        PipelinePropertyEditorDefinitionImpl booleanProperty = new PipelinePropertyEditorDefinitionImpl("New Boolean", "Boolean");
-        booleanProperty.addPropertyEditorPart(
-                new Supplier<GraphNodeEditorPart>() {
-                    @Override
-                    public GraphNodeEditorPart get() {
-                        return new CheckboxEditorPart("Value", "value", false, "gdx-graph-property-label");
-                    }
-                });
-        UIRenderPipelineConfiguration.registerPropertyType(booleanProperty);
-        UIRenderPipelineConfiguration.registerPropertyType(new PipelinePropertyEditorDefinitionImpl("New Camera", "Camera"));
+        UIRenderPipelineConfiguration.registerPropertyType(new PropertyBooleanEditorDefinition());
+        UIRenderPipelineConfiguration.registerPropertyType(
+                new PipelinePropertyEditorDefinitionImpl("New Camera", "Camera"));
 
         RuntimePluginRegistry.register(RenderPipelineRuntimeInitializer.class);
 

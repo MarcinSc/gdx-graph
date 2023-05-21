@@ -6,14 +6,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
+import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
-import com.gempukku.libgdx.graph.util.DisposableProducer;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class TexturePagedMultiPartBatchModel<T extends PropertyContainer, U> implements MultiPartBatchModel<T, U> {

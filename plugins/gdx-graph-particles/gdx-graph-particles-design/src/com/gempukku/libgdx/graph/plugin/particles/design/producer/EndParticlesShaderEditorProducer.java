@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.plugin.particles.design.producer;
 
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.plugin.particles.config.EndParticlesShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.particles.config.EndParticlesShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.setting.Culling;
 import com.gempukku.libgdx.graph.shader.setting.DepthTesting;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;

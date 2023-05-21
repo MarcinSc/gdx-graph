@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.graph.plugin.lighting3d.config.EndShadowShaderNodeConfiguration;
-import com.gempukku.libgdx.graph.plugin.models.design.producer.ModelShaderPreviewEditorPart;
+import com.gempukku.libgdx.graph.shader.lighting3d.config.EndShadowShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.producer.ModelShaderPreviewEditorPart;
 import com.gempukku.libgdx.graph.shader.setting.Culling;
 import com.gempukku.libgdx.graph.shader.setting.DepthTesting;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;

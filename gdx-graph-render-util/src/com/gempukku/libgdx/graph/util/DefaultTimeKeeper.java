@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.util;
 
-import com.gempukku.libgdx.graph.time.TimeKeeper;
+import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 
 public class DefaultTimeKeeper implements TimeKeeper {
     private boolean firstUpdate = true;

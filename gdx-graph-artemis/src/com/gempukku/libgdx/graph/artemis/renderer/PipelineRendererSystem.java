@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
-import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 
 // This should be on the CameraSystem only, but there is a bug in Artemis

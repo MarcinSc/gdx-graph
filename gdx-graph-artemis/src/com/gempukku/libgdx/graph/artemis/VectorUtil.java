@@ -2,7 +2,7 @@ package com.gempukku.libgdx.graph.artemis;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.gempukku.libgdx.graph.util.ValueOperations;
+import com.gempukku.libgdx.graph.pipeline.util.ValueOperations;
 
 public class VectorUtil {
     private static Vector3 tempVector3 = new Vector3();

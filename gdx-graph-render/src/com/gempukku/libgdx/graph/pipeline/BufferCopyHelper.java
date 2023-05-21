@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.gempukku.libgdx.graph.libgdx.context.OpenGLContext;
+import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
 
 public interface BufferCopyHelper {
     void copy(FrameBuffer from, FrameBuffer to, OpenGLContext renderContext, FullScreenRender fullScreenRender);

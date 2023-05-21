@@ -9,23 +9,23 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Lighting3DPrivateData;
-import com.gempukku.libgdx.graph.plugin.lighting3d.Point3DLight;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.GraphShaderRenderingWidget;
 import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
+import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPrivateData;
+import com.gempukku.libgdx.graph.shader.lighting3d.Point3DLight;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.ui.AssetResolver;
 import com.gempukku.libgdx.graph.ui.PatternTextures;
 import com.gempukku.libgdx.graph.ui.graph.GraphStatusChangeEvent;
-import com.gempukku.libgdx.graph.ui.shader.GraphShaderRenderingWidget;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.graph.util.WhitePixel;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.ParticleRenderableSprite;
 import com.gempukku.libgdx.graph.util.particles.generator.*;
@@ -199,7 +199,8 @@ public class ParticlesShaderPreview extends DisposableTable {
 
             globalPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {
-                if (property.getLocation() == PropertyLocation.Global_Uniform) {
+                PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
+                if (location == PropertyLocation.Global_Uniform) {
                     ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
                     globalPropertyContainer.setValue(property.getName(), propertyType.convertFromJson(property.getData()));
                 }
@@ -207,7 +208,8 @@ public class ParticlesShaderPreview extends DisposableTable {
 
             localPropertyContainer.clear();
             for (GraphProperty property : graph.getProperties()) {
-                if (property.getLocation() == PropertyLocation.Uniform || property.getLocation() == PropertyLocation.Attribute) {
+                PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
+                if (location == PropertyLocation.Uniform || location == PropertyLocation.Attribute) {
                     ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
                     Object value = propertyType.convertFromJson(property.getData());
                     if (propertyType.isTexture()) {

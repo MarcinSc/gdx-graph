@@ -893,8 +893,8 @@
     {
       "name": "Distortion",
       "type": "Float",
-      "location": "Global_Uniform",
       "data": {
+        "location": "Global_Uniform",
         "x": 0.20000000298023224
       }
     }

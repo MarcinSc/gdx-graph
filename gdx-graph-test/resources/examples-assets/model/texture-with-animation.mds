@@ -126,8 +126,8 @@
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -136,8 +136,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -145,24 +145,24 @@
     {
       "name": "Diffuse Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": null
       }
     },
     {
       "name": "Bone Weights",
       "type": "BoneWeights",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "maxBoneWeightCount": 4
       }
     },
     {
       "name": "Bone Transforms",
       "type": "BoneTransforms",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "maxBoneCount": 12
       }
     }

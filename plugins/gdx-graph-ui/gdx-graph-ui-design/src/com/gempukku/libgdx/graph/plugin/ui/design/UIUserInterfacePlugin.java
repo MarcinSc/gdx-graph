@@ -2,8 +2,8 @@ package com.gempukku.libgdx.graph.plugin.ui.design;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.design.producer.UIRendererPipelineEditorProducer;
+import com.gempukku.libgdx.graph.render.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 

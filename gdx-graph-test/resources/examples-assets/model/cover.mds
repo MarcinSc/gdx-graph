@@ -267,8 +267,8 @@
     {
       "name": "Direction",
       "type": "Vector3",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 0.0,
         "y": 1.0,
         "z": 0.0
@@ -277,24 +277,24 @@
     {
       "name": "Amount",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 1.0
       }
     },
     {
       "name": "Scale",
       "type": "Float",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "x": 10.0
       }
     },
     {
       "name": "Position",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -303,8 +303,8 @@
     {
       "name": "Normal",
       "type": "Vector3",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0,
         "z": 0.0
@@ -313,8 +313,8 @@
     {
       "name": "UV",
       "type": "Vector2",
-      "location": "Attribute",
       "data": {
+        "location": "Attribute",
         "x": 0.0,
         "y": 0.0
       }
@@ -322,8 +322,8 @@
     {
       "name": "Diffuse Texture",
       "type": "TextureRegion",
-      "location": "Uniform",
       "data": {
+        "location": "Uniform",
         "previewPath": "D:/dev/libgdx-graph/gdx-graph-test/resources/image/seamless_rock_face_texture_by_hhh316.jpg"
       }
     }

@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.plugin.particles.design.producer;
 
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.plugin.particles.ParticleEffectGraphType;
-import com.gempukku.libgdx.graph.plugin.particles.ParticlesShaderRendererPipelineNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.particles.ParticleEffectGraphType;
+import com.gempukku.libgdx.graph.shader.particles.ParticlesShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.ShaderGraphEditorPart;

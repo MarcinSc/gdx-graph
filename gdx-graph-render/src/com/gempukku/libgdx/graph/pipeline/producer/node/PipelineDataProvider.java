@@ -1,13 +1,13 @@
 package com.gempukku.libgdx.graph.pipeline.producer.node;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.BufferCopyHelper;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
 import com.gempukku.libgdx.graph.pipeline.PipelinePropertySource;
 import com.gempukku.libgdx.graph.pipeline.TextureFrameBufferCache;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.time.TimeProvider;
-import com.gempukku.libgdx.graph.util.WhitePixel;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 
 public interface PipelineDataProvider {
     <T> T getPrivatePluginData(Class<T> clazz);

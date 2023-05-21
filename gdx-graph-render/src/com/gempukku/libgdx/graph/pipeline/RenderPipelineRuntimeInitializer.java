@@ -1,12 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline;
 
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
-import com.gempukku.libgdx.graph.field.BooleanFieldType;
-import com.gempukku.libgdx.graph.field.FloatFieldType;
-import com.gempukku.libgdx.graph.field.Vector2FieldType;
-import com.gempukku.libgdx.graph.field.Vector3FieldType;
-import com.gempukku.libgdx.graph.pipeline.field.CameraPipelineFieldType;
-import com.gempukku.libgdx.graph.pipeline.field.ColorPipelineFieldType;
+import com.gempukku.libgdx.graph.pipeline.field.*;
 import com.gempukku.libgdx.graph.pipeline.producer.math.arithmetic.*;
 import com.gempukku.libgdx.graph.pipeline.producer.math.common.*;
 import com.gempukku.libgdx.graph.pipeline.producer.math.exponential.*;
@@ -14,10 +9,6 @@ import com.gempukku.libgdx.graph.pipeline.producer.math.geometric.*;
 import com.gempukku.libgdx.graph.pipeline.producer.math.trigonometry.*;
 import com.gempukku.libgdx.graph.pipeline.producer.math.value.MergePipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.math.value.SplitPipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.postprocessor.BloomPipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.postprocessor.DepthOfFieldPipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.postprocessor.GammaCorrectionPipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.postprocessor.GaussianBlurPipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.property.PropertyPipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.provided.RenderSizePipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.provided.TimePipelineNodeProducer;
@@ -28,7 +19,6 @@ import com.gempukku.libgdx.graph.pipeline.producer.value.producer.*;
 import com.gempukku.libgdx.graph.pipeline.property.*;
 import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.callback.producer.RenderCallbackPipelineNodeProducer;
 
 public class RenderPipelineRuntimeInitializer implements PluginRuntimeInitializer {
     @Override
@@ -37,7 +27,6 @@ public class RenderPipelineRuntimeInitializer implements PluginRuntimeInitialize
 
         RendererPipelineConfiguration.register(new StartPipelineNodeProducer());
         RendererPipelineConfiguration.register(new EndPipelineNodeProducer());
-        RendererPipelineConfiguration.register(new RenderCallbackPipelineNodeProducer());
         RendererPipelineConfiguration.register(new PipelineRendererNodeProducer());
 
         RendererPipelineConfiguration.register(new ValueFloatPipelineNodeProducer());
@@ -97,11 +86,6 @@ public class RenderPipelineRuntimeInitializer implements PluginRuntimeInitialize
         RendererPipelineConfiguration.register(new SplitPipelineNodeProducer());
 
         RendererPipelineConfiguration.register(new PropertyPipelineNodeProducer());
-
-        RendererPipelineConfiguration.register(new BloomPipelineNodeProducer());
-        RendererPipelineConfiguration.register(new GaussianBlurPipelineNodeProducer());
-        RendererPipelineConfiguration.register(new DepthOfFieldPipelineNodeProducer());
-        RendererPipelineConfiguration.register(new GammaCorrectionPipelineNodeProducer());
 
         RendererPipelineConfiguration.registerPropertyProducer(new FloatPipelinePropertyProducer(), new FloatFieldType());
         RendererPipelineConfiguration.registerPropertyProducer(new Vector2PipelinePropertyProducer(), new Vector2FieldType());

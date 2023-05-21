@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.graph.util.property;
 
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 
 public class HierarchicalPropertyContainer implements WritablePropertyContainer {
     private PropertyContainer parent;

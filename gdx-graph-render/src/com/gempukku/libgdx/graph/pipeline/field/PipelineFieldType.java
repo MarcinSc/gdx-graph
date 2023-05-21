@@ -9,5 +9,6 @@ public interface PipelineFieldType extends FieldType {
     String Color = "Color";
     String Boolean = "Boolean";
     String Camera = "Camera";
+    String Matrix4 = "Matrix4";
     String RenderPipeline = "RenderPipeline";
 }

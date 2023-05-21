@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.util.particles;
 
 import com.badlogic.gdx.graphics.VertexAttribute;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 
 public class ParticleRenderableSprite implements RenderableSprite {

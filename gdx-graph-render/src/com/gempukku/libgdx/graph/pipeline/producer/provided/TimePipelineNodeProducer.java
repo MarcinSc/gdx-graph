@@ -7,7 +7,7 @@ import com.gempukku.libgdx.graph.pipeline.config.provided.TimePipelineNodeConfig
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
-import com.gempukku.libgdx.graph.time.TimeProvider;
+import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 
 public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     public TimePipelineNodeProducer() {

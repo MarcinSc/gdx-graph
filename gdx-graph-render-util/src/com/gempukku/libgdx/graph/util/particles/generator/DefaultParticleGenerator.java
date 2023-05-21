@@ -2,7 +2,7 @@ package com.gempukku.libgdx.graph.util.particles.generator;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.particles.generator.value.FloatValue;
 import com.gempukku.libgdx.graph.util.particles.generator.value.RangeFloatValue;
 import com.gempukku.libgdx.graph.util.particles.generator.value.StaticFloatValue;

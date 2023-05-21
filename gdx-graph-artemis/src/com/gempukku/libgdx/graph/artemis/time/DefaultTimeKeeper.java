@@ -1,6 +1,6 @@
 package com.gempukku.libgdx.graph.artemis.time;
 
-import com.gempukku.libgdx.graph.time.TimeKeeper;
+import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 
 public class DefaultTimeKeeper implements TimeKeeper {
     private float timeCumulative = 0.0f;

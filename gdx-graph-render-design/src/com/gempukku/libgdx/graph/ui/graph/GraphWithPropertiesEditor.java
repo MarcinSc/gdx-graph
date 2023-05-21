@@ -155,7 +155,7 @@ public class GraphWithPropertiesEditor extends VisTable {
 
         for (GraphProperty property : graph.getProperties()) {
             PropertyEditorDefinition propertyEditorDefinition = getPropertyEditorDefinition(property.getType());
-            PropertyEditor propertyEditor = propertyEditorDefinition.createPropertyEditor(property.getName(), property.getLocation(), property.getData(), type.getPropertyLocations());
+            PropertyEditor propertyEditor = propertyEditorDefinition.createPropertyEditor(property.getName(), property.getData());
             addPropertyEditor(property.getName(), propertyEditor);
         }
 
@@ -305,7 +305,7 @@ public class GraphWithPropertiesEditor extends VisTable {
                             public void changed(ChangeEvent event, Actor actor) {
                                 String defaultName = value.getDefaultName();
                                 String propertyName = resolveUniqueName(defaultName);
-                                PropertyEditor defaultPropertyEditor = value.createPropertyEditor(propertyName, null, null, type.getPropertyLocations());
+                                PropertyEditor defaultPropertyEditor = value.createPropertyEditor(propertyName, null);
                                 addPropertyEditor(name, defaultPropertyEditor);
                             }
                         });
