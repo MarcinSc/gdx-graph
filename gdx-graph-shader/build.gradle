@@ -1,0 +1,8 @@
+archivesBaseName = "gdx-graph-shader"
+eclipse.project.name = "gdx-graph-shader"
+
+sourceCompatibility = 1.7
+
+dependencies {
+    api project(":gdx-graph-render")
+}

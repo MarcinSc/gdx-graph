@@ -1,12 +1,12 @@
-eclipse.project.name = appName + "-core"
+eclipse.project.name = "gdx-graph-render-design"
 
 sourceSets.main.resources.srcDirs = ["assets/"]
 
 sourceCompatibility = 1.8
 
 dependencies {
-    api project(":gdx-graph")
-    api project(":gdx-graph-util")
+    api project(":gdx-graph-render")
+    api project(":gdx-graph-render-util")
 
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-common:$gdxGempLibVersion"
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"

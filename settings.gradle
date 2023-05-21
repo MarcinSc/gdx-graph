@@ -1,4 +1,4 @@
-include 'desktop', 'core', 'gdx-graph', 'gdx-graph-util', 'gdx-graph-artemis', 'gdx-graph-test', 'gdx-graph-assistant'
+include 'gdx-graph-desktop', 'gdx-graph-render-design', 'gdx-graph-render', 'gdx-graph-shader', 'gdx-graph-render-util', 'gdx-graph-artemis', 'gdx-graph-test', 'gdx-graph-assistant'
 
 new File(rootDir, "plugins").listFiles().each {plugin->
     if (plugin.directory) {

@@ -6,7 +6,7 @@ project.ext.assetsDir = new File("assets")
 import org.gradle.internal.os.OperatingSystem
 
 dependencies {
-    api project(":core")
+    api project(":gdx-graph-render-design")
     api project(":gdx-graph-assistant")
 
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"

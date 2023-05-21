@@ -7,7 +7,7 @@ configurations {
 }
 
 dependencies {
-    api project(":core")
+    api project(":gdx-graph-render")
 
     // Plugins
     api project(":gdx-graph-callback-design")
