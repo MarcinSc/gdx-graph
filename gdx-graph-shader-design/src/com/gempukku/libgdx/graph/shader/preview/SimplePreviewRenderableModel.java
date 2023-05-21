@@ -50,8 +50,10 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
     @Override
     public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
                             ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
-        if (propertiesRenderableModel != null)
+        if (propertiesRenderableModel != null) {
             propertiesRenderableModel.dispose();
+            propertiesRenderableModel = null;
+        }
 
         hierarchicalPropertyContainer.setParent(propertyContainer);
 

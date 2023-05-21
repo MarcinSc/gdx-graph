@@ -1,18 +1,14 @@
 package com.gempukku.libgdx.graph.ui.graph;
 
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
-import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 
 import java.util.Iterator;
 
-public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, GraphChangedAware {
+public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer {
     private MenuNodeConfiguration configuration;
-    private ObjectSet<GraphChangedAware> awareChildren = new ObjectSet<>();
     private boolean closeable = true;
 
     public GdxGraphNodeEditorProducer(MenuNodeConfiguration configuration) {
@@ -50,18 +46,7 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
 
     @Override
     public GraphNodeEditor createNodeEditor(String nodeId, JsonValue data) {
-        GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(nodeId, configuration) {
-            @Override
-            protected void initializeWidget() {
-                awareChildren.add(this);
-            }
-
-            @Override
-            protected void disposeWidget() {
-                awareChildren.remove(this);
-            }
-        };
-        awareChildren.add(nodeEditor);
+        GdxGraphNodeEditor nodeEditor = new GdxGraphNodeEditor(nodeId, configuration);
         buildNodeEditorBeforeIO(nodeEditor, configuration);
         addConfigurationInputsAndOutputs(nodeEditor);
         buildNodeEditorAfterIO(nodeEditor, configuration);
@@ -137,12 +122,5 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer, 
             }
         }
         return null;
-    }
-
-    @Override
-    public void graphChanged(GraphChangedEvent event, GraphWithProperties graph) {
-        for (GraphChangedAware awareChild : awareChildren) {
-            awareChild.graphChanged(event, graph);
-        }
     }
 }

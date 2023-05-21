@@ -24,6 +24,7 @@ import com.gempukku.libgdx.ui.graph.GraphChangedListener;
 import com.gempukku.libgdx.ui.graph.GraphEditor;
 import com.gempukku.libgdx.ui.graph.PopupMenuProducer;
 import com.gempukku.libgdx.ui.graph.data.NodeGroup;
+import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
@@ -95,16 +96,6 @@ public class GraphWithPropertiesEditor extends VisTable {
                 }, "gdx-graph");
         this.compositeGraphWithProperties = new CompositeGraphWithProperties(graphEditor.getGraph(), propertyEditors);
 
-        this.addListener(
-                new GraphChangedListener() {
-                    @Override
-                    protected boolean graphChanged(GraphChangedEvent event) {
-                        processGraphChanged(event);
-                        return false;
-                    }
-                });
-
-
         VisTable leftTable = new VisTable();
         VisTable headerTable = new VisTable();
         headerTable.pad(2);
@@ -158,6 +149,15 @@ public class GraphWithPropertiesEditor extends VisTable {
             PropertyEditor propertyEditor = propertyEditorDefinition.createPropertyEditor(property.getName(), property.getData());
             addPropertyEditor(property.getName(), propertyEditor);
         }
+
+        this.addListener(
+                new GraphChangedListener() {
+                    @Override
+                    protected boolean graphChanged(GraphChangedEvent event) {
+                        processGraphChanged(event);
+                        return false;
+                    }
+                });
 
         GraphChangedEvent event = Pools.obtain(GraphChangedEvent.class);
         event.setStructure(true);
@@ -354,11 +354,9 @@ public class GraphWithPropertiesEditor extends VisTable {
             validationLabel.setText("OK");
         }
 
-        for (UIGraphConfiguration uiGraphConfiguration : type.getUIConfigurations()) {
-            for (MenuGraphNodeEditorProducer graphNodeEditorProducer : uiGraphConfiguration.getGraphNodeEditorProducers()) {
-                if (graphNodeEditorProducer instanceof GraphChangedAware) {
-                    ((GraphChangedAware) graphNodeEditorProducer).graphChanged(event, graph);
-                }
+        for (GraphNodeEditor graphNodeEditor : graphEditor.getGraphNodeEditors()) {
+            if (graphNodeEditor instanceof GraphChangedAware) {
+                ((GraphChangedAware) graphNodeEditor).graphChanged(event, graph);
             }
         }
     }

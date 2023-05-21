@@ -163,6 +163,7 @@ public class ShaderPreview extends DisposableTable {
 
             graphShaderRenderingWidget.setGraphShader(graphShader);
         } catch (Exception exp) {
+            exp.printStackTrace();
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             destroyShader();
         }

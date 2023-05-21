@@ -106,8 +106,10 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
     @Override
     public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
                             ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
-        if (propertiesRenderableModel != null)
+        if (propertiesRenderableModel != null) {
             propertiesRenderableModel.dispose();
+            propertiesRenderableModel = null;
+        }
 
         hierarchicalPropertyContainer.setParent(propertyContainer);
 
@@ -152,6 +154,7 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
     public void dispose() {
         if (propertiesRenderableModel != null) {
             propertiesRenderableModel.dispose();
+            propertiesRenderableModel = null;
         }
     }
 }

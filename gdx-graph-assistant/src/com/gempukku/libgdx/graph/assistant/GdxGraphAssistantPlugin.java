@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.assistant;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Collections;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -47,6 +48,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public void registerPlugin() {
+        Collections.allocateIterators = true;
         registerGdxPlugins();
     }
 
