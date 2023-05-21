@@ -46,7 +46,7 @@ jar {
         }
     }
     // Package assets
-    from("../core/assets")
+    from("../gdx-graph-design/assets")
     from("../gdx-graph/resources")
 
     manifest {
