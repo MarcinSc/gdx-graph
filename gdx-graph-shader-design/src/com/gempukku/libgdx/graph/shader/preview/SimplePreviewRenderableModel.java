@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -14,6 +15,7 @@ import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
+import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
@@ -25,6 +27,7 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
     private final ObjectSet<String> tags = new ObjectSet<>();
     private PropertiesRenderableModel propertiesRenderableModel;
     private HierarchicalPropertyContainer hierarchicalPropertyContainer;
+    private ObjectMap<String, Object> functionAttributeValues = new ObjectMap<>();
 
     public SimplePreviewRenderableModel(int vertexCount, short[] indices) {
         this.vertexCount = vertexCount;
@@ -35,8 +38,8 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
         this.hierarchicalPropertyContainer = new HierarchicalPropertyContainer();
     }
 
-    public void addProperty(String name, Object value) {
-        hierarchicalPropertyContainer.setValue(name, value);
+    public void addFunctionAttributeValues(String name, Object value) {
+        functionAttributeValues.put(name, value);
     }
 
     public void addTag(String tag) {
@@ -55,6 +58,8 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
             propertiesRenderableModel = null;
         }
 
+        fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
+
         hierarchicalPropertyContainer.setParent(propertyContainer);
 
         VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
@@ -62,6 +67,24 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
 
         propertiesRenderableModel = new PropertiesRenderableModel(
                 vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
+    }
+
+    private void fillPropertyContainerBasedOnAttributeFunctions(ObjectMap<String, ShaderPropertySource> propertySourceMap) {
+        hierarchicalPropertyContainer.clear();
+
+        for (ObjectMap.Entry<String, ShaderPropertySource> stringShaderPropertySourceEntry : propertySourceMap) {
+            String name = stringShaderPropertySourceEntry.key;
+            ShaderPropertySource property = stringShaderPropertySourceEntry.value;;
+            if (property.getPropertyLocation() == PropertyLocation.Attribute) {
+                String function = property.getAttributeFunction();
+                if (function != null) {
+                    Object value = functionAttributeValues.get(function);
+                    if (value != null) {
+                        hierarchicalPropertyContainer.setValue(name, value);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -92,6 +115,11 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         propertiesRenderableModel.render(camera, shaderProgram, propertyToLocationMapping);
+    }
+
+    @Override
+    public Actor getCustomizationActor() {
+        return null;
     }
 
     @Override

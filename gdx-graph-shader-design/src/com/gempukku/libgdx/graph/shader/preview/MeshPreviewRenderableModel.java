@@ -8,17 +8,19 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
-import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
+import com.gempukku.libgdx.graph.shader.AttributeFunctions;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
+import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
@@ -28,8 +30,13 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
     private final int vertexCount;
     private final short[] indices;
     private final ObjectSet<String> tags = new ObjectSet<>();
+    private final HierarchicalPropertyContainer hierarchicalPropertyContainer;
     private PropertiesRenderableModel propertiesRenderableModel;
-    private HierarchicalPropertyContainer hierarchicalPropertyContainer;
+
+    private final ArrayValuePerVertex<Vector3> positionValues;
+    private final ArrayValuePerVertex<Vector3> normalValues;
+    private final ArrayValuePerVertex<Vector3> tangentValues;
+    private final ArrayValuePerVertex<Vector2> uvValues;
 
     public MeshPreviewRenderableModel(Mesh mesh) {
         this.vertexCount = mesh.getNumVertices();
@@ -38,7 +45,11 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
         mesh.getIndices(indices);
 
         this.hierarchicalPropertyContainer = new HierarchicalPropertyContainer();
-        fillPropertyContainerBasedOnMesh(hierarchicalPropertyContainer, mesh);
+
+        positionValues = createVector3Value(VertexAttributes.Usage.Position, mesh);
+        normalValues = createVector3Value(VertexAttributes.Usage.Normal, mesh);
+        tangentValues = createVector3Value(VertexAttributes.Usage.Tangent, mesh);
+        uvValues = createVector2Value(VertexAttributes.Usage.TextureCoordinates, mesh);
     }
 
     public void addTag(String tag) {
@@ -49,11 +60,36 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
         tags.remove(tag);
     }
 
-    private static void fillPropertyContainerBasedOnMesh(WritablePropertyContainer propertyContainer, Mesh mesh) {
-        propertyContainer.setValue("Position", createVector3Value(VertexAttributes.Usage.Position, mesh));
-        propertyContainer.setValue("Normal", createVector3Value(VertexAttributes.Usage.Normal, mesh));
-        propertyContainer.setValue("Tangent", createVector3Value(VertexAttributes.Usage.Tangent, mesh));
-        propertyContainer.setValue("UV", createVector2Value(VertexAttributes.Usage.TextureCoordinates, mesh));
+    private void fillPropertyContainerBasedOnAttributeFunctions(ObjectMap<String, ShaderPropertySource> propertySourceMap) {
+        hierarchicalPropertyContainer.clear();
+
+        for (ObjectMap.Entry<String, ShaderPropertySource> stringShaderPropertySourceEntry : propertySourceMap) {
+            String name = stringShaderPropertySourceEntry.key;
+            ShaderPropertySource property = stringShaderPropertySourceEntry.value;;
+            if (property.getPropertyLocation() == PropertyLocation.Attribute) {
+                String function = property.getAttributeFunction();
+                if (function != null) {
+                    Object value = getValueForAttributeFunction(function);
+                    if (value != null) {
+                        hierarchicalPropertyContainer.setValue(name, value);
+                    }
+                }
+            }
+        }
+    }
+
+    private Object getValueForAttributeFunction(String attributeFunction) {
+        switch (attributeFunction) {
+            case AttributeFunctions.Position:
+                return positionValues;
+            case AttributeFunctions.Normal:
+                return normalValues;
+            case AttributeFunctions.Tangent:
+                return tangentValues;
+            case AttributeFunctions.TexCoord0:
+                return uvValues;
+        }
+        return null;
     }
 
     private static ArrayValuePerVertex<Vector3> createVector3Value(int usage, Mesh mesh) {
@@ -111,6 +147,7 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
             propertiesRenderableModel = null;
         }
 
+        fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
         hierarchicalPropertyContainer.setParent(propertyContainer);
 
         VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
@@ -148,6 +185,11 @@ public class MeshPreviewRenderableModel implements PreviewRenderableModel, Dispo
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         propertiesRenderableModel.render(camera, shaderProgram, propertyToLocationMapping);
+    }
+
+    @Override
+    public Actor getCustomizationActor() {
+        return null;
     }
 
     @Override

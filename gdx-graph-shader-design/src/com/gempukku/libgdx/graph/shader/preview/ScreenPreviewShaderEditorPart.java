@@ -1,11 +1,9 @@
 package com.gempukku.libgdx.graph.shader.preview;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
+import com.gempukku.libgdx.graph.shader.UIModelShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.builder.recipe.DefaultGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.InitializeShaderProgramIngredient;
 import com.gempukku.libgdx.graph.shader.builder.recipe.finalize.SetShaderProgramIngredient;
@@ -29,6 +27,7 @@ public class ScreenPreviewShaderEditorPart extends DisposableTable implements Gr
         DefaultGraphShaderRecipe recipe = createRecipe(nodeId, output);
 
         modelShaderPreview = new ShaderPreview(recipe);
+        modelShaderPreview.setRenderableModelSupplier(UIModelShaderConfiguration.getPreviewModelSuppliers().get("Rectangle"));
 
         add(modelShaderPreview).width(width).height(height);
     }
@@ -82,20 +81,20 @@ public class ScreenPreviewShaderEditorPart extends DisposableTable implements Gr
     @Override
     protected void initializeWidget() {
         try {
-            renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
-            renderableModel.addProperty("Position", new ArrayValuePerVertex<>(
-                    new Vector3(0, 0, 0),
-                    new Vector3(0, 1, 0),
-                    new Vector3(1, 1, 0),
-                    new Vector3(1, 0, 0)
-            ));
-            renderableModel.addProperty("UV", new ArrayValuePerVertex<>(
-                    new Vector2(0, 0),
-                    new Vector2(0, 1),
-                    new Vector2(1, 1),
-                    new Vector2(1, 0)
-            ));
-            modelShaderPreview.setRenderableModel(renderableModel);
+//            renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
+//            renderableModel.addFunctionAttributeValues(AttributeFunctions.Position, new ArrayValuePerVertex<>(
+//                    new Vector3(0, 0, 0),
+//                    new Vector3(0, 1, 0),
+//                    new Vector3(1, 1, 0),
+//                    new Vector3(1, 0, 0)
+//            ));
+//            renderableModel.addFunctionAttributeValues(AttributeFunctions.TexCoord0, new ArrayValuePerVertex<>(
+//                    new Vector2(0, 0),
+//                    new Vector2(0, 1),
+//                    new Vector2(1, 1),
+//                    new Vector2(1, 0)
+//            ));
+//            modelShaderPreview.setRenderableModelSupplier(renderableModel);
         } catch (Exception exp) {
             // Ignore
         }

@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.common.sprite.BillboardSpriteShaderNodeConfiguration;
@@ -25,6 +26,8 @@ import com.gempukku.libgdx.graph.shader.config.common.texture.UVTilingAndOffsetS
 import com.gempukku.libgdx.graph.shader.config.common.value.*;
 import com.gempukku.libgdx.graph.shader.config.provided.*;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.preview.MeshPreviewModels;
+import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.preview.ScreenPreviewShaderGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.EndModelShaderEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.effect.DitherColorShaderEditorProducer;
@@ -166,14 +169,31 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
         UIModelShaderConfiguration.registerPropertyType(new ShaderPropertyMatrix4EditorDefinition());
         UIModelShaderConfiguration.registerPropertyType(new ShaderPropertyTextureEditorDefinition());
 
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector2, "TexCoord0");
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector2, AttributeFunctions.TexCoord0);
 
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, "Position");
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, "Normal");
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, "Bi-Normal");
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, "Tangent");
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, AttributeFunctions.Position);
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, AttributeFunctions.Normal);
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, AttributeFunctions.BiNormal);
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector3, AttributeFunctions.Tangent);
 
-        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector4, "Color");
+        UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector4, AttributeFunctions.Color);
+
+        UIModelShaderConfiguration.registerPreviewModel(
+                "Sphere",
+                new Supplier<PreviewRenderableModel>() {
+                    @Override
+                    public PreviewRenderableModel get() {
+                        return MeshPreviewModels.createSphere();
+                    }
+                });
+        UIModelShaderConfiguration.registerPreviewModel(
+                "Rectangle",
+                new Supplier<PreviewRenderableModel>() {
+                    @Override
+                    public PreviewRenderableModel get() {
+                        return MeshPreviewModels.createRectangle();
+                    }
+                });
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);

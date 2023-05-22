@@ -1,5 +1,7 @@
 package com.gempukku.libgdx.graph.shader;
 
+import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
@@ -10,7 +12,7 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
     private static Map<String, ShaderPropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
     private static Map<String, List<String>> propertyTypeToFunctions = new HashMap<>();
-
+    private static Map<String, Supplier<? extends PreviewRenderableModel>> previewModels = new LinkedHashMap<>();
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
@@ -44,6 +46,14 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
         ShaderPropertyEditorDefinition propertyEditorDefinition = propertyProducers.get(propertyType);
         if (propertyEditorDefinition != null)
             propertyEditorDefinition.setPropertyFunctions(propertyTypeFunctions);
+    }
+
+    public static void registerPreviewModel(String displayName, Supplier<? extends PreviewRenderableModel> previewRenderableModelSupplier) {
+        previewModels.put(displayName, previewRenderableModelSupplier);
+    }
+
+    public static Map<String, Supplier<? extends PreviewRenderableModel>> getPreviewModelSuppliers() {
+        return previewModels;
     }
 
     @Override
