@@ -1,10 +1,11 @@
-package com.gempukku.libgdx.graph.ui.part;
+package com.gempukku.libgdx.graph.shader.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.setting.BlendingFactor;
+import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;

@@ -21,7 +21,8 @@ public class InitializePropertyMapIngredient implements GraphShaderRecipeIngredi
         for (GraphProperty property : graph.getProperties()) {
             String name = property.getName();
             PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
-            graphShader.addPropertySource(name, findPropertyProducerByType(property.getType(), configurations).createProperty(index++, name, property.getData(), location, designTime));
+            String attributeFunction = property.getData().getString("function", null);
+            graphShader.addPropertySource(name, findPropertyProducerByType(property.getType(), configurations).createProperty(index++, name, property.getData(), location, attributeFunction, designTime));
         }
     }
 

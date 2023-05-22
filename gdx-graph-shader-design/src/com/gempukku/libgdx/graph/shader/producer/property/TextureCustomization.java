@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.ui.pipeline.property;
+package com.gempukku.libgdx.graph.shader.producer.property;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
@@ -7,6 +7,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
+import com.gempukku.libgdx.graph.ui.pipeline.property.TextureWrapDisplayText;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;

@@ -17,7 +17,7 @@ public class BoneTransformPropertyProducer implements GraphShaderPropertyProduce
     }
 
     @Override
-    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime) {
         int boneCount = data.getInt("maxBoneCount", 12);
 
         Matrix4[] defaultValue = new Matrix4[boneCount];
@@ -25,6 +25,6 @@ public class BoneTransformPropertyProducer implements GraphShaderPropertyProduce
             defaultValue[i] = new Matrix4().idt();
         }
 
-        return new DefaultShaderPropertySource(index, name, new BoneTransformFieldType(boneCount), location, defaultValue);
+        return new DefaultShaderPropertySource(index, name, new BoneTransformFieldType(boneCount), location, attributeFunction, defaultValue);
     }
 }

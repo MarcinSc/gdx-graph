@@ -7,8 +7,10 @@ public class DefaultTextureShaderPropertySource extends DefaultShaderPropertySou
     private Texture.TextureFilter minFilter;
     private Texture.TextureFilter magFilter;
 
-    public DefaultTextureShaderPropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue, Texture.TextureFilter minFilter, Texture.TextureFilter magFilter) {
-        super(propertyIndex, propertyName, shaderFieldType, location, defaultValue);
+    public DefaultTextureShaderPropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType,
+                                              PropertyLocation location, String attributeFunction, Object defaultValue,
+                                              Texture.TextureFilter minFilter, Texture.TextureFilter magFilter) {
+        super(propertyIndex, propertyName, shaderFieldType, location, attributeFunction, defaultValue);
         this.minFilter = minFilter;
         this.magFilter = magFilter;
     }

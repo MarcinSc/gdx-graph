@@ -81,25 +81,31 @@ public class ScreenPreviewShaderEditorPart extends DisposableTable implements Gr
 
     @Override
     protected void initializeWidget() {
-        renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
-        renderableModel.addProperty("Position", new ArrayValuePerVertex<>(
-                new Vector3(0, 0, 0),
-                new Vector3(0, 1, 0),
-                new Vector3(1, 1, 0),
-                new Vector3(1, 0, 0)
-        ));
-        renderableModel.addProperty("UV", new ArrayValuePerVertex<>(
-                new Vector2(0, 0),
-                new Vector2(0, 1),
-                new Vector2(1, 1),
-                new Vector2(1, 0)
-        ));
-        modelShaderPreview.setRenderableModel(renderableModel);
+        try {
+            renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
+            renderableModel.addProperty("Position", new ArrayValuePerVertex<>(
+                    new Vector3(0, 0, 0),
+                    new Vector3(0, 1, 0),
+                    new Vector3(1, 1, 0),
+                    new Vector3(1, 0, 0)
+            ));
+            renderableModel.addProperty("UV", new ArrayValuePerVertex<>(
+                    new Vector2(0, 0),
+                    new Vector2(0, 1),
+                    new Vector2(1, 1),
+                    new Vector2(1, 0)
+            ));
+            modelShaderPreview.setRenderableModel(renderableModel);
+        } catch (Exception exp) {
+            // Ignore
+        }
     }
 
     @Override
     protected void disposeWidget() {
-        renderableModel.dispose();
+        if (renderableModel != null) {
+            renderableModel.dispose();
+        }
         renderableModel = null;
     }
 }

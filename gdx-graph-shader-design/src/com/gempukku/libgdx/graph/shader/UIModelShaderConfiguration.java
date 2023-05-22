@@ -11,6 +11,7 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, ShaderPropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
     private static Map<String, List<String>> propertyTypeToFunctions = new HashMap<>();
 
+
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
         if (menuLocation == null)

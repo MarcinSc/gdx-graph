@@ -15,15 +15,15 @@ public abstract class TextureShaderPropertyProducer implements GraphShaderProper
         return type;
     }
 
-    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime) {
         String minFilterStr = data.getString("minFilter", null);
         String magFilterStr = data.getString("magFilter", null);
         Texture.TextureFilter minFilter = (minFilterStr != null) ? Texture.TextureFilter.valueOf(minFilterStr) : Texture.TextureFilter.Nearest;
         Texture.TextureFilter magFilter = (magFilterStr != null) ? Texture.TextureFilter.valueOf(magFilterStr) : Texture.TextureFilter.Nearest;
         if (designTime)
-            return new DefaultTextureShaderPropertySource(index, name, type, location, WhitePixel.sharedInstance.textureRegion, minFilter, magFilter);
+            return new DefaultTextureShaderPropertySource(index, name, type, location, attributeFunction, WhitePixel.sharedInstance.textureRegion, minFilter, magFilter);
         else
-            return new DefaultTextureShaderPropertySource(index, name, type, location, getDefaultTextureRegion(), minFilter, magFilter);
+            return new DefaultTextureShaderPropertySource(index, name, type, location, attributeFunction, getDefaultTextureRegion(), minFilter, magFilter);
     }
 
     protected abstract TextureRegion getDefaultTextureRegion();

@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.ui.pipeline.property;
 
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.ui.graph.property.DefaultPropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
@@ -26,7 +25,7 @@ public class PropertyVector2EditorDefinition implements PropertyEditorDefinition
 
     @Override
     public PropertyEditor createPropertyEditor(String name, JsonValue jsonObject) {
-        DefaultPropertyEditor result = new DefaultPropertyEditor(name, ShaderFieldType.Vector2);
+        DefaultPropertyEditor result = new DefaultPropertyEditor(name, getType());
         result.addPropertyEditorPart(new Vector2EditorPart("Vector2", "x", "y", 0, 0, null, null,
                 "gdx-graph-property-label", "gdx-graph-property"));
         result.initialize(jsonObject);

@@ -6,6 +6,7 @@ sourceCompatibility = 1.8
 
 dependencies {
     api project(":gdx-graph-shader")
+    api project(":gdx-graph-shader-util")
     api project(":gdx-graph-lighting3d")
     api project(":gdx-graph-render-design")
 

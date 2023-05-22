@@ -9,7 +9,6 @@ import com.gempukku.libgdx.graph.shader.property.DefaultShaderPropertyEditor;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertyEditor;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
-import com.gempukku.libgdx.graph.ui.pipeline.property.TextureCustomization;
 import com.gempukku.libgdx.graph.ui.pipeline.property.TextureFilterDisplayText;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.FileSelectorEditorPart;

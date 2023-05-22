@@ -13,7 +13,7 @@ public class FloatShaderPropertyProducer implements GraphShaderPropertyProducer 
     }
 
     @Override
-    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
-        return new DefaultShaderPropertySource(index, name, type, location, type.convertFromJson(data));
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime) {
+        return new DefaultShaderPropertySource(index, name, type, location, attributeFunction, type.convertFromJson(data));
     }
 }

@@ -62,18 +62,16 @@ com_crashlytics_export_strings.xml
 /ios-moe/nbproject/private/
 
 /build/
-/android/build/
-/core/build/
-/gdx-graph/build/
 /gdx-graph-artemis/build/
 /gdx-graph-assistant/build/
+/gdx-graph-desktop/build/
+/gdx-graph-render/build/
+/gdx-graph-render-design/build/
+/gdx-graph-shader/build/
+/gdx-graph-shader-design/build/
+/gdx-graph-shader-util/build/
 /gdx-graph-test/build/
-/gdx-graph-util/build/
 /plugins/*/*/build/
-/desktop/build/
-/html/build/
-/ios/build/
-/ios-moe/build/
 
 /nbbuild/
 /android/nbbuild/

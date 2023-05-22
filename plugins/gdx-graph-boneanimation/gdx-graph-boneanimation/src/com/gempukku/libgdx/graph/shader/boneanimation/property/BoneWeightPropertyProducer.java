@@ -17,7 +17,7 @@ public class BoneWeightPropertyProducer implements GraphShaderPropertyProducer {
     }
 
     @Override
-    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, boolean designTime) {
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime) {
         int boneWeightCount = data.getInt("maxBoneWeightCount", 4);
 
         Vector2[] defaultValue = new Vector2[boneWeightCount];
@@ -25,6 +25,6 @@ public class BoneWeightPropertyProducer implements GraphShaderPropertyProducer {
             defaultValue[i] = new Vector2(0, 1);
         }
 
-        return new DefaultShaderPropertySource(index, name, new BoneWeightFieldType(boneWeightCount), location, defaultValue);
+        return new DefaultShaderPropertySource(index, name, new BoneWeightFieldType(boneWeightCount), location, attributeFunction, defaultValue);
     }
 }

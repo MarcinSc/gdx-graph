@@ -21,6 +21,8 @@ public interface ShaderPropertySource {
 
     PropertyLocation getPropertyLocation();
 
+    String getAttributeFunction();
+
     Object getValueToUse(Object givenValue);
 
     boolean isDefiningAttribute(String attributeName);

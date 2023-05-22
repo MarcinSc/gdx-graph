@@ -7,13 +7,16 @@ public class DefaultShaderPropertySource implements ShaderPropertySource {
     private final String propertyName;
     private final ShaderFieldType shaderFieldType;
     private final PropertyLocation location;
+    private final String attributeFunction;
     private final Object defaultValue;
 
-    public DefaultShaderPropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType, PropertyLocation location, Object defaultValue) {
+    public DefaultShaderPropertySource(int propertyIndex, String propertyName, ShaderFieldType shaderFieldType,
+                                       PropertyLocation location, String attributeFunction, Object defaultValue) {
         this.propertyIndex = propertyIndex;
         this.propertyName = propertyName;
         this.shaderFieldType = shaderFieldType;
         this.location = location;
+        this.attributeFunction = attributeFunction;
         this.defaultValue = defaultValue;
     }
 
@@ -66,6 +69,11 @@ public class DefaultShaderPropertySource implements ShaderPropertySource {
     @Override
     public PropertyLocation getPropertyLocation() {
         return location;
+    }
+
+    @Override
+    public String getAttributeFunction() {
+        return attributeFunction;
     }
 
     @Override
