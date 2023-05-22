@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.ui.DisposableTable;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.*;
@@ -21,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEditor, GraphChangedAware {
+public class GdxGraphNodeEditor extends VisTable implements GraphNodeEditor, GraphChangedAware {
     private static final String ioLabelStyle = "gdx-graph-io-label";
 
     private String nodeId;
@@ -37,16 +36,6 @@ public class GdxGraphNodeEditor extends DisposableTable implements GraphNodeEdit
 
     public String getNodeId() {
         return nodeId;
-    }
-
-    @Override
-    protected void initializeWidget() {
-
-    }
-
-    @Override
-    protected void disposeWidget() {
-
     }
 
     @Override

@@ -13,15 +13,14 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.init.SetupFloatPrevisionI
 import com.gempukku.libgdx.graph.shader.builder.recipe.source.OutputSource;
 import com.gempukku.libgdx.graph.shader.builder.recipe.vertex.AttributePositionVertexShaderIngredient;
 import com.gempukku.libgdx.graph.ui.graph.GraphChangedAware;
-import com.gempukku.libgdx.ui.DisposableTable;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorInput;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorOutput;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
+import com.kotcrab.vis.ui.widget.VisTable;
 
-public class ScreenPreviewShaderEditorPart extends DisposableTable implements GraphNodeEditorPart, GraphChangedAware {
+public class ScreenPreviewShaderEditorPart extends VisTable implements GraphNodeEditorPart, GraphChangedAware {
     private final ShaderPreview modelShaderPreview;
-    private SimplePreviewRenderableModel renderableModel;
 
     public ScreenPreviewShaderEditorPart(String nodeId, String output, int width, int height) {
         DefaultGraphShaderRecipe recipe = createRecipe(nodeId, output);
@@ -76,35 +75,5 @@ public class ScreenPreviewShaderEditorPart extends DisposableTable implements Gr
         if (event.isData() || event.isStructure()) {
             modelShaderPreview.graphChanged(graph);
         }
-    }
-
-    @Override
-    protected void initializeWidget() {
-        try {
-//            renderableModel = new SimplePreviewRenderableModel(4, new short[]{0, 2, 1, 2, 0, 3});
-//            renderableModel.addFunctionAttributeValues(AttributeFunctions.Position, new ArrayValuePerVertex<>(
-//                    new Vector3(0, 0, 0),
-//                    new Vector3(0, 1, 0),
-//                    new Vector3(1, 1, 0),
-//                    new Vector3(1, 0, 0)
-//            ));
-//            renderableModel.addFunctionAttributeValues(AttributeFunctions.TexCoord0, new ArrayValuePerVertex<>(
-//                    new Vector2(0, 0),
-//                    new Vector2(0, 1),
-//                    new Vector2(1, 1),
-//                    new Vector2(1, 0)
-//            ));
-//            modelShaderPreview.setRenderableModelSupplier(renderableModel);
-        } catch (Exception exp) {
-            // Ignore
-        }
-    }
-
-    @Override
-    protected void disposeWidget() {
-        if (renderableModel != null) {
-            renderableModel.dispose();
-        }
-        renderableModel = null;
     }
 }
