@@ -11,5 +11,7 @@ public interface PreviewRenderableModel extends RenderableModel {
     void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap, ObjectMap<String, ShaderPropertySource> propertySourceMap,
             PropertyContainer localPropertyContainer);
 
+    void update(float delta);
+
     Actor getCustomizationActor();
 }

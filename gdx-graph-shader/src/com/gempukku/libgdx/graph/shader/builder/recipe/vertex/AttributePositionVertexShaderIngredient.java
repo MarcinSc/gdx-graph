@@ -29,6 +29,6 @@ public class AttributePositionVertexShaderIngredient implements GraphShaderRecip
         vertexShaderBuilder.addMainLine("v_position_world = positionWorld;");
 
         vertexShaderBuilder.addMainLine("// End Graph Node");
-        vertexShaderBuilder.addMainLine("gl_Position = vec4((positionWorld.xy * 2.0 - 1.0), 0.0, 1.0);");
+        vertexShaderBuilder.addMainLine("gl_Position = vec4(positionWorld.xy * 2.0, 0.0, 1.0);");
     }
 }

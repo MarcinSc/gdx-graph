@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.common.sprite.BillboardSpriteShaderNodeConfiguration;
@@ -27,7 +26,6 @@ import com.gempukku.libgdx.graph.shader.config.common.value.*;
 import com.gempukku.libgdx.graph.shader.config.provided.*;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.preview.MeshPreviewModels;
-import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.preview.ScreenPreviewShaderGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.EndModelShaderEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.effect.DitherColorShaderEditorProducer;
@@ -179,21 +177,11 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
         UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector4, AttributeFunctions.Color);
 
         UIModelShaderConfiguration.registerPreviewModel(
-                "Sphere",
-                new Supplier<PreviewRenderableModel>() {
-                    @Override
-                    public PreviewRenderableModel get() {
-                        return MeshPreviewModels.createSphere();
-                    }
-                });
+                "Sphere", MeshPreviewModels.getSphereModelSupplier());
         UIModelShaderConfiguration.registerPreviewModel(
-                "Rectangle",
-                new Supplier<PreviewRenderableModel>() {
-                    @Override
-                    public PreviewRenderableModel get() {
-                        return MeshPreviewModels.createRectangle();
-                    }
-                });
+                "Rectangle", MeshPreviewModels.getRectangleModelSupplier());
+
+        UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelSupplier());
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);

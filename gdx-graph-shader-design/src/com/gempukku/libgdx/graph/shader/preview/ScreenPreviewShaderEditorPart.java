@@ -26,7 +26,7 @@ public class ScreenPreviewShaderEditorPart extends VisTable implements GraphNode
         DefaultGraphShaderRecipe recipe = createRecipe(nodeId, output);
 
         modelShaderPreview = new ShaderPreview(recipe);
-        modelShaderPreview.setRenderableModelSupplier(UIModelShaderConfiguration.getPreviewModelSuppliers().get("Rectangle"));
+        modelShaderPreview.setRenderableModelSupplier(UIModelShaderConfiguration.getScreenPreviewModel());
 
         add(modelShaderPreview).width(width).height(height);
     }

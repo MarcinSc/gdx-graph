@@ -195,6 +195,10 @@ public class ShaderPreview extends DisposableTable {
     public void act(float delta) {
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
+        if (previewRenderableModel != null) {
+            previewRenderableModel.update(delta);
+        }
+
         super.act(delta);
     }
 

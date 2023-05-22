@@ -13,6 +13,7 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, ShaderPropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
     private static Map<String, List<String>> propertyTypeToFunctions = new HashMap<>();
     private static Map<String, Supplier<? extends PreviewRenderableModel>> previewModels = new LinkedHashMap<>();
+    private static Supplier<? extends PreviewRenderableModel> screenPreviewModel;
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
@@ -50,6 +51,14 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
 
     public static void registerPreviewModel(String displayName, Supplier<? extends PreviewRenderableModel> previewRenderableModelSupplier) {
         previewModels.put(displayName, previewRenderableModelSupplier);
+    }
+
+    public static void setScreenPreviewModel(Supplier<? extends PreviewRenderableModel> screenPreviewModel) {
+        UIModelShaderConfiguration.screenPreviewModel = screenPreviewModel;
+    }
+
+    public static Supplier<? extends PreviewRenderableModel> getScreenPreviewModel() {
+        return screenPreviewModel;
     }
 
     public static Map<String, Supplier<? extends PreviewRenderableModel>> getPreviewModelSuppliers() {

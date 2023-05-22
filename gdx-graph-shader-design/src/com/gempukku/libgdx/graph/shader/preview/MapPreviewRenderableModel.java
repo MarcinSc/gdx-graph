@@ -21,15 +21,16 @@ import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 
-public class SimplePreviewRenderableModel implements PreviewRenderableModel, Disposable {
+public class MapPreviewRenderableModel implements PreviewRenderableModel, Disposable {
     private final int vertexCount;
     private final short[] indices;
     private final ObjectSet<String> tags = new ObjectSet<>();
+    private final HierarchicalPropertyContainer hierarchicalPropertyContainer;
     private PropertiesRenderableModel propertiesRenderableModel;
-    private HierarchicalPropertyContainer hierarchicalPropertyContainer;
-    private ObjectMap<String, Object> functionAttributeValues = new ObjectMap<>();
 
-    public SimplePreviewRenderableModel(int vertexCount, short[] indices) {
+    private final ObjectMap<String, Object> attributeFunctionValues = new ObjectMap<>();
+
+    public MapPreviewRenderableModel(int vertexCount, short[] indices) {
         this.vertexCount = vertexCount;
 
         this.indices = new short[indices.length];
@@ -38,8 +39,8 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
         this.hierarchicalPropertyContainer = new HierarchicalPropertyContainer();
     }
 
-    public void addFunctionAttributeValues(String name, Object value) {
-        functionAttributeValues.put(name, value);
+    public void addAttributeFunctionValue(String attributeFunction, Object value) {
+        attributeFunctionValues.put(attributeFunction, value);
     }
 
     public void addTag(String tag) {
@@ -48,25 +49,6 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
 
     public void removeTag(String tag) {
         tags.remove(tag);
-    }
-
-    @Override
-    public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
-                            ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
-        if (propertiesRenderableModel != null) {
-            propertiesRenderableModel.dispose();
-            propertiesRenderableModel = null;
-        }
-
-        fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
-
-        hierarchicalPropertyContainer.setParent(propertyContainer);
-
-        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
-        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
-
-        propertiesRenderableModel = new PropertiesRenderableModel(
-                vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
     }
 
     private void fillPropertyContainerBasedOnAttributeFunctions(ObjectMap<String, ShaderPropertySource> propertySourceMap) {
@@ -78,13 +60,35 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
             if (property.getPropertyLocation() == PropertyLocation.Attribute) {
                 String function = property.getAttributeFunction();
                 if (function != null) {
-                    Object value = functionAttributeValues.get(function);
+                    Object value = getValueForAttributeFunction(function);
                     if (value != null) {
                         hierarchicalPropertyContainer.setValue(name, value);
                     }
                 }
             }
         }
+    }
+
+    private Object getValueForAttributeFunction(String attributeFunction) {
+        return attributeFunctionValues.get(attributeFunction);
+    }
+
+    @Override
+    public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
+                            ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
+        if (propertiesRenderableModel != null) {
+            propertiesRenderableModel.dispose();
+            propertiesRenderableModel = null;
+        }
+
+        fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
+        hierarchicalPropertyContainer.setParent(propertyContainer);
+
+        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
+        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
+
+        propertiesRenderableModel = new PropertiesRenderableModel(
+                vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
     }
 
     @Override
@@ -118,6 +122,11 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
     }
 
     @Override
+    public void update(float delta) {
+
+    }
+
+    @Override
     public Actor getCustomizationActor() {
         return null;
     }
@@ -126,6 +135,7 @@ public class SimplePreviewRenderableModel implements PreviewRenderableModel, Dis
     public void dispose() {
         if (propertiesRenderableModel != null) {
             propertiesRenderableModel.dispose();
+            propertiesRenderableModel = null;
         }
     }
 }
