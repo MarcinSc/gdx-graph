@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Producer;
 import com.gempukku.libgdx.common.ValueProducer;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
@@ -142,6 +143,16 @@ public class MeshPreviewModels {
 
         public ModelProducer(Producer<PreviewRenderableModel> modelProducer) {
             this.modelProducer = modelProducer;
+        }
+
+        @Override
+        public void initialize(JsonValue data) {
+
+        }
+
+        @Override
+        public void serialize(JsonValue value) {
+
         }
 
         @Override

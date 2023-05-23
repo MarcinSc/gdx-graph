@@ -45,6 +45,8 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
     private final VisTable localTable;
     private final VisTable tabTable;
     private final VisImageButton maximizeButton;
+    private PreviewRenderableModelProducer renderableModelProducer;
+    private PreviewRenderableModelProducer tabRenderableModelProducer;
 
     public ModelShaderPreviewEditorPart(String modelTypeProperty) {
         this.modelTypeProperty = modelTypeProperty;
@@ -146,14 +148,16 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
         String modelTypeProperty = data.getString(this.modelTypeProperty, null);
         if (modelTypeProperty != null) {
             setPreviewModel(modelTypeProperty);
+            renderableModelProducer.initialize(data);
+            tabRenderableModelProducer.initialize(data);
         }
     }
 
     public void setPreviewModel(String previewModelType) {
         selectBox.setSelected(previewModelType);
         tabSelectBox.setSelected(previewModelType);
-        PreviewRenderableModelProducer renderableModelProducer = UIModelShaderConfiguration.getPreviewModelSuppliers().get(previewModelType).create();
-        PreviewRenderableModelProducer tabRenderableModelProducer = UIModelShaderConfiguration.getPreviewModelSuppliers().get(previewModelType).create();
+        renderableModelProducer = UIModelShaderConfiguration.getPreviewModelSuppliers().get(previewModelType).create();
+        tabRenderableModelProducer = UIModelShaderConfiguration.getPreviewModelSuppliers().get(previewModelType).create();
 
         modelCustomizationContainer.clear();
         tabModelCustomizationContainer.clear();
@@ -192,6 +196,7 @@ public class ModelShaderPreviewEditorPart implements GraphNodeEditorPart, GraphC
     @Override
     public void serializePart(JsonValue value) {
         value.addChild(modelTypeProperty, new JsonValue(selectBox.getSelected()));
+        renderableModelProducer.serialize(value);
     }
 
     @Override
