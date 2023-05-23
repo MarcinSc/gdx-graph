@@ -1,22 +1,33 @@
 package com.gempukku.libgdx.graph.util.particles;
 
-import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 
 public class ParticleRenderableSprite implements RenderableSprite {
-    private float particleBirth;
-    private float lifeLength;
-    private PropertyContainer propertyContainer;
+    private final float particleBirth;
+    private final float lifeLength;
+    private final ObjectSet<String> particleBirthProperties;
+    private final ObjectSet<String> particleDeathProperties;
+    private final PropertyContainer propertyContainer;
 
-    public ParticleRenderableSprite(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
+    public ParticleRenderableSprite(
+            float particleBirth, float lifeLength,
+            ObjectSet<String> particleBirthProperties, ObjectSet<String> particleDeathProperties,
+            PropertyContainer propertyContainer) {
         this.particleBirth = particleBirth;
         this.lifeLength = lifeLength;
+        this.particleBirthProperties = particleBirthProperties;
+        this.particleDeathProperties = particleDeathProperties;
         this.propertyContainer = propertyContainer;
     }
 
     public float getParticleBirth() {
         return particleBirth;
+    }
+
+    public float getLifeLength() {
+        return lifeLength;
     }
 
     public float getParticleDeath() {
@@ -25,14 +36,11 @@ public class ParticleRenderableSprite implements RenderableSprite {
 
     @Override
     public Object getValue(String name) {
-        return propertyContainer.getValue(name);
-    }
-
-    @Override
-    public void setUnknownPropertyInAttribute(VertexAttribute vertexAttribute, float[] vertexData, int startIndex) {
-        if (vertexAttribute.alias.equals("a_birthTime"))
-            vertexData[startIndex] = getParticleBirth();
-        else if (vertexAttribute.alias.equals("a_deathTime"))
-            vertexData[startIndex] = particleBirth + lifeLength;
+        if (particleBirthProperties.contains(name))
+            return particleBirth;
+        else if (particleDeathProperties.contains(name))
+            return particleBirth + lifeLength;
+        else
+            return propertyContainer.getValue(name);
     }
 }

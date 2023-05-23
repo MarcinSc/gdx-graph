@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
@@ -258,7 +259,8 @@ public class ParticlesShaderPreview extends DisposableTable {
                     new ParticleGenerator.ParticleCreateCallback() {
                         @Override
                         public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
-                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
+                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(
+                                    particleBirth, lifeLength, new ObjectSet<>(), new ObjectSet<>(), propertyContainer);
                             sprites.add(sprite);
                             spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
                         }
@@ -295,7 +297,8 @@ public class ParticlesShaderPreview extends DisposableTable {
                     new ParticleGenerator.ParticleCreateCallback() {
                         @Override
                         public void createParticle(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
-                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer);
+                            ParticleRenderableSprite sprite = new ParticleRenderableSprite(particleBirth, lifeLength,
+                                    new ObjectSet<>(), new ObjectSet<>(), propertyContainer);
                             sprites.add(sprite);
                             spriteIdentifiers.put(sprite, spriteMesh.addPart(sprite));
                         }

@@ -23,7 +23,7 @@ public class RandomPosition {
                 float y = 2 * x2 * a;
                 float z = 1 - 2 * (x1Square + x2Square);
 
-                float r = (float) Math.pow(MathUtils.random(0, radius), 1d / 3d);
+                float r = (float) Math.pow(MathUtils.random(0, 1f), 1d / 3d) * radius;
                 return result.set(centerX + r * x, centerY + r * y, centerZ + r * z);
             }
         }

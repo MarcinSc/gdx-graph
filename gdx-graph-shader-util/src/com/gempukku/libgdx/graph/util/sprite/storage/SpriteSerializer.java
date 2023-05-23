@@ -56,29 +56,22 @@ public class SpriteSerializer implements MeshSerializer<RenderableSprite> {
             int attributeOffset = vertexAttribute.offset / 4;
 
             ShaderPropertySource shaderPropertySource = vertexPropertySources.get(vertexAttribute);
-            if (shaderPropertySource == null) {
+            String attributeName = vertexAttribute.alias;
+            ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
+            Object attributeValue = sprite.getValue(shaderPropertySource.getPropertyName());
+            if (attributeValue instanceof ValuePerVertex) {
                 for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
                     int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
-                    sprite.setUnknownPropertyInAttribute(vertexAttribute, vertexValues, vertexOffset + attributeOffset);
+
+                    Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
+                    shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
                 }
             } else {
-                String attributeName = vertexAttribute.alias;
-                ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
-                Object attributeValue = sprite.getValue(shaderPropertySource.getPropertyName());
-                if (attributeValue instanceof ValuePerVertex) {
-                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-                        int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
+                attributeValue = shaderPropertySource.getValueToUse(attributeValue);
+                for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
+                    int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
 
-                        Object vertexValue = ((ValuePerVertex) attributeValue).getValue(vertexIndex);
-                        shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, shaderPropertySource.getValueToUse(vertexValue));
-                    }
-                } else {
-                    attributeValue = shaderPropertySource.getValueToUse(attributeValue);
-                    for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++) {
-                        int vertexOffset = vertexStart + vertexIndex * floatCountPerVertex;
-
-                        shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, attributeValue);
-                    }
+                    shaderFieldType.setValueInAttributesArray(attributeName, vertexValues, vertexOffset + attributeOffset, attributeValue);
                 }
             }
         }

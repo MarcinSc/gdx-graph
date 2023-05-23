@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.utils.Disposable;
-import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.common.Producer;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
@@ -36,7 +36,7 @@ public class ShaderPreview extends DisposableTable {
     private GraphWithProperties graph;
 
     private GraphShader graphShader;
-    private Supplier<? extends PreviewRenderableModel> renderableModelSupplier;
+    private Producer<? extends PreviewRenderableModel> renderableModelProducer;
     private PreviewRenderableModel previewRenderableModel;
 
     private final Camera camera;
@@ -86,12 +86,13 @@ public class ShaderPreview extends DisposableTable {
         return data;
     }
 
-    public void setRenderableModelSupplier(Supplier<? extends PreviewRenderableModel> renderableModelSupplier) {
-        this.renderableModelSupplier = renderableModelSupplier;
+    public void setRenderableModelProducer(Producer<? extends PreviewRenderableModel> renderableModelProducer) {
+        this.renderableModelProducer = renderableModelProducer;
+        timeKeeper.setTime(0);
 
         if (previewRenderableModel != null) {
             destroyRenderableModel();
-            previewRenderableModel = renderableModelSupplier.get();
+            previewRenderableModel = renderableModelProducer.create();
             previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
             graphShaderRenderingWidget.setRenderableModel(previewRenderableModel);
         }
@@ -101,7 +102,7 @@ public class ShaderPreview extends DisposableTable {
     protected void initializeWidget() {
         initialized = true;
         if (graphShader == null && graph != null) {
-            previewRenderableModel = renderableModelSupplier.get();
+            previewRenderableModel = renderableModelProducer.create();
             graphShaderRenderingWidget.setRenderableModel(previewRenderableModel);
             createShader(graph);
         }
@@ -164,6 +165,7 @@ public class ShaderPreview extends DisposableTable {
                 }
             }
 
+            timeKeeper.setTime(0);
             if (previewRenderableModel != null) {
                 previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
             }
@@ -196,7 +198,7 @@ public class ShaderPreview extends DisposableTable {
         timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
         if (previewRenderableModel != null) {
-            previewRenderableModel.update(delta);
+            previewRenderableModel.update(timeKeeper.getTime());
         }
 
         super.act(delta);

@@ -1,7 +1,8 @@
 package com.gempukku.libgdx.graph.shader;
 
-import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.common.Producer;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
+import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModelProducer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphConfiguration;
@@ -12,8 +13,9 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, MenuGraphNodeEditorProducer> graphBoxProducers = new TreeMap<>();
     private static Map<String, ShaderPropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
     private static Map<String, List<String>> propertyTypeToFunctions = new HashMap<>();
-    private static Map<String, Supplier<? extends PreviewRenderableModel>> previewModels = new LinkedHashMap<>();
-    private static Supplier<? extends PreviewRenderableModel> screenPreviewModel;
+    private static Map<String, Producer<? extends PreviewRenderableModelProducer>> previewModels = new LinkedHashMap<>();
+    private static Producer<? extends PreviewRenderableModel> screenPreviewModel;
+    private static Producer<? extends PreviewRenderableModel> spherePreviewModel;
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
@@ -49,19 +51,27 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
             propertyEditorDefinition.setPropertyFunctions(propertyTypeFunctions);
     }
 
-    public static void registerPreviewModel(String displayName, Supplier<? extends PreviewRenderableModel> previewRenderableModelSupplier) {
+    public static void registerPreviewModel(String displayName, Producer<? extends PreviewRenderableModelProducer> previewRenderableModelSupplier) {
         previewModels.put(displayName, previewRenderableModelSupplier);
     }
 
-    public static void setScreenPreviewModel(Supplier<? extends PreviewRenderableModel> screenPreviewModel) {
+    public static void setScreenPreviewModel(Producer<? extends PreviewRenderableModel> screenPreviewModel) {
         UIModelShaderConfiguration.screenPreviewModel = screenPreviewModel;
     }
 
-    public static Supplier<? extends PreviewRenderableModel> getScreenPreviewModel() {
+    public static void setSpherePreviewModel(Producer<? extends PreviewRenderableModel> screenPreviewModel) {
+        UIModelShaderConfiguration.spherePreviewModel = screenPreviewModel;
+    }
+
+    public static Producer<? extends PreviewRenderableModel> getScreenPreviewModel() {
         return screenPreviewModel;
     }
 
-    public static Map<String, Supplier<? extends PreviewRenderableModel>> getPreviewModelSuppliers() {
+    public static Producer<? extends PreviewRenderableModel> getSpherePreviewModel() {
+        return spherePreviewModel;
+    }
+
+    public static Map<String, Producer<? extends PreviewRenderableModelProducer>> getPreviewModelSuppliers() {
         return previewModels;
     }
 

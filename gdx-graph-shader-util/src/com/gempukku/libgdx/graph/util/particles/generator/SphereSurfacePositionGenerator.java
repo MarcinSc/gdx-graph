@@ -4,7 +4,15 @@ import com.badlogic.gdx.math.Vector3;
 
 public class SphereSurfacePositionGenerator implements PositionGenerator {
     private Vector3 center = new Vector3();
-    private float radius = 1f;
+    private float radius;
+
+    public SphereSurfacePositionGenerator() {
+        this(1f);
+    }
+
+    public SphereSurfacePositionGenerator(float radius) {
+        this.radius = radius;
+    }
 
     public Vector3 getCenter() {
         return center;

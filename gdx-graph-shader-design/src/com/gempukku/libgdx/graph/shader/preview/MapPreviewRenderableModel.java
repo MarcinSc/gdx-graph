@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -122,13 +121,8 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float currentTime) {
 
-    }
-
-    @Override
-    public Actor getCustomizationActor() {
-        return null;
     }
 
     @Override

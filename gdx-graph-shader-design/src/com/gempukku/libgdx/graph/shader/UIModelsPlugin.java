@@ -177,11 +177,11 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
         UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Vector4, AttributeFunctions.Color);
 
         UIModelShaderConfiguration.registerPreviewModel(
-                "Sphere", MeshPreviewModels.getSphereModelSupplier());
+                "Sphere", MeshPreviewModels.getSphereModelProducer());
         UIModelShaderConfiguration.registerPreviewModel(
-                "Rectangle", MeshPreviewModels.getRectangleModelSupplier());
+                "Rectangle", MeshPreviewModels.getRectangleModelProducer());
 
-        UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelSupplier());
+        UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelProducer().create());
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);

@@ -8,30 +8,34 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.common.Supplier;
+import com.gempukku.libgdx.common.Producer;
+import com.gempukku.libgdx.common.ValueProducer;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.shader.AttributeFunctions;
 
 public class MeshPreviewModels {
-    private static Supplier<PreviewRenderableModel> sphereModelSupplier;
-    private static Supplier<PreviewRenderableModel> rectangleModelSupplier;
+    private static Producer<PreviewRenderableModelProducer> sphereModelSupplier;
+    private static Producer<PreviewRenderableModelProducer> rectangleModelSupplier;
 
-    public static Supplier<PreviewRenderableModel> getRectangleModelSupplier() {
+    public static Producer<PreviewRenderableModelProducer> getRectangleModelProducer() {
         if (rectangleModelSupplier == null) {
-            rectangleModelSupplier = createRectangleModelSupplier();
+            rectangleModelSupplier = new ValueProducer<>(
+                    new ModelProducer(createRectangleModelSupplier()));
         }
         return rectangleModelSupplier;
     }
 
-    public static Supplier<PreviewRenderableModel> getSphereModelSupplier() {
+    public static Producer<PreviewRenderableModelProducer> getSphereModelProducer() {
         if (sphereModelSupplier == null) {
-            sphereModelSupplier = createSphereModelSupplier();
+            sphereModelSupplier = new ValueProducer<>(
+                    new ModelProducer(createSphereModelSupplier()));
         }
         return sphereModelSupplier;
     }
 
-    private static Supplier<PreviewRenderableModel> createRectangleModelSupplier() {
+    private static Producer<PreviewRenderableModel> createRectangleModelSupplier() {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
         Model model = modelBuilder.createRect(
@@ -43,13 +47,13 @@ public class MeshPreviewModels {
                 material,
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
         try {
-            return createModelSupplierFromMesh(model.meshes.get(0));
+            return createModelProducerFromMesh(model.meshes.get(0));
         } finally {
             model.dispose();
         }
     }
 
-    private static Supplier<PreviewRenderableModel> createSphereModelSupplier() {
+    private static Producer<PreviewRenderableModel> createSphereModelSupplier() {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
         float sphereDiameter = 0.8f;
@@ -57,13 +61,13 @@ public class MeshPreviewModels {
                 material,
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
         try {
-            return createModelSupplierFromMesh(model.meshes.get(0));
+            return createModelProducerFromMesh(model.meshes.get(0));
         } finally {
             model.dispose();
         }
     }
 
-    private static Supplier<PreviewRenderableModel> createModelSupplierFromMesh(Mesh mesh) {
+    private static Producer<PreviewRenderableModel> createModelProducerFromMesh(Mesh mesh) {
         int vertexCount = mesh.getNumVertices();
         short[] indices = new short[mesh.getNumIndices()];
         mesh.getIndices(indices);
@@ -73,9 +77,9 @@ public class MeshPreviewModels {
         ArrayValuePerVertex<Vector3> tangentValue = createVector3Value(VertexAttributes.Usage.Tangent, mesh);
         ArrayValuePerVertex<Vector2> uvValue = createVector2Value(VertexAttributes.Usage.TextureCoordinates, mesh);
 
-        return new Supplier<PreviewRenderableModel>() {
+        return new Producer<PreviewRenderableModel>() {
             @Override
-            public PreviewRenderableModel get() {
+            public PreviewRenderableModel create() {
                 MapPreviewRenderableModel result = new MapPreviewRenderableModel(vertexCount, indices);
                 result.addAttributeFunctionValue(AttributeFunctions.Position, positionValue);
                 result.addAttributeFunctionValue(AttributeFunctions.Normal, normalValue);
@@ -133,4 +137,21 @@ public class MeshPreviewModels {
         return new ArrayValuePerVertex<>(result.toArray());
     }
 
+    private static class ModelProducer implements PreviewRenderableModelProducer {
+        private final Producer<PreviewRenderableModel> modelProducer;
+
+        public ModelProducer(Producer<PreviewRenderableModel> modelProducer) {
+            this.modelProducer = modelProducer;
+        }
+
+        @Override
+        public Actor getCustomizationActor() {
+            return null;
+        }
+
+        @Override
+        public PreviewRenderableModel create() {
+            return modelProducer.create();
+        }
+    }
 }

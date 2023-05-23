@@ -26,7 +26,7 @@ public class SpherePreviewShaderEditorPart extends VisTable implements GraphNode
         DefaultGraphShaderRecipe recipe = createRecipe(nodeId, output);
 
         modelShaderPreview = new ShaderPreview(recipe);
-        modelShaderPreview.setRenderableModelSupplier(UIModelShaderConfiguration.getPreviewModelSuppliers().get("Sphere"));
+        modelShaderPreview.setRenderableModelProducer(UIModelShaderConfiguration.getSpherePreviewModel());
 
         add(modelShaderPreview).width(width).height(height);
     }

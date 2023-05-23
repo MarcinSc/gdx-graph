@@ -32,6 +32,9 @@ public class ParticleModel implements Disposable {
 
     private ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> lastSpriteModel;
 
+    private ObjectSet<String> particleBirthProperties = new ObjectSet<>();
+    private ObjectSet<String> particleDeathProperties = new ObjectSet<>();
+
     public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
         this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
     }
@@ -40,6 +43,14 @@ public class ParticleModel implements Disposable {
         propertyContainer = new MapWritablePropertyContainer();
         spriteModelManager = new ParticlesSpriteBatchProducer(particlesPerPage, spriteModel, graphModels, tag);
         spriteBatchModel = new PagedMultiPartBatchModel<>(spriteModelManager);
+    }
+
+    public void addParticleBirthProperty(String propertyName) {
+        particleBirthProperties.add(propertyName);
+    }
+
+    public void addParticleDeathProperty(String propertyName) {
+        particleDeathProperties.add(propertyName);
     }
 
     public void addGenerator(float currentTime, ParticleGenerator generator) {
@@ -63,7 +74,8 @@ public class ParticleModel implements Disposable {
     }
 
     private void createParticleImpl(float particleBirth, float lifeLength, PropertyContainer propertyContainer) {
-        spriteBatchModel.addPart(new ParticleRenderableSprite(particleBirth, lifeLength, propertyContainer));
+        spriteBatchModel.addPart(new ParticleRenderableSprite(
+                particleBirth, lifeLength, particleBirthProperties, particleDeathProperties, propertyContainer));
         lastSpriteModel.updateWithMaxDeathTime(particleBirth + lifeLength);
     }
 
