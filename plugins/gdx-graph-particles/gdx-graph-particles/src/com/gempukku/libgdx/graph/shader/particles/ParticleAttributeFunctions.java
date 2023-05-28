@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.graph.plugin.particles.design;
+package com.gempukku.libgdx.graph.shader.particles;
 
 public class ParticleAttributeFunctions {
     public static final String ParticleBirth = "Particle Birth";

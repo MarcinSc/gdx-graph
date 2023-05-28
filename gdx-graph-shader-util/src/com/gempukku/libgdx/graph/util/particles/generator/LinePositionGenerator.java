@@ -6,6 +6,14 @@ public class LinePositionGenerator implements PositionGenerator {
     private Vector3 point1 = new Vector3();
     private Vector3 point2 = new Vector3();
 
+    public LinePositionGenerator() {
+    }
+
+    public LinePositionGenerator(Vector3 point1, Vector3 point2) {
+        this.point1.set(point1);
+        this.point2.set(point2);
+    }
+
     public Vector3 getPoint1() {
         return point1;
     }

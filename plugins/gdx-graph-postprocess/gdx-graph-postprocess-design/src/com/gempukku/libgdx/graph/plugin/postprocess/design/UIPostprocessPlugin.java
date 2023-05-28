@@ -1,7 +1,9 @@
 package com.gempukku.libgdx.graph.plugin.postprocess.design;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.postprocess.design.producer.DepthOfFieldEditorProducer;
+import com.gempukku.libgdx.graph.render.postprocess.PostprocessPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.render.postprocess.producer.BloomPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.render.postprocess.producer.GammaCorrectionPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.render.postprocess.producer.GaussianBlurPipelineNodeConfiguration;
@@ -15,5 +17,7 @@ public class UIPostprocessPlugin implements UIGdxGraphPlugin {
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GaussianBlurPipelineNodeConfiguration()));
         UIRenderPipelineConfiguration.register(new DepthOfFieldEditorProducer());
         UIRenderPipelineConfiguration.register(new GdxGraphNodeEditorProducer(new GammaCorrectionPipelineNodeConfiguration()));
+
+        RuntimePluginRegistry.register(PostprocessPluginRuntimeInitializer.class);
     }
 }

@@ -15,6 +15,7 @@ import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
+import com.gempukku.libgdx.graph.shader.particles.ParticleAttributeFunctions;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
@@ -193,7 +194,7 @@ public class ParticlePreviewRenderableModel implements PreviewRenderableModel, D
 
     @Override
     public boolean isRendered(GraphShader graphShader, Camera camera) {
-        return renderableModel.isRendered(graphShader, camera);
+        return renderableModel != null && renderableModel.isRendered(graphShader, camera);
     }
 
     @Override

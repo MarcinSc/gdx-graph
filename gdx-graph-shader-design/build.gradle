@@ -1,6 +1,6 @@
 eclipse.project.name = "gdx-graph-shader-design"
 
-sourceSets.main.resources.srcDirs = ["assets/"]
+//sourceSets.main.resources.srcDirs = ["res/"]
 
 sourceCompatibility = 1.8
 

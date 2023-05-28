@@ -80,14 +80,18 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
             propertiesRenderableModel = null;
         }
 
-        fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
-        hierarchicalPropertyContainer.setParent(propertyContainer);
+        try {
+            fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
+            hierarchicalPropertyContainer.setParent(propertyContainer);
 
-        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
-        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
+            VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
+            ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
 
-        propertiesRenderableModel = new PropertiesRenderableModel(
-                vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
+            propertiesRenderableModel = new PropertiesRenderableModel(
+                    vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
     }
 
     @Override

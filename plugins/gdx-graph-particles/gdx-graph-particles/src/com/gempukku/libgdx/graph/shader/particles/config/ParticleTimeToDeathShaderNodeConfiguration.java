@@ -5,14 +5,12 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
 
-public class ParticleLifePercentageShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
-    public ParticleLifePercentageShaderNodeConfiguration() {
-        super("NewParticleLifePercentage", "Particle life %", "Particle");
-        addNodeInput(
-                new DefaultGraphNodeInput("birth", "Birth", ShaderFieldType.Float));
+public class ParticleTimeToDeathShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
+    public ParticleTimeToDeathShaderNodeConfiguration() {
+        super("ParticleTimeToDeath", "Particle time to death", "Particle");
         addNodeInput(
                 new DefaultGraphNodeInput("death", "Death", ShaderFieldType.Float));
         addNodeOutput(
-                new DefaultGraphNodeOutput("percentage", "Percentage", ShaderFieldType.Float));
+                new DefaultGraphNodeOutput("time", "Time", ShaderFieldType.Float));
     }
 }

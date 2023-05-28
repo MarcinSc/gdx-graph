@@ -1,40 +1,30 @@
 package com.gempukku.libgdx.graph.plugin.particles.design;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.common.Producer;
-import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.particles.design.generator.PositionParticleGeneratorProducer;
-import com.gempukku.libgdx.graph.plugin.particles.design.producer.EndParticlesShaderEditorProducer;
-import com.gempukku.libgdx.graph.plugin.particles.design.producer.ParticlesShaderRendererEditorProducer;
 import com.gempukku.libgdx.graph.shader.UIModelShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
+import com.gempukku.libgdx.graph.shader.particles.ParticleAttributeFunctions;
 import com.gempukku.libgdx.graph.shader.particles.ParticlesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.particles.config.ParticleLifePercentageShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.particles.config.ParticleLifetimeShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.particles.config.ParticleTimeToDeathShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModelProducer;
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
-import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 import com.gempukku.libgdx.graph.util.particles.generator.LinePositionGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PointPositionGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.SpherePositionGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.SphereSurfacePositionGenerator;
-import com.kotcrab.vis.ui.VisUI;
 
 public class UIParticlesPlugin implements UIGdxGraphPlugin {
     public void initialize(FileHandleResolver assetResolver) {
-        // Register graph type
-        UIParticleEffectGraphType graphType = new UIParticleEffectGraphType(VisUI.getSkin().getDrawable("graph-particle-effect-icon"));
-        GraphTypeRegistry.registerType(graphType);
-
-        // Register node editors
-        UIParticlesShaderConfiguration.register(new EndParticlesShaderEditorProducer());
-        UIParticlesShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
-        UIParticlesShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
-
-        UIRenderPipelineConfiguration.register(new ParticlesShaderRendererEditorProducer());
+        UIModelShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleLifetimeShaderNodeConfiguration()));
+        UIModelShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleLifePercentageShaderNodeConfiguration()));
+        UIModelShaderConfiguration.register(new GdxGraphNodeEditorProducer(new ParticleTimeToDeathShaderNodeConfiguration()));
 
         UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Float, ParticleAttributeFunctions.ParticleBirth);
         UIModelShaderConfiguration.registerPropertyFunction(ShaderFieldType.Float, ParticleAttributeFunctions.ParticleDeath);
@@ -47,24 +37,18 @@ public class UIParticlesPlugin implements UIGdxGraphPlugin {
                     }
                 });
 
-        UIParticlesShaderConfiguration.registerParticleGeneratorProducer(
+        UIParticlesPluginConfiguration.registerParticleGeneratorProducer(
                 "Point", new PositionParticleGeneratorProducer(new PointPositionGenerator()));
-        UIParticlesShaderConfiguration.registerParticleGeneratorProducer(
+        UIParticlesPluginConfiguration.registerParticleGeneratorProducer(
                 "Sphere", new PositionParticleGeneratorProducer(new SpherePositionGenerator(0.4f)));
-        UIParticlesShaderConfiguration.registerParticleGeneratorProducer(
+        UIParticlesPluginConfiguration.registerParticleGeneratorProducer(
                 "Sphere surface", new PositionParticleGeneratorProducer(new SphereSurfacePositionGenerator(0.4f)));
 
-        LinePositionGenerator linePositionGenerator = new LinePositionGenerator();
-        linePositionGenerator.getPoint1().set(-0.4f, 0, 0);
-        linePositionGenerator.getPoint2().set(0.4f, 0, 0);
-        UIParticlesShaderConfiguration.registerParticleGeneratorProducer(
-                "Line", new PositionParticleGeneratorProducer(linePositionGenerator));
+        UIParticlesPluginConfiguration.registerParticleGeneratorProducer(
+                "Line", new PositionParticleGeneratorProducer(new LinePositionGenerator(
+                        new Vector3(-0.4f, 0, 0), new Vector3(0.4f, 0, 0))));
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ParticlesPluginRuntimeInitializer.class);
-
-        // Register shader templates
-        ParticlesTemplateRegistry.register(
-                new FileGraphTemplate(graphType, "Empty billboard", assetResolver.resolve("template/particles/empty-particles-shader.json")));
     }
 }

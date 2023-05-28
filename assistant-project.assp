@@ -65,11 +65,11 @@
 			{ "name": "Tiled Wall", "graphType": "Model_Shader", "path": "examples-assets/model/tiled-wall.mds" },
 			{ "name": "Toon Lighted Model", "graphType": "Model_Shader", "path": "examples-assets/model/toon-lighted-model.mds" },
 			{ "name": "White Model", "graphType": "Model_Shader", "path": "examples-assets/model/white-model.mds" },
-			{ "name": "Dust Particles", "graphType": "Particle_Effect", "path": "examples-assets/particles/dust.pes" },
-			{ "name": "Exhaust", "graphType": "Particle_Effect", "path": "examples-assets/particles/exhaust.pes" },
-			{ "name": "Particle Test", "graphType": "Particle_Effect", "path": "examples-assets/particles/particle-test.pes" },
 			{ "name": "CRT Monitor", "graphType": "Screen_Shader", "path": "examples-assets/screen/crt-monitor.scs" },
-			{ "name": "Basic Shadow", "graphType": "Shadow_Shader", "path": "examples-assets/shadow/basic-shadow.sds" }
+			{ "name": "Basic Shadow", "graphType": "Shadow_Shader", "path": "examples-assets/shadow/basic-shadow.sds" },
+			{ "name": "Particle Tests", "graphType": "Model_Shader", "path": "examples-assets/model/particle-test.mds" },
+			{ "name": "Dust particles", "graphType": "Model_Shader", "path": "examples-assets/model/dust-particles.mds" },
+			{ "name": "Exhaust particles", "graphType": "Model_Shader", "path": "examples-assets/model/exhaust.mds" }
 		]
 	},
 	"deprecation-warning": {}

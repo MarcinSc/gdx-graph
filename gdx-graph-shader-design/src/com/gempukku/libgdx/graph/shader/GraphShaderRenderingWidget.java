@@ -77,7 +77,6 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
 
     public void setRenderableModel(RenderableModel renderableModel) {
         this.renderableModel = renderableModel;
-        shaderContext.setRenderableModel(renderableModel);
     }
 
     @Override
@@ -91,20 +90,22 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
         super.act(delta);
         int width = MathUtils.round(getWidth());
         int height = MathUtils.round(getHeight());
-        if (initialized && width > 0 && height > 0) {
+        if (initialized && renderableModel != null && width > 0 && height > 0) {
+            shaderContext.setRenderWidth(width);
+            shaderContext.setRenderHeight(height);
+            shaderContext.setRenderableModel(renderableModel);
+
             if (hasToRecreateBuffer(width, height)) {
                 if (frameBuffer != null) {
                     frameBuffer.dispose();
                 }
                 frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, true);
-
-                shaderContext.setRenderWidth(width);
-                shaderContext.setRenderHeight(height);
-
-                camera.viewportWidth = width;
-                camera.viewportHeight = height;
-                camera.update();
             }
+
+            camera.viewportWidth = width;
+            camera.viewportHeight = height;
+            camera.update();
+
             drawToOffscreen();
         }
     }
@@ -118,7 +119,7 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
         renderContext.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | GL20.GL_STENCIL_BUFFER_BIT);
-        if (graphShader != null && renderableModel != null) {
+        if (graphShader != null && renderableModel != null && renderableModel.isRendered(graphShader, camera)) {
             graphShader.begin(shaderContext, renderContext);
             graphShader.render(shaderContext, renderableModel);
             graphShader.end();
@@ -129,7 +130,7 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (frameBuffer != null) {
+        if (initialized && renderableModel != null && frameBuffer != null) {
             batch.draw(frameBuffer.getColorBufferTexture(), getX(), getY() + getHeight(), getWidth(), -getHeight());
         }
     }

@@ -14,47 +14,40 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.particles.ParticleAttributeFunctions;
-import com.gempukku.libgdx.graph.shader.particles.config.ParticleLifePercentageShaderNodeConfiguration;
+import com.gempukku.libgdx.graph.shader.particles.config.ParticleTimeToDeathShaderNodeConfiguration;
 
-public class ParticleLifePercentageShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
-    public ParticleLifePercentageShaderNodeBuilder() {
-        super(new ParticleLifePercentageShaderNodeConfiguration());
+public class ParticleTimeToDeathShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
+    public ParticleTimeToDeathShaderNodeBuilder() {
+        super(new ParticleTimeToDeathShaderNodeConfiguration());
     }
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
-        FieldOutput birthOutput = AttributeFunctionUtils.getOutputWithFallbackVertex(inputs, vertexShaderBuilder,
-                graphShader, "birth", ParticleAttributeFunctions.ParticleBirth, "0.0");
         FieldOutput deathOutput = AttributeFunctionUtils.getOutputWithFallbackVertex(inputs, vertexShaderBuilder,
                 graphShader, "death", ParticleAttributeFunctions.ParticleDeath, "0.0");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
 
         String name = "result_" + nodeId;
-        vertexShaderBuilder.addMainLine("// Particle Lifetime Percentage Node");
-        vertexShaderBuilder.addMainLine("float" + " " + name + " = (u_time - " + birthOutput.getRepresentation() + ") / (" + deathOutput.getRepresentation() + " - " + birthOutput.getRepresentation() + ");");
+        vertexShaderBuilder.addMainLine("// Particle Time To Death Node");
+        vertexShaderBuilder.addMainLine("float" + " " + name + " = " + deathOutput.getRepresentation() + " - u_time;");
 
-        return LibGDXCollections.singletonMap("percentage", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(
-            boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
-            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
-        FieldOutput birthOutput = AttributeFunctionUtils.getOutputWithFallbackFragment(inputs, vertexShaderBuilder, fragmentShaderBuilder,
-                graphShader, "birth", ParticleAttributeFunctions.ParticleBirth, "0.0");
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
         FieldOutput deathOutput = AttributeFunctionUtils.getOutputWithFallbackFragment(inputs, vertexShaderBuilder, fragmentShaderBuilder,
                 graphShader, "death", ParticleAttributeFunctions.ParticleDeath, "0.0");
         vertexShaderBuilder.addUniformVariable("u_time", "float", true, UniformSetters.time,
                 "Time");
 
-        String varyingName = "v_" + nodeId + "_lifePercentage";
-        vertexShaderBuilder.addMainLine("// Particle Lifetime Percentage Node");
+        String varyingName = "v_" + nodeId + "_lifetime";
+        vertexShaderBuilder.addMainLine("// Particle Time To Death Node");
         vertexShaderBuilder.addVaryingVariable(varyingName, "float");
         fragmentShaderBuilder.addVaryingVariable(varyingName, "float");
-        vertexShaderBuilder.addMainLine(varyingName + " = (u_time - " + birthOutput.getRepresentation() + ") / (" + deathOutput.getRepresentation() + " - " + birthOutput.getRepresentation() + ");");
+        vertexShaderBuilder.addMainLine(varyingName + " = " + deathOutput.getRepresentation() + " - u_time;");
 
-        return LibGDXCollections.singletonMap("percentage", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
+        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
     }
 }

@@ -31,7 +31,7 @@ public class ParticlePreviewRenderableModelProducer extends VisTable implements 
         VisLabel generatorText = new VisLabel("Generator: ", "gdx-graph-property-label");
         generator = new UndoableSelectBox<>("gdx-graph-property");
         Array<String> generatorNames = new Array<>();
-        for (String generatorName : UIParticlesShaderConfiguration.getParticleGeneratorProducers().keySet()) {
+        for (String generatorName : UIParticlesPluginConfiguration.getParticleGeneratorProducers().keySet()) {
             generatorNames.add(generatorName);
         }
         generator.setItems(generatorNames);
@@ -154,7 +154,7 @@ public class ParticlePreviewRenderableModelProducer extends VisTable implements 
     }
 
     private PreviewParticleGeneratorProducer getGenerator() {
-        return UIParticlesShaderConfiguration.getParticleGeneratorProducers().get(generator.getSelected());
+        return UIParticlesPluginConfiguration.getParticleGeneratorProducers().get(generator.getSelected());
     }
 
     private float getLifeLength() {

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
@@ -47,12 +46,14 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
         particleEffects.setGlobalProperty("Test", "Color", Color.RED);
 
         particleModel = new ParticleModel(1000, particleEffects, "Test");
+        particleModel.addParticleBirthProperty("Particle Birth");
+        particleModel.addParticleDeathProperty("Particle Death");
 
-        createEffect(particleModel, new Vector3(0, 0, 0), 0.1f);
-        createEffect(particleModel, new Vector3(2, 0, 0), 0.2f);
+        createEffect(particleModel, new Vector3(0, 0, 0));
+        createEffect(particleModel, new Vector3(2, 0, 0));
     }
 
-    private void createEffect(ParticleModel particleModel, Vector3 center, float size) {
+    private void createEffect(ParticleModel particleModel, Vector3 center) {
         SpherePositionGenerator positionGenerator = new SpherePositionGenerator();
         positionGenerator.getCenter().set(center);
         positionGenerator.setRadius(0.3f);
@@ -65,10 +66,6 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
                         return SpriteUtil.QUAD_UVS;
                     }
                 });
-
-        MapWritablePropertyContainer properties = new MapWritablePropertyContainer();
-        properties.setValue("Size", size);
-
         particleModel.addGenerator(timeKeeper.getTime(), particleGenerator);
     }
 

@@ -115,6 +115,8 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         float max = 0.3f;
 
         particleModel = new ParticleModel(1000, models, "exhaust");
+        particleModel.addParticleBirthProperty("Particle Birth");
+        particleModel.addParticleDeathProperty("Particle Death");
 
         createExhaust(particleModel, new Vector3(min, height, distance), new Vector3(max, height, distance));
         createExhaust(particleModel, new Vector3(-min, height, distance), new Vector3(-max, height, distance));

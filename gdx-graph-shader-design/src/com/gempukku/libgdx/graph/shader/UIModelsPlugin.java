@@ -28,6 +28,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.preview.MeshPreviewModels;
 import com.gempukku.libgdx.graph.shader.preview.ScreenPreviewShaderGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.EndModelShaderEditorProducer;
+import com.gempukku.libgdx.graph.shader.producer.ModelShaderRendererEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.effect.DitherColorShaderEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.effect.DitherShaderEditorProducer;
 import com.gempukku.libgdx.graph.shader.producer.effect.GradientShaderEditorProducer;
@@ -41,6 +42,7 @@ import com.gempukku.libgdx.graph.shader.producer.texture.UVFlipbookShaderEditorP
 import com.gempukku.libgdx.graph.ui.UIGdxGraphPlugin;
 import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
+import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 import com.gempukku.libgdx.graph.ui.pipeline.value.*;
 import com.kotcrab.vis.ui.VisUI;
 
@@ -182,6 +184,8 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
                 "Rectangle", MeshPreviewModels.getRectangleModelProducer());
 
         UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelProducer().create());
+
+        UIRenderPipelineConfiguration.register(new ModelShaderRendererEditorProducer());
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);

@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.util;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-public class PreserveMinimumDisposableProducer<T extends Disposable> implements DisposableProducer<T>, Disposable {
+public class PreserveMinimumDisposableProducer<T> implements DisposableProducer<T>, Disposable {
     private final Array<T> preserved = new Array<>();
     private final int preserveCount;
     private final DisposableProducer<T> producer;
@@ -31,14 +31,14 @@ public class PreserveMinimumDisposableProducer<T extends Disposable> implements 
         if (currentCount < preserveCount) {
             preserved.add(disposable);
         } else {
-            disposable.dispose();
+            producer.dispose(disposable);
         }
     }
 
     @Override
     public void dispose() {
         for (T disposable : preserved) {
-            disposable.dispose();
+            producer.dispose(disposable);
         }
         preserved.clear();
     }

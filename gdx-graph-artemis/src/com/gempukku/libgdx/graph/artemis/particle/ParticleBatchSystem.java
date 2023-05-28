@@ -52,7 +52,14 @@ public class ParticleBatchSystem extends BaseEntitySystem {
 
     private ParticleModel createParticleBatchModel(ParticleBatchComponent particleBatch, GraphModels graphModels, String tag) {
         SpriteModel particleSpriteModel = getSpriteModel(particleBatch);
-        return new ParticleModel(particleBatch.getSpritesPerPage(), particleSpriteModel, graphModels, tag);
+        ParticleModel particleModel = new ParticleModel(particleBatch.getSpritesPerPage(), particleSpriteModel, graphModels, tag);
+        for (String particleBirthAttribute : particleBatch.getParticleBirthAttributes()) {
+            particleModel.addParticleBirthProperty(particleBirthAttribute);
+        }
+        for (String particleDeathAttribute : particleBatch.getParticleDeathAttributes()) {
+            particleModel.addParticleDeathProperty(particleDeathAttribute);
+        }
+        return particleModel;
     }
 
     private SpriteModel getSpriteModel(ParticleBatchComponent particleBatch) {

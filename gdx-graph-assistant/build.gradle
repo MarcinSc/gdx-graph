@@ -13,6 +13,7 @@ dependencies {
     api project(":gdx-graph-callback-design")
     api project(":gdx-graph-maps-design")
     api project(":gdx-graph-particles-design")
+    api project(":gdx-graph-postprocess-design")
     api project(":gdx-graph-screen-design")
     api project(":gdx-graph-boneanimation-design")
     api project(":gdx-graph-lighting3d-design")
