@@ -68,7 +68,7 @@ public class EndModelShaderEditorProducer extends GdxGraphNodeEditorProducer {
 
         SelectEditorPart positionType = new SelectEditorPart("Position", "positionType",
                 "gdx-graph-property-label", "gdx-graph-property",
-                new String[] {"Object space", "World space"});
+                new String[] {"Object space", "World space", "Clip space"});
         graphNodeEditor.addGraphEditorPart(positionType);
 
         graphNodeEditor.addGraphEditorPart(new SectionEditorPart("Rendering config", "gdx-graph-section-label", "default"));

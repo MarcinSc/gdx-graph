@@ -44,10 +44,16 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
 
     public void addTag(String tag) {
         tags.add(tag);
+        if (propertiesRenderableModel != null) {
+            propertiesRenderableModel.addTag(tag);
+        }
     }
 
     public void removeTag(String tag) {
         tags.remove(tag);
+        if (propertiesRenderableModel != null) {
+            propertiesRenderableModel.removeTag(tag);
+        }
     }
 
     private void fillPropertyContainerBasedOnAttributeFunctions(ObjectMap<String, ShaderPropertySource> propertySourceMap) {
@@ -89,6 +95,9 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
 
             propertiesRenderableModel = new PropertiesRenderableModel(
                     vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
+            for (String tag : tags) {
+                propertiesRenderableModel.addTag(tag);
+            }
         } catch (Exception exp) {
             exp.printStackTrace();
         }

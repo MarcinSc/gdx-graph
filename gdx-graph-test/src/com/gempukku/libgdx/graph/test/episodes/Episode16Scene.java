@@ -1,14 +1,15 @@
 package com.gempukku.libgdx.graph.test.episodes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -17,26 +18,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
+import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
-import com.gempukku.libgdx.graph.shader.screen.GraphScreenShaders;
+import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
+import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
 
 public class Episode16Scene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
-    private Model model;
+    private Model shipModel;
     private Camera camera;
     private Stage stage;
     private Skin skin;
@@ -44,6 +52,8 @@ public class Episode16Scene implements LibgdxGraphTestScene {
     private final float cameraAngle = -0.5f;
     private final float cameraDistance = 1.3f;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
+    private PropertiesRenderableModel screenModel;
+    private MapWritablePropertyContainer screenModelPropertyContainer;
 
     @Override
     public String getName() {
@@ -88,14 +98,65 @@ public class Episode16Scene implements LibgdxGraphTestScene {
     private void createModels(GraphModels models) {
         JsonReader jsonReader = new JsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
-        model = modelLoader.loadModel(Gdx.files.classpath("model/luminaris/luminaris.g3dj"));
+        shipModel = modelLoader.loadModel(Gdx.files.classpath("model/luminaris/luminaris.g3dj"));
 
-        ModelInstance modelInstance = new ModelInstance(model);
+        ModelInstance modelInstance = new ModelInstance(shipModel);
         final float scale = 0.025f;
         modelInstance.transform.idt().translate(-0.3f, 0.11f, 0).scale(scale, scale, scale);
 
         MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, models);
         modelAdapter.addTag("Default");
+
+        ObjectMap<String, BasicShader.Attribute> attributes = models.getShaderAttributes("CRT Monitor");
+
+        VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributes);
+        ObjectMap<VertexAttribute, ShaderPropertySource> propertySourceMap = GraphModelUtil.getPropertySourceMap(models, "CRT Monitor", vertexAttributes);
+
+        Model model = new ModelBuilder().createRect(
+                -1f, 1f, 0,
+                -1f, -1f, 0,
+                1f, -1f, 0,
+                1f, 1f, 0,
+                0, 0, 1,
+                new Material(),
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
+        try {
+            Mesh mesh = model.meshes.get(0);
+            short[] indices = new short[mesh.getNumIndices()];
+            mesh.getIndices(indices);
+            screenModelPropertyContainer = new MapWritablePropertyContainer();
+            screenModelPropertyContainer.setValue("Position", createVector3Value(VertexAttributes.Usage.Position, mesh));
+            screenModel = new PropertiesRenderableModel(vertexAttributes, propertySourceMap,
+                    mesh.getNumVertices(), indices, screenModelPropertyContainer);
+
+            models.addModel(screenModel);
+        } finally {
+            model.dispose();
+        }
+    }
+
+    private static ArrayValuePerVertex<Vector3> createVector3Value(int usage, Mesh mesh) {
+        int vertexCount = mesh.getNumVertices();
+        int floatsPerVertex = mesh.getVertexSize() / 4;
+
+        float[] vertices = new float[vertexCount * floatsPerVertex];
+        mesh.getVertices(vertices);
+
+        VertexAttribute attribute = mesh.getVertexAttributes().findByUsage(usage);
+        if (attribute == null)
+            return null;
+
+        int offset = attribute.offset / 4;
+
+        Array<Vector3> result = new Array<>(Vector3.class);
+        for (int i = 0; i < vertexCount; i++) {
+            result.add(new Vector3(
+                    vertices[floatsPerVertex * i + offset + 0],
+                    vertices[floatsPerVertex * i + offset + 1],
+                    vertices[floatsPerVertex * i + offset + 2]));
+        }
+
+        return new ArrayValuePerVertex<>(result.toArray());
     }
 
     private Stage createStage() {
@@ -107,6 +168,11 @@ public class Episode16Scene implements LibgdxGraphTestScene {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         pipelineRenderer.setPipelineProperty("Distort", distort.isChecked());
+                        if (distort.isChecked()) {
+                            screenModel.addTag("CRT Monitor");
+                        } else {
+                            screenModel.removeTag("CRT Monitor");
+                        }
                     }
                 });
 
@@ -116,7 +182,7 @@ public class Episode16Scene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        pipelineRenderer.getPluginData(GraphScreenShaders.class).setProperty("CRT Monitor", "Distortion", distortion.getValue());
+                        screenModelPropertyContainer.setValue("Distortion", distortion.getValue());
                     }
                 });
 
@@ -160,7 +226,8 @@ public class Episode16Scene implements LibgdxGraphTestScene {
 
     @Override
     public void disposeScene() {
-        model.dispose();
+        shipModel.dispose();
+        screenModel.dispose();
         stage.dispose();
         skin.dispose();
         pipelineRenderer.dispose();

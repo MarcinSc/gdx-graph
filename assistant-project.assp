@@ -69,7 +69,8 @@
 			{ "name": "Basic Shadow", "graphType": "Shadow_Shader", "path": "examples-assets/shadow/basic-shadow.sds" },
 			{ "name": "Particle Tests", "graphType": "Model_Shader", "path": "examples-assets/model/particle-test.mds" },
 			{ "name": "Dust particles", "graphType": "Model_Shader", "path": "examples-assets/model/dust-particles.mds" },
-			{ "name": "Exhaust particles", "graphType": "Model_Shader", "path": "examples-assets/model/exhaust.mds" }
+			{ "name": "Exhaust particles", "graphType": "Model_Shader", "path": "examples-assets/model/exhaust.mds" },
+			{ "name": "CRT Screen", "graphType": "Model_Shader", "path": "examples-assets/model/crt-screen.mds" }
 		]
 	},
 	"deprecation-warning": {}

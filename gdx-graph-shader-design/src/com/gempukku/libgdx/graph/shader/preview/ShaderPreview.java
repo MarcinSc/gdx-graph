@@ -86,109 +86,120 @@ public class ShaderPreview extends DisposableTable {
         return data;
     }
 
+    private void updateRenderingWidgetIfNeeded() {
+        if (initialized && shaderRecipe != null && graph != null && renderableModelProducer != null) {
+            // Attempt to compile a shader
+            GraphShader graphShader = createShader(graph);
+            if (graphShader != null) {
+                this.graphShader = graphShader;
+
+                timeKeeper.setTime(0);
+                previewRenderableModel = renderableModelProducer.create();
+                previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+
+                graphShaderRenderingWidget.setGraphShader(graphShader);
+                graphShaderRenderingWidget.setRenderableModel(previewRenderableModel);
+            }
+        } else {
+            // Destroy everything!
+            destroyShader();
+            destroyRenderableModel();
+            graphShaderRenderingWidget.setRenderableModel(null);
+            graphShaderRenderingWidget.setGraphShader(null);
+        }
+    }
+
     public void setRenderableModelProducer(Producer<? extends PreviewRenderableModel> renderableModelProducer) {
         this.renderableModelProducer = renderableModelProducer;
-        timeKeeper.setTime(0);
-
-        if (previewRenderableModel != null) {
-            destroyRenderableModel();
-            previewRenderableModel = renderableModelProducer.create();
-            previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
-            graphShaderRenderingWidget.setRenderableModel(previewRenderableModel);
-        }
+        updateRenderingWidgetIfNeeded();
     }
 
     @Override
     protected void initializeWidget() {
         initialized = true;
-        if (graphShader == null && graph != null) {
-            previewRenderableModel = renderableModelProducer.create();
-            graphShaderRenderingWidget.setRenderableModel(previewRenderableModel);
-            createShader(graph);
-        }
+        updateRenderingWidgetIfNeeded();
     }
 
     @Override
     protected void disposeWidget() {
-        destroyRenderableModel();
-        destroyShader();
         initialized = false;
+        updateRenderingWidgetIfNeeded();
     }
 
-    private void createShader(final GraphWithProperties graph) {
+    private GraphShader createShader(final GraphWithProperties graph) {
         try {
-            graphShader = shaderRecipe.buildGraphShader("Test", true, graph, AssetResolver.instance);
-
-            globalPropertyContainer.clear();
-            for (GraphProperty property : graph.getProperties()) {
-                PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
-                if (location == PropertyLocation.Global_Uniform) {
-                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
-                    Object value = propertyType.convertFromJson(property.getData());
-                    if (propertyType.isTexture()) {
-                        if (value != null) {
-                            try {
-                                Texture texture = new Texture(Gdx.files.absolute((String) value));
-                                graphShader.addManagedResource(texture);
-                                globalPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
-                            } catch (Exception exp) {
+            GraphShader graphShader = shaderRecipe.buildGraphShader("Test", true, graph, AssetResolver.instance);
+            try {
+                globalPropertyContainer.clear();
+                for (GraphProperty property : graph.getProperties()) {
+                    PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
+                    if (location == PropertyLocation.Global_Uniform) {
+                        ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
+                        Object value = propertyType.convertFromJson(property.getData());
+                        if (propertyType.isTexture()) {
+                            if (value != null) {
+                                try {
+                                    Texture texture = new Texture(Gdx.files.absolute((String) value));
+                                    graphShader.addManagedResource(texture);
+                                    globalPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
+                                } catch (Exception exp) {
+                                    globalPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                                }
+                            } else {
                                 globalPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
                             }
                         } else {
-                            globalPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                            globalPropertyContainer.setValue(property.getName(), propertyType.convertFromJson(property.getData()));
                         }
-                    } else {
-                        globalPropertyContainer.setValue(property.getName(), propertyType.convertFromJson(property.getData()));
                     }
                 }
-            }
 
-            localPropertyContainer.clear();
-            for (GraphProperty property : graph.getProperties()) {
-                PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
-                if (location == PropertyLocation.Uniform || location == PropertyLocation.Attribute) {
-                    ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
-                    Object value = propertyType.convertFromJson(property.getData());
-                    if (propertyType.isTexture()) {
-                        if (value != null) {
-                            try {
-                                Texture texture = new Texture(Gdx.files.absolute((String) value));
-                                graphShader.addManagedResource(texture);
-                                localPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
-                            } catch (Exception exp) {
+                localPropertyContainer.clear();
+                for (GraphProperty property : graph.getProperties()) {
+                    PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
+                    if (location == PropertyLocation.Uniform || location == PropertyLocation.Attribute) {
+                        ShaderFieldType propertyType = ShaderFieldTypeRegistry.findShaderFieldType(property.getType());
+                        Object value = propertyType.convertFromJson(property.getData());
+                        if (propertyType.isTexture()) {
+                            if (value != null) {
+                                try {
+                                    Texture texture = new Texture(Gdx.files.absolute((String) value));
+                                    graphShader.addManagedResource(texture);
+                                    localPropertyContainer.setValue(property.getName(), new TextureRegion(texture));
+                                } catch (Exception exp) {
+                                    localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
+                                }
+                            } else {
                                 localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
                             }
-                        } else {
-                            localPropertyContainer.setValue(property.getName(), WhitePixel.sharedInstance.textureRegion);
                         }
                     }
                 }
+            } catch (RuntimeException exp) {
+                graphShader.dispose();
+                throw exp;
             }
 
-            timeKeeper.setTime(0);
-            if (previewRenderableModel != null) {
-                previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
-            }
-
-            graphShaderRenderingWidget.setGraphShader(graphShader);
+            return graphShader;
         } catch (Exception exp) {
             exp.printStackTrace();
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
-            destroyShader();
+            return null;
         }
     }
 
     private void destroyRenderableModel() {
-        if (previewRenderableModel instanceof Disposable) {
-            ((Disposable) previewRenderableModel).dispose();
+        if (previewRenderableModel != null) {
+            if (previewRenderableModel instanceof Disposable) {
+                ((Disposable) previewRenderableModel).dispose();
+            }
+            previewRenderableModel = null;
         }
-        previewRenderableModel = null;
     }
 
     private void destroyShader() {
         if (graphShader != null) {
             graphShader.dispose();
-            graphShaderRenderingWidget.setGraphShader(null);
             graphShader = null;
         }
     }
@@ -205,15 +216,12 @@ public class ShaderPreview extends DisposableTable {
     }
 
     public void graphChanged(GraphWithProperties graph) {
-        destroyShader();
         boolean valid = shaderRecipe.isValid(graph);
         if (valid) {
             this.graph = graph;
-            if (initialized) {
-                createShader(graph);
-            }
         } else {
             this.graph = null;
         }
+        updateRenderingWidgetIfNeeded();
     }
 }

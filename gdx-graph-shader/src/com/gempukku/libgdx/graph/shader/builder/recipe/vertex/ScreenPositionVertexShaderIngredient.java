@@ -14,6 +14,6 @@ public class ScreenPositionVertexShaderIngredient implements GraphShaderRecipeIn
         // Vertex part
         vertexShaderBuilder.addAttributeVariable(VertexAttribute.Position(), "vec3", "Position");
         vertexShaderBuilder.addMainLine("// End Graph Node");
-        vertexShaderBuilder.addMainLine("gl_Position = vec4((a_position.xy * 2.0 - 1.0), 1.0, 1.0);");
+        vertexShaderBuilder.addMainLine("gl_Position = vec4(a_position.xy, 1.0, 1.0);");
     }
 }

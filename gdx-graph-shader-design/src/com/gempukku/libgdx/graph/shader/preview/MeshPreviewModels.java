@@ -40,10 +40,10 @@ public class MeshPreviewModels {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
         Model model = modelBuilder.createRect(
-                -0.5f, 0.5f, 0,
-                -0.5f, -0.5f, 0,
-                0.5f, -0.5f, 0,
-                0.5f, 0.5f, 0,
+                -1f, 1f, 1,
+                -1f, -1f, 1,
+                1f, -1f, 1,
+                1f, 1f, 1,
                 0, 0, 1,
                 material,
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.Tangent | VertexAttributes.Usage.TextureCoordinates);
@@ -82,6 +82,7 @@ public class MeshPreviewModels {
             @Override
             public PreviewRenderableModel create() {
                 MapPreviewRenderableModel result = new MapPreviewRenderableModel(vertexCount, indices);
+                result.addTag("Test");
                 result.addAttributeFunctionValue(AttributeFunctions.Position, positionValue);
                 result.addAttributeFunctionValue(AttributeFunctions.Normal, normalValue);
                 result.addAttributeFunctionValue(AttributeFunctions.Tangent, tangentValue);

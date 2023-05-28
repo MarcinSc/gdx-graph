@@ -17,7 +17,6 @@ import com.gempukku.libgdx.graph.plugin.lighting3d.design.UILighting3DPlugin;
 import com.gempukku.libgdx.graph.plugin.maps.design.UIMapsPlugin;
 import com.gempukku.libgdx.graph.plugin.particles.design.UIParticlesPlugin;
 import com.gempukku.libgdx.graph.plugin.postprocess.design.UIPostprocessPlugin;
-import com.gempukku.libgdx.graph.plugin.screen.design.UIScreenPlugin;
 import com.gempukku.libgdx.graph.plugin.ui.design.UIUserInterfacePlugin;
 import com.gempukku.libgdx.graph.shader.UIModelsPlugin;
 import com.gempukku.libgdx.graph.ui.AssetResolver;
@@ -107,7 +106,6 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         UIGdxGraphPluginRegistry.register(UILighting3DPlugin.class);
         UIGdxGraphPluginRegistry.register(UIParticlesPlugin.class);
         UIGdxGraphPluginRegistry.register(UIPostprocessPlugin.class);
-        UIGdxGraphPluginRegistry.register(UIScreenPlugin.class);
         UIGdxGraphPluginRegistry.register(UIBoneAnimationPlugin.class);
     }
 

@@ -147,7 +147,7 @@ public class GraphWithPropertiesEditor extends VisTable {
         for (GraphProperty property : graph.getProperties()) {
             PropertyEditorDefinition propertyEditorDefinition = getPropertyEditorDefinition(property.getType());
             PropertyEditor propertyEditor = propertyEditorDefinition.createPropertyEditor(property.getName(), property.getData());
-            addPropertyEditor(property.getName(), propertyEditor);
+            addPropertyEditor(property.getType(), propertyEditor);
         }
 
         this.addListener(

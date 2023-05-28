@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.ValuePerVertex;
@@ -16,6 +17,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
 public class PropertiesRenderableModel implements RenderableModel, Disposable {
+    private ObjectSet<String> tags = new ObjectSet<>();
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private final VertexAttributes vertexAttributes;
@@ -36,6 +38,14 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
         mesh.setVertices(vertexData);
 
         mesh.setIndices(indices, 0, indices.length);
+    }
+
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        tags.remove(tag);
     }
 
     private static float[] createVertexData(VertexAttributes vertexAttributes, ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
@@ -80,7 +90,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
 
     @Override
     public boolean isRendered(GraphShader graphShader, Camera camera) {
-        return true;
+        return tags.contains(graphShader.getTag());
     }
 
     @Override

@@ -7,7 +7,6 @@ dependencies {
     api project(":gdx-graph-lighting3d")
     api project(":gdx-graph-particles")
     api project(":gdx-graph-postprocess")
-    api project(":gdx-graph-screen")
     api project(":gdx-graph-ui")
 
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"

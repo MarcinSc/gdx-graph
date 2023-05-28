@@ -23,7 +23,6 @@ import com.gempukku.libgdx.graph.shader.ShaderPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.boneanimation.BoneAnimationPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.particles.ParticlesPluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.shader.screen.ScreenPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
 import com.gempukku.libgdx.graph.test.scenes.*;
 
@@ -48,7 +47,6 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         RuntimePluginRegistry.register(RenderCallbackPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(UIPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(ParticlesPluginRuntimeInitializer.class);
-        RuntimePluginRegistry.register(ScreenPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(BoneAnimationPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(PostprocessPluginRuntimeInitializer.class);
