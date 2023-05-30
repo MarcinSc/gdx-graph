@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModelProducer;
 import com.gempukku.libgdx.ui.undo.UndoableSelectBox;
@@ -175,8 +177,9 @@ public class ParticlePreviewRenderableModelProducer extends VisTable implements 
     }
 
     @Override
-    public PreviewRenderableModel create() {
+    public PreviewRenderableModel create(GraphShader graphShader, PropertyContainer localPropertyContainer) {
         lastModel = new ParticlePreviewRenderableModel(getGenerator(), getLifeLength(), getInitialParticles(), getParticlesPerSecond());
+        lastModel.initModel(graphShader, localPropertyContainer);
         return lastModel;
     }
 }

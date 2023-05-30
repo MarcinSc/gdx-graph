@@ -39,7 +39,7 @@ public class ShaderPreview extends DisposableTable {
     private GraphWithProperties graph;
 
     private GraphShader graphShader;
-    private Producer<? extends PreviewRenderableModel> renderableModelProducer;
+    private PreviewModelProducer renderableModelProducer;
     private PreviewRenderableModel previewRenderableModel;
 
     private final Camera camera;
@@ -72,43 +72,36 @@ public class ShaderPreview extends DisposableTable {
 
     private void updateRenderingWidgetIfNeeded() {
         if (initialized && shaderRecipe != null && graph != null && renderableModelProducer != null) {
+            destroyEverything();
+
             // Attempt to compile a shader
             GraphShader graphShader = createShader(graph);
             if (graphShader != null) {
                 this.graphShader = graphShader;
 
-                AssetResolver assetResolver = AssetResolver.instance;
-
-                configuration = new PipelineRendererConfiguration(timeKeeper, assetResolver, rootPropertyContainer, null);
-
-                for (ObjectMap.Entry<Class<? extends RendererConfiguration>, Producer<? extends RendererConfiguration>> configurationProducer : UIRenderPipelineConfiguration.getPreviewConfigurationBuilders()) {
-                    Class<RendererConfiguration> configurationClass = (Class<RendererConfiguration>) configurationProducer.key;
-                    RendererConfiguration rendererConfiguration = configurationProducer.value.create();
-                    configuration.setConfig(configurationClass, rendererConfiguration);
-                }
-
                 timeKeeper.setTime(0);
-                previewRenderableModel = renderableModelProducer.create();
-
-                setupRenderableModel(previewRenderableModel, graph);
+                setupRenderableModel(graph);
 
                 graphShaderRenderingWidget.setGraphShader(graphShader);
+                graphShaderRenderingWidget.setPipelineRendererConfiguration(configuration);
+            } else {
+                destroyEverything();
             }
         } else {
             // Destroy everything!
-            if (configuration != null) {
-                configuration.dispose();
-                configuration = null;
-            }
-            destroyShader();
-            destroyRenderableModel();
-            graphShaderRenderingWidget.setGraphShader(null);
-            graphShaderRenderingWidget.setPipelineRendererConfiguration(null);
+            destroyEverything();
         }
     }
 
-    private void setupRenderableModel(
-            PreviewRenderableModel previewRenderableModel, GraphWithProperties graph) {
+    private void destroyEverything() {
+        destroyConfiguration();
+        destroyShader();
+        destroyRenderableModel();
+        graphShaderRenderingWidget.setGraphShader(null);
+        graphShaderRenderingWidget.setPipelineRendererConfiguration(null);
+    }
+
+    private void setupRenderableModel(GraphWithProperties graph) {
         SimpleShaderRendererConfiguration shaderRenderingConfiguration = (SimpleShaderRendererConfiguration) configuration.getConfig(ShaderRendererConfiguration.class);
         shaderRenderingConfiguration.registerShader(graphShader);
 
@@ -137,7 +130,7 @@ public class ShaderPreview extends DisposableTable {
             }
         }
 
-        WritablePropertyContainer localPropertyContainer = previewRenderableModel.getPropertyContainer();
+        MapWritablePropertyContainer localPropertyContainer = new MapWritablePropertyContainer();
         for (GraphProperty property : graph.getProperties()) {
             PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
             if (location == PropertyLocation.Uniform || location == PropertyLocation.Attribute) {
@@ -159,10 +152,11 @@ public class ShaderPreview extends DisposableTable {
             }
         }
 
-        previewRenderableModel.updateModel(graphShader.getAttributes(), graphShader.getProperties(), localPropertyContainer);
+        previewRenderableModel = renderableModelProducer.create(graphShader, localPropertyContainer);
+        shaderRenderingConfiguration.addModel(previewRenderableModel);
     }
 
-    public void setRenderableModelProducer(Producer<? extends PreviewRenderableModel> renderableModelProducer) {
+    public void setRenderableModelProducer(PreviewModelProducer renderableModelProducer) {
         this.renderableModelProducer = renderableModelProducer;
         updateRenderingWidgetIfNeeded();
     }
@@ -181,11 +175,25 @@ public class ShaderPreview extends DisposableTable {
 
     private GraphShader createShader(final GraphWithProperties graph) {
         try {
+            configuration = new PipelineRendererConfiguration(timeKeeper, AssetResolver.instance, rootPropertyContainer, null);
+            for (ObjectMap.Entry<Class<? extends RendererConfiguration>, Producer<? extends RendererConfiguration>> configurationProducer : UIRenderPipelineConfiguration.getPreviewConfigurationBuilders()) {
+                Class<RendererConfiguration> configurationClass = (Class<RendererConfiguration>) configurationProducer.key;
+                RendererConfiguration rendererConfiguration = configurationProducer.value.create();
+                configuration.setConfig(configurationClass, rendererConfiguration);
+            }
+
             return shaderRecipe.buildGraphShader("Test", true, graph, configuration);
         } catch (Exception exp) {
             exp.printStackTrace();
             fire(new GraphStatusChangeEvent(GraphStatusChangeEvent.Type.ERROR, exp.getMessage()));
             return null;
+        }
+    }
+
+    private void destroyConfiguration() {
+        if (configuration != null) {
+            configuration.dispose();
+            configuration = null;
         }
     }
 

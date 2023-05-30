@@ -13,30 +13,32 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.Producer;
 import com.gempukku.libgdx.common.ValueProducer;
+import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.shader.AttributeFunctions;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 
 public class MeshPreviewModels {
-    private static Producer<PreviewRenderableModelProducer> sphereModelSupplier;
-    private static Producer<PreviewRenderableModelProducer> rectangleModelSupplier;
+    private static Producer<PreviewRenderableModelProducer> sphereModelProducer;
+    private static Producer<PreviewRenderableModelProducer> rectangleModelProducer;
 
     public static Producer<PreviewRenderableModelProducer> getRectangleModelProducer() {
-        if (rectangleModelSupplier == null) {
-            rectangleModelSupplier = new ValueProducer<>(
+        if (rectangleModelProducer == null) {
+            rectangleModelProducer = new ValueProducer<>(
                     new ModelProducer(createRectangleModelSupplier()));
         }
-        return rectangleModelSupplier;
+        return rectangleModelProducer;
     }
 
     public static Producer<PreviewRenderableModelProducer> getSphereModelProducer() {
-        if (sphereModelSupplier == null) {
-            sphereModelSupplier = new ValueProducer<>(
+        if (sphereModelProducer == null) {
+            sphereModelProducer = new ValueProducer<>(
                     new ModelProducer(createSphereModelSupplier()));
         }
-        return sphereModelSupplier;
+        return sphereModelProducer;
     }
 
-    private static Producer<PreviewRenderableModel> createRectangleModelSupplier() {
+    private static PreviewModelProducer createRectangleModelSupplier() {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
         Model model = modelBuilder.createRect(
@@ -54,7 +56,7 @@ public class MeshPreviewModels {
         }
     }
 
-    private static Producer<PreviewRenderableModel> createSphereModelSupplier() {
+    private static PreviewModelProducer createSphereModelSupplier() {
         ModelBuilder modelBuilder = new ModelBuilder();
         Material material = new Material();
         float sphereDiameter = 0.8f;
@@ -68,7 +70,7 @@ public class MeshPreviewModels {
         }
     }
 
-    private static Producer<PreviewRenderableModel> createModelProducerFromMesh(Mesh mesh) {
+    private static PreviewModelProducer createModelProducerFromMesh(Mesh mesh) {
         int vertexCount = mesh.getNumVertices();
         short[] indices = new short[mesh.getNumIndices()];
         mesh.getIndices(indices);
@@ -78,15 +80,16 @@ public class MeshPreviewModels {
         ArrayValuePerVertex<Vector3> tangentValue = createVector3Value(VertexAttributes.Usage.Tangent, mesh);
         ArrayValuePerVertex<Vector2> uvValue = createVector2Value(VertexAttributes.Usage.TextureCoordinates, mesh);
 
-        return new Producer<PreviewRenderableModel>() {
+        return new PreviewModelProducer() {
             @Override
-            public PreviewRenderableModel create() {
+            public PreviewRenderableModel create(GraphShader graphShader, PropertyContainer localPropertyContainer) {
                 MapPreviewRenderableModel result = new MapPreviewRenderableModel(vertexCount, indices);
                 result.addTag("Test");
                 result.addAttributeFunctionValue(AttributeFunctions.Position, positionValue);
                 result.addAttributeFunctionValue(AttributeFunctions.Normal, normalValue);
                 result.addAttributeFunctionValue(AttributeFunctions.Tangent, tangentValue);
                 result.addAttributeFunctionValue(AttributeFunctions.TexCoord0, uvValue);
+                result.initModel(graphShader, localPropertyContainer);
                 return result;
             }
         };
@@ -140,9 +143,9 @@ public class MeshPreviewModels {
     }
 
     private static class ModelProducer implements PreviewRenderableModelProducer {
-        private final Producer<PreviewRenderableModel> modelProducer;
+        private final PreviewModelProducer modelProducer;
 
-        public ModelProducer(Producer<PreviewRenderableModel> modelProducer) {
+        public ModelProducer(PreviewModelProducer modelProducer) {
             this.modelProducer = modelProducer;
         }
 
@@ -162,8 +165,8 @@ public class MeshPreviewModels {
         }
 
         @Override
-        public PreviewRenderableModel create() {
-            return modelProducer.create();
+        public PreviewRenderableModel create(GraphShader graphShader, PropertyContainer localPropertyContainer) {
+            return modelProducer.create(graphShader, localPropertyContainer);
         }
     }
 }

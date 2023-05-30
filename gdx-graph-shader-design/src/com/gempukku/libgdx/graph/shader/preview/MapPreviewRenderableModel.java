@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
@@ -78,26 +77,22 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
         return attributeFunctionValues.get(attributeFunction);
     }
 
-    @Override
-    public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
-                            ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer propertyContainer) {
-        if (propertiesRenderableModel != null) {
-            propertiesRenderableModel.dispose();
-            propertiesRenderableModel = null;
-        }
-
+    public void initModel(final GraphShader graphShader, PropertyContainer propertyContainer) {
         try {
+            ObjectMap<String, ShaderPropertySource> propertySourceMap = graphShader.getProperties();
             fillPropertyContainerBasedOnAttributeFunctions(propertySourceMap);
             hierarchicalPropertyContainer.setParent(propertyContainer);
 
-            VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
+            VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
             ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
 
             propertiesRenderableModel = new PropertiesRenderableModel(
-                    vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer);
-            for (String tag : tags) {
-                propertiesRenderableModel.addTag(tag);
-            }
+                    vertexAttributes, vertexPropertySources, vertexCount, indices, hierarchicalPropertyContainer) {
+                @Override
+                public boolean isRendered(GraphShader renderingShader, Camera camera) {
+                    return true;
+                }
+            };
         } catch (Exception exp) {
             exp.printStackTrace();
         }

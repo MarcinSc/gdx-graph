@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.shader;
 
 import com.gempukku.libgdx.common.Producer;
-import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModelProducer;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
@@ -14,8 +13,8 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
     private static Map<String, ShaderPropertyEditorDefinition> propertyProducers = new LinkedHashMap<>();
     private static Map<String, List<String>> propertyTypeToFunctions = new HashMap<>();
     private static Map<String, Producer<? extends PreviewRenderableModelProducer>> previewModels = new LinkedHashMap<>();
-    private static Producer<? extends PreviewRenderableModel> screenPreviewModel;
-    private static Producer<? extends PreviewRenderableModel> spherePreviewModel;
+    private static Producer<? extends PreviewRenderableModelProducer> screenPreviewModel;
+    private static Producer<? extends PreviewRenderableModelProducer> spherePreviewModel;
 
     public static void register(MenuGraphNodeEditorProducer producer) {
         String menuLocation = producer.getMenuLocation();
@@ -55,19 +54,19 @@ public class UIModelShaderConfiguration implements UIGraphConfiguration {
         previewModels.put(displayName, previewRenderableModelSupplier);
     }
 
-    public static void setScreenPreviewModel(Producer<? extends PreviewRenderableModel> screenPreviewModel) {
+    public static void setScreenPreviewModel(Producer<? extends PreviewRenderableModelProducer> screenPreviewModel) {
         UIModelShaderConfiguration.screenPreviewModel = screenPreviewModel;
     }
 
-    public static void setSpherePreviewModel(Producer<? extends PreviewRenderableModel> screenPreviewModel) {
+    public static void setSpherePreviewModel(Producer<? extends PreviewRenderableModelProducer> screenPreviewModel) {
         UIModelShaderConfiguration.spherePreviewModel = screenPreviewModel;
     }
 
-    public static Producer<? extends PreviewRenderableModel> getScreenPreviewModel() {
+    public static Producer<? extends PreviewRenderableModelProducer> getScreenPreviewModel() {
         return screenPreviewModel;
     }
 
-    public static Producer<? extends PreviewRenderableModel> getSpherePreviewModel() {
+    public static Producer<? extends PreviewRenderableModelProducer> getSpherePreviewModel() {
         return spherePreviewModel;
     }
 

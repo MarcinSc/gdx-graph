@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.particles.ParticleAttributeFunctions;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
@@ -93,12 +92,11 @@ public class ParticlePreviewRenderableModel implements PreviewRenderableModel, D
         particleGenerator.setParticlesPerSecond(particlesPerSecond);
     }
 
-    @Override
-    public void updateModel(ObjectMap<String, BasicShader.Attribute> attributeMap,
-                            ObjectMap<String, ShaderPropertySource> propertySourceMap, PropertyContainer localPropertyContainer) {
-        vertexAttributes = GraphModelUtil.getVertexAttributes(attributeMap);
+    public void initModel(GraphShader graphShader, PropertyContainer localPropertyContainer) {
+        vertexAttributes = GraphModelUtil.getVertexAttributes(graphShader.getAttributes());
+        propertySourceMap = graphShader.getProperties();
+
         vertexPropertySources = GraphModelUtil.getPropertySourceMap(vertexAttributes, propertySourceMap);
-        this.propertySourceMap = propertySourceMap;
 
         hierarchicalPropertyContainer.setParent(localPropertyContainer);
         birthAttributeNames = getAttributesWithFunction(propertySourceMap, ParticleAttributeFunctions.ParticleBirth);
