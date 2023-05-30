@@ -5,6 +5,9 @@ sourceCompatibility = 1.7
 dependencies {
     api project(":gdx-graph-render")
     api project(":gdx-graph-shader")
+    api project(":gdx-graph-lighting3d")
+    api project(":gdx-graph-ui")
+    api project(":gdx-graph-callback")
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 

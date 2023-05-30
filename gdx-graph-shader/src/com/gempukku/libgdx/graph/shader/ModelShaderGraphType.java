@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.graph.shader;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.builder.ModelGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
@@ -63,7 +63,7 @@ public class ModelShaderGraphType implements ShaderGraphType {
     }
 
     @Override
-    public GraphShader buildGraphShader(String tag, FileHandleResolver assetResolver, GraphWithProperties graph, boolean designTime) {
-        return new ModelGraphShaderRecipe().buildGraphShader(tag, designTime, graph, assetResolver);
+    public GraphShader buildGraphShader(String tag, PipelineRendererConfiguration configuration, GraphWithProperties graph, boolean designTime) {
+        return new ModelGraphShaderRecipe().buildGraphShader(tag, designTime, graph, configuration);
     }
 }

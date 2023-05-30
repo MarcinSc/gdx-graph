@@ -10,10 +10,10 @@ import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class TexturePagedMultiPartBatchModel<T extends PropertyContainer, U> implements MultiPartBatchModel<T, U> {
@@ -27,18 +27,18 @@ public class TexturePagedMultiPartBatchModel<T extends PropertyContainer, U> imp
     private final WritablePropertyContainer propertyContainer;
     private final Array<ShaderPropertySource> textureUniforms;
 
-    public TexturePagedMultiPartBatchModel(GraphModels graphModels, String tag,
+    public TexturePagedMultiPartBatchModel(ShaderInformation shaderInformation, String tag,
                                            DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer) {
-        this(graphModels, tag, objectBatchModelProducer, new MapWritablePropertyContainer());
+        this(shaderInformation, tag, objectBatchModelProducer, new MapWritablePropertyContainer());
     }
 
-    public TexturePagedMultiPartBatchModel(GraphModels graphModels, String tag,
+    public TexturePagedMultiPartBatchModel(ShaderInformation shaderInformation, String tag,
                                            DisposableProducer<? extends MultiPartBatchModel<T, U>> objectBatchModelProducer,
                                            WritablePropertyContainer propertyContainer) {
         this.objectBatchModelProducer = objectBatchModelProducer;
         this.propertyContainer = propertyContainer;
 
-        ObjectMap<String, ShaderPropertySource> shaderProperties = graphModels.getShaderProperties(tag);
+        ObjectMap<String, ShaderPropertySource> shaderProperties = shaderInformation.getShaderProperties(tag);
         if (shaderProperties == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 

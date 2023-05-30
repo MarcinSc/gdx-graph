@@ -15,8 +15,10 @@ import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
 import com.gempukku.libgdx.graph.pipeline.util.PreserveMinimumDisposableProducer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -65,23 +67,23 @@ public class SpriteBatchSystem extends BaseEntitySystem {
     }
 
     private MultiPartBatchModel<RenderableSprite, SpriteReference> createSpriteBatchModel(
-            final SpriteBatchComponent spriteBatch, final GraphModels graphModels, final String tag,
-            final WritablePropertyContainer propertyContainer) {
+            final SpriteBatchComponent spriteBatch, final ShaderInformation shaderInformation, final ModelContainer<RenderableModel> modelContainer,
+            final String tag, final WritablePropertyContainer propertyContainer) {
         final SpriteModel spriteModel = getSpriteModel(spriteBatch);
         SpriteBatchComponent.SystemType spriteSystemType = spriteBatch.getType();
 
-        final VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-        final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+        final VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(shaderInformation, tag);
+        final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(shaderInformation, tag, vertexAttributes);
 
         final SpriteSerializer spriteSerializer = new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel);
 
         if (spriteSystemType == SpriteBatchComponent.SystemType.TexturePaged) {
-            return new TexturePagedMultiPartBatchModel<>(graphModels, tag,
+            return new TexturePagedMultiPartBatchModel<>(shaderInformation, tag,
                     new DisposableProducer<MultiPartBatchModel<RenderableSprite, SpriteReference>>() {
                         @Override
                         public MultiPartBatchModel<RenderableSprite, SpriteReference> create() {
                             HierarchicalPropertyContainer texturePropertyContainer = new HierarchicalPropertyContainer(propertyContainer);
-                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel,
+                            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, modelContainer, tag, spriteModel,
                                     texturePropertyContainer);
                         }
 
@@ -91,7 +93,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                         }
                     });
         } else if (spriteSystemType == SpriteBatchComponent.SystemType.MultiPaged) {
-            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, graphModels, tag, spriteModel, propertyContainer);
+            return createMultiPageSpriteBatchModel(spriteBatch, vertexAttributes, spriteSerializer, modelContainer, tag, spriteModel, propertyContainer);
         } else {
             throw new GdxRuntimeException("Unable to create SpriteBatchModel unknown type: " + spriteSystemType);
         }
@@ -100,7 +102,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
     private PagedMultiPartBatchModel<RenderableSprite, SpriteReference> createMultiPageSpriteBatchModel(
             final SpriteBatchComponent spriteBatch,
             final VertexAttributes vertexAttributes, final SpriteSerializer spriteSerializer,
-            final GraphModels graphModels, final String tag, final SpriteModel spriteModel,
+            final ModelContainer<RenderableModel> modelContainer, final String tag, final SpriteModel spriteModel,
             final WritablePropertyContainer propertyContainer) {
         DisposableProducer<MultiPartRenderableModel<RenderableSprite, SpriteReference>> renderableProducer =
                 new DisposableProducer<MultiPartRenderableModel<RenderableSprite, SpriteReference>>() {
@@ -114,13 +116,13 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                                         spriteBatch.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer, tag);
                         DefaultMultiPartRenderableModel<RenderableSprite, SpriteReference> model =
                                 new DefaultMultiPartRenderableModel<>(multiPartMemoryMesh, meshModel);
-                        graphModels.addModel(model);
+                        modelContainer.addModel(model);
                         return model;
                     }
 
                     @Override
                     public void dispose(MultiPartRenderableModel<RenderableSprite, SpriteReference> model) {
-                        graphModels.removeModel(model);
+                        modelContainer.removeModel(model);
                         model.dispose();
                     }
                 };
@@ -158,13 +160,15 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
+        ShaderInformation shaderInformation = pipelineRendererSystem.getShaderInformation();
+        ModelContainer<RenderableModel> modelContainer = pipelineRendererSystem.getModelContainer();
+
         for (Entity newSpriteEntity : newSpriteBatchEntities) {
             SpriteBatchComponent spriteSystem = spriteBatchComponentMapper.get(newSpriteEntity);
-            GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
             String tag = spriteSystem.getRenderTag();
             WritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
-            MultiPartBatchModel<RenderableSprite, SpriteReference> spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag, propertyContainer);
+            MultiPartBatchModel<RenderableSprite, SpriteReference> spriteModel = createSpriteBatchModel(spriteSystem, shaderInformation, modelContainer, tag, propertyContainer);
 
             for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
                 propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(newSpriteEntity, property.value, Object.class));

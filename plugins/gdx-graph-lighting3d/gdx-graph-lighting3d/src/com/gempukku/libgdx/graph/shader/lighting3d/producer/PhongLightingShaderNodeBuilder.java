@@ -4,43 +4,42 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 
 public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
-    private final int maxNumberOfDirectionalLights;
-    private final int maxNumberOfPointLights;
-    private final int maxNumberOfSpotlights;
-
-    public PhongLightingShaderNodeBuilder(int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights) {
+    public PhongLightingShaderNodeBuilder() {
         super(new PhongLightingShaderNodeConfiguration());
-        this.maxNumberOfDirectionalLights = maxNumberOfDirectionalLights;
-        this.maxNumberOfPointLights = maxNumberOfPointLights;
-        this.maxNumberOfSpotlights = maxNumberOfSpotlights;
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         throw new UnsupportedOperationException("At the moment light calculation is not available in vertex shader");
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, final GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         String environmentId = data.getString("id", "");
+
+        LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        int maxNumberOfDirectionalLights = lightingRendererConfiguration.getMaxNumberOfDirectionalLights(environmentId, graphShader);
+        int maxNumberOfPointLights = lightingRendererConfiguration.getMaxNumberOfPointLights(environmentId, graphShader);
+        int maxNumberOfSpotlights = lightingRendererConfiguration.getMaxNumberOfSpotlights(environmentId, graphShader);
 
         fragmentShaderBuilder.addStructure("Lighting",
                 "  vec3 diffuse;\n" +
                         "  vec3 specular;\n");
 
-        Lighting3DUtils.configureAmbientLighting(fragmentShaderBuilder, nodeId, environmentId);
+        Lighting3DUtils.configureAmbientLighting(fragmentShaderBuilder, nodeId, environmentId, lightingRendererConfiguration);
 
         ObjectMap<String, String> variables = new ObjectMap<>();
         variables.put("NUM_SPOT_LIGHTS", String.valueOf(maxNumberOfSpotlights));
@@ -49,11 +48,11 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
         variables.put("NODE_ID", nodeId);
 
         if (maxNumberOfDirectionalLights > 0)
-            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfDirectionalLights, lightingRendererConfiguration);
         if (maxNumberOfPointLights > 0)
-            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfPointLights, lightingRendererConfiguration);
         if (maxNumberOfSpotlights > 0)
-            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfSpotlights, lightingRendererConfiguration);
 
         FieldOutput positionValue = inputs.get("position");
         FieldOutput normalValue = inputs.get("normal");
@@ -73,7 +72,7 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
 
         fragmentShaderBuilder.addMainLine("// Phong Lighting node");
         String calculateLightingFunctionName = "calculatePhongLightingFunction_" + nodeId;
-        String calculateLightingFunction = createCalculateLightingFunction(nodeId);
+        String calculateLightingFunction = createCalculateLightingFunction(nodeId, maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights);
         fragmentShaderBuilder.addFunction(calculateLightingFunctionName, calculateLightingFunction);
         String lightingVariable = "lighting_" + nodeId;
         fragmentShaderBuilder.addMainLine("Lighting " + lightingVariable + " = " + calculateLightingFunctionName + "(" + position + ", " + normal + ", " + shininess + ");");
@@ -96,7 +95,7 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
         return result;
     }
 
-    private String createCalculateLightingFunction(String nodeId) {
+    private String createCalculateLightingFunction(String nodeId, int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Lighting calculatePhongLightingFunction_" + nodeId + "(vec3 position, vec3 normal, float shininess) {\n");
@@ -114,31 +113,31 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
         return sb.toString();
     }
 
-    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfSpotlights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configureSpotLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfSpotlights);
+        Lighting3DUtils.configureSpotLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfSpotlights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getSpotPhongLightContribution_" + nodeId,
                 GLSLFragmentReader.getFragment(assetResolver, "phong/spotLightContribution", variables));
     }
 
-    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfPointLights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configurePointLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfPointLights);
+        Lighting3DUtils.configurePointLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfPointLights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getPointPhongLightContribution_" + nodeId,
                 GLSLFragmentReader.getFragment(assetResolver, "phong/pointLightContribution", variables));
     }
 
-    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfDirectionalLights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configureDirectionalLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights);
+        Lighting3DUtils.configureDirectionalLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getDirectionalPhongLightContribution_" + nodeId,
                 GLSLFragmentReader.getFragment(assetResolver, "phong/directionalLightContribution", variables));

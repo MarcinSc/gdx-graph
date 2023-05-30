@@ -6,10 +6,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.math.arithmetic.AddPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNodeProducer;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 
 public class AddPipelineNodeProducer extends AbstractPipelineNodeProducer {
     public AddPipelineNodeProducer() {
@@ -17,7 +21,7 @@ public class AddPipelineNodeProducer extends AbstractPipelineNodeProducer {
     }
 
     @Override
-    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration pipelineRendererConfiguration) {
         final String resultType = outputTypes.get("output");
         final Object resultValue = createDefaultValue(resultType);
 

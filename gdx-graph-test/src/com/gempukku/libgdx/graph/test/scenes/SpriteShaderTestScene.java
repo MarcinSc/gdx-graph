@@ -11,13 +11,15 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.sprite.DefaultRenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -37,6 +39,8 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
     private MultiPartRenderableModel<RenderableSprite, SpriteReference> spriteBatch;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -48,11 +52,9 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         camera = new OrthographicCamera();
         pipelineRenderer = loadPipelineRenderer();
 
-        GraphModels graphModels = pipelineRenderer.getPluginData(GraphModels.class);
-
         String tag = "Test";
-        VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+        VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(shaderConfiguration, tag);
+        ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(shaderConfiguration, tag, vertexAttributes);
 
         SpriteModel spriteModel = new QuadSpriteModel();
 
@@ -65,7 +67,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
 
         spriteBatch = new DefaultMultiPartRenderableModel<>(sprites, gdxMesh);
 
-        graphModels.addModel(spriteBatch);
+        shaderConfiguration.addModel(spriteBatch);
 
         DefaultRenderableSprite sprite1 = new DefaultRenderableSprite();
         sprite1.setValue("Position", new Vector3(0, 0, -10));
@@ -81,7 +83,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
         spriteBatch.addPart(sprite1);
         spriteBatch.addPart(sprite2);
 
-        graphModels.setGlobalProperty("Test", "Color", new Vector2(1f, 1f));
+        shaderConfiguration.getGlobalUniforms("Test").setValue("Color", new Vector2(1f, 1f));
     }
 
     @Override
@@ -106,8 +108,12 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/sprite-shader-test.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/sprite-shader-test.json"), configuration);
     }
 }

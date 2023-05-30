@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PositionPropertyGenerator;
@@ -24,6 +26,8 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
     private ParticleModel particleModel;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -42,10 +46,9 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
 
         pipelineRenderer = loadPipelineRenderer();
 
-        GraphModels particleEffects = pipelineRenderer.getPluginData(GraphModels.class);
-        particleEffects.setGlobalProperty("Test", "Color", Color.RED);
+        shaderConfiguration.getGlobalUniforms("Test").setValue("Color", Color.RED);
 
-        particleModel = new ParticleModel(1000, particleEffects, "Test");
+        particleModel = new ParticleModel(1000, shaderConfiguration, shaderConfiguration, "Test");
         particleModel.addParticleBirthProperty("Particle Birth");
         particleModel.addParticleDeathProperty("Particle Death");
 
@@ -93,8 +96,12 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/particles-shader-test.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/particles-shader-test.json"), configuration);
     }
 }

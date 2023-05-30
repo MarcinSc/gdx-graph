@@ -1,12 +1,11 @@
 package com.gempukku.libgdx.graph.shader.common.effect;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.LibGDXCollections;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.common.effect.DitherShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -19,7 +18,7 @@ public class DitherShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilde
     }
 
     @Override
-    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         FieldOutput inputValue = inputs.get("input");
         FieldOutput positionValue = inputs.get("position");
         FieldOutput pixelSizeValue = inputs.get("pixelSize");
@@ -30,7 +29,7 @@ public class DitherShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilde
 
         int ditherSize = data.getInt("ditherSize", 4);
 
-        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "dither/dither" + ditherSize);
+        loadFragmentIfNotDefined(commonShaderBuilder, configuration, "dither/dither" + ditherSize);
 
         commonShaderBuilder.addMainLine("float " + name + " = getDither" + ditherSize + "(" + positionValue.getRepresentation() + ", " + pixelSizeValue.getRepresentation() + ", " + inputValue.getRepresentation() + ");\n");
 

@@ -1,13 +1,12 @@
 package com.gempukku.libgdx.graph.shader.node;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
@@ -36,45 +35,45 @@ public abstract class ConfigurationShaderNodeBuilder implements GraphShaderNodeB
             boolean designTime, String nodeId, JsonValue data,
             ObjectMap<String, Array<FieldOutput>> inputs, ObjectSet<String> producedOutputs,
             VertexShaderBuilder vertexShaderBuilder,
-            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+            GraphShader graphShader, PipelineRendererConfiguration configuration) {
         ObjectMap<String, FieldOutput> inputMap = new ObjectMap<>();
         for (ObjectMap.Entry<String, Array<FieldOutput>> entry : inputs.entries()) {
             if (entry.value != null && entry.value.size == 1)
                 inputMap.put(entry.key, entry.value.get(0));
         }
 
-        return buildVertexNodeSingleInputs(designTime, nodeId, data, inputMap, producedOutputs, vertexShaderBuilder, graphShaderContext, graphShader, assetResolver);
+        return buildVertexNodeSingleInputs(designTime, nodeId, data, inputMap, producedOutputs, vertexShaderBuilder, graphShader, configuration);
     }
 
     protected abstract ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(
             boolean designTime, String nodeId, JsonValue data,
             ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
             VertexShaderBuilder vertexShaderBuilder,
-            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver);
+            GraphShader graphShader, PipelineRendererConfiguration configuration);
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNode(
             boolean designTime, String nodeId, JsonValue data,
             ObjectMap<String, Array<FieldOutput>> inputs, ObjectSet<String> producedOutputs,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+            GraphShader graphShader, PipelineRendererConfiguration configuration) {
         ObjectMap<String, FieldOutput> inputMap = new ObjectMap<>();
         for (ObjectMap.Entry<String, Array<FieldOutput>> entry : inputs.entries()) {
             if (entry.value != null && entry.value.size == 1)
                 inputMap.put(entry.key, entry.value.get(0));
         }
-        return buildFragmentNodeSingleInputs(designTime, nodeId, data, inputMap, producedOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphShaderContext, graphShader, assetResolver);
+        return buildFragmentNodeSingleInputs(designTime, nodeId, data, inputMap, producedOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphShader, configuration);
     }
 
     protected abstract ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(
             boolean designTime, String nodeId, JsonValue data,
             ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver);
+            GraphShader graphShader, PipelineRendererConfiguration configuration);
 
-    protected void loadFragmentIfNotDefined(CommonShaderBuilder shaderBuilder, FileHandleResolver assetResolver, String fragmentName) {
+    protected void loadFragmentIfNotDefined(CommonShaderBuilder shaderBuilder, PipelineRendererConfiguration configuration, String fragmentName) {
         if (!shaderBuilder.containsFunction(fragmentName))
-            shaderBuilder.addFunction(fragmentName, GLSLFragmentReader.getFragment(assetResolver, fragmentName));
+            shaderBuilder.addFunction(fragmentName, GLSLFragmentReader.getFragment(configuration.getAssetResolver(), fragmentName));
     }
 
     protected void copyAttributeToFragmentShader(VertexAttribute attribute, String varyingName, String comment,

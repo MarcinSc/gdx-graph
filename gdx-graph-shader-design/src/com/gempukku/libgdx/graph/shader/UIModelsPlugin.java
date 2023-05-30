@@ -1,7 +1,9 @@
 package com.gempukku.libgdx.graph.shader;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.gempukku.libgdx.common.Producer;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
+import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.common.sprite.BillboardSpriteShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.common.sprite.ScreenSpriteShaderNodeConfiguration;
@@ -44,6 +46,7 @@ import com.gempukku.libgdx.graph.ui.graph.FileGraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.UIRenderPipelineConfiguration;
 import com.gempukku.libgdx.graph.ui.pipeline.value.*;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
 import com.kotcrab.vis.ui.VisUI;
 
 public class UIModelsPlugin implements UIGdxGraphPlugin {
@@ -186,6 +189,14 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
         UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelProducer().create());
 
         UIRenderPipelineConfiguration.register(new ModelShaderRendererEditorProducer());
+
+        UIRenderPipelineConfiguration.registerPreviewConfigurationBuilder(
+                ShaderRendererConfiguration.class, new Producer<ShaderRendererConfiguration>() {
+                    @Override
+                    public ShaderRendererConfiguration create() {
+                        return new SimpleShaderRendererConfiguration(new MapWritablePropertyContainer());
+                    }
+                });
 
         // Register runtime plugin
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);

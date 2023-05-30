@@ -7,8 +7,9 @@ import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.lighting.Lighting3DEnvironment;
 
 public class LightingSystem extends BaseSystem {
     private PipelineRendererSystem pipelineRendererSystem;
@@ -22,8 +23,17 @@ public class LightingSystem extends BaseSystem {
     private Array<Entity> newEnvironments = new Array<>();
     private Array<Entity> newDirectionalLights = new Array<>();
 
+    private SimpleLightingRendererConfiguration lightingConfiguration;
+
+    public LightingSystem(int maxDirectionalLights, int maxPointLights, int maxSpotLights, float shadowAcneValue, int shadowSoftness) {
+        lightingConfiguration = new SimpleLightingRendererConfiguration(maxDirectionalLights, maxPointLights, maxSpotLights,
+                shadowAcneValue, shadowSoftness);
+    }
+
     @Override
     protected void initialize() {
+        pipelineRendererSystem.addRendererConfiguration(LightingRendererConfiguration.class, lightingConfiguration);
+
         world.getAspectSubscriptionManager().get(Aspect.all(LightingEnvironmentComponent.class)).
                 addSubscriptionListener(
                         new EntitySubscription.SubscriptionListener() {
@@ -40,8 +50,7 @@ public class LightingSystem extends BaseSystem {
                                     LightingEnvironmentComponent environment = environmentComponentMapper.get(entities.get(i));
                                     String environmentName = environment.getName();
                                     environmentMap.remove(environmentName);
-                                    Lighting3DPublicData pluginData = pipelineRendererSystem.getPluginData(Lighting3DPublicData.class);
-                                    pluginData.setEnvironment(environment.getId(), null);
+                                    setEnvironment(environment.getId(), null);
                                 }
                             }
                         });
@@ -73,9 +82,9 @@ public class LightingSystem extends BaseSystem {
     protected void processSystem() {
         for (Entity newEnvironment : newEnvironments) {
             LightingEnvironmentComponent environment = environmentComponentMapper.get(newEnvironment);
-            Lighting3DEnvironment lighting = new Lighting3DEnvironment(environment.getCenter(), environment.getRadius());
+            Lighting3DEnvironment lighting = new Lighting3DEnvironment(environment.getCenter(), environment.getDiameter());
             lighting.setAmbientColor(environment.getAmbientColor());
-            pipelineRendererSystem.getPluginData(Lighting3DPublicData.class).setEnvironment(environment.getId(), lighting);
+            setEnvironment(environment.getId(), lighting);
             environmentMap.put(environment.getName(), lighting);
         }
         newEnvironments.clear();
@@ -92,5 +101,9 @@ public class LightingSystem extends BaseSystem {
             directionalLightMap.put(newDirectionalLight.getId(), light);
         }
         newDirectionalLights.clear();
+    }
+
+    private void setEnvironment(String environmentId, Lighting3DEnvironment environment) {
+        lightingConfiguration.setEnvironment(environmentId, environment);
     }
 }

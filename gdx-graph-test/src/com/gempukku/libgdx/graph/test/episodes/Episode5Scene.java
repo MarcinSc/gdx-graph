@@ -22,13 +22,18 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 
 public class Episode5Scene implements LibgdxGraphTestScene {
@@ -40,6 +45,8 @@ public class Episode5Scene implements LibgdxGraphTestScene {
     private Skin skin;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private MaterialModelInstanceModelAdapter sphereAdapter;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -61,7 +68,7 @@ public class Episode5Scene implements LibgdxGraphTestScene {
 
         camera = createCamera();
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class));
+        createModels(shaderConfiguration);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -77,8 +84,8 @@ public class Episode5Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models) {
-        sphereAdapter = new MaterialModelInstanceModelAdapter(new ModelInstance(sphereModel), models);
+    private void createModels(ModelContainer<RenderableModel> modelContainer) {
+        sphereAdapter = new MaterialModelInstanceModelAdapter(new ModelInstance(sphereModel), modelContainer);
         sphereAdapter.addTag("Cover");
     }
 
@@ -163,14 +170,22 @@ public class Episode5Scene implements LibgdxGraphTestScene {
         stage.dispose();
         sphereModel.dispose();
         pipelineRenderer.dispose();
+        configuration.dispose();
         rockTexture.dispose();
         WhitePixel.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode5.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode5.json"), configuration);
     }
 }

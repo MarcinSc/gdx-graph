@@ -21,16 +21,22 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
+import com.gempukku.libgdx.graph.util.lighting.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
@@ -51,6 +57,8 @@ public class Episode18Scene implements LibgdxGraphTestScene {
     private float cameraPositionAngle = 0f;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private ParticleModel particleModel;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -68,7 +76,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         updateCamera();
 
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class));
+        createModels(shaderConfiguration);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -97,7 +105,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models) {
+    private void createModels(ModelContainer<RenderableModel> modelContainer) {
         UBJsonReader jsonReader = new UBJsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         model = modelLoader.loadModel(Gdx.files.classpath("model/fighter/fighter.g3db"));
@@ -106,7 +114,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         final float scale = 0.0008f;
         modelInstance.transform.idt().scale(scale, scale, scale).rotate(-1, 0, 0f, 90);
 
-        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, models);
+        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, modelContainer);
         modelAdapter.addTag("Default");
 
         float height = 0.22f;
@@ -114,7 +122,7 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         float min = 0.2f;
         float max = 0.3f;
 
-        particleModel = new ParticleModel(1000, models, "exhaust");
+        particleModel = new ParticleModel(1000, shaderConfiguration, modelContainer, "exhaust");
         particleModel.addParticleBirthProperty("Particle Birth");
         particleModel.addParticleDeathProperty("Particle Death");
 
@@ -215,10 +223,20 @@ public class Episode18Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode18.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        pipelineRenderer.getPluginData(Lighting3DPublicData.class).setEnvironment("", lights);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+
+        SimpleLightingRendererConfiguration lightingConfiguration = new SimpleLightingRendererConfiguration();
+        configuration.setConfig(LightingRendererConfiguration.class, lightingConfiguration);
+        lightingConfiguration.setEnvironment("", lights);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode18.json"), configuration);
     }
 }

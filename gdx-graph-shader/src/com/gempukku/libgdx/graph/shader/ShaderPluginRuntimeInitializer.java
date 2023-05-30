@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.shader;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
-import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.common.effect.*;
 import com.gempukku.libgdx.graph.shader.common.math.arithmetic.*;
@@ -23,7 +22,6 @@ import com.gempukku.libgdx.graph.shader.common.texture.Sampler2DShaderNodeBuilde
 import com.gempukku.libgdx.graph.shader.common.texture.UVFlipbookShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.common.texture.UVTilingAndOffsetShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.common.value.*;
-import com.gempukku.libgdx.graph.shader.impl.GraphModelsImpl;
 import com.gempukku.libgdx.graph.shader.producer.EndModelShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.producer.ModelShaderRendererPipelineNodeProducer;
 import com.gempukku.libgdx.graph.shader.property.*;
@@ -31,7 +29,7 @@ import com.gempukku.libgdx.graph.shader.provided.*;
 
 public class ShaderPluginRuntimeInitializer implements PluginRuntimeInitializer {
     @Override
-    public void initialize(PluginRegistry pluginRegistry) {
+    public void initialize() {
         GraphTypeRegistry.registerType(new ModelShaderGraphType());
 
         // Math - Arithmetic
@@ -171,12 +169,7 @@ public class ShaderPluginRuntimeInitializer implements PluginRuntimeInitializer 
         ModelShaderConfiguration.addNodeBuilder(new ModelFragmentCoordinateShaderNodeBuilder());
         ModelShaderConfiguration.addNodeBuilder(new InstanceIdShaderNodeBuilder());
 
-        GraphModelsImpl data = new GraphModelsImpl();
-
-        RendererPipelineConfiguration.register(new ModelShaderRendererPipelineNodeProducer(pluginRegistry));
-
-        pluginRegistry.registerPrivateData(GraphModelsImpl.class, data);
-        pluginRegistry.registerPublicData(GraphModels.class, data);
+        RendererPipelineConfiguration.register(new ModelShaderRendererPipelineNodeProducer());
     }
 
     @Override

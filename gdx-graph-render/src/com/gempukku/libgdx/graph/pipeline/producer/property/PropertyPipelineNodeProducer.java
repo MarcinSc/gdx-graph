@@ -5,12 +5,12 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
-import com.gempukku.libgdx.graph.pipeline.PipelinePropertySource;
+import com.gempukku.libgdx.graph.pipeline.PipelineProperty;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
+import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
-import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public class PropertyPipelineNodeProducer implements PipelineNodeProducer {
@@ -34,17 +34,23 @@ public class PropertyPipelineNodeProducer implements PipelineNodeProducer {
     }
 
     @Override
-    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes, final PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration pipelineRendererConfiguration) {
         final String propertyName = data.getString("name");
-        final String fieldType = data.getString("type");
+
+        PipelineProperty pipelineProperty = pipelineRendererConfiguration.getPipelinePropertySource().getPipelineProperty(propertyName);
+        PropertyContainer propertyContainer = pipelineRendererConfiguration.getPipelinePropertyContainer();
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final PropertyFieldOutput fieldOutput = new PropertyFieldOutput(
-                pipelineDataProvider.getPipelinePropertySource(), pipelineDataProvider.getRootPropertyContainer(),
-                fieldType, propertyName);
+                propertyName, pipelineProperty, propertyContainer);
         result.put("value", fieldOutput);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
+        return new AbstractPipelineNode(result) {
+            @Override
+            public void setInputs(ObjectMap<String, Array<FieldOutput<?>>> inputs) {
+
+            }
+
             @Override
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
 
@@ -53,23 +59,21 @@ public class PropertyPipelineNodeProducer implements PipelineNodeProducer {
     }
 
     private static class PropertyFieldOutput implements PipelineNode.FieldOutput {
-        private final PipelinePropertySource pipelinePropertySource;
-        private final PropertyContainer pipelinePropertyContainer;
-        private final String fieldType;
         private final String propertyName;
+        private final PipelineProperty pipelineProperty;
+        private final PropertyContainer pipelinePropertyContainer;
 
         public PropertyFieldOutput(
-                PipelinePropertySource pipelinePropertySource, PropertyContainer pipelinePropertyContainer,
-                                   String fieldType, String propertyName) {
-            this.pipelinePropertySource = pipelinePropertySource;
-            this.pipelinePropertyContainer = pipelinePropertyContainer;
-            this.fieldType = fieldType;
+                String propertyName,
+                PipelineProperty pipelineProperty, PropertyContainer pipelinePropertyContainer) {
             this.propertyName = propertyName;
+            this.pipelineProperty = pipelineProperty;
+            this.pipelinePropertyContainer = pipelinePropertyContainer;
         }
 
         @Override
         public String getPropertyType() {
-            return fieldType;
+            return pipelineProperty.getType();
         }
 
         @Override
@@ -77,7 +81,7 @@ public class PropertyPipelineNodeProducer implements PipelineNodeProducer {
             Object value = pipelinePropertyContainer.getValue(propertyName);
             if (value != null)
                 return value;
-            return pipelinePropertySource.getPipelineProperty(propertyName).getValue();
+            return pipelineProperty.getValue();
         }
     }
 }

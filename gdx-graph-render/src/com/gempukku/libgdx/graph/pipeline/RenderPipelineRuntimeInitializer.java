@@ -17,12 +17,11 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PipelineRe
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.StartPipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.value.producer.*;
 import com.gempukku.libgdx.graph.pipeline.property.*;
-import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
 
 public class RenderPipelineRuntimeInitializer implements PluginRuntimeInitializer {
     @Override
-    public void initialize(PluginRegistry pluginRegistry) {
+    public void initialize() {
         GraphTypeRegistry.registerType(new RenderPipelineGraphType());
 
         RendererPipelineConfiguration.register(new StartPipelineNodeProducer());

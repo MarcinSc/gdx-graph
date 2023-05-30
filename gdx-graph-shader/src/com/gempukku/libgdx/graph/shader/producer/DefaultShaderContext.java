@@ -4,41 +4,52 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
-import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
-import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderContext;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 
 public class DefaultShaderContext implements ShaderContext {
+    private PipelineRendererConfiguration pipelineRendererConfiguration;
+
     private int renderWidth;
     private int renderHeight;
-    private RenderableModel renderableModel;
+    private Object model;
 
     private Camera camera;
     private Texture depthTexture;
     private Texture colorTexture;
     private TimeProvider timeProvider;
-    private final PropertyContainer pipelinePropertyContainer;
     private PropertyContainer globalPropertyContainer;
     private PropertyContainer localPropertyContainer;
+    private GraphShader graphShader;
 
-    private final PluginPrivateDataSource pluginPrivateDataSource;
-    private final TextureRegion defaultTexture;
+    @Override
+    public GraphShader getGraphShader() {
+        return graphShader;
+    }
 
-    public DefaultShaderContext(PropertyContainer pipelinePropertyContainer, PluginPrivateDataSource pluginPrivateDataSource,
-                                TextureRegion defaultTexture) {
-        this.pipelinePropertyContainer = pipelinePropertyContainer;
-        this.pluginPrivateDataSource = pluginPrivateDataSource;
-        this.defaultTexture = defaultTexture;
+    public void setGraphShader(GraphShader graphShader) {
+        this.graphShader = graphShader;
     }
 
     @Override
-    public RenderableModel getRenderableModel() {
-        return renderableModel;
+    public Object getModel() {
+        return model;
     }
 
-    public void setRenderableModel(RenderableModel renderableModel) {
-        this.renderableModel = renderableModel;
+    public void setModel(Object model) {
+        this.model = model;
+    }
+
+    public void setPipelineRendererConfiguration(PipelineRendererConfiguration pipelineRendererConfiguration) {
+        this.pipelineRendererConfiguration = pipelineRendererConfiguration;
+    }
+
+    @Override
+    public ShaderRendererConfiguration getShaderRenderingConfiguration() {
+        return pipelineRendererConfiguration.getConfig(ShaderRendererConfiguration.class);
     }
 
     @Override
@@ -88,16 +99,12 @@ public class DefaultShaderContext implements ShaderContext {
 
     @Override
     public TextureRegion getDefaultTexture() {
-        return defaultTexture;
+        return pipelineRendererConfiguration.getPipelineHelper().getWhitePixel().textureRegion;
     }
 
     @Override
     public TimeProvider getTimeProvider() {
-        return timeProvider;
-    }
-
-    public void setTimeProvider(TimeProvider timeProvider) {
-        this.timeProvider = timeProvider;
+        return pipelineRendererConfiguration.getTimeProvider();
     }
 
     public void setGlobalPropertyContainer(PropertyContainer globalPropertyContainer) {
@@ -108,12 +115,16 @@ public class DefaultShaderContext implements ShaderContext {
         this.localPropertyContainer = localPropertyContainer;
     }
 
+    private PropertyContainer getPipelinePropertyContainer() {
+        return pipelineRendererConfiguration.getPipelinePropertyContainer();
+    }
+
     @Override
     public Object getGlobalProperty(String name) {
         Object value = globalPropertyContainer.getValue(name);
         if (value != null)
             return value;
-        return pipelinePropertyContainer.getValue(name);
+        return getPipelinePropertyContainer().getValue(name);
     }
 
     @Override
@@ -124,11 +135,6 @@ public class DefaultShaderContext implements ShaderContext {
         value = globalPropertyContainer.getValue(name);
         if (value != null)
             return value;
-        return pipelinePropertyContainer.getValue(name);
-    }
-
-    @Override
-    public <T> T getPrivatePluginData(Class<T> clazz) {
-        return pluginPrivateDataSource.getPrivatePluginData(clazz);
+        return getPipelinePropertyContainer().getValue(name);
     }
 }

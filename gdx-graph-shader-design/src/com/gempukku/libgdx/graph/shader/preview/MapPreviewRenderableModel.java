@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
@@ -119,13 +119,8 @@ public class MapPreviewRenderableModel implements PreviewRenderableModel, Dispos
     }
 
     @Override
-    public PropertyContainer getPropertyContainer() {
+    public WritablePropertyContainer getPropertyContainer() {
         return propertiesRenderableModel.getPropertyContainer();
-    }
-
-    @Override
-    public void prepareToRender(ShaderContext shaderContext) {
-        propertiesRenderableModel.prepareToRender(shaderContext);
     }
 
     @Override

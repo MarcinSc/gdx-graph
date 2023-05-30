@@ -13,6 +13,7 @@ import com.gempukku.gdx.plugins.PluginVersion;
 import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.UIBoneAnimationPlugin;
 import com.gempukku.libgdx.graph.plugin.callback.design.UIRenderCallbackPlugin;
+import com.gempukku.libgdx.graph.plugin.callback.design.UIScreenshotPlugin;
 import com.gempukku.libgdx.graph.plugin.lighting3d.design.UILighting3DPlugin;
 import com.gempukku.libgdx.graph.plugin.maps.design.UIMapsPlugin;
 import com.gempukku.libgdx.graph.plugin.particles.design.UIParticlesPlugin;
@@ -107,6 +108,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         UIGdxGraphPluginRegistry.register(UIParticlesPlugin.class);
         UIGdxGraphPluginRegistry.register(UIPostprocessPlugin.class);
         UIGdxGraphPluginRegistry.register(UIBoneAnimationPlugin.class);
+        UIGdxGraphPluginRegistry.register(UIScreenshotPlugin.class);
     }
 
     @Override

@@ -19,15 +19,14 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
 import com.gempukku.libgdx.graph.shader.RenderableModel;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class MaterialModelInstanceModelAdapter {
     private ModelInstance modelInstance;
-    private GraphModels graphModels;
+    private ModelContainer<RenderableModel> modelContainer;
 
     private final ObjectSet<String> tags = new ObjectSet<>();
     private final Array<RenderableModel> registeredModels = new Array<>();
@@ -36,9 +35,9 @@ public class MaterialModelInstanceModelAdapter {
     private CullingTest cullingTest;
     private ObjectMap<IntMapping<String>, int[]> locationMappingCache = new ObjectMap<>();
 
-    public MaterialModelInstanceModelAdapter(ModelInstance modelInstance, GraphModels graphModels) {
+    public MaterialModelInstanceModelAdapter(ModelInstance modelInstance, ModelContainer<RenderableModel> modelContainer) {
         this.modelInstance = modelInstance;
-        this.graphModels = graphModels;
+        this.modelContainer = modelContainer;
 
         materialProperties = new ObjectMap<>();
         for (Material material : modelInstance.materials) {
@@ -108,7 +107,7 @@ public class MaterialModelInstanceModelAdapter {
         if (node.parts.size > 0) {
             for (NodePart nodePart : node.parts) {
                 NodePartRenderableModel renderableModel = new NodePartRenderableModel(node, nodePart);
-                graphModels.addModel(renderableModel);
+                modelContainer.addModel(renderableModel);
                 registeredModels.add(renderableModel);
             }
         }
@@ -126,7 +125,7 @@ public class MaterialModelInstanceModelAdapter {
 
         if (tags.isEmpty()) {
             for (RenderableModel registeredModel : registeredModels) {
-                graphModels.removeModel(registeredModel);
+                modelContainer.removeModel(registeredModel);
             }
             registeredModels.clear();
         }
@@ -186,11 +185,6 @@ public class MaterialModelInstanceModelAdapter {
         @Override
         public boolean isRendered(GraphShader graphShader, Camera camera) {
             return tags.contains(graphShader.getTag()) && nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
-        }
-
-        @Override
-        public void prepareToRender(ShaderContext shaderContext) {
-
         }
 
         @Override

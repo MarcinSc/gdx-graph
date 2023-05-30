@@ -1,12 +1,11 @@
 package com.gempukku.libgdx.graph.shader.common.sprite;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.LibGDXCollections;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationCommonShaderNodeBuilder;
@@ -18,14 +17,14 @@ public class ScreenSpriteShaderNodeBuilder extends ConfigurationCommonShaderNode
     }
 
     @Override
-    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         FieldOutput positionField = inputs.get("position");
         FieldOutput uvField = inputs.get("uv");
         FieldOutput anchorField = inputs.get("anchor");
         FieldOutput sizeField = inputs.get("size");
         FieldOutput rotationField = inputs.get("rotation");
 
-        loadFragmentIfNotDefined(commonShaderBuilder, assetResolver, "screenSprite");
+        loadFragmentIfNotDefined(commonShaderBuilder, configuration, "screenSprite");
 
         String position = positionField.getRepresentation();
         String uv = uvField.getRepresentation();

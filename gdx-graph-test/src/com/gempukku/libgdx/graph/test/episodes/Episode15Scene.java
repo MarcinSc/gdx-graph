@@ -20,16 +20,22 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
+import com.gempukku.libgdx.graph.util.lighting.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 
 public class Episode15Scene implements LibgdxGraphTestScene {
@@ -42,6 +48,8 @@ public class Episode15Scene implements LibgdxGraphTestScene {
     private final float cameraAngle = -0.5f;
     private final float cameraDistance = 1.3f;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -59,7 +67,7 @@ public class Episode15Scene implements LibgdxGraphTestScene {
         camera = createCamera();
 
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class));
+        createModels(shaderConfiguration);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -83,7 +91,7 @@ public class Episode15Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models) {
+    private void createModels(ModelContainer<RenderableModel> modelContainer) {
         JsonReader jsonReader = new JsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         model = modelLoader.loadModel(Gdx.files.classpath("model/luminaris/luminaris.g3dj"));
@@ -92,7 +100,7 @@ public class Episode15Scene implements LibgdxGraphTestScene {
         final float scale = 0.025f;
         modelInstance.transform.idt().translate(-0.3f, 0.11f, 0).scale(scale, scale, scale);
 
-        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, models);
+        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, modelContainer);
         modelAdapter.addTag("Default");
     }
 
@@ -105,7 +113,7 @@ public class Episode15Scene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        pipelineRenderer.setPipelineProperty("Focus Distance", cameraFocusDistance.getValue());
+                        configuration.getPipelinePropertyContainer().setValue("Focus Distance", cameraFocusDistance.getValue());
                     }
                 });
 
@@ -115,7 +123,7 @@ public class Episode15Scene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        pipelineRenderer.setPipelineProperty("Focus Range", cameraFocusRange.getValue());
+                        configuration.getPipelinePropertyContainer().setValue("Focus Range", cameraFocusRange.getValue());
                     }
                 });
 
@@ -168,10 +176,20 @@ public class Episode15Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode15.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        pipelineRenderer.getPluginData(Lighting3DPublicData.class).setEnvironment("", lights);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+
+        SimpleLightingRendererConfiguration lightingConfiguration = new SimpleLightingRendererConfiguration();
+        configuration.setConfig(LightingRendererConfiguration.class, lightingConfiguration);
+        lightingConfiguration.setEnvironment("", lights);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode15.json"), configuration);
     }
 }

@@ -22,15 +22,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
+import com.gempukku.libgdx.graph.render.callback.CallbackRendererConfiguration;
 import com.gempukku.libgdx.graph.render.callback.RenderCallback;
-import com.gempukku.libgdx.graph.render.callback.RenderCallbackPublicData;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleCallbackRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
 
 public class Episode3Scene implements LibgdxGraphTestScene {
     private Stage stage;
@@ -43,6 +44,7 @@ public class Episode3Scene implements LibgdxGraphTestScene {
     private Camera camera;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private ModelBatch modelBatch;
+    private PipelineRendererConfiguration configuration;
 
     @Override
     public String getName() {
@@ -162,8 +164,7 @@ public class Episode3Scene implements LibgdxGraphTestScene {
     }
 
     private void setPropertyIfDefined(String propertyName, float value) {
-        if (pipelineRenderer.hasPipelineProperty(propertyName))
-            pipelineRenderer.setPipelineProperty(propertyName, value);
+        configuration.getPipelinePropertyContainer().setValue(propertyName, value);
     }
 
     @Override
@@ -190,39 +191,46 @@ public class Episode3Scene implements LibgdxGraphTestScene {
         modelBatch.dispose();
         sphereModel.dispose();
         pipelineRenderer.dispose();
+        configuration.dispose();
         skin.dispose();
         stage.dispose();
         WhitePixel.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode3.json"), timeKeeper);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        pipelineRenderer.getPluginData(RenderCallbackPublicData.class).setRenderCallback(
-                "Callback", new RenderCallback() {
-                    @Override
-                    public void renderCallback(RenderPipeline renderPipeline, PipelineDataProvider pipelineDataProvider, PipelineRenderingContext pipelineRenderingContext, PipelineNode.PipelineRequirementsCallback pipelineRequirementsCallback) {
-                        RenderPipelineBuffer currentBuffer = renderPipeline.getDefaultBuffer();
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
 
-                        int width = currentBuffer.getWidth();
-                        int height = currentBuffer.getHeight();
-                        float viewportWidth = camera.viewportWidth;
-                        float viewportHeight = camera.viewportHeight;
-                        if (width != viewportWidth || height != viewportHeight) {
-                            camera.viewportWidth = width;
-                            camera.viewportHeight = height;
-                            camera.update();
-                        }
+        SimpleCallbackRendererConfiguration callbackConfiguration = new SimpleCallbackRendererConfiguration();
+        callbackConfiguration.setRenderCallback("Callback", new RenderCallback() {
+            @Override
+            public void renderCallback(RenderPipeline renderPipeline, PipelineRendererConfiguration pipelineRendererConfiguration, PipelineRenderingContext pipelineRenderingContext, PipelineNode.PipelineRequirementsCallback pipelineRequirementsCallback) {
+                RenderPipelineBuffer currentBuffer = renderPipeline.getDefaultBuffer();
 
-                        currentBuffer.beginColor();
+                int width = currentBuffer.getWidth();
+                int height = currentBuffer.getHeight();
+                float viewportWidth = camera.viewportWidth;
+                float viewportHeight = camera.viewportHeight;
+                if (width != viewportWidth || height != viewportHeight) {
+                    camera.viewportWidth = width;
+                    camera.viewportHeight = height;
+                    camera.update();
+                }
 
-                        modelBatch.begin(camera);
-                        modelBatch.render(renderableProviders, environment);
-                        modelBatch.end();
+                currentBuffer.beginColor();
 
-                        currentBuffer.endColor();
-                    }
-                });
-        return pipelineRenderer;
+                modelBatch.begin(camera);
+                modelBatch.render(renderableProviders, environment);
+                modelBatch.end();
+
+                currentBuffer.endColor();
+            }
+        });
+
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+        configuration.setConfig(CallbackRendererConfiguration.class, callbackConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode3.json"), configuration);
     }
 }

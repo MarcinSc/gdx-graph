@@ -1,13 +1,12 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -42,31 +41,31 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     }
 
     @Override
-    public GraphShader buildGraphShader(String tag, boolean designTime, GraphWithProperties graph, FileHandleResolver assetResolver) {
+    public GraphShader buildGraphShader(String tag, boolean designTime, GraphWithProperties graph, PipelineRendererConfiguration configuration) {
         GraphShader graphShader = new GraphShader(tag);
 
         VertexShaderBuilder vertexShaderBuilder = new VertexShaderBuilder(graphShader);
         FragmentShaderBuilder fragmentShaderBuilder = new FragmentShaderBuilder(graphShader);
 
         for (GraphShaderRecipeIngredient initIngredient : initIngredients) {
-            initIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, null, assetResolver);
+            initIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, null, configuration);
         }
 
         OutputResolver vertexOutputResolver = new OutputResolver(
-                designTime, graph, assetResolver, graphShader, false, vertexShaderBuilder, fragmentShaderBuilder);
+                designTime, graph, configuration, graphShader, false, vertexShaderBuilder, fragmentShaderBuilder);
         for (GraphShaderRecipeIngredient vertexShaderIngredient : vertexShaderIngredients) {
-            vertexShaderIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, vertexOutputResolver, assetResolver);
+            vertexShaderIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, vertexOutputResolver, configuration);
         }
 
         OutputResolver fragmentOutputResolver = new OutputResolver(
-                designTime, graph, assetResolver, graphShader, true, vertexShaderBuilder, fragmentShaderBuilder);
+                designTime, graph, configuration, graphShader, true, vertexShaderBuilder, fragmentShaderBuilder);
 
         for (GraphShaderRecipeIngredient fragmentShaderIngredient : fragmentShaderIngredients) {
-            fragmentShaderIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, fragmentOutputResolver, assetResolver);
+            fragmentShaderIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, fragmentOutputResolver, configuration);
         }
 
         for (GraphShaderRecipeIngredient finalizeIngredient : finalizeIngredients) {
-            finalizeIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, null, assetResolver);
+            finalizeIngredient.processIngredient(designTime, graph, graphShader, vertexShaderBuilder, fragmentShaderBuilder, null, configuration);
         }
 
         return graphShader;
@@ -91,7 +90,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     private static class OutputResolver implements GraphShaderRecipeIngredient.GraphShaderOutputResolver {
         private final boolean designTime;
         private final GraphWithProperties graph;
-        private final FileHandleResolver assetResolver;
+        private final PipelineRendererConfiguration configuration;
         private final GraphShader graphShader;
         private final boolean fragmentShader;
         private final VertexShaderBuilder vertexShaderBuilder;
@@ -100,12 +99,12 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
         private final GraphConfiguration[] graphConfigurations;
 
         public OutputResolver(
-                boolean designTime, GraphWithProperties graph, FileHandleResolver assetResolver,
+                boolean designTime, GraphWithProperties graph, PipelineRendererConfiguration configuration,
                 GraphShader graphShader, boolean fragmentShader,
                 VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder) {
             this.designTime = designTime;
             this.graph = graph;
-            this.assetResolver = assetResolver;
+            this.configuration = configuration;
             this.graphShader = graphShader;
             this.fragmentShader = fragmentShader;
             this.vertexShaderBuilder = vertexShaderBuilder;
@@ -116,7 +115,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
 
         @Override
         public GraphShaderNodeBuilder.FieldOutput getSingleOutput(String nodeId, String property) {
-            ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> nodeOutputs = buildNode(designTime, fragmentShader, graph, graphShader, graphShader, assetResolver,
+            ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> nodeOutputs = buildNode(designTime, fragmentShader, graph, graphShader, configuration,
                     nodeId, this.nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
             return nodeOutputs.get(property);
         }
@@ -136,7 +135,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     private static ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> buildNode(
             boolean designTime, boolean fragmentShader,
             GraphWithProperties graph,
-            GraphShaderContext context, GraphShader graphShader, FileHandleResolver assetResolver,
+            GraphShader graphShader, PipelineRendererConfiguration configuration,
             String nodeId, ObjectMap<String, ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>> nodeOutputs,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphConfiguration... graphConfigurations) {
@@ -156,7 +155,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
                 Array<String> fieldTypes = new Array<>();
                 Array<GraphShaderNodeBuilder.FieldOutput> fieldOutputs = new Array<>();
                 for (GraphConnection vertexInfo : vertexInfos) {
-                    ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> output = buildNode(designTime, fragmentShader, graph, context, graphShader, assetResolver,vertexInfo.getNodeFrom(), nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
+                    ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> output = buildNode(designTime, fragmentShader, graph, graphShader, configuration,vertexInfo.getNodeFrom(), nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
                     GraphShaderNodeBuilder.FieldOutput fieldOutput = output.get(vertexInfo.getFieldFrom());
                     ShaderFieldType fieldType = fieldOutput.getFieldType();
                     fieldTypes.add(fieldType.getName());
@@ -166,9 +165,9 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
             }
             ObjectSet<String> requiredOutputs = findRequiredOutputs(graph, nodeId);
             if (fragmentShader) {
-                nodeOutput = (ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>) nodeBuilder.buildFragmentNode(designTime, nodeId, nodeInfo.getData(), inputFields, requiredOutputs, vertexShaderBuilder, fragmentShaderBuilder, context, graphShader, assetResolver);
+                nodeOutput = (ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>) nodeBuilder.buildFragmentNode(designTime, nodeId, nodeInfo.getData(), inputFields, requiredOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphShader, configuration);
             } else {
-                nodeOutput = (ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>) nodeBuilder.buildVertexNode(designTime, nodeId, nodeInfo.getData(), inputFields, requiredOutputs, vertexShaderBuilder, context, graphShader, assetResolver);
+                nodeOutput = (ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>) nodeBuilder.buildVertexNode(designTime, nodeId, nodeInfo.getData(), inputFields, requiredOutputs, vertexShaderBuilder, graphShader, configuration);
             }
             nodeOutputs.put(nodeId, nodeOutput);
         }

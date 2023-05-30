@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.vertex;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ModelsUniformSetters;
 import com.gempukku.libgdx.graph.shader.UniformSetters;
@@ -22,7 +22,7 @@ public class ModelPositionVertexShaderIngredient implements GraphShaderRecipeIng
     public void processIngredient(
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+            GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         GraphShaderNodeBuilder.FieldOutput positionField = positionSource.resolveOutput(outputResolver);
 
         String positionType = positionSource.resolveNode(graph).getData().getString("positionType", "World space");

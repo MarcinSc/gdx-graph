@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.shader.boneanimation.property;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.DefaultShaderPropertySource;
 import com.gempukku.libgdx.graph.shader.property.GraphShaderPropertyProducer;
@@ -17,7 +18,7 @@ public class BoneWeightPropertyProducer implements GraphShaderPropertyProducer {
     }
 
     @Override
-    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime) {
+    public ShaderPropertySource createProperty(int index, String name, JsonValue data, PropertyLocation location, String attributeFunction, boolean designTime, PipelineRendererConfiguration configuration) {
         int boneWeightCount = data.getInt("maxBoneWeightCount", 4);
 
         Vector2[] defaultValue = new Vector2[boneWeightCount];

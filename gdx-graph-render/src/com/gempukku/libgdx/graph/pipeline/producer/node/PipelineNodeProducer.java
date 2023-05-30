@@ -3,6 +3,7 @@ package com.gempukku.libgdx.graph.pipeline.producer.node;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 
 public interface PipelineNodeProducer {
@@ -12,6 +13,7 @@ public interface PipelineNodeProducer {
 
     ObjectMap<String, String> getOutputTypes(JsonValue data, ObjectMap<String, Array<String>> inputTypes);
 
-    PipelineNode createNode(JsonValue data, ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes,
-                            PipelineDataProvider pipelineDataProvider);
+    PipelineNode createNode(JsonValue data,
+                            ObjectMap<String, Array<String>> inputTypes, ObjectMap<String, String> outputTypes,
+                            PipelineRendererConfiguration pipelineRendererConfiguration);
 }

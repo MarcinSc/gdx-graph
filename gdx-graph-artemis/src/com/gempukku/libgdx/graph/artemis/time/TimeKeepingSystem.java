@@ -6,6 +6,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.IntMap;
+import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 
 public class TimeKeepingSystem extends BaseEntitySystem {
     private IntMap<DefaultTimeKeeper> timeKeepers = new IntMap<>();

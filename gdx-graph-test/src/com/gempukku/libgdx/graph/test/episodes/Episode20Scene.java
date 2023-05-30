@@ -20,6 +20,7 @@ import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
+import com.gempukku.libgdx.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.system.ConfigurePhysicsSystem;
 import com.gempukku.libgdx.graph.test.system.PlayerControlSystem;
@@ -121,7 +122,7 @@ public class Episode20Scene implements LibgdxGraphTestScene {
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new SpriteBatchSystem());
         worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
-                new SpriteSystem());
+                new SpriteSystem(), new StageSystem(0));
 
         world = new World(worldConfigurationBuilder.build());
 

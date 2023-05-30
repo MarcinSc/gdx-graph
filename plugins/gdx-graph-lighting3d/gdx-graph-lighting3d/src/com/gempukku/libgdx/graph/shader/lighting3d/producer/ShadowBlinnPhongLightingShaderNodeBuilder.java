@@ -1,191 +1,56 @@
 package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g3d.utils.TextureDescriptor;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
-import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
-import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
-import com.gempukku.libgdx.graph.shader.*;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.GLSLFragmentReader;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
-import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.LightColor;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPrivateData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.node.ConfigurationShaderNodeBuilder;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 
 public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
-    private final int maxNumberOfDirectionalLights;
-    private final int maxNumberOfPointLights;
-    private final int maxNumberOfSpotlights;
-    private final float shadowAcneValue;
-    private final int shadowSoftness;
-
-    public ShadowBlinnPhongLightingShaderNodeBuilder(int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights,
-                                                     float shadowAcneValue, int shadowSoftness) {
+    public ShadowBlinnPhongLightingShaderNodeBuilder() {
         super(new ShadowBlinnPhongLightingShaderNodeConfiguration());
-        this.maxNumberOfDirectionalLights = maxNumberOfDirectionalLights;
-        this.maxNumberOfPointLights = maxNumberOfPointLights;
-        this.maxNumberOfSpotlights = maxNumberOfSpotlights;
-        this.shadowAcneValue = shadowAcneValue;
-        this.shadowSoftness = shadowSoftness;
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNodeSingleInputs(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         throw new UnsupportedOperationException("At the moment light calculation is not available in vertex shader");
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, final GraphShaderContext graphShaderContext, final GraphShader graphShader, FileHandleResolver assetResolver) {
+    public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, final GraphShader graphShader, final PipelineRendererConfiguration configuration) {
         final String environmentId = data.getString("id", "");
+
+        final LightingRendererConfiguration lightingConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        int maxNumberOfDirectionalLights = lightingConfiguration.getMaxNumberOfDirectionalLights(environmentId, graphShader);
+        int maxNumberOfPointLights = lightingConfiguration.getMaxNumberOfPointLights(environmentId, graphShader);
+        int maxNumberOfSpotlights = lightingConfiguration.getMaxNumberOfSpotlights(environmentId, graphShader);
+        float shadowAcneValue = lightingConfiguration.getShadowAcneValue(environmentId, graphShader);
+        int shadowSoftness = lightingConfiguration.getShadowSoftness(environmentId, graphShader);
 
         fragmentShaderBuilder.addStructure("Lighting",
                 "  vec3 diffuse;\n" +
                         "  vec3 specular;\n");
 
-//        Lighting3DUtils.configureShadowInformation(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, graphShader.getDefaultTexture());
-//
-//        Lighting3DUtils.configureAmbientLighting(fragmentShaderBuilder, nodeId, environmentId);
+        Lighting3DUtils.configureShadowInformation(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, configuration.getPipelineHelper().getWhitePixel().textureRegion, lightingConfiguration);
 
+        Lighting3DUtils.configureAmbientLighting(fragmentShaderBuilder, nodeId, environmentId, lightingConfiguration);
 
-        final float[] shadowCameras = new float[16 * maxNumberOfDirectionalLights];
-        fragmentShaderBuilder.addArrayUniformVariable("u_shadowCamera_" + nodeId, maxNumberOfDirectionalLights, "mat4", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                        if (environment != null) {
-                            Array<Directional3DLight> directionalLights = environment.getDirectionalLights();
-                            for (int i = 0; i < directionalLights.size; i++) {
-                                OrthographicCamera shadowCamera = directionalLights.get(i).getShadowCamera();
-                                if (shadowCamera != null) {
-                                    System.arraycopy(shadowCamera.combined.val, 0, shadowCameras, i * 16, 16);
-                                }
-                            }
-                        }
-                        shader.setUniformMatrix4Array(location, shadowCameras);
-                    }
-                }, "Shadow camera matrix");
-
-        final float[] shadowCamerasBufferSize = new float[1 * maxNumberOfDirectionalLights];
-        fragmentShaderBuilder.addArrayUniformVariable("u_shadowCameraBufferSize_" + nodeId, maxNumberOfDirectionalLights, "float", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                        if (environment != null) {
-                            Array<Directional3DLight> directionalLights = environment.getDirectionalLights();
-                            for (int i = 0; i < directionalLights.size; i++) {
-                                OrthographicCamera shadowCamera = directionalLights.get(i).getShadowCamera();
-                                if (shadowCamera != null) {
-                                    shadowCamerasBufferSize[i] = directionalLights.get(i).getShadowBufferSize();
-                                }
-                            }
-                        }
-                        shader.setUniformFloatArray(location, shadowCamerasBufferSize);
-                    }
-                }, "Shadow camera buffer size");
-
-        final float[] shadowCamerasClipping = new float[2 * maxNumberOfDirectionalLights];
-        fragmentShaderBuilder.addArrayUniformVariable("u_shadowCameraClipping_" + nodeId, maxNumberOfDirectionalLights, "vec2", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                        if (environment != null) {
-                            Array<Directional3DLight> directionalLights = environment.getDirectionalLights();
-                            for (int i = 0; i < directionalLights.size; i++) {
-                                OrthographicCamera shadowCamera = directionalLights.get(i).getShadowCamera();
-                                if (shadowCamera != null) {
-                                    shadowCamerasClipping[i * 2 + 0] = shadowCamera.near;
-                                    shadowCamerasClipping[i * 2 + 1] = shadowCamera.far;
-                                }
-                            }
-                        }
-                        shader.setUniformVector2Array(location, shadowCamerasClipping);
-                    }
-                }, "Shadow camera clipping");
-
-        final float[] shadowCamerasPosition = new float[3 * maxNumberOfDirectionalLights];
-        fragmentShaderBuilder.addArrayUniformVariable("u_shadowCameraPosition_" + nodeId, maxNumberOfDirectionalLights, "vec3", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                        if (environment != null) {
-                            Array<Directional3DLight> directionalLights = environment.getDirectionalLights();
-                            for (int i = 0; i < directionalLights.size; i++) {
-                                OrthographicCamera shadowCamera = directionalLights.get(i).getShadowCamera();
-                                if (shadowCamera != null) {
-                                    shadowCamerasPosition[i * 3 + 0] = shadowCamera.position.x;
-                                    shadowCamerasPosition[i * 3 + 1] = shadowCamera.position.y;
-                                    shadowCamerasPosition[i * 3 + 2] = shadowCamera.position.z;
-                                }
-                            }
-                        }
-                        shader.setUniformVector3Array(location, shadowCamerasPosition);
-                    }
-                }, "Shadow camera position");
-
-        for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
-            final int lightIndex = i;
-            final TextureDescriptor<Texture> textureDescriptor = new TextureDescriptor<>(null,
-                    Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest, Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-
-            fragmentShaderBuilder.addUniformVariable("u_shadowMap_" + nodeId + "_" + i, "sampler2D", true,
-                    new UniformRegistry.UniformSetter() {
-                        @Override
-                        public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                            Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                            if (environment != null) {
-                                Array<Directional3DLight> directionalLights = environment.getDirectionalLights();
-                                RenderPipelineBuffer shadowFrameBuffer = null;
-                                if (directionalLights.size > lightIndex)
-                                    shadowFrameBuffer = directionalLights.get(lightIndex).getShadowFrameBuffer();
-
-                                if (shadowFrameBuffer != null) {
-                                    textureDescriptor.texture = shadowFrameBuffer.getColorBufferTexture();
-                                } else {
-                                    textureDescriptor.texture = WhitePixel.sharedInstance.texture;
-                                }
-                            } else {
-                                textureDescriptor.texture = WhitePixel.sharedInstance.texture;
-                            }
-                            shader.setUniform(location, textureDescriptor);
-                        }
-                    }, "Shadow map " + i);
-        }
-
-        fragmentShaderBuilder.addUniformVariable("u_ambientLight_" + nodeId, "vec3", true,
-                new UniformRegistry.UniformSetter() {
-                    @Override
-                    public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DEnvironment environment = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class).getEnvironment(data.getString("id", ""));
-                        if (environment != null && environment.getAmbientColor() != null) {
-                            LightColor ambientColor = environment.getAmbientColor();
-                            shader.setUniform(location, ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue());
-                        } else {
-                            shader.setUniform(location, 0f, 0f, 0f);
-                        }
-                    }
-                }, "Ambient light");
-
-        loadFragmentIfNotDefined(fragmentShaderBuilder, assetResolver, "unpackVec3ToFloat");
+        loadFragmentIfNotDefined(fragmentShaderBuilder, configuration, "unpackVec3ToFloat");
 
         String isLightedFunctionName = "isLighted_" + nodeId;
         String probeShadowMapFunctionName = "probeShadowMap_" + nodeId;
-        fragmentShaderBuilder.addFunction(probeShadowMapFunctionName, createProbeShadowMapFunction(nodeId));
+        fragmentShaderBuilder.addFunction(probeShadowMapFunctionName, createProbeShadowMapFunction(nodeId, maxNumberOfDirectionalLights));
 
         ObjectMap<String, String> variables = new ObjectMap<>();
         variables.put("NUM_SPOT_LIGHTS", String.valueOf(maxNumberOfSpotlights));
@@ -196,14 +61,14 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
         variables.put("SHADOW_PROBE_COUNT", SimpleNumberFormatter.format((shadowSoftness + 1) * (shadowSoftness + 1)));
         variables.put("NODE_ID", nodeId);
 
-        fragmentShaderBuilder.addFunction(isLightedFunctionName, GLSLFragmentReader.getFragment(assetResolver,"isLighted", variables));
+        fragmentShaderBuilder.addFunction(isLightedFunctionName, GLSLFragmentReader.getFragment(configuration.getAssetResolver(), "isLighted", variables));
 
         if (maxNumberOfDirectionalLights > 0)
-            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passDirectionalLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfDirectionalLights, lightingConfiguration);
         if (maxNumberOfPointLights > 0)
-            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passPointLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfPointLights, lightingConfiguration);
         if (maxNumberOfSpotlights > 0)
-            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables, assetResolver);
+            passSpotLights(environmentId, fragmentShaderBuilder, nodeId, variables, configuration.getAssetResolver(), maxNumberOfSpotlights, lightingConfiguration);
 
         FieldOutput positionValue = inputs.get("position");
         FieldOutput normalValue = inputs.get("normal");
@@ -223,7 +88,7 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
 
         fragmentShaderBuilder.addMainLine("// Blinn-Phong Lighting node");
         String calculateLightingFunctionName = "calculateBlinnPhongLightingFunction_" + nodeId;
-        fragmentShaderBuilder.addFunction(calculateLightingFunctionName, createCalculateLightingFunction(nodeId));
+        fragmentShaderBuilder.addFunction(calculateLightingFunctionName, createCalculateLightingFunction(nodeId, maxNumberOfDirectionalLights, maxNumberOfPointLights, maxNumberOfSpotlights));
         String lightingVariable = "lighting_" + nodeId;
         fragmentShaderBuilder.addMainLine("Lighting " + lightingVariable + " = " + calculateLightingFunctionName + "(" + position + ", " + normal + ", " + shininess + ");");
 
@@ -245,7 +110,7 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
         return result;
     }
 
-    private String createProbeShadowMapFunction(String nodeId) {
+    private String createProbeShadowMapFunction(String nodeId, int maxNumberOfDirectionalLights) {
         StringBuilder sb = new StringBuilder();
         sb.append("vec4 probeShadowMap_" + nodeId + "(int lightIndex, vec2 coord) {\n");
         for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
@@ -257,7 +122,7 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
         return sb.toString();
     }
 
-    private String createCalculateLightingFunction(String nodeId) {
+    private String createCalculateLightingFunction(String nodeId, int maxNumberOfDirectionalLights, int maxNumberOfPointLights, int maxNumberOfSpotlights) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Lighting calculateBlinnPhongLightingFunction_" + nodeId + "(vec3 position, vec3 normal, float shininess) {\n");
@@ -275,33 +140,33 @@ public class ShadowBlinnPhongLightingShaderNodeBuilder extends ConfigurationShad
         return sb.toString();
     }
 
-    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passSpotLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfSpotlights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configureSpotLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfSpotlights);
+        Lighting3DUtils.configureSpotLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfSpotlights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getSpotBlinnPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment(assetResolver,"blinn-phong/spotLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "blinn-phong/spotLightContribution", variables));
     }
 
-    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passPointLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfPointLights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configurePointLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfPointLights);
+        Lighting3DUtils.configurePointLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfPointLights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getPointBlinnPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment(assetResolver,"blinn-phong/pointLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "blinn-phong/pointLightContribution", variables));
     }
 
-    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver) {
+    private void passDirectionalLights(final String environmentId, FragmentShaderBuilder fragmentShaderBuilder, String nodeId, final ObjectMap<String, String> variables, FileHandleResolver assetResolver, int maxNumberOfDirectionalLights, final LightingRendererConfiguration lightingRendererConfiguration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
 
-        Lighting3DUtils.configureDirectionalLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights);
+        Lighting3DUtils.configureDirectionalLighting(fragmentShaderBuilder, nodeId, environmentId, maxNumberOfDirectionalLights, lightingRendererConfiguration);
 
         fragmentShaderBuilder.addFunction("getDirectionalBlinnPhongLightContribution_" + nodeId,
-                GLSLFragmentReader.getFragment(assetResolver,"blinn-phong/shadowDirectionalLightContribution", variables));
+                GLSLFragmentReader.getFragment(assetResolver, "blinn-phong/shadowDirectionalLightContribution", variables));
     }
 }

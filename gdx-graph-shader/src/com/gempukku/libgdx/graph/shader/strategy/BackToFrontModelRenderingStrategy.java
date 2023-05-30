@@ -5,8 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.RenderableModel;
-import com.gempukku.libgdx.graph.shader.impl.GraphModelsImpl;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 
 public class BackToFrontModelRenderingStrategy implements ModelRenderingStrategy {
     private static final Pool<ModelWithShader> pool = Pools.get(ModelWithShader.class);
@@ -14,22 +13,22 @@ public class BackToFrontModelRenderingStrategy implements ModelRenderingStrategy
     private final DistanceModelWithShaderSorter modelSorter = new DistanceModelWithShaderSorter(DistanceModelWithShaderSorter.Order.Back_To_Front);
 
     @Override
-    public void processModels(GraphModelsImpl models, Array<GraphShader> shaders, Camera camera, StrategyCallback callback) {
+    public void processModels(ShaderRendererConfiguration configuration, Array<GraphShader> shaders, Camera camera, StrategyCallback callback) {
         callback.begin();
         clearSortingArray();
-        for (RenderableModel model : models.getModels()) {
+        for (Object model : configuration.getModels()) {
             for (GraphShader shader : shaders) {
-                if (model.isRendered(shader, camera)) {
+                if (configuration.isRendered(model, shader, camera)) {
                     ModelWithShader modelWithShader = pool.obtain();
                     modelWithShader.setShader(shader);
-                    modelWithShader.setRenderableModel(model);
+                    modelWithShader.setModel(model);
                     orderingArray.add(modelWithShader);
                 }
             }
         }
-        modelSorter.sort(camera.position, orderingArray);
+        modelSorter.sort(configuration, camera.position, orderingArray);
         for (ModelWithShader model : orderingArray) {
-            callback.process(model.getRenderableModel(), model.getShader());
+            callback.process(model.getModel(), model.getShader());
         }
         callback.end();
     }

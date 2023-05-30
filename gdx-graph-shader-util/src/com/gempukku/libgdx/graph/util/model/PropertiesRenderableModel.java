@@ -9,10 +9,10 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.ValuePerVertex;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.RenderableModel;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 
@@ -21,14 +21,14 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     private final Vector3 position = new Vector3();
     private final Matrix4 worldTransform = new Matrix4();
     private final VertexAttributes vertexAttributes;
-    private final PropertyContainer propertyContainer;
+    private final WritablePropertyContainer propertyContainer;
     private final Mesh mesh;
     private final float[] vertexData;
     private int[] attributeLocations;
 
     public PropertiesRenderableModel(VertexAttributes vertexAttributes,
                                      ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
-                                     int vertexCount, short[] indices, PropertyContainer propertyContainer) {
+                                     int vertexCount, short[] indices, WritablePropertyContainer propertyContainer) {
         this.vertexAttributes = vertexAttributes;
         this.propertyContainer = propertyContainer;
 
@@ -74,11 +74,6 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     }
 
     @Override
-    public void prepareToRender(ShaderContext shaderContext) {
-
-    }
-
-    @Override
     public Vector3 getPosition() {
         return position;
     }
@@ -94,7 +89,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     }
 
     @Override
-    public PropertyContainer getPropertyContainer() {
+    public WritablePropertyContainer getPropertyContainer() {
         return propertyContainer;
     }
 

@@ -3,15 +3,15 @@ package com.gempukku.libgdx.graph.artemis.ui;
 import com.artemis.Aspect;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorProvider;
@@ -19,45 +19,49 @@ import com.gempukku.libgdx.lib.artemis.input.InputProcessorProvider;
 public class StageSystem extends EntitySystem implements InputProcessorProvider, Disposable {
     private PipelineRendererSystem pipelineRendererSystem;
 
-    private Stage stage;
-    private Skin skin;
     private int processorPriority;
+    private SimpleUIRendererConfiguration simpleUIRendererConfiguration;
 
-    private Entity stageEntity;
-    private boolean initializedStage;
+    private Array<Entity> addedEntities = new Array<>();
+    private String inputProcessingStageId;
+    private InputMultiplexer multiplexer = new InputMultiplexer();
 
     public StageSystem(int processorPriority) {
         super(Aspect.all(StageComponent.class));
 
         this.processorPriority = processorPriority;
-
-        stage = new Stage(new ScreenViewport());
     }
 
     @Override
     protected void initialize() {
+        simpleUIRendererConfiguration = new SimpleUIRendererConfiguration();
+        pipelineRendererSystem.addRendererConfiguration(UIRendererConfiguration.class, simpleUIRendererConfiguration);
     }
 
     @Override
     public void inserted(Entity e) {
-        stageEntity = e;
+        addedEntities.add(e);
     }
 
-    public Skin getSkin() {
-        if (!initializedStage)
-            throw new GdxRuntimeException("Stage not yet initialized");
-        return skin;
+    @Override
+    public void removed(Entity e) {
+        addedEntities.removeValue(e, true);
+        StageComponent stageComponent = e.getComponent(StageComponent.class);
+        Stage stage = removeStage(stageComponent.getStageName());
+        if (stage != null) {
+            stage.dispose();
+        }
     }
 
-    public Stage getStage() {
-        if (!initializedStage)
-            throw new GdxRuntimeException("Stage not yet initialized");
-        return stage;
+    public Stage getStage(String stageId) {
+        return simpleUIRendererConfiguration.getStage(stageId);
     }
 
     @EventListener
     public void screenResized(ScreenResized screenResized, Entity entity) {
-        stage.getViewport().update(screenResized.getWidth(), screenResized.getHeight(), true);
+        for (Stage stage : simpleUIRendererConfiguration.getStageMap().values()) {
+            stage.getViewport().update(screenResized.getWidth(), screenResized.getHeight(), true);
+        }
     }
 
     @Override
@@ -67,28 +71,46 @@ public class StageSystem extends EntitySystem implements InputProcessorProvider,
 
     @Override
     public InputProcessor getInputProcessor() {
-        return stage;
+        return multiplexer;
+    }
+
+    public void addStage(String stageId, Stage stage, boolean inputProcessing) {
+        simpleUIRendererConfiguration.setStage(stageId, stage);
+        if (inputProcessing)
+            setInputProcessingStage(stageId);
+    }
+
+    public Stage removeStage(String stageId) {
+        return simpleUIRendererConfiguration.removeStage(stageId);
+    }
+
+    public void setInputProcessingStage(String stageId) {
+        multiplexer.clear();
+        multiplexer.addProcessor(getStage(stageId));
     }
 
     @Override
     protected void processSystem() {
-        if (!initializedStage) {
-            StageComponent stageComponent = stageEntity.getComponent(StageComponent.class);
+        if (addedEntities.size > 0) {
+            for (Entity stageEntity : addedEntities) {
+                StageComponent stageComponent = stageEntity.getComponent(StageComponent.class);
 
-            UIPluginPublicData uiData = pipelineRendererSystem.getPluginData(UIPluginPublicData.class);
-            uiData.setStage(stageComponent.getStageName(), stage);
-
-            skin = new Skin(Gdx.files.classpath(stageComponent.getSkinPath()));
-            initializedStage = true;
+                Stage stage = new Stage(new ScreenViewport());
+                addStage(stageComponent.getStageName(), stage, stageComponent.isInputProcessing());
+            }
+            addedEntities.clear();
         }
 
-        stage.act(world.getDelta());
+        for (Stage value : simpleUIRendererConfiguration.getStageMap().values()) {
+            value.act(world.getDelta());
+        }
     }
 
     @Override
     public void dispose() {
-        if (skin != null)
-            skin.dispose();
-        stage.dispose();
+        for (Stage stage : simpleUIRendererConfiguration.getStageMap().values()) {
+            stage.dispose();
+        }
+        simpleUIRendererConfiguration.removeAllStages();
     }
 }

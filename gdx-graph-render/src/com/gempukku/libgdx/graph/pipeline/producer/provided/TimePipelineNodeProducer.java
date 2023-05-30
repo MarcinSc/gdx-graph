@@ -3,10 +3,14 @@ package com.gempukku.libgdx.graph.pipeline.producer.provided;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.provided.TimePipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
 
 public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
@@ -15,7 +19,7 @@ public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final DefaultFieldOutput<Float> timeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
         final DefaultFieldOutput<Float> sinTimeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
         final DefaultFieldOutput<Float> cosTimeFieldOutput = new DefaultFieldOutput<>(PipelineFieldType.Float);
@@ -27,12 +31,12 @@ public class TimePipelineNodeProducer extends SingleInputsPipelineNodeProducer {
         result.put("cosTime", cosTimeFieldOutput);
         result.put("deltaTime", deltaTimeFieldOutput);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
+        return new SingleInputsPipelineNode(result, configuration) {
             private TimeProvider timeProvider;
 
             @Override
             public void initializePipeline() {
-                timeProvider = pipelineDataProvider.getTimeProvider();
+                timeProvider = configuration.getTimeProvider();
             }
 
             @Override

@@ -15,7 +15,7 @@ public class UILighting3DPlugin implements UIGdxGraphPlugin {
     @Override
     public void initialize(FileHandleResolver assetResolver) {
         // Register graph type
-        UIShadowShaderGraphType graphType = new UIShadowShaderGraphType();
+        UIDepthShaderGraphType graphType = new UIDepthShaderGraphType();
         GraphTypeRegistry.registerType(graphType);
 
         // Register node editors

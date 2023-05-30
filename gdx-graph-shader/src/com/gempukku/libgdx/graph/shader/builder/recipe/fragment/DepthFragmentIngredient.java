@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.fragment;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -14,7 +14,7 @@ public class DepthFragmentIngredient implements GraphShaderRecipeIngredient {
     public void processIngredient(
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+            GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         fragmentShaderBuilder.addUniformVariable("u_cameraClipping", "vec2", true, UniformSetters.cameraClipping,
                 "Near/far clipping");
         fragmentShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
@@ -22,7 +22,7 @@ public class DepthFragmentIngredient implements GraphShaderRecipeIngredient {
         fragmentShaderBuilder.addVaryingVariable("v_position_world", "vec3");
 
         if (!fragmentShaderBuilder.containsFunction("packFloatToVec3")) {
-            fragmentShaderBuilder.addFunction("packFloatToVec3", GLSLFragmentReader.getFragment(assetResolver, "packFloatToVec3"));
+            fragmentShaderBuilder.addFunction("packFloatToVec3", GLSLFragmentReader.getFragment(configuration.getAssetResolver(), "packFloatToVec3"));
         }
         fragmentShaderBuilder.addMainLine("gl_FragColor = vec4(packFloatToVec3(distance(v_position_world, u_cameraPosition), u_cameraClipping.x, u_cameraClipping.y), 1.0);");
     }

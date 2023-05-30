@@ -17,6 +17,7 @@ dependencies {
     api project(":gdx-graph-boneanimation-design")
     api project(":gdx-graph-lighting3d-design")
     api project(":gdx-graph-ui-design")
+    api project(":gdx-graph-screenshot-design")
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"

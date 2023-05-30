@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.init;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -11,7 +11,7 @@ public class SetupFloatPrevisionIngredient implements GraphShaderRecipeIngredien
     @Override
     public void processIngredient(
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
-            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+            VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         vertexShaderBuilder.addInitialLine("#ifdef GL_ES");
         vertexShaderBuilder.addInitialLine("#define LOWP lowp");
         vertexShaderBuilder.addInitialLine("#define MED mediump");

@@ -25,19 +25,25 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
+import com.gempukku.libgdx.graph.util.lighting.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 import com.gempukku.libgdx.graph.util.model.PropertiesRenderableModel;
@@ -54,6 +60,8 @@ public class Episode16Scene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private PropertiesRenderableModel screenModel;
     private MapWritablePropertyContainer screenModelPropertyContainer;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -71,7 +79,7 @@ public class Episode16Scene implements LibgdxGraphTestScene {
         camera = createCamera();
 
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class));
+        createModels(shaderConfiguration);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -95,7 +103,7 @@ public class Episode16Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models) {
+    private void createModels(ModelContainer<RenderableModel> modelContainer) {
         JsonReader jsonReader = new JsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         shipModel = modelLoader.loadModel(Gdx.files.classpath("model/luminaris/luminaris.g3dj"));
@@ -104,13 +112,13 @@ public class Episode16Scene implements LibgdxGraphTestScene {
         final float scale = 0.025f;
         modelInstance.transform.idt().translate(-0.3f, 0.11f, 0).scale(scale, scale, scale);
 
-        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, models);
+        MaterialModelInstanceModelAdapter modelAdapter = new MaterialModelInstanceModelAdapter(modelInstance, modelContainer);
         modelAdapter.addTag("Default");
 
-        ObjectMap<String, BasicShader.Attribute> attributes = models.getShaderAttributes("CRT Monitor");
+        ObjectMap<String, BasicShader.Attribute> attributes = shaderConfiguration.getShaderAttributes("CRT Monitor");
 
         VertexAttributes vertexAttributes = GraphModelUtil.getVertexAttributes(attributes);
-        ObjectMap<VertexAttribute, ShaderPropertySource> propertySourceMap = GraphModelUtil.getPropertySourceMap(models, "CRT Monitor", vertexAttributes);
+        ObjectMap<VertexAttribute, ShaderPropertySource> propertySourceMap = GraphModelUtil.getPropertySourceMap(shaderConfiguration, "CRT Monitor", vertexAttributes);
 
         Model model = new ModelBuilder().createRect(
                 -1f, 1f, 0,
@@ -129,7 +137,7 @@ public class Episode16Scene implements LibgdxGraphTestScene {
             screenModel = new PropertiesRenderableModel(vertexAttributes, propertySourceMap,
                     mesh.getNumVertices(), indices, screenModelPropertyContainer);
 
-            models.addModel(screenModel);
+            modelContainer.addModel(screenModel);
         } finally {
             model.dispose();
         }
@@ -167,7 +175,7 @@ public class Episode16Scene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        pipelineRenderer.setPipelineProperty("Distort", distort.isChecked());
+                        configuration.getPipelinePropertyContainer().setValue("Distort", distort.isChecked());
                         if (distort.isChecked()) {
                             screenModel.addTag("CRT Monitor");
                         } else {
@@ -235,10 +243,20 @@ public class Episode16Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode16.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        pipelineRenderer.getPluginData(Lighting3DPublicData.class).setEnvironment("", lights);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+
+        SimpleLightingRendererConfiguration lightingConfiguration = new SimpleLightingRendererConfiguration();
+        configuration.setConfig(LightingRendererConfiguration.class, lightingConfiguration);
+        lightingConfiguration.setEnvironment("", lights);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode16.json"), configuration);
     }
 }

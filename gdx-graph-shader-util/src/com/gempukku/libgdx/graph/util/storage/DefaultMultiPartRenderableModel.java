@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.WritableRenderableModel;
 
@@ -83,11 +82,6 @@ public class DefaultMultiPartRenderableModel<T, U> implements MultiPartRenderabl
     @Override
     public Matrix4 getWorldTransform() {
         return renderableModel.getWorldTransform();
-    }
-
-    @Override
-    public void prepareToRender(ShaderContext shaderContext) {
-        renderableModel.prepareToRender(shaderContext);
     }
 
     @Override

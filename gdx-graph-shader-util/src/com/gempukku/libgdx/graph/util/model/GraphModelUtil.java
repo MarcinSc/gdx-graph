@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.shader.BasicShader;
-import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 
 public class GraphModelUtil {
     private GraphModelUtil() {
@@ -23,25 +23,27 @@ public class GraphModelUtil {
         return new VertexAttributes(vertexAttributeArray.toArray());
     }
 
-    public static VertexAttributes getShaderVertexAttributes(GraphModels graphModels, String tag) {
-        ObjectMap<String, BasicShader.Attribute> shaderAttributes = graphModels.getShaderAttributes(tag);
+    public static VertexAttributes getShaderVertexAttributes(ShaderInformation shaderInformation, String tag) {
+        ObjectMap<String, BasicShader.Attribute> shaderAttributes = shaderInformation.getShaderAttributes(tag);
         if (shaderAttributes == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
         return getVertexAttributes(shaderAttributes);
     }
 
-    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(GraphModels graphModels, String tag,
-                                                                                        VertexAttributes vertexAttributes) {
-        ObjectMap<String, ShaderPropertySource> shaderProperties = graphModels.getShaderProperties(tag);
+    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(
+            ShaderInformation shaderInformation, String tag,
+            VertexAttributes vertexAttributes) {
+        ObjectMap<String, ShaderPropertySource> shaderProperties = shaderInformation.getShaderProperties(tag);
         if (shaderProperties == null)
             throw new GdxRuntimeException("Unable to locate shader with tag: " + tag);
 
         return getPropertySourceMap(vertexAttributes, shaderProperties);
     }
 
-    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(VertexAttributes vertexAttributes,
-                                                                                        ObjectMap<String, ShaderPropertySource> shaderProperties) {
+    public static ObjectMap<VertexAttribute, ShaderPropertySource> getPropertySourceMap(
+            VertexAttributes vertexAttributes,
+            ObjectMap<String, ShaderPropertySource> shaderProperties) {
         ObjectMap<VertexAttribute, ShaderPropertySource> result = new ObjectMap<>();
 
         for (VertexAttribute vertexAttribute : vertexAttributes) {

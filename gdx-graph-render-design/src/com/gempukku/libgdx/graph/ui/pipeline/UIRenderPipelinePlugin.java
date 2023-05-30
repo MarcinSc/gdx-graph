@@ -109,6 +109,5 @@ public class UIRenderPipelinePlugin implements UIGdxGraphPlugin {
         RenderPipelineTemplateRegistry.register(
                 new FileGraphTemplate(graphType, "Empty pipeline",
                         assetResolver.resolve("template/empty-pipeline.json")));
-
     }
 }

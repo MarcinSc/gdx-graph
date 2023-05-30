@@ -22,16 +22,22 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPublicData;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
+import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
+import com.gempukku.libgdx.graph.util.lighting.Lighting3DEnvironment;
 import com.gempukku.libgdx.graph.util.model.MaterialModelInstanceModelAdapter;
 
 public class Episode17Scene implements LibgdxGraphTestScene {
@@ -48,6 +54,8 @@ public class Episode17Scene implements LibgdxGraphTestScene {
     private Model model;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private MaterialModelInstanceModelAdapter mainRobotAdapter;
+    private PipelineRendererConfiguration configuration;
+    private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
     public String getName() {
@@ -64,7 +72,7 @@ public class Episode17Scene implements LibgdxGraphTestScene {
         camera = createCamera();
 
         pipelineRenderer = loadPipelineRenderer();
-        createModels(pipelineRenderer.getPluginData(GraphModels.class));
+        createModels(shaderConfiguration);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -88,7 +96,7 @@ public class Episode17Scene implements LibgdxGraphTestScene {
         return camera;
     }
 
-    private void createModels(GraphModels models) {
+    private void createModels(ModelContainer<RenderableModel> modelContainer) {
         JsonReader jsonReader = new JsonReader();
         G3dModelLoader modelLoader = new G3dModelLoader(jsonReader);
         model = modelLoader.loadModel(Gdx.files.classpath("model/gold-robot/gold-robot.g3dj"));
@@ -99,13 +107,13 @@ public class Episode17Scene implements LibgdxGraphTestScene {
         animationController = new AnimationController(mainRobotInstance);
         animationController.animate("Root|jog", -1, null, 0f);
 
-        mainRobotAdapter = new MaterialModelInstanceModelAdapter(mainRobotInstance, models);
+        mainRobotAdapter = new MaterialModelInstanceModelAdapter(mainRobotInstance, modelContainer);
         mainRobotAdapter.addTag("Default");
 
         ModelInstance secondRobotInstance = new ModelInstance(model);
         secondRobotInstance.transform.idt().translate(1.5f, 0, 0).scale(scale, scale, scale);
 
-        MaterialModelInstanceModelAdapter secondRobotAdapter = new MaterialModelInstanceModelAdapter(secondRobotInstance, models);
+        MaterialModelInstanceModelAdapter secondRobotAdapter = new MaterialModelInstanceModelAdapter(secondRobotInstance, modelContainer);
         secondRobotAdapter.addTag("Default");
     }
 
@@ -184,10 +192,20 @@ public class Episode17Scene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode17.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Camera", camera);
-        pipelineRenderer.getPluginData(Lighting3DPublicData.class).setEnvironment("", lights);
-        pipelineRenderer.getPluginData(UIPluginPublicData.class).setStage("", stage);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Camera", camera);
+
+        SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
+        uiConfiguration.setStage("", stage);
+        configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
+
+        SimpleLightingRendererConfiguration lightingConfiguration = new SimpleLightingRendererConfiguration();
+        configuration.setConfig(LightingRendererConfiguration.class, lightingConfiguration);
+        lightingConfiguration.setEnvironment("", lights);
+
+        shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());
+        configuration.setConfig(ShaderRendererConfiguration.class, shaderConfiguration);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode17.json"), configuration);
     }
 }

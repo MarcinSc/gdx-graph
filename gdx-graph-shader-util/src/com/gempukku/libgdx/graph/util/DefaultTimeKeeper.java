@@ -3,43 +3,53 @@ package com.gempukku.libgdx.graph.util;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 
 public class DefaultTimeKeeper implements TimeKeeper {
-    private boolean firstUpdate = true;
-    private float timeCumulative = 0;
+    private float timeCumulative = 0.0f;
     private float delta;
     private boolean paused;
+    private float timeMultiplier = 1f;
 
-    @Override
+    public DefaultTimeKeeper() {
+    }
+
     public void updateTime(float delta) {
-        if (!paused) {
-            this.delta = delta;
-            if (!firstUpdate)
-                timeCumulative += delta;
-            firstUpdate = false;
+        if (!this.paused) {
+            float timeDiff = timeMultiplier * delta;
+            this.delta = timeDiff;
+            this.timeCumulative += timeDiff;
         } else {
-            this.delta = 0;
+            this.delta = 0.0f;
         }
     }
 
-    @Override
-    public float getTime() {
-        return timeCumulative;
+    public void setTimeMultiplier(float timeMultiplier) {
+        this.timeMultiplier = timeMultiplier;
     }
 
-    @Override
+    public float getTimeMultiplier() {
+        return timeMultiplier;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public float getTime() {
+        return this.timeCumulative;
+    }
+
     public float getDelta() {
-        return delta;
+        return this.delta;
     }
 
     public void pauseTime() {
-        paused = true;
+        this.paused = true;
     }
 
     public void resumeTime() {
-        paused = false;
+        this.paused = false;
     }
 
     public void setTime(float time) {
-        timeCumulative = time;
-        firstUpdate = true;
+        this.timeCumulative = time;
     }
 }

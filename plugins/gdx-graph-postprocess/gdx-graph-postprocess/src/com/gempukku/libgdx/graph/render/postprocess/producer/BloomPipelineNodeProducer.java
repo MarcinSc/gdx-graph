@@ -8,11 +8,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
 
 public class BloomPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
@@ -21,12 +25,12 @@ public class BloomPipelineNodeProducer extends SingleInputsPipelineNodeProducer 
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, final PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> pipelineOutput = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", pipelineOutput);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
+        return new SingleInputsPipelineNode(result, configuration) {
             private FullScreenRender fullScreenRender;
             private ShaderProgram bloomSumProgram;
             private ShaderProgram gaussianBlurPassProgram;
@@ -34,7 +38,7 @@ public class BloomPipelineNodeProducer extends SingleInputsPipelineNodeProducer 
 
             @Override
             public void initializePipeline() {
-                FileHandleResolver assetResolver = pipelineDataProvider.getAssetResolver();
+                FileHandleResolver assetResolver = configuration.getAssetResolver();
                 brightnessFilterPassProgram = new ShaderProgram(
                         assetResolver.resolve("shader/viewToScreenCoords.vert"),
                         assetResolver.resolve("shader/brightnessFilter.frag"));
@@ -51,7 +55,7 @@ public class BloomPipelineNodeProducer extends SingleInputsPipelineNodeProducer 
                 if (!bloomSumProgram.isCompiled())
                     throw new IllegalArgumentException("Error compiling shader: " + bloomSumProgram.getLog());
 
-                fullScreenRender = pipelineDataProvider.getFullScreenRender();
+                fullScreenRender = configuration.getPipelineHelper().getFullScreenRender();
             }
 
             @Override

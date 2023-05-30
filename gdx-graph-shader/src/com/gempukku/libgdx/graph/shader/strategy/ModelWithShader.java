@@ -2,18 +2,17 @@ package com.gempukku.libgdx.graph.shader.strategy;
 
 import com.badlogic.gdx.utils.Pool;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.RenderableModel;
 
 public class ModelWithShader implements Pool.Poolable {
-    private RenderableModel renderableModel;
+    private Object model;
     private GraphShader shader;
 
-    public RenderableModel getRenderableModel() {
-        return renderableModel;
+    public Object getModel() {
+        return model;
     }
 
-    public void setRenderableModel(RenderableModel renderableModel) {
-        this.renderableModel = renderableModel;
+    public void setModel(Object model) {
+        this.model = model;
     }
 
     public GraphShader getShader() {
@@ -26,7 +25,7 @@ public class ModelWithShader implements Pool.Poolable {
 
     @Override
     public void reset() {
-        renderableModel = null;
+        model = null;
         shader = null;
     }
 }

@@ -8,75 +8,47 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.shader.context.StateOpenGLContext;
-import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
-import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
-import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.shader.producer.DefaultShaderContext;
 import com.gempukku.libgdx.ui.DisposableWidget;
 
 public class GraphShaderRenderingWidget extends DisposableWidget {
     private final DefaultShaderContext shaderContext;
     private final StateOpenGLContext renderContext;
-    private final MapWritablePropertyContainer rootPropertyContainer = new MapWritablePropertyContainer();
-    private final ObjectMap<Class<?>, Object> privatePluginData = new ObjectMap<>();
 
     private boolean initialized;
     private FrameBuffer frameBuffer;
 
     private Camera camera;
     private GraphShader graphShader;
-    private RenderableModel renderableModel;
+    private PipelineRendererConfiguration pipelineRendererConfiguration;
+    private Texture colorTexture;
+    private Texture depthTexture;
 
     public GraphShaderRenderingWidget() {
-        shaderContext = new DefaultShaderContext(rootPropertyContainer,
-                new PluginPrivateDataSource() {
-                    @Override
-                    public <T> T getPrivatePluginData(Class<T> clazz) {
-                        return (T) privatePluginData.get(clazz);
-                    }
-                }, WhitePixel.sharedInstance.textureRegion);
+        shaderContext = new DefaultShaderContext();
         renderContext = new StateOpenGLContext();
     }
 
-    public <T> void addPrivatePluginData(Class<T> clazz, T data) {
-        privatePluginData.put(clazz, data);
+    public void setPipelineRendererConfiguration(PipelineRendererConfiguration pipelineRendererConfiguration) {
+        this.pipelineRendererConfiguration = pipelineRendererConfiguration;
     }
 
     public void setColorTexture(Texture texture) {
-        shaderContext.setColorTexture(texture);
+        this.colorTexture = texture;
     }
 
     public void setDepthTexture(Texture texture) {
-        shaderContext.setDepthTexture(texture);
-    }
-
-    public void setTimeProvider(TimeProvider timeProvider) {
-        shaderContext.setTimeProvider(timeProvider);
-    }
-
-    public void setGlobalPropertyContainer(PropertyContainer propertyContainer) {
-        shaderContext.setGlobalPropertyContainer(propertyContainer);
-    }
-
-    public void setLocalPropertyContainer(PropertyContainer propertyContainer) {
-        shaderContext.setLocalPropertyContainer(propertyContainer);
+        this.depthTexture = texture;
     }
 
     public void setCamera(Camera camera) {
         this.camera = camera;
-        shaderContext.setCamera(camera);
     }
 
     public void setGraphShader(GraphShader graphShader) {
         this.graphShader = graphShader;
-    }
-
-    public void setRenderableModel(RenderableModel renderableModel) {
-        this.renderableModel = renderableModel;
     }
 
     @Override
@@ -113,24 +85,52 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
         return frameBuffer == null || frameBuffer.getWidth() != width || frameBuffer.getHeight() != height;
     }
 
+    private ShaderRendererConfiguration<RenderableModel> getShaderRenderingConfiguration() {
+        return pipelineRendererConfiguration.getConfig(ShaderRendererConfiguration.class);
+    }
+
     private void drawToOffscreen() {
         frameBuffer.begin();
         renderContext.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | GL20.GL_STENCIL_BUFFER_BIT);
-        if (graphShader != null && renderableModel != null && renderableModel.isRendered(graphShader, camera)) {
-            shaderContext.setRenderableModel(renderableModel);
+        if (graphShader != null && pipelineRendererConfiguration != null &&
+                colorTexture != null && depthTexture != null &&
+                camera != null && hasRenderableModels(getShaderRenderingConfiguration())) {
+            ShaderRendererConfiguration shaderRendererConfiguration = getShaderRenderingConfiguration();
+
+            shaderContext.setCamera(camera);
+            shaderContext.setColorTexture(colorTexture);
+            shaderContext.setDepthTexture(depthTexture);
+            shaderContext.setPipelineRendererConfiguration(pipelineRendererConfiguration);
+            shaderContext.setGraphShader(graphShader);
+            shaderContext.setGlobalPropertyContainer(shaderRendererConfiguration.getGlobalUniforms(graphShader));
             graphShader.begin(shaderContext, renderContext);
-            graphShader.render(shaderContext, renderableModel);
+            for (Object model : shaderRendererConfiguration.getModels()) {
+                if (shaderRendererConfiguration.isRendered(model, graphShader, camera)) {
+                    shaderContext.setLocalPropertyContainer(shaderRendererConfiguration.getModelUniforms(model, graphShader));
+                    shaderContext.setModel(model);
+                    graphShader.render(shaderRendererConfiguration, shaderContext, model);
+                    shaderContext.setModel(null);
+                }
+            }
             graphShader.end();
         }
         renderContext.end();
         frameBuffer.end();
     }
 
+    private boolean hasRenderableModels(ShaderRendererConfiguration shaderRendererConfiguration) {
+        for (Object model : getShaderRenderingConfiguration().getModels()) {
+            if (shaderRendererConfiguration.isRendered(model, graphShader, camera))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (initialized && renderableModel != null && graphShader != null && frameBuffer != null) {
+        if (initialized && graphShader != null && frameBuffer != null) {
             batch.draw(frameBuffer.getColorBufferTexture(), getX(), getY() + getHeight(), getWidth(), -getHeight());
         }
     }

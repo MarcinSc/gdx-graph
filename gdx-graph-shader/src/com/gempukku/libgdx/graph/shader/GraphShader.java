@@ -71,11 +71,9 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
         disposableList.add(disposable);
     }
 
-    public void render(DefaultShaderContext shaderContext, RenderableModel renderableModel) {
-        renderableModel.prepareToRender(shaderContext);
-
-        shaderContext.setRenderableModel(renderableModel);
-        shaderContext.setLocalPropertyContainer(renderableModel.getPropertyContainer());
+    public void render(ShaderRendererConfiguration configuration, DefaultShaderContext shaderContext, Object model) {
+        shaderContext.setModel(model);
+        shaderContext.setLocalPropertyContainer(configuration.getModelUniforms(model, this));
 
         for (Uniform uniform : localUniforms.values()) {
             uniform.getSetter().set(this, uniform.getLocation(), shaderContext);
@@ -83,7 +81,8 @@ public class GraphShader extends UniformCachingShader implements GraphShaderCont
         for (StructArrayUniform uniform : localStructArrayUniforms.values()) {
             uniform.getSetter().set(this, uniform.getStartIndex(), uniform.getFieldOffsets(), uniform.getSize(), shaderContext);
         }
-        renderableModel.render(shaderContext.getCamera(), program, getPropertyToLocationMapping());
+        configuration.renderModel(model, shaderContext, getPropertyToLocationMapping());
+        shaderContext.setModel(null);
     }
 
     @Override

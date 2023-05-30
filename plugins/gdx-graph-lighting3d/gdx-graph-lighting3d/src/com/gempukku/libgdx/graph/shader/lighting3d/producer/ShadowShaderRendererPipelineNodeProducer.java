@@ -1,7 +1,6 @@
 package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -9,35 +8,34 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.*;
-import com.gempukku.libgdx.graph.pipeline.time.TimeProvider;
-import com.gempukku.libgdx.graph.plugin.PluginPrivateDataSource;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.RenderableModel;
-import com.gempukku.libgdx.graph.shader.impl.GraphModelsImpl;
+import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
+import com.gempukku.libgdx.graph.shader.depth.DepthShaderLoader;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DEnvironment;
-import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPrivateData;
-import com.gempukku.libgdx.graph.shader.lighting3d.ShadowShaderLoader;
+import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.producer.DefaultShaderContext;
 import com.gempukku.libgdx.graph.shader.strategy.*;
 
 public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
-    private final PluginPrivateDataSource pluginPrivateDataSource;
-
-    public ShadowShaderRendererPipelineNodeProducer(PluginPrivateDataSource pluginPrivateDataSource) {
+    public ShadowShaderRendererPipelineNodeProducer() {
         super(new ShadowShaderRendererPipelineNodeConfiguration());
-        this.pluginPrivateDataSource = pluginPrivateDataSource;
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
-        final DefaultShaderContext shaderContext = new DefaultShaderContext(pipelineDataProvider.getRootPropertyContainer(), pluginPrivateDataSource, pipelineDataProvider.getWhitePixel().textureRegion);
+    public PipelineNode createNodeForSingleInputs(
+            JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes,
+            PipelineRendererConfiguration configuration) {
+        final ShaderRendererConfiguration shaderRendererConfiguration = configuration.getConfig(ShaderRendererConfiguration.class);
+        final LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        final DefaultShaderContext shaderContext = new DefaultShaderContext();
+        shaderContext.setPipelineRendererConfiguration(configuration);
 
         final Array<GraphShader> shaders = new Array<>();
 
@@ -52,29 +50,22 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                 shaderContext);
 
         final Array<RenderPipelineBuffer> createdPipelineBuffers = new Array<>();
-        final Array<Directional3DLight> shadowDirectionalLights = new Array<>();
+        final Array<Directional3DLight> usedLights = new Array<>();
 
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
-            private Lighting3DPrivateData lighting;
-            private TimeProvider timeProvider;
-            private GraphModelsImpl models;
+        return new SingleInputsPipelineNode(result, configuration) {
             private RenderPipeline pipeline;
 
             @Override
             public void initializePipeline() {
-                lighting = pipelineDataProvider.getPrivatePluginData(Lighting3DPrivateData.class);
-                timeProvider = pipelineDataProvider.getTimeProvider();
-                models = pipelineDataProvider.getPrivatePluginData(GraphModelsImpl.class);
-
                 for (JsonValue shaderDefinition : shaderDefinitions) {
-                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(pipelineDataProvider.getAssetResolver(), shaderDefinition);
+                    GraphShader depthGraphShader = ShadowShaderRendererPipelineNodeProducer.createDepthShader(configuration, shaderDefinition);
 
                     shaders.add(depthGraphShader);
-                    models.registerTag(depthGraphShader.getTag(), depthGraphShader);
+                    shaderRendererConfiguration.registerShader(depthGraphShader);
                 }
             }
 
@@ -114,18 +105,16 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
                 if (enabled) {
                     boolean needsDrawing = false;
-                    Lighting3DEnvironment environment = lighting.getEnvironment(environmentId);
                     // Initialize directional light cameras and textures
-                    for (Directional3DLight directionalLight : environment.getDirectionalLights()) {
-                        if (directionalLight.isShadowsEnabled()) {
-                            needsDrawing = true;
-                            directionalLight.updateCamera(environment.getSceneCenter(), environment.getSceneDiameter());
-                            if (directionalLight.getShadowFrameBuffer() == null) {
-                                RenderPipelineBuffer shadowFrameBuffer = renderPipeline.getNewFrameBuffer(directionalLight.getShadowBufferSize(), directionalLight.getShadowBufferSize(), Pixmap.Format.RGB888, Color.WHITE);
-                                directionalLight.setShadowFrameBuffer(shadowFrameBuffer);
-                                createdPipelineBuffers.add(shadowFrameBuffer);
-                                shadowDirectionalLights.add(directionalLight);
-                            }
+                    Array<Directional3DLight> shadowDirectionalLights = lightingRendererConfiguration.getShadowDirectionalLights(environmentId);
+                    for (Directional3DLight directionalLight : shadowDirectionalLights) {
+                        needsDrawing = true;
+                        directionalLight.updateCamera(lightingRendererConfiguration.getShadowSceneCenter(environmentId), lightingRendererConfiguration.getShadowSceneDiameter(environmentId));
+                        if (directionalLight.getShadowFrameBuffer() == null) {
+                            RenderPipelineBuffer shadowFrameBuffer = renderPipeline.getNewFrameBuffer(directionalLight.getShadowBufferSize(), directionalLight.getShadowBufferSize(), Pixmap.Format.RGB888, Color.WHITE);
+                            directionalLight.setShadowFrameBuffer(shadowFrameBuffer);
+                            createdPipelineBuffers.add(shadowFrameBuffer);
+                            usedLights.add(directionalLight);
                         }
                     }
 
@@ -134,30 +123,27 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
 
                         RenderPipelineBuffer drawBuffer = renderPipeline.getDefaultBuffer();
 
-                        for (Directional3DLight directionalLight : environment.getDirectionalLights()) {
-                            if (directionalLight.isShadowsEnabled()) {
-                                RenderPipelineBuffer shadowBuffer = directionalLight.getShadowFrameBuffer();
-                                Camera camera = directionalLight.getShadowCamera();
+                        for (Directional3DLight directionalLight : shadowDirectionalLights) {
+                            RenderPipelineBuffer shadowBuffer = directionalLight.getShadowFrameBuffer();
+                            Camera camera = directionalLight.getShadowCamera();
 
-                                shaderContext.setCamera(camera);
-                                shaderContext.setTimeProvider(timeProvider);
-                                shaderContext.setRenderWidth(shadowBuffer.getWidth());
-                                shaderContext.setRenderHeight(shadowBuffer.getHeight());
+                            shaderContext.setCamera(camera);
+                            shaderContext.setRenderWidth(shadowBuffer.getWidth());
+                            shaderContext.setRenderHeight(shadowBuffer.getHeight());
 
-                                if (usesDepth) {
-                                    renderPipeline.enrichWithDepthBuffer(drawBuffer);
-                                    shaderContext.setDepthTexture(drawBuffer.getDepthBufferTexture());
-                                }
-
-                                if (needsSceneColor)
-                                    shaderContext.setColorTexture(drawBuffer.getColorBufferTexture());
-
-                                // Drawing models on color buffer
-                                depthStrategyCallback.prepare(pipelineRenderingContext, models);
-                                shadowBuffer.beginColor();
-                                renderingStrategy.processModels(models, shaders, camera, depthStrategyCallback);
-                                shadowBuffer.endColor();
+                            if (usesDepth) {
+                                renderPipeline.enrichWithDepthBuffer(drawBuffer);
+                                shaderContext.setDepthTexture(drawBuffer.getDepthBufferTexture());
                             }
+
+                            if (needsSceneColor)
+                                shaderContext.setColorTexture(drawBuffer.getColorBufferTexture());
+
+                            // Drawing models on color buffer
+                            depthStrategyCallback.prepare(pipelineRenderingContext, shaderRendererConfiguration);
+                            shadowBuffer.beginColor();
+                            renderingStrategy.processModels(shaderRendererConfiguration, shaders, camera, depthStrategyCallback);
+                            shadowBuffer.endColor();
                         }
                     }
                 }
@@ -171,10 +157,10 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
                     pipeline.returnFrameBuffer(createdPipelineBuffer);
                 }
                 createdPipelineBuffers.clear();
-                for (Directional3DLight shadowDirectionalLight : shadowDirectionalLights) {
+                for (Directional3DLight shadowDirectionalLight : usedLights) {
                     shadowDirectionalLight.setShadowFrameBuffer(null);
                 }
-                shadowDirectionalLights.clear();
+                usedLights.clear();
             }
 
             @Override
@@ -202,27 +188,27 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         throw new IllegalStateException("Unrecognized RenderOrder: " + renderOrder.name());
     }
 
-    private static GraphShader createDepthShader(FileHandleResolver assetResolver, JsonValue shaderDefinition) {
-        FileHandle shaderFile = assetResolver.resolve(shaderDefinition.getString("path"));
+    private static GraphShader createDepthShader(PipelineRendererConfiguration configuration, JsonValue shaderDefinition) {
+        FileHandle shaderFile = configuration.getAssetResolver().resolve(shaderDefinition.getString("path"));
         String tag = shaderDefinition.getString("tag");
         Gdx.app.debug("Shader", "Building shader with tag: " + tag);
-        return ShadowShaderLoader.loadShader(shaderFile, tag, assetResolver);
+        return DepthShaderLoader.loadShader(shaderFile, tag, configuration);
     }
 
     private static class RenderingStrategyCallback implements ModelRenderingStrategy.StrategyCallback {
         private final DefaultShaderContext shaderContext;
 
-        private GraphModelsImpl graphModels;
         private PipelineRenderingContext context;
+        private ShaderRendererConfiguration configuration;
         private GraphShader runningShader = null;
 
         public RenderingStrategyCallback(DefaultShaderContext shaderContext) {
             this.shaderContext = shaderContext;
         }
 
-        public void prepare(PipelineRenderingContext context, GraphModelsImpl graphModels) {
+        public void prepare(PipelineRenderingContext context, ShaderRendererConfiguration configuration) {
             this.context = context;
-            this.graphModels = graphModels;
+            this.configuration = configuration;
         }
 
         @Override
@@ -231,18 +217,16 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
         }
 
         @Override
-        public void process(RenderableModel model, GraphShader shader) {
+        public void process(Object model, GraphShader shader) {
             if (runningShader != shader) {
                 endCurrentShader();
-                beginShader(shader);
-            }
-            shader.render(shaderContext, model);
-        }
 
-        private void beginShader(GraphShader shader) {
-            shaderContext.setGlobalPropertyContainer(graphModels.getGlobalProperties(shader.getTag()));
-            shader.begin(shaderContext, context.getRenderContext());
-            runningShader = shader;
+                shaderContext.setGraphShader(shader);
+                shaderContext.setGlobalPropertyContainer(configuration.getGlobalUniforms(shader));
+                shader.begin(shaderContext, context.getRenderContext());
+                runningShader = shader;
+            }
+            shader.render(configuration, shaderContext, model);
         }
 
         private void endCurrentShader() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -12,6 +13,7 @@ import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 public class Episode1Scene implements LibgdxGraphTestScene {
     private PipelineRenderer pipelineRenderer;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
+    private PipelineRendererConfiguration configuration;
 
     @Override
     public String getName() {
@@ -25,8 +27,7 @@ public class Episode1Scene implements LibgdxGraphTestScene {
 
     @Override
     public void renderScene() {
-        float delta = Gdx.graphics.getDeltaTime();
-        timeKeeper.updateTime(delta);
+        timeKeeper.updateTime(Gdx.graphics.getDeltaTime());
 
         pipelineRenderer.render(RenderOutputs.drawToScreen);
     }
@@ -39,11 +40,13 @@ public class Episode1Scene implements LibgdxGraphTestScene {
     @Override
     public void disposeScene() {
         pipelineRenderer.dispose();
+        configuration.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        PipelineRenderer pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode1.json"), timeKeeper);
-        pipelineRenderer.setPipelineProperty("Background Color", Color.ORANGE);
-        return pipelineRenderer;
+        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration.getPipelinePropertyContainer().setValue("Background Color", Color.ORANGE);
+
+        return PipelineLoader.loadPipelineRenderer(Gdx.files.local("examples-assets/episode1.json"), configuration);
     }
 }

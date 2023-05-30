@@ -1,0 +1,11 @@
+eclipse.project.name = "gdx-graph-screenshot-design"
+
+sourceCompatibility = 1.8
+
+dependencies {
+    api project(":gdx-graph-screenshot")
+    api project(":gdx-graph-render-design")
+
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
+}

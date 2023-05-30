@@ -14,8 +14,10 @@ import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
 import com.gempukku.libgdx.graph.pipeline.util.PreserveMinimumDisposableProducer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.patchwork.PatchReference;
 import com.gempukku.libgdx.graph.util.patchwork.RenderablePatch;
@@ -57,13 +59,14 @@ public class PatchworkSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
+        ShaderInformation shaderInformation = pipelineRendererSystem.getShaderInformation();
+        ModelContainer<RenderableModel> modelContainer = pipelineRendererSystem.getModelContainer();
+
         for (Entity newPatchworkEntity : newPatchworkEntities) {
             PatchworkComponent patchwork = patchworkComponentMapper.get(newPatchworkEntity);
-            GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
-
             String tag = patchwork.getRenderTag();
             WritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
-            MultiPartBatchModel<RenderablePatch, PatchReference> patchworkModel = createPatchworkBatchModel(patchwork, graphModels, tag, propertyContainer);
+            MultiPartBatchModel<RenderablePatch, PatchReference> patchworkModel = createPatchworkBatchModel(patchwork, shaderInformation, modelContainer, tag, propertyContainer);
 
             for (ObjectMap.Entry<String, Object> property : patchwork.getProperties()) {
                 propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(newPatchworkEntity, property.value, Object.class));
@@ -75,22 +78,22 @@ public class PatchworkSystem extends BaseEntitySystem {
     }
 
     private MultiPartBatchModel<RenderablePatch, PatchReference> createPatchworkBatchModel(
-            final PatchworkComponent patchwork, final GraphModels graphModels, final String tag,
-            final WritablePropertyContainer propertyContainer) {
+            final PatchworkComponent patchwork, final ShaderInformation shaderInformation, final ModelContainer<RenderableModel> modelContainer,
+            final String tag, final WritablePropertyContainer propertyContainer) {
         PatchworkComponent.SystemType patchworkSystemType = patchwork.getType();
 
-        final VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-        final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+        final VertexAttributes vertexAttributes = GraphModelUtil.getShaderVertexAttributes(shaderInformation, tag);
+        final ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(shaderInformation, tag, vertexAttributes);
 
         final PatchSerializer patchSerializer = new PatchSerializer(vertexAttributes, vertexPropertySources);
 
         if (patchworkSystemType == PatchworkComponent.SystemType.TexturePaged) {
-            return new TexturePagedMultiPartBatchModel<>(graphModels, tag,
+            return new TexturePagedMultiPartBatchModel<>(shaderInformation, tag,
                     new DisposableProducer<MultiPartBatchModel<RenderablePatch, PatchReference>>() {
                         @Override
                         public MultiPartBatchModel<RenderablePatch, PatchReference> create() {
                             HierarchicalPropertyContainer texturePropertyContainer = new HierarchicalPropertyContainer(propertyContainer);
-                            return createMultiPagePatchworkModel(patchwork, vertexAttributes, patchSerializer, graphModels, tag,
+                            return createMultiPagePatchworkModel(patchwork, vertexAttributes, patchSerializer, modelContainer, tag,
                                     texturePropertyContainer);
                         }
 
@@ -100,7 +103,7 @@ public class PatchworkSystem extends BaseEntitySystem {
                         }
                     });
         } else if (patchworkSystemType == PatchworkComponent.SystemType.MultiPaged) {
-            return createMultiPagePatchworkModel(patchwork, vertexAttributes, patchSerializer, graphModels, tag, propertyContainer);
+            return createMultiPagePatchworkModel(patchwork, vertexAttributes, patchSerializer, modelContainer, tag, propertyContainer);
         } else {
             throw new GdxRuntimeException("Unable to create PatchworkModel, unknown type: " + patchworkSystemType);
         }
@@ -109,7 +112,7 @@ public class PatchworkSystem extends BaseEntitySystem {
     private PagedMultiPartBatchModel<RenderablePatch, PatchReference> createMultiPagePatchworkModel(
             final PatchworkComponent patchwork,
             final VertexAttributes vertexAttributes, final PatchSerializer patchSerializer,
-            final GraphModels graphModels, final String tag,
+            final ModelContainer<RenderableModel> modelContainer, final String tag,
             final WritablePropertyContainer propertyContainer) {
         DisposableProducer<MultiPartRenderableModel<RenderablePatch, PatchReference>> renderableProducer =
                 new DisposableProducer<MultiPartRenderableModel<RenderablePatch, PatchReference>>() {
@@ -123,13 +126,13 @@ public class PatchworkSystem extends BaseEntitySystem {
                                         patchwork.isStaticBatch(), multiPartMemoryMesh, vertexAttributes, propertyContainer, tag);
                         DefaultMultiPartRenderableModel<RenderablePatch, PatchReference> model =
                                 new DefaultMultiPartRenderableModel<>(multiPartMemoryMesh, meshModel);
-                        graphModels.addModel(model);
+                        modelContainer.addModel(model);
                         return model;
                     }
 
                     @Override
                     public void dispose(MultiPartRenderableModel<RenderablePatch, PatchReference> model) {
-                        graphModels.removeModel(model);
+                        modelContainer.removeModel(model);
                         model.dispose();
                     }
                 };

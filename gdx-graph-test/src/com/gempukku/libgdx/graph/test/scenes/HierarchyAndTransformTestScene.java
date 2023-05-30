@@ -15,7 +15,7 @@ import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
+import com.gempukku.libgdx.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
@@ -85,7 +85,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new SpriteBatchSystem());
         worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
-                new SpriteSystem());
+                new SpriteSystem(), new StageSystem(0));
 
         world = new World(worldConfigurationBuilder.build());
 
@@ -146,7 +146,7 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
 
         stage.addActor(tbl);
 
-        world.getSystem(PipelineRendererSystem.class).getPluginData(UIPluginPublicData.class).setStage("Main", stage);
+        world.getSystem(StageSystem.class).addStage("Main", stage, true);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -173,6 +173,5 @@ public class HierarchyAndTransformTestScene implements LibgdxGraphTestScene {
     public void disposeScene() {
         world.dispose();
         skin.dispose();
-        stage.dispose();
     }
 }

@@ -8,7 +8,7 @@ public class LightingEnvironmentComponent extends Component {
     private String id;
     private String name;
     private Vector3 center;
-    private int radius;
+    private int diameter;
     private Color ambientColor;
 
     public String getId() {
@@ -23,8 +23,8 @@ public class LightingEnvironmentComponent extends Component {
         return center;
     }
 
-    public int getRadius() {
-        return radius;
+    public int getDiameter() {
+        return diameter;
     }
 
     public Color getAmbientColor() {

@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.vertex;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.UniformSetters;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -19,7 +19,7 @@ public class CameraAttributePositionVertexShaderIngredient implements GraphShade
     }
 
     @Override
-    public void processIngredient(boolean designTime, GraphWithProperties graph, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+    public void processIngredient(boolean designTime, GraphWithProperties graph, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         ShaderPropertySource shaderPropertySource = graphShader.getPropertySource(propertyName);
         ShaderFieldType shaderFieldType = shaderPropertySource.getShaderFieldType();
         GraphShaderNodeBuilder.FieldOutput positionField = shaderFieldType.addAsVertexAttribute(vertexShaderBuilder, null, shaderPropertySource);

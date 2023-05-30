@@ -10,8 +10,10 @@ import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.util.DisposableProducer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
@@ -35,13 +37,13 @@ public class ParticleModel implements Disposable {
     private ObjectSet<String> particleBirthProperties = new ObjectSet<>();
     private ObjectSet<String> particleDeathProperties = new ObjectSet<>();
 
-    public ParticleModel(int particlesPerPage, GraphModels graphModels, String tag) {
-        this(particlesPerPage, new QuadSpriteModel(), graphModels, tag);
+    public ParticleModel(int particlesPerPage, ShaderInformation shaderInformation, ModelContainer<RenderableModel> modelContainer, String tag) {
+        this(particlesPerPage, new QuadSpriteModel(), shaderInformation, modelContainer, tag);
     }
 
-    public ParticleModel(int particlesPerPage, SpriteModel spriteModel, GraphModels graphModels, String tag) {
+    public ParticleModel(int particlesPerPage, SpriteModel spriteModel, ShaderInformation shaderInformation, ModelContainer<RenderableModel> modelContainer, String tag) {
         propertyContainer = new MapWritablePropertyContainer();
-        spriteModelManager = new ParticlesSpriteBatchProducer(particlesPerPage, spriteModel, graphModels, tag);
+        spriteModelManager = new ParticlesSpriteBatchProducer(particlesPerPage, spriteModel, shaderInformation, modelContainer, tag);
         spriteBatchModel = new PagedMultiPartBatchModel<>(spriteModelManager);
     }
 
@@ -94,7 +96,7 @@ public class ParticleModel implements Disposable {
     private class ParticlesSpriteBatchProducer implements DisposableProducer<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> {
         private final int spriteCapacity;
         private final SpriteModel spriteModel;
-        private final GraphModels graphModels;
+        private final ModelContainer<RenderableModel> modelContainer;
         private final String tag;
 
         private final ObjectSet<ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference>> models = new ObjectSet<>();
@@ -103,14 +105,15 @@ public class ParticleModel implements Disposable {
 
         public ParticlesSpriteBatchProducer(int spriteCapacity,
                                             SpriteModel spriteModel,
-                                            GraphModels graphModels, String tag) {
+                                            ShaderInformation shaderInformation,
+                                            ModelContainer<RenderableModel> modelContainer, String tag) {
             this.spriteCapacity = spriteCapacity;
             this.spriteModel = spriteModel;
-            this.graphModels = graphModels;
+            this.modelContainer = modelContainer;
             this.tag = tag;
 
-            vertexAttributes = GraphModelUtil.getShaderVertexAttributes(graphModels, tag);
-            ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(graphModels, tag, vertexAttributes);
+            vertexAttributes = GraphModelUtil.getShaderVertexAttributes(shaderInformation, tag);
+            ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources = GraphModelUtil.getPropertySourceMap(shaderInformation, tag, vertexAttributes);
 
             spriteSerializer = new SpriteSerializer(
                     vertexAttributes, vertexPropertySources, spriteModel);
@@ -127,13 +130,13 @@ public class ParticleModel implements Disposable {
                     new ParticleMultiPartRenderableModelGdx<>(meshModel, gdxMesh);
             lastSpriteModel = model;
             models.add(model);
-            graphModels.addModel(model);
+            modelContainer.addModel(model);
             return model;
         }
 
         @Override
         public void dispose(ParticleMultiPartRenderableModelGdx<RenderableSprite, SpriteReference> model) {
-            graphModels.removeModel(model);
+            modelContainer.removeModel(model);
             model.dispose();
             models.remove(model);
         }

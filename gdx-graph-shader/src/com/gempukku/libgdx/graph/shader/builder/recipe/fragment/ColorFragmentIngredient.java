@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.fragment;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -21,7 +21,7 @@ public class ColorFragmentIngredient implements GraphShaderRecipeIngredient {
     public void processIngredient(
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+            GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         GraphShaderNodeBuilder.FieldOutput colorField = colorSource.resolveOutput(outputResolver);
         String alpha = "1.0";
 

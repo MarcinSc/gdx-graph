@@ -12,18 +12,15 @@ import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.UniformRegistry;
 import com.gempukku.libgdx.graph.shader.builder.CommonShaderBuilder;
 import com.gempukku.libgdx.graph.shader.lighting3d.*;
-import com.gempukku.libgdx.graph.shader.lighting3d.provider.Lights3DProvider;
 
 public class Lighting3DUtils {
-    public static void configureAmbientLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId) {
+    public static void configureAmbientLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId,
+                                                final LightingRendererConfiguration lightingRendererConfiguration) {
         commonShaderBuilder.addUniformVariable("u_ambientLight_" + nodeId, "vec3", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        LightColor ambientColor = lights3DProvider.getAmbientLight(environment, shaderContext.getRenderableModel());
+                        LightColor ambientColor = lightingRendererConfiguration.getAmbientLight(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                         if (ambientColor != null) {
                             shader.setUniform(location, ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue());
                         } else {
@@ -33,7 +30,8 @@ public class Lighting3DUtils {
                 }, "Ambient light");
     }
 
-    public static void configureSpotLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfSpotlights) {
+    public static void configureSpotLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId,
+                                             final int maxNumberOfSpotlights, final LightingRendererConfiguration lightingRendererConfiguration) {
         commonShaderBuilder.addStructure("SpotLight",
                 "  vec3 color;\n" +
                         "  vec3 position;\n" +
@@ -44,10 +42,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.StructArrayUniformSetter() {
                     @Override
                     public void set(BasicShader shader, int startingLocation, int[] fieldOffsets, int structSize, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Spot3DLight> spots = lights3DProvider.getSpotLights(environment, shaderContext.getRenderableModel(), maxNumberOfSpotlights);
+                        Array<Spot3DLight> spots = lightingRendererConfiguration.getSpotLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
 
                         for (int i = 0; i < maxNumberOfSpotlights; i++) {
                             int location = startingLocation + i * structSize;
@@ -76,7 +71,8 @@ public class Lighting3DUtils {
                 }, "Spot lights");
     }
 
-    public static void configurePointLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfPointLights) {
+    public static void configurePointLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfPointLights,
+                                              final LightingRendererConfiguration lightingRendererConfiguration) {
         commonShaderBuilder.addStructure("PointLight",
                 "  vec3 color;\n" +
                         "  vec3 position;\n");
@@ -84,10 +80,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.StructArrayUniformSetter() {
                     @Override
                     public void set(BasicShader shader, int startingLocation, int[] fieldOffsets, int structSize, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Point3DLight> points = lights3DProvider.getPointLights(environment, shaderContext.getRenderableModel(), maxNumberOfPointLights);
+                        Array<Point3DLight> points = lightingRendererConfiguration.getPointLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
 
                         for (int i = 0; i < maxNumberOfPointLights; i++) {
                             int location = startingLocation + i * structSize;
@@ -109,7 +102,8 @@ public class Lighting3DUtils {
                 }, "Point lights");
     }
 
-    public static void configureDirectionalLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights) {
+    public static void configureDirectionalLighting(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights,
+                                                    final LightingRendererConfiguration lightingRendererConfiguration) {
         commonShaderBuilder.addStructure("DirectionalLight",
                 "  vec3 color;\n" +
                         "  vec3 direction;\n");
@@ -117,10 +111,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.StructArrayUniformSetter() {
                     @Override
                     public void set(BasicShader shader, int startingLocation, int[] fieldOffsets, int structSize, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
 
                         for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                             int location = startingLocation + i * structSize;
@@ -142,16 +133,14 @@ public class Lighting3DUtils {
                 }, "Directional lights");
     }
 
-    public static void configureShadowInformation(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights, final TextureRegion whiteTexture) {
+    public static void configureShadowInformation(CommonShaderBuilder commonShaderBuilder, String nodeId, final String environmentId, final int maxNumberOfDirectionalLights, final TextureRegion whiteTexture,
+                                                  final LightingRendererConfiguration lightingRendererConfiguration) {
         final float[] shadowCameras = new float[16 * maxNumberOfDirectionalLights];
         commonShaderBuilder.addArrayUniformVariable("u_shadowCamera_" + nodeId, maxNumberOfDirectionalLights, "mat4", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -171,10 +160,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -195,10 +181,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -219,10 +202,7 @@ public class Lighting3DUtils {
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                        Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                        Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                        Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                        Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                         if (dirs != null) {
                             for (int i = 0; i < maxNumberOfDirectionalLights; i++) {
                                 if (dirs.size > i) {
@@ -248,10 +228,7 @@ public class Lighting3DUtils {
                     new UniformRegistry.UniformSetter() {
                         @Override
                         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                            Lighting3DPrivateData privatePluginData = shaderContext.getPrivatePluginData(Lighting3DPrivateData.class);
-                            Lighting3DEnvironment environment = privatePluginData.getEnvironment(environmentId);
-                            Lights3DProvider lights3DProvider = privatePluginData.getLights3DProvider();
-                            Array<Directional3DLight> dirs = lights3DProvider.getDirectionalLights(environment, shaderContext.getRenderableModel(), maxNumberOfDirectionalLights);
+                            Array<Directional3DLight> dirs = lightingRendererConfiguration.getDirectionalLights(environmentId, shaderContext.getGraphShader(), shaderContext.getModel());
                             if (dirs != null) {
                                 RenderPipelineBuffer shadowFrameBuffer = null;
                                 if (dirs.size > lightIndex)

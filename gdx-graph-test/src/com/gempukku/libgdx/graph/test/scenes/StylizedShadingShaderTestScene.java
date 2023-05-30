@@ -3,7 +3,6 @@ package com.gempukku.libgdx.graph.test.scenes;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,8 +18,7 @@ import com.gempukku.libgdx.graph.artemis.patchwork.generator.ConeGenerator;
 import com.gempukku.libgdx.graph.artemis.patchwork.generator.SphereGenerator;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.time.TimeKeepingSystem;
-import com.gempukku.libgdx.graph.render.ui.UIPluginPublicData;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.ScreenResized;
@@ -34,8 +32,6 @@ import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
-
-import java.util.Arrays;
 
 public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     private static final int INDEPENDENT_SYSTEMS = 4;
@@ -104,7 +100,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private void setShadingTexture(PipelineRendererSystem pipelineRenderSystem, String texture) {
-        pipelineRenderSystem.getPluginData(GraphModels.class).setGlobalProperty("Stylized",
+        pipelineRenderSystem.setGlobalUniform("Stylized",
                 "Shading Texture",
                 world.getSystem(TextureSystem.class).getTextureRegion(texture, texture));
     }
@@ -129,9 +125,9 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                 new PipelineRendererSystem());
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new PatchworkSystem(),
-                new LightingSystem());
+                new LightingSystem(1, 0, 0, 0.05f, 1));
         worldConfigurationBuilder.with(DEPEND_ON_BATCH_SYSTEMS,
-                new PatchGeneratorSystem());
+                new PatchGeneratorSystem(), new StageSystem(0));
 
         world = new World(worldConfigurationBuilder.build());
 
@@ -162,7 +158,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         tbl.add(cameraPositionAngle).width(300).pad(0, 10, 0, 10).row();
 
         Label shadingTextureLabel = new Label("Shading texture", skin);
-        final SelectBox<ShadingTexture> shadingTexture = new SelectBox<ShadingTexture>(skin);
+        final SelectBox<ShadingTexture> shadingTexture = new SelectBox<>(skin);
         shadingTexture.setItems(ShadingTexture.values());
         shadingTexture.addListener(
                 new ChangeListener() {
@@ -181,8 +177,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
                 new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        GraphModels graphModels = world.getSystem(PipelineRendererSystem.class).getPluginData(GraphModels.class);
-                        graphModels.setGlobalProperty("Stylized",
+                        world.getSystem(PipelineRendererSystem.class).setGlobalUniform("Stylized",
                                 "Texture Scale", textureScale.getValue());
                     }
                 });
@@ -191,9 +186,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
 
         stage.addActor(tbl);
 
-        world.getSystem(PipelineRendererSystem.class).getPluginData(UIPluginPublicData.class).setStage("Main", stage);
-
-        Gdx.input.setInputProcessor(stage);
+        world.getSystem(StageSystem.class).addStage("Main", stage, true);
     }
 
     @Override
@@ -218,13 +211,5 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
     public void disposeScene() {
         world.dispose();
         skin.dispose();
-        stage.dispose();
-    }
-
-    public static void main(String[] args) {
-        Matrix4 m = new Matrix4();
-        m.translate(-2, 0, 0);
-        m.rotate(1, 0, 0, 90);
-        System.out.println(Arrays.toString(m.val));
     }
 }

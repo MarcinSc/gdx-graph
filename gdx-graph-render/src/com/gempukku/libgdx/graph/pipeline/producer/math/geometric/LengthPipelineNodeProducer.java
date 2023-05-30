@@ -5,10 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.config.math.geometric.LengthPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
 
 public class LengthPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     public LengthPipelineNodeProducer() {
@@ -16,12 +20,12 @@ public class LengthPipelineNodeProducer extends SingleInputsPipelineNodeProducer
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput resultOutput = new DefaultFieldOutput(PipelineFieldType.Float);
         result.put("output", resultOutput);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
+        return new SingleInputsPipelineNode(result, configuration) {
             @Override
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
                 FieldOutput<?> aFunction = inputs.get("input");

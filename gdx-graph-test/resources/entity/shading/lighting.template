@@ -7,7 +7,7 @@
       "y": 0,
       "z": 0
     },
-    "radius": 20,
+    "diameter": 20,
     "ambientColor": {
       "r": 0.1,
       "g": 0.1,

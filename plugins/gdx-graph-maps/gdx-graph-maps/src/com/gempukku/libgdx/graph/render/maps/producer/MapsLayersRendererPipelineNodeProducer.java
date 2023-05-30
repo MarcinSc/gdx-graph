@@ -6,12 +6,16 @@ import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
-import com.gempukku.libgdx.graph.render.maps.MapsPluginPrivateData;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
+import com.gempukku.libgdx.graph.render.maps.MapsRendererConfiguration;
 
 public class MapsLayersRendererPipelineNodeProducer extends SingleInputsPipelineNodeProducer {
     public MapsLayersRendererPipelineNodeProducer() {
@@ -19,7 +23,9 @@ public class MapsLayersRendererPipelineNodeProducer extends SingleInputsPipeline
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(final JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNodeForSingleInputs(final JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
+        final MapsRendererConfiguration mapsConfiguration = configuration.getConfig(MapsRendererConfiguration.class);
+
         final String mapId = data.getString("id");
         final String[] layerNames = data.getString("layers").split(",");
         final int[] ids = new int[layerNames.length];
@@ -28,14 +34,7 @@ public class MapsLayersRendererPipelineNodeProducer extends SingleInputsPipeline
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
-            private MapsPluginPrivateData mapsPluginData;
-
-            @Override
-            public void initializePipeline() {
-                mapsPluginData = pipelineDataProvider.getPrivatePluginData(MapsPluginPrivateData.class);
-            }
-
+        return new SingleInputsPipelineNode(result, configuration) {
             @Override
             public void executeNode(PipelineRenderingContext pipelineRenderingContext, PipelineRequirementsCallback pipelineRequirementsCallback) {
                 final PipelineNode.FieldOutput<Boolean> processorEnabled = (PipelineNode.FieldOutput<Boolean>) inputs.get("enabled");
@@ -45,8 +44,8 @@ public class MapsLayersRendererPipelineNodeProducer extends SingleInputsPipeline
                 RenderPipeline renderPipeline = renderPipelineInput.getValue();
                 Camera camera = cameraInput.getValue();
                 boolean enabled = processorEnabled == null || processorEnabled.getValue();
-                Map map = mapsPluginData.getMap(mapId);
-                MapRenderer mapRenderer = mapsPluginData.getMapRenderer(mapId);
+                Map map = mapsConfiguration.getMap(mapId);
+                MapRenderer mapRenderer = mapsConfiguration.getMapRenderer(mapId);
                 if (enabled && map != null) {
                     // Sadly need to switch off (and then on) the RenderContext
                     pipelineRenderingContext.getRenderContext().end();

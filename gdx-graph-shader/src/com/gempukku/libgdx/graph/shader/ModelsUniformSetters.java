@@ -8,7 +8,8 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform()).mul(shaderContext.getCamera().combined));
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, tmp4.set(worldTransform).mul(shaderContext.getCamera().combined));
         }
     };
 
@@ -17,7 +18,8 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform()).mul(shaderContext.getCamera().combined).toNormalMatrix());
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, tmp4.set(worldTransform).mul(shaderContext.getCamera().combined).toNormalMatrix());
         }
     };
 
@@ -26,7 +28,8 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform()).mul(shaderContext.getCamera().view));
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, tmp4.set(worldTransform).mul(shaderContext.getCamera().view));
         }
     };
 
@@ -35,14 +38,16 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmp4.set(shaderContext.getRenderableModel().getWorldTransform()).mul(shaderContext.getCamera().view).toNormalMatrix());
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, tmp4.set(worldTransform).mul(shaderContext.getCamera().view).toNormalMatrix());
         }
     };
 
     public final static UniformRegistry.UniformSetter worldTrans = new UniformRegistry.UniformSetter() {
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, shaderContext.getRenderableModel().getWorldTransform());
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, worldTransform);
         }
     };
 
@@ -51,7 +56,8 @@ public class ModelsUniformSetters {
 
         @Override
         public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-            shader.setUniform(location, tmpM.set(shaderContext.getRenderableModel().getWorldTransform()).toNormalMatrix());
+            Matrix4 worldTransform = shaderContext.getShaderRenderingConfiguration().getWorldTransform(shaderContext.getModel(), shaderContext.getGraphShader());
+            shader.setUniform(location, tmpM.set(worldTransform).toNormalMatrix());
         }
     };
 }

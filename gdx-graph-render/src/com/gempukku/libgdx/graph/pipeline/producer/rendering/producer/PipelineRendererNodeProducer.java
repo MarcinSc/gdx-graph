@@ -4,12 +4,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.FullScreenRender;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.config.rendering.PipelineRendererNodeConfiguration;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
 
 public class PipelineRendererNodeProducer extends SingleInputsPipelineNodeProducer {
     public PipelineRendererNodeProducer() {
@@ -17,18 +21,18 @@ public class PipelineRendererNodeProducer extends SingleInputsPipelineNodeProduc
     }
 
     @Override
-    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineDataProvider pipelineDataProvider) {
+    public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
 
-        return new SingleInputsPipelineNode(result, pipelineDataProvider) {
+        return new SingleInputsPipelineNode(result, configuration) {
             private FullScreenRender fullScreenRender;
             private Vector2 tmpVector = new Vector2();
 
             @Override
             public void initializePipeline() {
-                fullScreenRender = pipelineDataProvider.getFullScreenRender();
+                fullScreenRender = configuration.getPipelineHelper().getFullScreenRender();
             }
 
             @Override

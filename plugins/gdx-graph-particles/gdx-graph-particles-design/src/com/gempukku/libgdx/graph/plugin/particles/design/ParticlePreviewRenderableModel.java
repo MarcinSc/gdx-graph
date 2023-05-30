@@ -12,9 +12,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
+import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.shader.particles.ParticleAttributeFunctions;
 import com.gempukku.libgdx.graph.shader.preview.PreviewRenderableModel;
 import com.gempukku.libgdx.graph.shader.property.ShaderPropertySource;
@@ -203,13 +203,8 @@ public class ParticlePreviewRenderableModel implements PreviewRenderableModel, D
     }
 
     @Override
-    public PropertyContainer getPropertyContainer() {
+    public WritablePropertyContainer getPropertyContainer() {
         return renderableModel.getPropertyContainer();
-    }
-
-    @Override
-    public void prepareToRender(ShaderContext shaderContext) {
-        renderableModel.prepareToRender(shaderContext);
     }
 
     @Override

@@ -39,8 +39,6 @@ public interface RenderableModel {
      */
     PropertyContainer getPropertyContainer();
 
-    void prepareToRender(ShaderContext shaderContext);
-
     /**
      * Renders the model with the shader. Check for implementations provided to get an
      * idea of what should be done.

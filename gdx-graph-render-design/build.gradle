@@ -6,6 +6,7 @@ sourceCompatibility = 1.8
 
 dependencies {
     api project(":gdx-graph-render")
+    api project(":gdx-graph-shader-util")
 
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-common:$gdxGempLibVersion"
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"

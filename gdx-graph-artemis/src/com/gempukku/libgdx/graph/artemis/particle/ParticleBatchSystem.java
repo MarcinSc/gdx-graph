@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.graph.artemis.sprite.DefaultSpriteModel;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
+import com.gempukku.libgdx.graph.shader.RenderableModel;
+import com.gempukku.libgdx.graph.util.ShaderInformation;
 import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.ParticleGenerator;
 import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
@@ -50,9 +52,9 @@ public class ParticleBatchSystem extends BaseEntitySystem {
         return particleModelMap.get(particleBatchName);
     }
 
-    private ParticleModel createParticleBatchModel(ParticleBatchComponent particleBatch, GraphModels graphModels, String tag) {
+    private ParticleModel createParticleBatchModel(ParticleBatchComponent particleBatch, ShaderInformation shaderInformation, ModelContainer<RenderableModel> modelContainer, String tag) {
         SpriteModel particleSpriteModel = getSpriteModel(particleBatch);
-        ParticleModel particleModel = new ParticleModel(particleBatch.getSpritesPerPage(), particleSpriteModel, graphModels, tag);
+        ParticleModel particleModel = new ParticleModel(particleBatch.getSpritesPerPage(), particleSpriteModel, shaderInformation, modelContainer, tag);
         for (String particleBirthAttribute : particleBatch.getParticleBirthAttributes()) {
             particleModel.addParticleBirthProperty(particleBirthAttribute);
         }
@@ -78,12 +80,14 @@ public class ParticleBatchSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
+        ShaderInformation shaderInformation = pipelineRendererSystem.getShaderInformation();
+        ModelContainer<RenderableModel> modelContainer = pipelineRendererSystem.getModelContainer();
+
         for (Entity newParticleBatchEntity : newParticleBatchEntities) {
             ParticleBatchComponent particleBatch = particleBatchComponentMapper.get(newParticleBatchEntity);
-            GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
             String tag = particleBatch.getRenderTag();
-            ParticleModel spriteModel = createParticleBatchModel(particleBatch, graphModels, tag);
+            ParticleModel spriteModel = createParticleBatchModel(particleBatch, shaderInformation, modelContainer, tag);
 
             WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
             for (ObjectMap.Entry<String, Object> property : particleBatch.getProperties()) {

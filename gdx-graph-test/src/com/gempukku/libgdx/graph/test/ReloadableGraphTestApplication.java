@@ -18,6 +18,7 @@ import com.gempukku.libgdx.graph.pipeline.RenderPipelineRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.render.callback.RenderCallbackPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.render.postprocess.PostprocessPluginRuntimeInitializer;
+import com.gempukku.libgdx.graph.render.screenshot.ScreenshotPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.render.ui.UIPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.ShaderPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.boneanimation.BoneAnimationPluginRuntimeInitializer;
@@ -50,9 +51,8 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
         RuntimePluginRegistry.register(ShaderPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(BoneAnimationPluginRuntimeInitializer.class);
         RuntimePluginRegistry.register(PostprocessPluginRuntimeInitializer.class);
-        Lighting3DPluginRuntimeInitializer.register(
-                1, 0, 0,
-                0.2f, 5);
+        RuntimePluginRegistry.register(Lighting3DPluginRuntimeInitializer.class);
+        RuntimePluginRegistry.register(ScreenshotPluginRuntimeInitializer.class);
 
         scenes = new LibgdxGraphTestScene[]{
                 new Episode1Scene(),

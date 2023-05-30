@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.init;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
@@ -15,14 +15,14 @@ import com.gempukku.libgdx.graph.shader.property.PropertyLocation;
 
 public class InitializePropertyMapIngredient implements GraphShaderRecipeIngredient {
     @Override
-    public void processIngredient(boolean designTime, GraphWithProperties graph, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+    public void processIngredient(boolean designTime, GraphWithProperties graph, GraphShader graphShader, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         GraphConfiguration[] configurations = GraphTypeRegistry.findGraphType(graph.getType(), ShaderGraphType.class).getConfigurations();
         int index = 0;
         for (GraphProperty property : graph.getProperties()) {
             String name = property.getName();
             PropertyLocation location = PropertyLocation.valueOf(property.getData().getString("location"));
             String attributeFunction = property.getData().getString("function", null);
-            graphShader.addPropertySource(name, findPropertyProducerByType(property.getType(), configurations).createProperty(index++, name, property.getData(), location, attributeFunction, designTime));
+            graphShader.addPropertySource(name, findPropertyProducerByType(property.getType(), configurations).createProperty(index++, name, property.getData(), location, attributeFunction, designTime, configuration));
         }
     }
 

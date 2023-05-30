@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 import com.gempukku.libgdx.graph.util.model.GraphModelUtil;
 import com.gempukku.libgdx.graph.util.model.WritableRenderableModel;
@@ -102,11 +101,6 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpda
     }
 
     @Override
-    public void prepareToRender(ShaderContext shaderContext) {
-        memoryMesh.updateGdxMesh(this);
-    }
-
-    @Override
     public void updateIndices(short[] indexValues, int startIndex, int count) {
         mesh.setIndices(indexValues);
     }
@@ -119,6 +113,7 @@ public class GdxMeshRenderableModel implements WritableRenderableModel, MeshUpda
     @Override
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         this.shaderProgram = shaderProgram;
+        memoryMesh.updateGdxMesh(this);
         memoryMesh.renderGdxMesh(this);
     }
 

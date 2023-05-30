@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.graph.shader.builder.recipe.fragment;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.gempukku.libgdx.common.SimpleNumberFormatter;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
@@ -20,7 +20,7 @@ public class FillColorFragmentIngredient implements GraphShaderRecipeIngredient 
     public void processIngredient(
             boolean designTime, GraphWithProperties graph, GraphShader graphShader,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
-            GraphShaderOutputResolver outputResolver, FileHandleResolver assetResolver) {
+            GraphShaderOutputResolver outputResolver, PipelineRendererConfiguration configuration) {
         fragmentShaderBuilder.addMainLine("// End Graph Node");
         fragmentShaderBuilder.addMainLine("gl_FragColor = vec4(" + SimpleNumberFormatter.format(color.r)+", "+SimpleNumberFormatter.format(color.g)+", "+SimpleNumberFormatter.format(color.b)+", "+SimpleNumberFormatter.format(color.a)+");");
     }

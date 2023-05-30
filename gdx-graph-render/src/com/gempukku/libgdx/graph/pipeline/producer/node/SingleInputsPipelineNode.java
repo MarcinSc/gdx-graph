@@ -2,14 +2,15 @@ package com.gempukku.libgdx.graph.pipeline.producer.node;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 
 public abstract class SingleInputsPipelineNode extends AbstractPipelineNode {
-    protected final PipelineDataProvider pipelineDataProvider;
+    protected final PipelineRendererConfiguration configuration;
     protected ObjectMap<String, FieldOutput<?>> inputs = new ObjectMap<>();
 
-    public SingleInputsPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineDataProvider pipelineDataProvider) {
+    public SingleInputsPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineRendererConfiguration configuration) {
         super(outputs);
-        this.pipelineDataProvider = pipelineDataProvider;
+        this.configuration = configuration;
     }
 
     @Override

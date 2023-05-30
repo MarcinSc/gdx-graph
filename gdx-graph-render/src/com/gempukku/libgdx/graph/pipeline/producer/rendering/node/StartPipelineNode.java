@@ -5,29 +5,29 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
 import com.gempukku.libgdx.graph.pipeline.RenderPipelineBuffer;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
 import com.gempukku.libgdx.graph.pipeline.impl.RenderPipelineImpl;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
-import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineDataProvider;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
 
 public class StartPipelineNode extends SingleInputsPipelineNode {
     private final DefaultFieldOutput<RenderPipeline> output;
     private RenderPipelineImpl renderPipeline;
 
-    public StartPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineDataProvider pipelineDataProvider) {
-        super(outputs, pipelineDataProvider);
+    public StartPipelineNode(ObjectMap<String, FieldOutput<?>> outputs, PipelineRendererConfiguration configuration) {
+        super(outputs, configuration);
         output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         outputs.put("output", output);
     }
 
     @Override
     public void initializePipeline() {
-        renderPipeline = new RenderPipelineImpl(pipelineDataProvider.getBufferCopyHelper(),
-                pipelineDataProvider.getTextureBufferCache());
+        renderPipeline = new RenderPipelineImpl(configuration.getPipelineHelper().getBufferCopyHelper(),
+                configuration.getPipelineHelper().getTextureBufferCache());
 
         output.setValue(renderPipeline);
     }

@@ -14,13 +14,14 @@ import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
-import com.gempukku.libgdx.graph.shader.builder.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.ui.GraphResolver;
 import com.gempukku.libgdx.graph.ui.GraphResolverHolder;
 import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
+import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.kotcrab.vis.ui.util.InputValidator;
@@ -176,7 +177,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                             errorDialog.setModal(true);
                             application.addWindow(errorDialog.fadeIn());
                         } else {
-                            GraphShader graphShader = GraphShaderBuilder.buildShader(graph, application.getAssetResolver());
+                            GraphShader graphShader = GraphShaderBuilder.buildTextShader(graph, new DefaultTimeKeeper());
                             ShaderCodeWindow shaderCodeWindow = new ShaderCodeWindow(graphShader);
                             shaderCodeWindow.setCenterOnAdd(true);
                             application.addWindow(shaderCodeWindow.fadeIn());

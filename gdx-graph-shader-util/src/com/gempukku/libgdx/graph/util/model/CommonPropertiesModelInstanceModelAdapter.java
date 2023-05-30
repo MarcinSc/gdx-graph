@@ -18,15 +18,14 @@ import com.gempukku.libgdx.common.IntMapping;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.PropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.shader.GraphModels;
 import com.gempukku.libgdx.graph.shader.GraphShader;
+import com.gempukku.libgdx.graph.shader.ModelContainer;
 import com.gempukku.libgdx.graph.shader.RenderableModel;
-import com.gempukku.libgdx.graph.shader.ShaderContext;
 import com.gempukku.libgdx.graph.util.culling.CullingTest;
 
 public class CommonPropertiesModelInstanceModelAdapter {
     private ModelInstance modelInstance;
-    private GraphModels graphModels;
+    private ModelContainer<RenderableModel> graphModels;
 
     private final ObjectSet<String> tags = new ObjectSet<>();
     private final Array<RenderableModel> registeredModels = new Array<>();
@@ -35,11 +34,11 @@ public class CommonPropertiesModelInstanceModelAdapter {
     private CullingTest cullingTest;
     private ObjectMap<IntMapping<String>, int[]> locationMappingCache = new ObjectMap<>();
 
-    public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, GraphModels graphModels) {
+    public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, ModelContainer<RenderableModel> graphModels) {
         this(modelInstance, graphModels, new MapWritablePropertyContainer());
     }
 
-    public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, GraphModels graphModels, WritablePropertyContainer propertyContainer) {
+    public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, ModelContainer<RenderableModel> graphModels, WritablePropertyContainer propertyContainer) {
         this.modelInstance = modelInstance;
         this.graphModels = graphModels;
         this.propertyContainer = propertyContainer;
@@ -132,11 +131,6 @@ public class CommonPropertiesModelInstanceModelAdapter {
         @Override
         public boolean isRendered(GraphShader graphShader, Camera camera) {
             return tags.contains(graphShader.getTag()) && nodePart.enabled && (cullingTest == null || !cullingTest.isCulled(camera, getPosition()));
-        }
-
-        @Override
-        public void prepareToRender(ShaderContext shaderContext) {
-
         }
 
         @Override

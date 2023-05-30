@@ -1,14 +1,18 @@
 package com.gempukku.libgdx.graph.pipeline.impl;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.Function;
+import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.graph.pipeline.PreparedRenderingPipeline;
-import com.gempukku.libgdx.graph.pipeline.RenderPipeline;
-import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
+import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
-import com.gempukku.libgdx.graph.pipeline.producer.node.*;
+import com.gempukku.libgdx.graph.pipeline.producer.node.EndPipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
+import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineRequirements;
+import com.gempukku.libgdx.graph.pipeline.property.PipelinePropertyProducer;
 import com.gempukku.libgdx.ui.graph.data.*;
 
 import java.util.LinkedList;
@@ -24,6 +28,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
     private ObjectMap<PipelineNode, PipelineNode.PipelineRequirementsCallback> requirementsCallbacks;
 
     private final Function<GraphNode, NodeConfiguration> nodeConfigurationResolver;
+    private final ObjectMap<String, PipelineProperty> pipelinePropertes = new ObjectMap<>();
 
     public PreparedRenderingPipelineImpl(GraphWithProperties graph,
                                          String endNodeId) {
@@ -36,15 +41,24 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
                 return RendererPipelineConfiguration.findProducer(value.getType()).getConfiguration(value.getData());
             }
         };
+
+        for (final GraphProperty property : graph.getProperties()) {
+            PipelinePropertyProducer propertyProducer = RendererPipelineConfiguration.findPropertyProducer(property.getType());
+            if (propertyProducer == null)
+                throw new GdxRuntimeException("Unknown type of property: " + property.getType());
+            pipelinePropertes.put(property.getName(), propertyProducer.createProperty(property.getData()));
+        }
     }
 
     @Override
-    public void initialize(PipelineDataProvider pipelineDataProvider) {
+    public void initialize(PipelineRendererConfiguration configuration) {
+        configuration.setPipelinePropertySource(this);
+
         ObjectMap<String, ObjectMap<String, String>> nodeOutputTypes = new ObjectMap<>();
         populateNodeOutputTypes(endNodeId, nodeOutputTypes);
 
         ObjectMap<String, PipelineNode> pipelineNodeMap = new ObjectMap<>();
-        populatePipelineNodes(endNodeId, pipelineNodeMap, nodeOutputTypes, pipelineDataProvider);
+        populatePipelineNodes(endNodeId, pipelineNodeMap, nodeOutputTypes, configuration);
 
         endPipelineNode = (EndPipelineNode) pipelineNodeMap.get(endNodeId);
 
@@ -67,6 +81,21 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
 
         // Setup inputs
         setupInputs(pipelineNodeMap, outputs);
+    }
+
+    @Override
+    public PipelineProperty getPipelineProperty(String property) {
+        return pipelinePropertes.get(property);
+    }
+
+    @Override
+    public boolean hasPipelineProperty(String property) {
+        return pipelinePropertes.containsKey(property);
+    }
+
+    @Override
+    public Iterable<? extends PipelineProperty> getProperties() {
+        return pipelinePropertes.values();
     }
 
     private void populateExecutionOrder(ObjectMap<String, PipelineNode> pipelineNodeMap, LinkedList<PipelineNode> nodesInExecutionOrder, String nodeId) {
@@ -221,7 +250,7 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
     private void populatePipelineNodes(
             String nodeId, ObjectMap<String, PipelineNode> pipelineNodeMap,
             ObjectMap<String, ObjectMap<String, String>> pipelineNodeOutputTypes,
-            PipelineDataProvider pipelineDataProvider) {
+            PipelineRendererConfiguration configuration) {
         PipelineNode pipelineNode = pipelineNodeMap.get(nodeId);
         if (pipelineNode != null)
             return;
@@ -240,14 +269,14 @@ public class PreparedRenderingPipelineImpl implements PreparedRenderingPipeline 
 
             Array<String> fieldTypes = new Array<>();
             for (GraphConnection graphConnection : graphConnections) {
-                populatePipelineNodes(graphConnection.getNodeFrom(), pipelineNodeMap, pipelineNodeOutputTypes, pipelineDataProvider);
+                populatePipelineNodes(graphConnection.getNodeFrom(), pipelineNodeMap, pipelineNodeOutputTypes, configuration);
                 ObjectMap<String, String> outputTypes = pipelineNodeOutputTypes.get(graphConnection.getNodeFrom());
                 String fieldType = outputTypes.get(graphConnection.getFieldFrom());
                 fieldTypes.add(fieldType);
             }
             inputTypes.put(inputName, fieldTypes);
         }
-        pipelineNode = nodeProducer.createNode(nodeInfo.getData(), inputTypes, pipelineNodeOutputTypes.get(nodeId), pipelineDataProvider);
+        pipelineNode = nodeProducer.createNode(nodeInfo.getData(), inputTypes, pipelineNodeOutputTypes.get(nodeId), configuration);
         pipelineNodeMap.put(nodeId, pipelineNode);
     }
 

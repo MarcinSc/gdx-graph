@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RenderOrder;
-import com.gempukku.libgdx.graph.shader.lighting3d.ShadowShaderGraphType;
+import com.gempukku.libgdx.graph.shader.depth.DepthShaderGraphType;
 import com.gempukku.libgdx.graph.shader.lighting3d.producer.ShadowShaderRendererPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
@@ -28,7 +28,7 @@ public class ShadowShaderRendererEditorProducer extends GdxGraphNodeEditorProduc
         StringEditorPart envId = new StringEditorPart("Env id: ", "id", "", "gdx-graph-property-label", "gdx-graph-property");
         graphNodeEditor.addGraphEditorPart(envId);
 
-        ShaderGraphEditorPart graphBoxPart = new ShaderGraphEditorPart((UIGraphType) GraphTypeRegistry.findGraphType(ShadowShaderGraphType.TYPE));
+        ShaderGraphEditorPart graphBoxPart = new ShaderGraphEditorPart((UIGraphType) GraphTypeRegistry.findGraphType(DepthShaderGraphType.TYPE));
         graphNodeEditor.addGraphEditorPart(graphBoxPart);
     }
 }

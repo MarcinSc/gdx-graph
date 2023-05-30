@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.graph.shader.particles;
 
-import com.gempukku.libgdx.graph.plugin.PluginRegistry;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.ModelShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.particles.particle.ParticleLifePercentageShaderNodeBuilder;
@@ -9,7 +8,7 @@ import com.gempukku.libgdx.graph.shader.particles.particle.ParticleTimeToDeathSh
 
 public class ParticlesPluginRuntimeInitializer implements PluginRuntimeInitializer {
     @Override
-    public void initialize(PluginRegistry pluginRegistry) {
+    public void initialize() {
         ModelShaderConfiguration.addNodeBuilder(new ParticleLifetimeShaderNodeBuilder());
         ModelShaderConfiguration.addNodeBuilder(new ParticleLifePercentageShaderNodeBuilder());
         ModelShaderConfiguration.addNodeBuilder(new ParticleTimeToDeathShaderNodeBuilder());

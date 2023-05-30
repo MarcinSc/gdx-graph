@@ -1,13 +1,12 @@
 package com.gempukku.libgdx.graph.shader.property;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
+import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.GraphShader;
-import com.gempukku.libgdx.graph.shader.GraphShaderContext;
 import com.gempukku.libgdx.graph.shader.builder.FragmentShaderBuilder;
 import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
@@ -42,12 +41,12 @@ public class PropertyShaderNodeBuilder implements GraphShaderNodeBuilder {
     }
 
     @Override
-    public ObjectMap<String, ? extends FieldOutput> buildVertexNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, Array<FieldOutput>> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+    public ObjectMap<String, ? extends FieldOutput> buildVertexNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, Array<FieldOutput>> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         final String name = data.getString("name");
         final String propertyType = data.getString("type");
 
         ShaderFieldType fieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
-        ShaderPropertySource shaderPropertySource = graphShaderContext.getPropertySource(name);
+        ShaderPropertySource shaderPropertySource = graphShader.getPropertySource(name);
 
         PropertyLocation propertyLocation = shaderPropertySource.getPropertyLocation();
         ObjectMap<String, FieldOutput> result = new ObjectMap<>();
@@ -67,12 +66,12 @@ public class PropertyShaderNodeBuilder implements GraphShaderNodeBuilder {
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, Array<FieldOutput>> inputs, ObjectSet<String> producedOutputs,
-                                                                      VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShaderContext graphShaderContext, GraphShader graphShader, FileHandleResolver assetResolver) {
+                                                                      VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         final String name = data.getString("name");
         final String propertyType = data.getString("type");
 
         ShaderFieldType fieldType = ShaderFieldTypeRegistry.findShaderFieldType(propertyType);
-        ShaderPropertySource shaderPropertySource = graphShaderContext.getPropertySource(name);
+        ShaderPropertySource shaderPropertySource = graphShader.getPropertySource(name);
 
         PropertyLocation propertyLocation = shaderPropertySource.getPropertyLocation();
         ObjectMap<String, FieldOutput> result = new ObjectMap<>();
