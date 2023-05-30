@@ -2,6 +2,7 @@ package com.gempukku.libgdx.graph.render.screenshot.producer;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.Function;
@@ -25,6 +26,10 @@ public class ScreenshotShadowMapPipelineNodeProducer extends SingleInputsPipelin
 
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
+        final LightingRendererConfiguration lightingConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        if (lightingConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class LightingRendererConfiguration needs to be define for pipeline");
+
         final String environmentId = data.getString("environmentId", null);
         final int lightIndex = data.getInt("lightIndex", 0);
         final String path = data.getString("path", null);
@@ -33,8 +38,6 @@ public class ScreenshotShadowMapPipelineNodeProducer extends SingleInputsPipelin
         final ObjectMap<String, PipelineNode.FieldOutput<?>> result = new ObjectMap<>();
         final DefaultFieldOutput<RenderPipeline> output = new DefaultFieldOutput<>(PipelineFieldType.RenderPipeline);
         result.put("output", output);
-
-        final LightingRendererConfiguration lightingConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
 
         return new SingleInputsPipelineNode(result, configuration) {
             @Override

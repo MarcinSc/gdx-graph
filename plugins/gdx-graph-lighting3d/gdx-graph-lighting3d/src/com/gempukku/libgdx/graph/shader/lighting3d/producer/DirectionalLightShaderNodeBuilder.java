@@ -1,9 +1,6 @@
 package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.*;
 import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.BasicShader;
 import com.gempukku.libgdx.graph.shader.GraphShader;
@@ -25,6 +22,9 @@ public class DirectionalLightShaderNodeBuilder extends ConfigurationCommonShader
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, final GraphShader graphShader, PipelineRendererConfiguration configuration) {
         final LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        if (lightingRendererConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class LightingRendererConfiguration needs to be define for pipeline");
+
         final int index = data.getInt("index");
         final String environmentId = data.getString("id", "");
 

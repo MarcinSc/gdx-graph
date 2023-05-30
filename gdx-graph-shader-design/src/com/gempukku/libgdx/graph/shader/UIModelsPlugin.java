@@ -187,6 +187,7 @@ public class UIModelsPlugin implements UIGdxGraphPlugin {
                 "Rectangle", MeshPreviewModels.getRectangleModelProducer());
 
         UIModelShaderConfiguration.setScreenPreviewModel(MeshPreviewModels.getRectangleModelProducer());
+        UIModelShaderConfiguration.setSpherePreviewModel(MeshPreviewModels.getSphereModelProducer());
 
         UIRenderPipelineConfiguration.register(new ModelShaderRendererEditorProducer());
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
@@ -33,7 +34,13 @@ public class ShadowShaderRendererPipelineNodeProducer extends SingleInputsPipeli
             JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes,
             PipelineRendererConfiguration configuration) {
         final ShaderRendererConfiguration shaderRendererConfiguration = configuration.getConfig(ShaderRendererConfiguration.class);
+        if (shaderRendererConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class ShaderRendererConfiguration needs to be define for pipeline");
+
         final LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        if (lightingRendererConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class LightingRendererConfiguration needs to be define for pipeline");
+
         final DefaultShaderContext shaderContext = new DefaultShaderContext();
         shaderContext.setPipelineRendererConfiguration(configuration);
 

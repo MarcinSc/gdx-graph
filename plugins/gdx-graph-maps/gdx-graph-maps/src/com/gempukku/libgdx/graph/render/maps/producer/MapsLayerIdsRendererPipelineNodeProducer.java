@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapRenderer;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
@@ -25,6 +26,8 @@ public class MapsLayerIdsRendererPipelineNodeProducer extends SingleInputsPipeli
     @Override
     public PipelineNode createNodeForSingleInputs(final JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final MapsRendererConfiguration mapsConfiguration = configuration.getConfig(MapsRendererConfiguration.class);
+        if (mapsConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class MapsRendererConfiguration needs to be define for pipeline");
 
         final String mapId = data.getString("id");
         final String[] layerIds = data.getString("layers").split(",");

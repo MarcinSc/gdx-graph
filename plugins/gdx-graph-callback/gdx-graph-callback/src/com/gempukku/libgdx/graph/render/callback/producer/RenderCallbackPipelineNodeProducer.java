@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.render.callback.producer;
 
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
@@ -21,6 +22,8 @@ public class RenderCallbackPipelineNodeProducer extends SingleInputsPipelineNode
     @Override
     public PipelineNode createNodeForSingleInputs(JsonValue data, ObjectMap<String, String> inputTypes, ObjectMap<String, String> outputTypes, PipelineRendererConfiguration configuration) {
         final CallbackRendererConfiguration callbackConfiguration = configuration.getConfig(CallbackRendererConfiguration.class);
+        if (callbackConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class CallbackRendererConfiguration needs to be define for pipeline");
 
         final String callbackId = data.getString("callbackId", null);
 

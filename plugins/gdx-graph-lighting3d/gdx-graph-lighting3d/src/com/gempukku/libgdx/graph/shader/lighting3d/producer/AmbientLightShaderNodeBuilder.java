@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -26,13 +27,16 @@ public class AmbientLightShaderNodeBuilder extends ConfigurationCommonShaderNode
             boolean designTime, String nodeId, final JsonValue data,
             ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
             CommonShaderBuilder commonShaderBuilder, final GraphShader graphShader, final PipelineRendererConfiguration configuration) {
+        final LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        if (lightingRendererConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class LightingRendererConfiguration needs to be define for pipeline");
+
         final String environmentId = data.getString("id", "");
 
         commonShaderBuilder.addUniformVariable("u_ambientLight_" + nodeId, "vec4", false,
                 new UniformRegistry.UniformSetter() {
                     @Override
                     public void set(BasicShader shader, int location, ShaderContext shaderContext) {
-                        LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
                         LightColor ambientColor = lightingRendererConfiguration.getAmbientLight(environmentId, graphShader, shaderContext.getModel());
                         if (ambientColor != null) {
                             shader.setUniform(location, ambientColor.getRed(), ambientColor.getGreen(), ambientColor.getBlue(), 1f);

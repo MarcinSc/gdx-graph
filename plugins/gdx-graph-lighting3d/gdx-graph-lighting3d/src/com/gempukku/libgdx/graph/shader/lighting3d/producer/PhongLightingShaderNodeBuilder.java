@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -28,9 +29,12 @@ public class PhongLightingShaderNodeBuilder extends ConfigurationShaderNodeBuild
 
     @Override
     public ObjectMap<String, ? extends FieldOutput> buildFragmentNodeSingleInputs(boolean designTime, String nodeId, final JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
+        LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
+        if (lightingRendererConfiguration == null)
+            throw new GdxRuntimeException("A configuration with class LightingRendererConfiguration needs to be define for pipeline");
+
         String environmentId = data.getString("id", "");
 
-        LightingRendererConfiguration lightingRendererConfiguration = configuration.getConfig(LightingRendererConfiguration.class);
         int maxNumberOfDirectionalLights = lightingRendererConfiguration.getMaxNumberOfDirectionalLights(environmentId, graphShader);
         int maxNumberOfPointLights = lightingRendererConfiguration.getMaxNumberOfPointLights(environmentId, graphShader);
         int maxNumberOfSpotlights = lightingRendererConfiguration.getMaxNumberOfSpotlights(environmentId, graphShader);
