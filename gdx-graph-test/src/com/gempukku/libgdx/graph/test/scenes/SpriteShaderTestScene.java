@@ -11,8 +11,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
-import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.pipeline.util.ArrayValuePerVertex;
 import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
@@ -39,7 +39,7 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
     private MultiPartRenderableModel<RenderableSprite, SpriteReference> spriteBatch;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
     private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
@@ -105,10 +105,11 @@ public class SpriteShaderTestScene implements LibgdxGraphTestScene {
     public void disposeScene() {
         spriteBatch.dispose();
         pipelineRenderer.dispose();
+        configuration.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.getPipelinePropertyContainer().setValue("Camera", camera);
 
         shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());

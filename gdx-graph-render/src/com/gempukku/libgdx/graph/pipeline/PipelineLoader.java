@@ -8,7 +8,7 @@ import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineRenderer;
-import com.gempukku.libgdx.graph.pipeline.impl.PreparedRenderingPipelineImpl;
+import com.gempukku.libgdx.graph.pipeline.impl.GraphPreparedRenderingPipeline;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
@@ -36,8 +36,13 @@ public class PipelineLoader {
             if (validationResult.hasErrors())
                 throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
+            GraphPipelinePropertySource pipelinePropertySource = new GraphPipelinePropertySource(graph);
+            configuration.initialize(pipelinePropertySource);
+
+            GraphPreparedRenderingPipeline renderingPipeline = new GraphPreparedRenderingPipeline(graph, configuration,"end");
+
             return new DefaultPipelineRenderer(
-                    new PreparedRenderingPipelineImpl(graph, "end"), configuration);
+                    renderingPipeline, configuration);
         } catch (ReflectionException exp) {
             throw new GdxRuntimeException("Unable to initialize plugins", exp);
         } catch (IOException exp) {

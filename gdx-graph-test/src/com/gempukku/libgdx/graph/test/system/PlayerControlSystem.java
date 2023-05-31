@@ -85,7 +85,7 @@ public class PlayerControlSystem extends EntitySystem {
             for (ObjectMap.Entry<String, Object> stateProperty : stateProperties) {
                 properties.put(stateProperty.key, stateProperty.value);
             }
-            properties.put("Animation Start", pipelineRendererSystem.getCurrentTime());
+            properties.put("Animation Start", pipelineRendererSystem.getPipelineTime(stateBasedSprite.getPipelineName()));
             spriteSystem.updateSprite(playerEntity.getId());
 
             playerInputControlled.setCurrentState(state);

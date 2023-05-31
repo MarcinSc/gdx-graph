@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.UBJsonReader;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
-import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.ModelContainer;
@@ -39,7 +39,7 @@ public class Episode6Scene implements LibgdxGraphTestScene {
     private Skin skin;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private MaterialModelInstanceModelAdapter modelAdapter;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
     private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
@@ -137,6 +137,7 @@ public class Episode6Scene implements LibgdxGraphTestScene {
         stage.dispose();
         skin.dispose();
         pipelineRenderer.dispose();
+        configuration.dispose();
         WhitePixel.dispose();
     }
 
@@ -144,7 +145,7 @@ public class Episode6Scene implements LibgdxGraphTestScene {
         SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();
         uiConfiguration.setStage("", stage);
 
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
         configuration.getPipelinePropertyContainer().setValue("Camera", camera);
 

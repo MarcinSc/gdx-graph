@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.*;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
@@ -44,7 +45,7 @@ public class Episode4Scene implements LibgdxGraphTestScene {
     private Camera camera2;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private ModelBatch modelBatch;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
 
     @Override
     public String getName() {
@@ -165,7 +166,7 @@ public class Episode4Scene implements LibgdxGraphTestScene {
         callbackConfiguration.setRenderCallback("Callback1", new ModelsRenderCallback(camera1));
         callbackConfiguration.setRenderCallback("Callback2", new ModelsRenderCallback(camera2));
 
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
         configuration.setConfig(CallbackRendererConfiguration.class, callbackConfiguration);
 

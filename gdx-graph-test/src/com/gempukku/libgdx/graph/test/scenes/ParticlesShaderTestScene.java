@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
-import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
@@ -26,7 +26,7 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private Camera camera;
     private ParticleModel particleModel;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
     private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
@@ -92,11 +92,12 @@ public class ParticlesShaderTestScene implements LibgdxGraphTestScene {
     @Override
     public void disposeScene() {
         particleModel.dispose();
+        configuration.dispose();
         pipelineRenderer.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.getPipelinePropertyContainer().setValue("Camera", camera);
 
         shaderConfiguration = new SimpleShaderRendererConfiguration(configuration.getPipelinePropertyContainer());

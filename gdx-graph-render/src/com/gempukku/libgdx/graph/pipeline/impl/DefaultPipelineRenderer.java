@@ -4,12 +4,10 @@ import com.gempukku.libgdx.graph.pipeline.*;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.shader.context.OpenGLContext;
 import com.gempukku.libgdx.graph.pipeline.shader.context.StateOpenGLContext;
-import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 
 public class DefaultPipelineRenderer implements PipelineRenderer, PipelineRenderingContext {
     private final OpenGLContext renderContext = new StateOpenGLContext();
     private final PreparedRenderingPipeline preparedRenderingPipeline;
-    private final WhitePixel whitePixel;
     private final PipelineRendererConfiguration configuration;
 
     private RenderOutput renderOutput;
@@ -17,11 +15,12 @@ public class DefaultPipelineRenderer implements PipelineRenderer, PipelineRender
     public DefaultPipelineRenderer(
             PreparedRenderingPipeline preparedRenderingPipeline, PipelineRendererConfiguration configuration) {
         this.configuration = configuration;
-        whitePixel = new WhitePixel();
-
         this.preparedRenderingPipeline = preparedRenderingPipeline;
+    }
 
-        preparedRenderingPipeline.initialize(configuration);
+    @Override
+    public PipelineRendererConfiguration getConfiguration() {
+        return configuration;
     }
 
     @Override
@@ -66,7 +65,6 @@ public class DefaultPipelineRenderer implements PipelineRenderer, PipelineRender
 
     @Override
     public void dispose() {
-        whitePixel.dispose();
         preparedRenderingPipeline.dispose();
     }
 }

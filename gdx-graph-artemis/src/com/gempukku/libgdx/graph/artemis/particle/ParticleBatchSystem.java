@@ -35,7 +35,7 @@ public class ParticleBatchSystem extends BaseEntitySystem {
 
     private ComponentMapper<ParticleBatchComponent> particleBatchComponentMapper;
 
-    private final ObjectMap<String, ParticleModel> particleModelMap = new ObjectMap<>();
+    private final ObjectMap<String, PipelineParticleModel> particleModelMap = new ObjectMap<>();
 
     private Array<Entity> newParticleBatchEntities = new Array<>();
 
@@ -48,13 +48,15 @@ public class ParticleBatchSystem extends BaseEntitySystem {
         newParticleBatchEntities.add(world.getEntity(entityId));
     }
 
-    public ParticleModel getParticleModel(String particleBatchName) {
+    public PipelineParticleModel getParticleModel(String particleBatchName) {
         return particleModelMap.get(particleBatchName);
     }
 
-    private ParticleModel createParticleBatchModel(ParticleBatchComponent particleBatch, ShaderInformation shaderInformation, ModelContainer<RenderableModel> modelContainer, String tag) {
+    private PipelineParticleModel createParticleBatchModel(ParticleBatchComponent particleBatch, ShaderInformation shaderInformation, ModelContainer<RenderableModel> modelContainer, String tag) {
         SpriteModel particleSpriteModel = getSpriteModel(particleBatch);
-        ParticleModel particleModel = new ParticleModel(particleBatch.getSpritesPerPage(), particleSpriteModel, shaderInformation, modelContainer, tag);
+        PipelineParticleModel particleModel = new PipelineParticleModel(
+                particleBatch.getPipelineName(),
+                particleBatch.getSpritesPerPage(), particleSpriteModel, shaderInformation, modelContainer, tag);
         for (String particleBirthAttribute : particleBatch.getParticleBirthAttributes()) {
             particleModel.addParticleBirthProperty(particleBirthAttribute);
         }
@@ -87,7 +89,7 @@ public class ParticleBatchSystem extends BaseEntitySystem {
             ParticleBatchComponent particleBatch = particleBatchComponentMapper.get(newParticleBatchEntity);
 
             String tag = particleBatch.getRenderTag();
-            ParticleModel spriteModel = createParticleBatchModel(particleBatch, shaderInformation, modelContainer, tag);
+            PipelineParticleModel spriteModel = createParticleBatchModel(particleBatch, shaderInformation, modelContainer, tag);
 
             WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
             for (ObjectMap.Entry<String, Object> property : particleBatch.getProperties()) {
@@ -98,14 +100,16 @@ public class ParticleBatchSystem extends BaseEntitySystem {
         }
         newParticleBatchEntities.clear();
 
-        float currentTime = pipelineRendererSystem.getCurrentTime();
-        for (ParticleModel particleModel : particleModelMap.values()) {
+        for (PipelineParticleModel particleModel : particleModelMap.values()) {
+            float currentTime = pipelineRendererSystem.getPipelineTime(particleModel.getPipelineName());
             particleModel.update(currentTime);
         }
     }
 
     public void addParticleGenerator(String particleBatchName, ParticleGenerator particleGenerator) {
-        particleModelMap.get(particleBatchName).addGenerator(pipelineRendererSystem.getCurrentTime(), particleGenerator);
+        PipelineParticleModel pipelineParticleModel = particleModelMap.get(particleBatchName);
+        float pipelineTime = pipelineRendererSystem.getPipelineTime(pipelineParticleModel.getPipelineName());
+        pipelineParticleModel.addGenerator(pipelineTime, particleGenerator);
     }
 
     public void removeParticleGenerator(String particleBatchName, ParticleGenerator particleGenerator) {

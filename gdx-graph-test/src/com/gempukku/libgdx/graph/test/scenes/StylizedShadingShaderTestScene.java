@@ -85,7 +85,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
         spawnSystem.spawnEntities("entity/shading/shading-setup.entities");
 
         PipelineRendererSystem pipelineRenderSystem = world.getSystem(PipelineRendererSystem.class);
-        pipelineRenderSystem.setRenderingEnabled(false);
+        pipelineRenderSystem.setRenderingPipeline(null);
 
         world.process();
 
@@ -96,7 +96,7 @@ public class StylizedShadingShaderTestScene implements LibgdxGraphTestScene {
 
         createUI();
 
-        pipelineRenderSystem.setRenderingEnabled(true);
+        pipelineRenderSystem.setRenderingPipeline("");
     }
 
     private void setShadingTexture(PipelineRendererSystem pipelineRenderSystem, String texture) {

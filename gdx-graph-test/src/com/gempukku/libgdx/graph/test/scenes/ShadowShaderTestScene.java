@@ -23,8 +23,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
-import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
 import com.gempukku.libgdx.graph.render.ui.UIRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
@@ -47,7 +47,7 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
     private Stage stage;
     private Lighting3DEnvironment lights;
     private ModelInstance sphereInstance;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
     private SimpleShaderRendererConfiguration shaderConfiguration;
 
     @Override
@@ -170,6 +170,7 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
     @Override
     public void disposeScene() {
         pipelineRenderer.dispose();
+        configuration.dispose();
         for (Disposable disposable : disposables) {
             disposable.dispose();
         }
@@ -177,7 +178,7 @@ public class ShadowShaderTestScene implements LibgdxGraphTestScene {
     }
 
     private PipelineRenderer loadPipelineRenderer() {
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.getPipelinePropertyContainer().setValue("Camera", camera);
 
         SimpleUIRendererConfiguration uiConfiguration = new SimpleUIRendererConfiguration();

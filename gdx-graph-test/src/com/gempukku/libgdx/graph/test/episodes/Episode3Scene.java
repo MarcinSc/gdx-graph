@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gempukku.libgdx.graph.pipeline.*;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.time.TimeKeeper;
@@ -44,7 +45,7 @@ public class Episode3Scene implements LibgdxGraphTestScene {
     private Camera camera;
     private final TimeKeeper timeKeeper = new DefaultTimeKeeper();
     private ModelBatch modelBatch;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
 
     @Override
     public String getName() {
@@ -227,7 +228,7 @@ public class Episode3Scene implements LibgdxGraphTestScene {
             }
         });
 
-        configuration = new PipelineRendererConfiguration(timeKeeper);
+        configuration = new SimplePipelineRendererConfiguration(timeKeeper);
         configuration.setConfig(UIRendererConfiguration.class, uiConfiguration);
         configuration.setConfig(CallbackRendererConfiguration.class, callbackConfiguration);
 

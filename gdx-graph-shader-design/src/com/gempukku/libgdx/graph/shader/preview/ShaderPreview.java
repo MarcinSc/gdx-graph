@@ -12,8 +12,8 @@ import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.data.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.data.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.RendererConfiguration;
+import com.gempukku.libgdx.graph.pipeline.impl.SimplePipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderRenderingWidget;
@@ -34,7 +34,7 @@ public class ShaderPreview extends DisposableTable {
     private final GraphShaderRecipe shaderRecipe;
 
     private final GraphShaderRenderingWidget graphShaderRenderingWidget;
-    private PipelineRendererConfiguration configuration;
+    private SimplePipelineRendererConfiguration configuration;
 
     private GraphWithProperties graph;
 
@@ -175,7 +175,7 @@ public class ShaderPreview extends DisposableTable {
 
     private GraphShader createShader(final GraphWithProperties graph) {
         try {
-            configuration = new PipelineRendererConfiguration(timeKeeper, AssetResolver.instance, rootPropertyContainer, null);
+            configuration = new SimplePipelineRendererConfiguration(timeKeeper, AssetResolver.instance, rootPropertyContainer);
             for (ObjectMap.Entry<Class<? extends RendererConfiguration>, Producer<? extends RendererConfiguration>> configurationProducer : UIRenderPipelineConfiguration.getPreviewConfigurationBuilders()) {
                 Class<RendererConfiguration> configurationClass = (Class<RendererConfiguration>) configurationProducer.key;
                 RendererConfiguration rendererConfiguration = configurationProducer.value.create();

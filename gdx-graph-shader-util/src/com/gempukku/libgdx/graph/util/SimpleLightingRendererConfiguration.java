@@ -102,9 +102,11 @@ public class SimpleLightingRendererConfiguration implements LightingRendererConf
     public Array<Directional3DLight> getShadowDirectionalLights(String environmentId) {
         Lighting3DEnvironment environment = getEnvironment(environmentId);
         tmpDirectionalLightArray.clear();
-        for (Directional3DLight directionalLight : environment.getDirectionalLights()) {
-            if (directionalLight.isShadowsEnabled()) {
-                tmpDirectionalLightArray.add(directionalLight);
+        if (environment != null) {
+            for (Directional3DLight directionalLight : environment.getDirectionalLights()) {
+                if (directionalLight.isShadowsEnabled()) {
+                    tmpDirectionalLightArray.add(directionalLight);
+                }
             }
         }
         return tmpDirectionalLightArray;

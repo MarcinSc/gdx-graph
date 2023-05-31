@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.artemis.particle.property.EntityPositionProperty;
 import com.gempukku.libgdx.graph.artemis.particle.property.OwnEntityPositionProperty;
 import com.gempukku.libgdx.graph.artemis.renderer.PipelineRendererSystem;
-import com.gempukku.libgdx.graph.util.particles.ParticleModel;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultParticleGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.DefaultPropertyGenerator;
 import com.gempukku.libgdx.graph.util.particles.generator.PropertyGenerator;
@@ -135,7 +134,7 @@ public class ParticleEffectSystem extends BaseEntitySystem implements PropertyEv
         }
     }
 
-    private DefaultParticleGenerator addParticleEffect(ParticleModel particleBatchModel, Entity entity, ParticleEffect particleEffectDefinition) {
+    private DefaultParticleGenerator addParticleEffect(PipelineParticleModel particleBatchModel, Entity entity, ParticleEffect particleEffectDefinition) {
         FloatValue lifeLength = particleEffectDefinition.getVariableLifeLength();
         if (lifeLength == null)
             lifeLength = new StaticFloatValue(particleEffectDefinition.getLifeLength());
@@ -150,7 +149,7 @@ public class ParticleEffectSystem extends BaseEntitySystem implements PropertyEv
         for (ObjectMap.Entry<String, Object> property : particleEffectDefinition.getProperties()) {
             particleGenerator.setPropertyGenerator(property.key, evaluatePropertySystem.evaluateProperty(entity, property.value, PropertyGenerator.class));
         }
-        particleBatchModel.addGenerator(pipelineRendererSystem.getCurrentTime(), particleGenerator);
+        particleBatchModel.addGenerator(pipelineRendererSystem.getPipelineTime(particleBatchModel.getPipelineName()), particleGenerator);
         return particleGenerator;
     }
 
@@ -158,7 +157,7 @@ public class ParticleEffectSystem extends BaseEntitySystem implements PropertyEv
         Array<BatchNameWithParticleGenerator> effects = new Array<>();
         for (ParticleEffect particleEffectDefinition : effect.getParticleEffects()) {
             String batchName = particleEffectDefinition.getParticleBatchName();
-            ParticleModel particleBatchModel = particleBatchSystem.getParticleModel(batchName);
+            PipelineParticleModel particleBatchModel = particleBatchSystem.getParticleModel(batchName);
             DefaultParticleGenerator particleGenerator = addParticleEffect(particleBatchModel, effectEntity, particleEffectDefinition);
             effects.add(new BatchNameWithParticleGenerator(batchName, particleGenerator));
         }
