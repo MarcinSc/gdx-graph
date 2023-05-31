@@ -133,7 +133,7 @@ public class ParticlePreviewRenderableModel implements PreviewRenderableModel, D
                     spriteModel,
                     new SpriteSerializer(vertexAttributes, vertexPropertySources, spriteModel));
 
-            renderableModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, hierarchicalPropertyContainer, "");
+            renderableModel = new GdxMeshRenderableModel(false, spriteMesh, vertexAttributes, hierarchicalPropertyContainer, "Test");
 
             createParticleGenerator(currentTime);
         }

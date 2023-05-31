@@ -25,7 +25,6 @@ import com.gempukku.libgdx.graph.shader.boneanimation.BoneAnimationPluginRuntime
 import com.gempukku.libgdx.graph.shader.lighting3d.Lighting3DPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.shader.particles.ParticlesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.test.episodes.*;
-import com.gempukku.libgdx.graph.test.scenes.*;
 
 public class ReloadableGraphTestApplication extends ApplicationAdapter {
     private LibgdxGraphTestScene[] scenes;
@@ -71,7 +70,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new Episode15Scene(),
                 new Episode16Scene(),
                 new Episode17Scene(),
-                new Episode18Scene(),
+                new Episode18Scene()/*,
                 new Episode19Scene(),
                 new Episode20Scene(),
                 new Episode21Scene(),
@@ -84,7 +83,7 @@ public class ReloadableGraphTestApplication extends ApplicationAdapter {
                 new SDFTextShaderTestScene(),
                 new HierarchyAndTransformTestScene(),
                 new StylizedShadingShaderTestScene(),
-                new TopDownCameraTestScene()
+                new TopDownCameraTestScene()*/
         };
         loadedIndex = scenes.length - 1;
 

@@ -6,4 +6,7 @@ dependencies {
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
 
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-all:$mockitoVersion"
 }

@@ -4,6 +4,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.Function;
 
+/**
+ * Validates that input is of the same type, but always returns the specified field type.
+ */
 public class ValidateSameTypeOutputTypeFunction implements Function<ObjectMap<String, Array<String>>, String> {
     private final String fieldType;
     private final String[] inputs;
@@ -17,12 +20,17 @@ public class ValidateSameTypeOutputTypeFunction implements Function<ObjectMap<St
     public String evaluate(ObjectMap<String, Array<String>> map) {
         String resolvedType = null;
         for (String input : inputs) {
-            Array<String> type = map.get(input);
-            if (type == null || type.size == 0)
+            Array<String> types = map.get(input);
+            if (types == null || types.size == 0)
                 return null;
-            if (resolvedType != null && !resolvedType.equals(type.get(0)))
-                return null;
-            resolvedType = type.get(0);
+            for (String type : types) {
+                if (resolvedType != null) {
+                    if (!resolvedType.equals(type))
+                        return null;
+                } else {
+                    resolvedType = type;
+                }
+            }
         }
 
         return fieldType;

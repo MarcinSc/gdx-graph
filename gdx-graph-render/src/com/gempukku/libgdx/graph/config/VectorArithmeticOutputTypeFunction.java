@@ -4,36 +4,36 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.Function;
 
+/**
+ * User for operations that accepts multiple values for the same input, however the values all have to have the same
+ * type, or be of neutral type. Returns a non-neutral of those in the input (if found), or neutral if all inputs
+ * were of neutral type.
+ */
 public class VectorArithmeticOutputTypeFunction implements Function<ObjectMap<String, Array<String>>, String> {
-    private final String floatType;
-    private final String input1;
-    private final String input2;
+    private final String neutralType;
+    private final String[] inputs;
 
-    public VectorArithmeticOutputTypeFunction(String floatType, String input1, String input2) {
-        this.floatType = floatType;
-        this.input1 = input1;
-        this.input2 = input2;
+    public VectorArithmeticOutputTypeFunction(String neutralType, String... inputs) {
+        this.neutralType = neutralType;
+        this.inputs = inputs;
     }
 
     @Override
-    public String evaluate(ObjectMap<String, Array<String>> inputs) {
-        Array<String> inputA = inputs.get(input1);
-        Array<String> inputB = inputs.get(input2);
-        if (inputA.size < 1 || inputB.size < 1)
-            return null;
+    public String evaluate(ObjectMap<String, Array<String>> map) {
+        String resultType = neutralType;
+        for (String input : inputs) {
+            Array<String> types = map.get(input);
+            if (types.size == 0 || types.get(0) == null)
+                return null;
 
-        String a = inputA.get(0);
-        String b = inputB.get(0);
-        if (a == null || b == null)
-            return null;
+            for (String type : types) {
+                if (type == null || !type.equals(resultType) && (!resultType.equals(neutralType) && !type.equals(neutralType)))
+                    return null;
+                if (!type.equals(neutralType))
+                    resultType = type;
+            }
+        }
 
-        if (a.equals(floatType))
-            return b;
-        if (b.equals(floatType))
-            return a;
-        if (!a.equals(b))
-            return null;
-
-        return a;
+        return resultType;
     }
 }

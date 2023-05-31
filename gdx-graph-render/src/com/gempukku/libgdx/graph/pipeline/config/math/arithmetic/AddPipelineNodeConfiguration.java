@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline.config.math.arithmetic;
 
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
-import com.gempukku.libgdx.graph.config.MultiParamVectorArithmeticOutputTypeFunction;
+import com.gempukku.libgdx.graph.config.VectorArithmeticOutputTypeFunction;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeInputSide;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
 import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
@@ -17,7 +17,7 @@ public class AddPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
                         Color, Vector3, Vector2, Float));
         addNodeOutput(
                 new DefaultGraphNodeOutput("output", "Result",
-                        new MultiParamVectorArithmeticOutputTypeFunction(Float, "inputs"),
+                        new VectorArithmeticOutputTypeFunction(Float, "inputs"),
                         Float, Vector2, Vector3, Color));
     }
 }

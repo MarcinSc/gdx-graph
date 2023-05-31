@@ -108,10 +108,7 @@ public class GraphShaderRenderingWidget extends DisposableWidget {
             graphShader.begin(shaderContext, renderContext);
             for (Object model : shaderRendererConfiguration.getModels()) {
                 if (shaderRendererConfiguration.isRendered(model, graphShader, camera)) {
-                    shaderContext.setLocalPropertyContainer(shaderRendererConfiguration.getModelUniforms(model, graphShader));
-                    shaderContext.setModel(model);
                     graphShader.render(shaderRendererConfiguration, shaderContext, model);
-                    shaderContext.setModel(null);
                 }
             }
             graphShader.end();
