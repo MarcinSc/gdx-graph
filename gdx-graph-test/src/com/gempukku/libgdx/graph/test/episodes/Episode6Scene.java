@@ -25,7 +25,6 @@ import com.gempukku.libgdx.graph.shader.ModelContainer;
 import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
@@ -49,8 +48,6 @@ public class Episode6Scene implements LibgdxGraphTestScene {
 
     @Override
     public void initializeScene() {
-        WhitePixel.initialize();
-
         stage = createStage();
 
         camera = createCamera();
@@ -138,7 +135,6 @@ public class Episode6Scene implements LibgdxGraphTestScene {
         skin.dispose();
         pipelineRenderer.dispose();
         configuration.dispose();
-        WhitePixel.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {

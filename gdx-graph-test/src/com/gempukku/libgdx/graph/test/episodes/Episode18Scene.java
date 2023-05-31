@@ -31,7 +31,6 @@ import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.shader.lighting3d.Directional3DLight;
 import com.gempukku.libgdx.graph.shader.lighting3d.LightingRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.SimpleLightingRendererConfiguration;
 import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
@@ -67,8 +66,6 @@ public class Episode18Scene implements LibgdxGraphTestScene {
 
     @Override
     public void initializeScene() {
-        WhitePixel.initialize();
-
         lights = createLights();
         stage = createStage();
 
@@ -220,7 +217,6 @@ public class Episode18Scene implements LibgdxGraphTestScene {
         skin.dispose();
         pipelineRenderer.dispose();
         configuration.dispose();
-        WhitePixel.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {

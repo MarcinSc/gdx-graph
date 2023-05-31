@@ -30,7 +30,6 @@ import com.gempukku.libgdx.graph.shader.ModelContainer;
 import com.gempukku.libgdx.graph.shader.RenderableModel;
 import com.gempukku.libgdx.graph.shader.ShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.test.LibgdxGraphTestScene;
-import com.gempukku.libgdx.graph.test.WhitePixel;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.graph.util.SimpleShaderRendererConfiguration;
 import com.gempukku.libgdx.graph.util.SimpleUIRendererConfiguration;
@@ -55,8 +54,6 @@ public class Episode5Scene implements LibgdxGraphTestScene {
 
     @Override
     public void initializeScene() {
-        WhitePixel.initialize();
-
         rockTexture = new Texture(Gdx.files.classpath("image/seamless_rock_face_texture_by_hhh316.jpg"));
         ModelBuilder modelBuilder = new ModelBuilder();
         sphereModel = modelBuilder.createSphere(1, 1, 1, 20, 20,
@@ -172,7 +169,6 @@ public class Episode5Scene implements LibgdxGraphTestScene {
         pipelineRenderer.dispose();
         configuration.dispose();
         rockTexture.dispose();
-        WhitePixel.dispose();
     }
 
     private PipelineRenderer loadPipelineRenderer() {
