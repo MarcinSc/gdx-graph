@@ -21,6 +21,6 @@ public class ValueBooleanShaderNodeBuilder extends ConfigurationCommonShaderNode
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         boolean value = data.getBoolean("value");
 
-        return LibGDXCollections.singletonMap("value", new DefaultFieldOutput(ShaderFieldType.Boolean, String.valueOf(value)));
+        return LibGDXCollections.mapWithOne("value", new DefaultFieldOutput(ShaderFieldType.Boolean, String.valueOf(value)));
     }
 }

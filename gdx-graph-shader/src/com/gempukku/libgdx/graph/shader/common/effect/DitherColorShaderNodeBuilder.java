@@ -37,7 +37,7 @@ public class DitherColorShaderNodeBuilder extends ConfigurationCommonShaderNodeB
 
         commonShaderBuilder.addMainLine("vec4 " + name + " = " + getDitherColorFunctionName + "(" + positionValue.getRepresentation() + ", " + pixelSizeValue.getRepresentation() + ", " + colorValue.getRepresentation() + ");\n");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private String createGetDitherColorFunction(String functionName, int ditherSize) {

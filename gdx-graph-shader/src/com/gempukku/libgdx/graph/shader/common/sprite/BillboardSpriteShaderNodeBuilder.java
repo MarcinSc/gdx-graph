@@ -42,7 +42,7 @@ public class BillboardSpriteShaderNodeBuilder extends ConfigurationCommonShaderN
 
         commonShaderBuilder.addMainLine("vec3 " + name + " = billboardSprite(" + position + ", " + uv + ", " + size + ", " + anchor + ", " + rotation + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector3, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector3, name));
     }
 
     private String resolveSize(FieldOutput sizeField) {

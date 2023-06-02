@@ -56,7 +56,7 @@ public class AddShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
 
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = " + additionText + ";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private ShaderFieldType determineOutputType(Array<FieldOutput> inputs) {

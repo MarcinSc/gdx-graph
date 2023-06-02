@@ -47,7 +47,7 @@ public class VoronoiDistance3DShaderNodeBuilder extends ConfigurationCommonShade
             commonShaderBuilder.addMainLine("float " + name + " = " + output + ";");
         }
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     private static Vector2 voronoiDistanceRandom2(Vector2 p) {

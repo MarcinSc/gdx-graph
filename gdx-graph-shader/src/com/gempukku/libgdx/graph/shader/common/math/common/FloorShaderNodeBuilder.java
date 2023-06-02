@@ -26,6 +26,6 @@ public class FloorShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = floor(" + inputValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

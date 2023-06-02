@@ -24,7 +24,7 @@ public class ValueVector3ShaderNodeBuilder extends ConfigurationCommonShaderNode
         float v2 = data.getFloat("v2");
         float v3 = data.getFloat("v3");
 
-        return LibGDXCollections.singletonMap("value", new DefaultFieldOutput(ShaderFieldType.Vector3, "vec3(" + format(v1) + ", " + format(v2) + ", " + format(v3) + ")"));
+        return LibGDXCollections.mapWithOne("value", new DefaultFieldOutput(ShaderFieldType.Vector3, "vec3(" + format(v1) + ", " + format(v2) + ", " + format(v3) + ")"));
     }
 
     private String format(float component) {

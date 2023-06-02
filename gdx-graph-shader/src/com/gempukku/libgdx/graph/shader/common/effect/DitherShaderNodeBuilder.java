@@ -33,6 +33,6 @@ public class DitherShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilde
 
         commonShaderBuilder.addMainLine("float " + name + " = getDither" + ditherSize + "(" + positionValue.getRepresentation() + ", " + pixelSizeValue.getRepresentation() + ", " + inputValue.getRepresentation() + ");\n");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

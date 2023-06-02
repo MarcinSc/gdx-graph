@@ -37,6 +37,6 @@ public class UVFlipbookShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         String resultName = "result_" + nodeId;
         commonShaderBuilder.addMainLine("vec2 " + resultName + " = uvFlipbook(" + uvValue + ", int(" + tileCountValue + ".x), int(" + tileCountValue + ".y), int(" + indexValue + "), " + loopingValue + " == 1.0, bvec2(" + invertX + ", " + invertY + "));");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
     }
 }

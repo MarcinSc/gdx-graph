@@ -21,6 +21,6 @@ public class InstanceIdShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(
             boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
             CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
-        return LibGDXCollections.singletonMap("id", new DefaultFieldOutput(ShaderFieldType.Float, "float(gl_InstanceID)"));
+        return LibGDXCollections.mapWithOne("id", new DefaultFieldOutput(ShaderFieldType.Float, "float(gl_InstanceID)"));
     }
 }

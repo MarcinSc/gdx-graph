@@ -27,6 +27,6 @@ public class Arctan2ShaderNodeBuilder extends ConfigurationCommonShaderNodeBuild
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = atan(" + inputValue.getRepresentation() + ".y, " + inputValue.getRepresentation() + ".x);");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

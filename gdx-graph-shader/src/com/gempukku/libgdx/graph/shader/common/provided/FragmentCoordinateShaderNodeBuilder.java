@@ -26,6 +26,6 @@ public class FragmentCoordinateShaderNodeBuilder extends ConfigurationCommonShad
     @Override
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs,
                                                                        CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector4, "gl_FragCoord"));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector4, "gl_FragCoord"));
     }
 }

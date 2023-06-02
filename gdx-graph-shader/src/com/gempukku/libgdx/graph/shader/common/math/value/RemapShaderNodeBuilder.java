@@ -29,7 +29,7 @@ public class RemapShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = " + functionName + "(" + inputValue.getRepresentation() + ", " + fromValue.getRepresentation() + ", " + toValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     public static String appendRemapFunction(CommonShaderBuilder commonShaderBuilder, ShaderFieldType resultType) {

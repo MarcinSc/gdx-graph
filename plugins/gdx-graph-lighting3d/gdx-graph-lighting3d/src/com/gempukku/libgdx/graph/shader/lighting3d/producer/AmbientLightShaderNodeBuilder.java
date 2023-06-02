@@ -45,6 +45,6 @@ public class AmbientLightShaderNodeBuilder extends ConfigurationCommonShaderNode
                         }
                     }
                 }, "Ambient light");
-        return LibGDXCollections.singletonMap("ambient", new DefaultFieldOutput(ShaderFieldType.Vector4, "u_ambientLight_" + nodeId));
+        return LibGDXCollections.mapWithOne("ambient", new DefaultFieldOutput(ShaderFieldType.Vector4, "u_ambientLight_" + nodeId));
     }
 }

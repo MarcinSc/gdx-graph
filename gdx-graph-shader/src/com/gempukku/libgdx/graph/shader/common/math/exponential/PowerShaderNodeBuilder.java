@@ -27,6 +27,6 @@ public class PowerShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilder
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = pow(" + aValue.getRepresentation() + ", " + bValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 }

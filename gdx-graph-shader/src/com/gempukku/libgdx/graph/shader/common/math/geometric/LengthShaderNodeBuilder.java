@@ -26,6 +26,6 @@ public class LengthShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilde
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine("float " + name + " = length(" + inputValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

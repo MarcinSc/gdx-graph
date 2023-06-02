@@ -27,7 +27,7 @@ public class SubtractShaderNodeBuilder extends ConfigurationCommonShaderNodeBuil
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = " + aValue.getRepresentation() + " - " + bValue.getRepresentation() + ";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private ShaderFieldType determineOutputType(FieldOutput a, FieldOutput b) {

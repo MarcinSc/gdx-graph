@@ -31,7 +31,7 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
         vertexShaderBuilder.addMainLine("// Particle Lifetime Node");
         vertexShaderBuilder.addMainLine("float" + " " + name + " = u_time - " + birthOutput.getRepresentation() + ";");
 
-        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("time", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     @Override
@@ -47,6 +47,6 @@ public class ParticleLifetimeShaderNodeBuilder extends ConfigurationShaderNodeBu
         fragmentShaderBuilder.addVaryingVariable(varyingName, "float");
         vertexShaderBuilder.addMainLine(varyingName + " = u_time - " + birthOutput.getRepresentation() + ";");
 
-        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
+        return LibGDXCollections.mapWithOne("time", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
     }
 }

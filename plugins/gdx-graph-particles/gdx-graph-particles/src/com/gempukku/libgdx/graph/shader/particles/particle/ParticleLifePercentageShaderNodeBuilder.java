@@ -33,7 +33,7 @@ public class ParticleLifePercentageShaderNodeBuilder extends ConfigurationShader
         vertexShaderBuilder.addMainLine("// Particle Lifetime Percentage Node");
         vertexShaderBuilder.addMainLine("float" + " " + name + " = (u_time - " + birthOutput.getRepresentation() + ") / (" + deathOutput.getRepresentation() + " - " + birthOutput.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("percentage", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("percentage", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     @Override
@@ -54,6 +54,6 @@ public class ParticleLifePercentageShaderNodeBuilder extends ConfigurationShader
         fragmentShaderBuilder.addVaryingVariable(varyingName, "float");
         vertexShaderBuilder.addMainLine(varyingName + " = (u_time - " + birthOutput.getRepresentation() + ") / (" + deathOutput.getRepresentation() + " - " + birthOutput.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("percentage", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
+        return LibGDXCollections.mapWithOne("percentage", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
     }
 }

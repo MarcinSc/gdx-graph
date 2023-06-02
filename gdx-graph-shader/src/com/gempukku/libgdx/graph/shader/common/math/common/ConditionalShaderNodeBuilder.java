@@ -37,7 +37,7 @@ public class ConditionalShaderNodeBuilder extends ConfigurationCommonShaderNodeB
             commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = " + aggregate + "(" + function + "(" + a.getRepresentation() + ", " + b.getRepresentation() + ")) ? " + aTrue.getRepresentation() + " : " + aFalse.getRepresentation() + ";");
         }
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private String getFunction(String operation) {

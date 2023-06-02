@@ -27,6 +27,6 @@ public class ModuloShaderNodeBuilder extends ConfigurationCommonShaderNodeBuilde
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = mod(" + aValue.getRepresentation() + ", " + bValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

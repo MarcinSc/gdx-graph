@@ -80,11 +80,11 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         menuManager.addPopupMenu("Graph", null, "New");
         menuManager.setPopupMenuDisabled("Graph", null, "New", true);
 
-        menuManager.addPopupMenu("Graph", null, "Open");
-        menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
-
         menuManager.addPopupMenu("Graph", null, "Import");
         menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
+
+        menuManager.addPopupMenu("Graph", null, "Open");
+        menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
 
         menuManager.addPopupMenu("Graph", null, "Remove");
         menuManager.setPopupMenuDisabled("Graph", null, "Remove", true);

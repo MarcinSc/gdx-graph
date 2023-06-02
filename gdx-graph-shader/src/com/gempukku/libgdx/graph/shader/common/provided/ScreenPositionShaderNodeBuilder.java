@@ -31,6 +31,6 @@ public class ScreenPositionShaderNodeBuilder extends ConfigurationShaderNodeBuil
         String name = "result_" + nodeId;
         fragmentShaderBuilder.addMainLine("// Screen Position node");
         fragmentShaderBuilder.addMainLine("vec2 " + name + " = gl_FragCoord.xy * u_pixelSize;");
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector2, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector2, name));
     }
 }

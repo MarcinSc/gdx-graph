@@ -53,7 +53,7 @@ public class MaximumShaderNodeBuilder implements GraphShaderNodeBuilder {
 
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = "+ buildMaxString(values)+";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private static String buildMaxString(Array<FieldOutput> values) {

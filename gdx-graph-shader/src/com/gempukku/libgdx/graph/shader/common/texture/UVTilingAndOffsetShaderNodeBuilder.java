@@ -33,6 +33,6 @@ public class UVTilingAndOffsetShaderNodeBuilder extends ConfigurationCommonShade
         String resultName = "result_" + nodeId;
         commonShaderBuilder.addMainLine("vec2 " + resultName + " = " + uvValue + " * " + tilingValue + " + " + offsetValue + ";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
     }
 }

@@ -31,7 +31,7 @@ public class ParticleTimeToDeathShaderNodeBuilder extends ConfigurationShaderNod
         vertexShaderBuilder.addMainLine("// Particle Time To Death Node");
         vertexShaderBuilder.addMainLine("float" + " " + name + " = " + deathOutput.getRepresentation() + " - u_time;");
 
-        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("time", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     @Override
@@ -47,6 +47,6 @@ public class ParticleTimeToDeathShaderNodeBuilder extends ConfigurationShaderNod
         fragmentShaderBuilder.addVaryingVariable(varyingName, "float");
         vertexShaderBuilder.addMainLine(varyingName + " = " + deathOutput.getRepresentation() + " - u_time;");
 
-        return LibGDXCollections.singletonMap("time", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
+        return LibGDXCollections.mapWithOne("time", new DefaultFieldOutput(ShaderFieldType.Float, varyingName));
     }
 }

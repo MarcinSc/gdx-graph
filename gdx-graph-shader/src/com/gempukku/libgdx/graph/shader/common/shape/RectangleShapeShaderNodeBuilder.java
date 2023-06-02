@@ -37,6 +37,6 @@ public class RectangleShapeShaderNodeBuilder extends ConfigurationCommonShaderNo
         commonShaderBuilder.addMainLine("vec2 " + temp1 + " = abs(" + uv + " * 2.0 - 1.0);");
         commonShaderBuilder.addMainLine("float " + name + " = smoothstep(0.0, " + border + ", min(" + size + ".x - " + temp1 + ".x, " + size + ".y - " + temp1 + ".y));");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 }

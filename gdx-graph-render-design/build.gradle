@@ -1,7 +1,5 @@
 eclipse.project.name = "gdx-graph-render-design"
 
-sourceSets.main.resources.srcDirs = ["assets/"]
-
 sourceCompatibility = 1.8
 
 dependencies {

@@ -22,6 +22,6 @@ public class CameraViewportSizeShaderNodeBuilder extends ConfigurationCommonShad
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         commonShaderBuilder.addUniformVariable("u_cameraViewportSize", "vec2", true, UniformSetters.cameraViewportSize,
                 "Camera viewport size");
-        return LibGDXCollections.singletonMap("viewport", new DefaultFieldOutput(ShaderFieldType.Vector2, "u_cameraViewportSize"));
+        return LibGDXCollections.mapWithOne("viewport", new DefaultFieldOutput(ShaderFieldType.Vector2, "u_cameraViewportSize"));
     }
 }

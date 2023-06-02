@@ -23,7 +23,7 @@ public class ValueVector2ShaderNodeBuilder extends ConfigurationCommonShaderNode
         float v1 = data.getFloat("v1");
         float v2 = data.getFloat("v2");
 
-        return LibGDXCollections.singletonMap("value", new DefaultFieldOutput(ShaderFieldType.Vector2, "vec2(" + format(v1) + ", " + format(v2) + ")"));
+        return LibGDXCollections.mapWithOne("value", new DefaultFieldOutput(ShaderFieldType.Vector2, "vec2(" + format(v1) + ", " + format(v2) + ")"));
     }
 
     private String format(float component) {

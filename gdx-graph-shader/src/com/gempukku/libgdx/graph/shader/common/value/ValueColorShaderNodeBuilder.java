@@ -24,7 +24,7 @@ public class ValueColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         final Color color = Color.valueOf(data.getString("color"));
 
         String value = "vec4(" + format(color.r) + ", " + format(color.g) + ", " + format(color.b) + ", " + format(color.a) + ")";
-        return LibGDXCollections.singletonMap("value", new DefaultFieldOutput(ShaderFieldType.Vector4, value));
+        return LibGDXCollections.mapWithOne("value", new DefaultFieldOutput(ShaderFieldType.Vector4, value));
     }
 
     private String format(float component) {

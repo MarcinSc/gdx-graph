@@ -28,6 +28,6 @@ public class WorldPositionShaderNodeBuilder extends ConfigurationShaderNodeBuild
         if (!fragmentShaderBuilder.hasVaryingVariable("v_position_world"))
             fragmentShaderBuilder.addVaryingVariable("v_position_world", "vec3");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector3, "v_position_world"));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector3, "v_position_world"));
     }
 }

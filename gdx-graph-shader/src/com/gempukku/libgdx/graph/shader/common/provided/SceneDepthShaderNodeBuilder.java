@@ -29,7 +29,7 @@ public class SceneDepthShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                                                                        CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         graphShader.setUsingDepthTexture(true);
         if (designTime) {
-            return LibGDXCollections.singletonMap("depth", new DefaultFieldOutput(ShaderFieldType.Float, "0.0"));
+            return LibGDXCollections.mapWithOne("depth", new DefaultFieldOutput(ShaderFieldType.Float, "0.0"));
         } else {
             commonShaderBuilder.addUniformVariable("u_cameraClipping", "vec2", true, UniformSetters.cameraClipping,
                     "Near/far clipping");
@@ -44,7 +44,7 @@ public class SceneDepthShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
             String name = "depth_" + nodeId;
             commonShaderBuilder.addMainLine("// Scene depth node");
             commonShaderBuilder.addMainLine("float " + name + " = unpackVec3ToFloat(texture2D(u_sceneDepthTexture, " + screenPositionValue + ".xy).rgb, u_cameraClipping.x, u_cameraClipping.y);");
-            return LibGDXCollections.singletonMap("depth", new DefaultFieldOutput(ShaderFieldType.Float, name));
+            return LibGDXCollections.mapWithOne("depth", new DefaultFieldOutput(ShaderFieldType.Float, name));
         }
     }
 }

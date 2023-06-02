@@ -28,6 +28,6 @@ public class ObjectToWorldShaderNodeBuilder extends ConfigurationCommonShaderNod
         commonShaderBuilder.addMainLine("// Object to World Node");
         commonShaderBuilder.addMainLine("vec3 " + resultName + " = (u_worldTrans * vec4(" + input.getRepresentation() + ", 1.0)).xyz;");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector3, resultName));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector3, resultName));
     }
 }

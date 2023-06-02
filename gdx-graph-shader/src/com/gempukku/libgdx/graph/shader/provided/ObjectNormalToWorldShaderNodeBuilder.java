@@ -28,6 +28,6 @@ public class ObjectNormalToWorldShaderNodeBuilder extends ConfigurationCommonSha
         commonShaderBuilder.addMainLine("// Object Normal to World Node");
         commonShaderBuilder.addMainLine("vec3 " + resultName + " = normalize((u_normalWorldTrans * vec4(" + input.getRepresentation() + ", 0.0)).xyz);");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector3, resultName));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector3, resultName));
     }
 }

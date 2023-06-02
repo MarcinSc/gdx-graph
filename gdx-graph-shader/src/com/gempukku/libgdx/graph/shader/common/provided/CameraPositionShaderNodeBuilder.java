@@ -22,6 +22,6 @@ public class CameraPositionShaderNodeBuilder extends ConfigurationCommonShaderNo
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         commonShaderBuilder.addUniformVariable("u_cameraPosition", "vec3", true, UniformSetters.cameraPosition,
                 "Camera position");
-        return LibGDXCollections.singletonMap("position", new DefaultFieldOutput(ShaderFieldType.Vector3, "u_cameraPosition"));
+        return LibGDXCollections.mapWithOne("position", new DefaultFieldOutput(ShaderFieldType.Vector3, "u_cameraPosition"));
     }
 }

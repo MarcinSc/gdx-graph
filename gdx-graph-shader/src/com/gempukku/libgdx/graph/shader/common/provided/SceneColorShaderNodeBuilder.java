@@ -63,7 +63,7 @@ public class SceneColorShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
                     }
                 }, "Scene color texture UVs");
 
-        return LibGDXCollections.singletonMap("texture",
+        return LibGDXCollections.mapWithOne("texture",
                 new DefaultTextureFieldOutput(ShaderFieldType.TextureRegion, transformName, textureName, uWrap, vWrap));
     }
 }

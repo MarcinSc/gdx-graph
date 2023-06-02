@@ -57,7 +57,7 @@ public class MultiplyShaderNodeBuilder extends ConfigurationShaderNodeBuilder {
 
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = " + multiplyText + ";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private ShaderFieldType determineOutputType(Array<FieldOutput> inputs) {

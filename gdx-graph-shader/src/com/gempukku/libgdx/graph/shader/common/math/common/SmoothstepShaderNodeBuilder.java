@@ -28,6 +28,6 @@ public class SmoothstepShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = smoothstep(" + edge0Value.getRepresentation() + ", " + edge1Value.getRepresentation() + ", " + inputValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

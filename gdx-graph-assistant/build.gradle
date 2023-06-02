@@ -46,8 +46,10 @@ jar {
         }
     }
     // Package assets
-    from("../gdx-graph-design/assets")
-    from("../gdx-graph/resources")
+    from("../gdx-graph-render/resources")
+    from("../gdx-graph-render-design/resources")
+    from("../gdx-graph-shader-design/resources")
+    from("../plugins/gdx-graph-lighting3d/gdx-graph-lighting3d-design/resources")
 
     manifest {
         attributes(

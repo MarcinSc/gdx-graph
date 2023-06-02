@@ -99,15 +99,6 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             }
         }
 
-        menuManager.setPopupMenuDisabled("Graph", null, "Open", gdxGraphProjectData.getGraphs().isEmpty());
-        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
-            if (graphType instanceof UIGraphType) {
-                UIGraphType type = (UIGraphType) graphType;
-                menuManager.addPopupMenu("Graph", "Open", type.getPresentableName());
-                menuManager.setPopupMenuDisabled("Graph", "Open", type.getPresentableName(), true);
-            }
-        }
-
         menuManager.setPopupMenuDisabled("Graph", null, "Import", false);
         for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
             if (graphType instanceof UIGraphType) {
@@ -119,15 +110,6 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                                 importGraph(type);
                             }
                         });
-            }
-        }
-
-        menuManager.setPopupMenuDisabled("Graph", null, "Remove", gdxGraphProjectData.getGraphs().isEmpty());
-        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
-            if (graphType instanceof UIGraphType) {
-                UIGraphType type = (UIGraphType) graphType;
-                menuManager.addPopupMenu("Graph", "Remove", type.getPresentableName());
-                menuManager.setPopupMenuDisabled("Graph", "Remove", type.getPresentableName(), true);
             }
         }
 
@@ -189,6 +171,8 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         for (GdxGraphData graph : gdxGraphProjectData.getGraphs()) {
             loadGraphIntoProject(jsonReader, graph);
         }
+
+        rebuildGraphMenus();
     }
 
     private FileTypeFilter createGraphFileFilter(UIGraphType graphType, boolean otherExtensionsAllowed) {
@@ -237,8 +221,9 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                     public void finished(String input) {
                         String graphName = input.trim();
                         GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
-                        loadGraphIntoProject(filePath, graphName, graphType, graph);
                         gdxGraphProjectData.getGraphs().add(graphData);
+                        mainGraphs.put(graphData.getPath(), graph);
+                        rebuildGraphMenus();
                         dirty = true;
                         openGraphTab(filePath, graphName, graphType);
                     }
@@ -247,37 +232,16 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
     }
 
     private void loadGraphIntoProject(JsonReader jsonReader, GdxGraphData graph) {
-        UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getGraphType());
         String graphPath = graph.getPath();
         FileHandle graphFile = assistantProject.getAssetFolder().child(graphPath);
-        loadGraphIntoProject(jsonReader, graph.getName(), graphType, graphPath, graphFile);
+        try {
+            mainGraphs.put(graphPath, jsonReader.parse(graphFile));
+        } catch (RuntimeException exp) {
+            application.getStatusManager().addStatus("Unable to load graph: " + graph.getName());
+        }
     }
 
-    private void loadGraphIntoProject(JsonReader jsonReader, String graphName, UIGraphType graphType, String graphPath, FileHandle graphFile) {
-        loadGraphIntoProject(graphPath, graphName, graphType, jsonReader.parse(graphFile));
-    }
-
-    private void loadGraphIntoProject(String graphPath, String graphName, UIGraphType graphType, JsonValue graph) {
-        mainGraphs.put(graphPath, graph);
-        menuManager.addMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphName,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        openGraphTab(graphPath, graphName, graphType);
-                    }
-                });
-        menuManager.setPopupMenuDisabled("Graph", "Open", graphType.getPresentableName(), false);
-        menuManager.addMenuItem("Graph", "Remove/" + graphType.getPresentableName(), graphName,
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        removeGraph(graphPath, graphName, graphType);
-                    }
-                });
-        menuManager.setPopupMenuDisabled("Graph", "Remove", graphType.getPresentableName(), false);
-    }
-
-    private void removeGraph(String graphPath, String graphName, UIGraphType graphType) {
+    private void removeGraph(String graphPath) {
         Dialogs.OptionDialog optionDialog = new Dialogs.OptionDialog("Delete graph", "Would you like to also delete the file from disk?",
                 Dialogs.OptionDialogType.YES_NO,
                 new OptionDialogListener() {
@@ -301,23 +265,22 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
     private void doRemoveGraph(String graphPath, boolean deleteFile) {
         mainGraphs.remove(graphPath);
-        GraphTab tab = mainGraphTabs.remove(graphPath);
 
         GdxGraphData graphData = gdxGraphProjectData.findGraphByPath(graphPath);
         gdxGraphProjectData.getGraphs().removeValue(graphData, true);
 
-        UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graphData.getGraphType());
-
-        menuManager.removeMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphData.getName());
-        menuManager.removeMenuItem("Graph", "Remove/" + graphType.getPresentableName(), graphData.getName());
-
+        GraphTab tab = mainGraphTabs.remove(graphPath);
         if (tab != null) {
             tabManager.closeTab(tab);
         }
+
         if (deleteFile) {
             FileHandle graphFile = assistantProject.getAssetFolder().child(graphPath);
             graphFile.delete();
         }
+
+        rebuildGraphMenus();
+        dirty = true;
     }
 
     private String toProjectChildPath(FileHandle file) {
@@ -366,6 +329,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
                                     GdxGraphData graphData = new GdxGraphData(graphName, graphType.getType(), filePath);
                                     loadGraphIntoProject(new JsonReader(), graphData);
                                     gdxGraphProjectData.getGraphs().add(graphData);
+                                    rebuildGraphMenus();
                                     dirty = true;
                                     openGraphTab(filePath, graphName, graphType);
                                 }
@@ -492,12 +456,70 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
         mainGraphTabs.clear();
         menuManager.clearPopupMenuContents("Graph", null, "New");
         menuManager.setPopupMenuDisabled("Graph", null, "New", true);
-        menuManager.clearPopupMenuContents("Graph", null, "Open");
-        menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
         menuManager.clearPopupMenuContents("Graph", null, "Import");
         menuManager.setPopupMenuDisabled("Graph", null, "Import", true);
+        clearGraphMenus();
         menuManager.setMenuItemDisabled("Graph", null, "Create group", true);
         menuManager.setMenuItemDisabled("Graph", null, "View shader text", true);
         GraphResolverHolder.graphResolver = null;
+    }
+
+    private void rebuildGraphMenus() {
+        clearGraphMenus();
+        populateGraphMenus();
+    }
+
+    private void populateGraphMenus() {
+        menuManager.setPopupMenuDisabled("Graph", null, "Open", gdxGraphProjectData.getGraphs().isEmpty());
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                menuManager.addPopupMenu("Graph", "Open", type.getPresentableName());
+                menuManager.setPopupMenuDisabled("Graph", "Open", type.getPresentableName(), true);
+            }
+        }
+
+        menuManager.setPopupMenuDisabled("Graph", null, "Remove", gdxGraphProjectData.getGraphs().isEmpty());
+        for (GraphType graphType : GraphTypeRegistry.getAllGraphTypes()) {
+            if (graphType instanceof UIGraphType) {
+                UIGraphType type = (UIGraphType) graphType;
+                menuManager.addPopupMenu("Graph", "Remove", type.getPresentableName());
+                menuManager.setPopupMenuDisabled("Graph", "Remove", type.getPresentableName(), true);
+            }
+        }
+
+        for (GdxGraphData graph : gdxGraphProjectData.getGraphs()) {
+            UIGraphType graphType = (UIGraphType) GraphTypeRegistry.findGraphType(graph.getGraphType());
+            String graphName = graph.getName();
+            String graphPath = graph.getPath();
+
+            menuManager.addMenuItem("Graph", "Open/" + graphType.getPresentableName(), graphName,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            openGraphTab(graphPath, graphName, graphType);
+                        }
+                    });
+            if (!mainGraphs.containsKey(graphPath)) {
+                // The graph could not have been loaded
+                menuManager.setMenuItemDisabled("Graph", "Open/"+graphType.getPresentableName(), graphName, true);
+            }
+            menuManager.setPopupMenuDisabled("Graph", "Open", graphType.getPresentableName(), false);
+            menuManager.addMenuItem("Graph", "Remove/" + graphType.getPresentableName(), graphName,
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            removeGraph(graphPath);
+                        }
+                    });
+            menuManager.setPopupMenuDisabled("Graph", "Remove", graphType.getPresentableName(), false);
+        }
+    }
+
+    private void clearGraphMenus() {
+        menuManager.clearPopupMenuContents("Graph", null, "Open");
+        menuManager.setPopupMenuDisabled("Graph", null, "Open", true);
+        menuManager.clearPopupMenuContents("Graph", null, "Remove");
+        menuManager.setPopupMenuDisabled("Graph", null, "Remove", true);
     }
 }

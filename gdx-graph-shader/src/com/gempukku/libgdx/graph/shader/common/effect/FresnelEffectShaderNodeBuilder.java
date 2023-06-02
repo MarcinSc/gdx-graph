@@ -28,6 +28,6 @@ public class FresnelEffectShaderNodeBuilder extends ConfigurationCommonShaderNod
         String resultType = ShaderFieldType.Float;
         commonShaderBuilder.addMainLine("float " + name + " = pow((1.0 - clamp(dot(normalize(" + normalValue.getRepresentation() + "), normalize(" + viewDirValue.getRepresentation() + ")), 0.0, 1.0)), " + powerValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

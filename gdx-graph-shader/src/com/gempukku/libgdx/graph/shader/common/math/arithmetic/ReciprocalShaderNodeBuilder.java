@@ -27,6 +27,6 @@ public class ReciprocalShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = 1.0 / " + inputValue.getRepresentation() + ";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

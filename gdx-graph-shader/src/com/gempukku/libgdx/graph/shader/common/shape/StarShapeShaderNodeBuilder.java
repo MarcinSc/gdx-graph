@@ -37,6 +37,6 @@ public class StarShapeShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
 
         commonShaderBuilder.addMainLine("float " + name + " = 1.0 - step(getStarValue(" + uv + ", " + arms + ", " + minDepth + ", " + maxDepth + ", " + curve + "), distance(2.0 * " + uv + ", vec2(1.0)));");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 }

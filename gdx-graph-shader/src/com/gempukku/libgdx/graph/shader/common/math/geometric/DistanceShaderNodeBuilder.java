@@ -27,6 +27,6 @@ public class DistanceShaderNodeBuilder extends ConfigurationCommonShaderNodeBuil
         String name = "result_" + nodeId;
         commonShaderBuilder.addMainLine("float " + name + " = distance(" + p0Value.getRepresentation() + ", " + p1Value.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

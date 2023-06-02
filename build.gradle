@@ -21,7 +21,7 @@ allprojects {
     }
 
     ext.texturePacker = [
-            "$projectDir/atlas/gdx-graph-skin", "$projectDir/assets/skin/gdx-graph", "uiskin"
+            "$projectDir/atlas/gdx-graph-skin", "$projectDir/resources/skin/gdx-graph", "uiskin"
     ]
 
     repositories {

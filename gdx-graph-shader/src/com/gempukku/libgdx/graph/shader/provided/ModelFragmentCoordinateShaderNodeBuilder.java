@@ -34,6 +34,6 @@ public class ModelFragmentCoordinateShaderNodeBuilder extends ConfigurationCommo
         commonShaderBuilder.addMainLine("vec4 " + tmpName + " = u_projViewTrans * u_worldTrans * vec4(0.0, 0.0, 0.0, 1.0);");
         commonShaderBuilder.addMainLine("vec2 " + resultName + " = u_viewportSize * (" + tmpName + ".xy / " + tmpName + ".w + 1.0) / 2.0;");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector2, resultName));
     }
 }

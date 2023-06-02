@@ -42,7 +42,7 @@ public class RemapValueShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
         commonShaderBuilder.addMainLine("// Remap Value node");
         commonShaderBuilder.addMainLine("float " + name + " = " + remapValueFunctionName + "(" + inputValue + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 
     private String createRemapValueFunction(String remapValueFunctionName, Array<Vector2> pointArray, ClampMethod clampMethod) {

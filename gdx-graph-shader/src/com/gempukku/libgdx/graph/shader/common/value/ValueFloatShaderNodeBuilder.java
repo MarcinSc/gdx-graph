@@ -22,7 +22,7 @@ public class ValueFloatShaderNodeBuilder extends ConfigurationCommonShaderNodeBu
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         float value = data.getFloat("v1");
 
-        return LibGDXCollections.singletonMap("value", new DefaultFieldOutput(ShaderFieldType.Float, format(value)));
+        return LibGDXCollections.mapWithOne("value", new DefaultFieldOutput(ShaderFieldType.Float, format(value)));
     }
 
     private String format(float component) {

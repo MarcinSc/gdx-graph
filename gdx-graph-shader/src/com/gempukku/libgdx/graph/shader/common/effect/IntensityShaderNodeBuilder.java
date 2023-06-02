@@ -26,6 +26,6 @@ public class IntensityShaderNodeBuilder extends ConfigurationCommonShaderNodeBui
         String resultType = ShaderFieldType.Float;
         commonShaderBuilder.addMainLine("float " + name + " = dot(" + aValue.getRepresentation() + ".rgb, vec3(0.2126729, 0.7151522, 0.0721750));");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 }

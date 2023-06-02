@@ -28,6 +28,6 @@ public class DistanceFromPlaneShaderNodeBuilder extends ConfigurationCommonShade
 
         commonShaderBuilder.addMainLine("float " + name + " = dot(normalize(" + planeNormalValue.getRepresentation() + "), " + pointValue.getRepresentation() + " - " + planePointValue.getRepresentation() + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 }

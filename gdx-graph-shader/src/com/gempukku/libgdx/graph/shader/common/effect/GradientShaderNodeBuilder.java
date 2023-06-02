@@ -42,7 +42,7 @@ public class GradientShaderNodeBuilder extends ConfigurationCommonShaderNodeBuil
         commonShaderBuilder.addMainLine("// Gradient node");
         commonShaderBuilder.addMainLine("vec4 " + name + " = " + remapValueFunctionName + "(" + inputValue + ");");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Vector4, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Vector4, name));
     }
 
     private String createGradientFunction(String remapValueFunctionName, Array<ColorPoint> pointArray, ClampMethod clampMethod) {

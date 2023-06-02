@@ -30,6 +30,6 @@ public class CheckerboardShapeShaderNodeBuilder extends ConfigurationCommonShade
 
         commonShaderBuilder.addMainLine("float " + name + " = mod(dot(vec2(1.0), step(vec2(0.5), fract(" + uv + " * " + repeat + "))), 2.0);");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(ShaderFieldType.Float, name));
     }
 }

@@ -53,7 +53,7 @@ public class MinimumShaderNodeBuilder implements GraphShaderNodeBuilder {
 
         commonShaderBuilder.addMainLine(resultType.getShaderType() + " " + name + " = "+buildMinString(values)+";");
 
-        return LibGDXCollections.singletonMap("output", new DefaultFieldOutput(resultType, name));
+        return LibGDXCollections.mapWithOne("output", new DefaultFieldOutput(resultType, name));
     }
 
     private static String buildMinString(Array<FieldOutput> values) {

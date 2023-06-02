@@ -22,6 +22,6 @@ public class CameraDirectionShaderNodeBuilder extends ConfigurationCommonShaderN
     protected ObjectMap<String, ? extends FieldOutput> buildCommonNode(boolean designTime, String nodeId, JsonValue data, ObjectMap<String, FieldOutput> inputs, ObjectSet<String> producedOutputs, CommonShaderBuilder commonShaderBuilder, GraphShader graphShader, PipelineRendererConfiguration configuration) {
         commonShaderBuilder.addUniformVariable("u_cameraDirection", "vec3", true, UniformSetters.cameraDirection,
                 "Camera direction");
-        return LibGDXCollections.singletonMap("direction", new DefaultFieldOutput(ShaderFieldType.Vector3, "u_cameraDirection"));
+        return LibGDXCollections.mapWithOne("direction", new DefaultFieldOutput(ShaderFieldType.Vector3, "u_cameraDirection"));
     }
 }
