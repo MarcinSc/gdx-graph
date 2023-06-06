@@ -3,16 +3,11 @@ package com.gempukku.libgdx.graph.shader.lighting3d;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
 import com.gempukku.libgdx.graph.pipeline.RendererPipelineConfiguration;
 import com.gempukku.libgdx.graph.plugin.PluginRuntimeInitializer;
-import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.ModelShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.depth.DepthShaderGraphType;
 import com.gempukku.libgdx.graph.shader.lighting3d.producer.*;
 
 public class Lighting3DPluginRuntimeInitializer implements PluginRuntimeInitializer {
-    public static void register() {
-        RuntimePluginRegistry.register(Lighting3DPluginRuntimeInitializer.class);
-    }
-
     @Override
     public void initialize() {
         GraphTypeRegistry.registerType(new DepthShaderGraphType());
