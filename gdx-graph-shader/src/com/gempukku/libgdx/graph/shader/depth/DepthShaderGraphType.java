@@ -37,7 +37,7 @@ public class DepthShaderGraphType implements ShaderGraphType {
 
         DAGValidatorWithEndNode dagValidator = new DAGValidatorWithEndNode();
         SumGraphValidator sumValidator = new SumGraphValidator(
-                new RequiredInputsValidator(nodeConfigurationResolver),
+                new RequiredValidator(nodeConfigurationResolver),
                 new MultipleConnectionsValidator(nodeConfigurationResolver),
                 new FieldTypeValidator(nodeConfigurationResolver));
         SerialGraphValidator validator = new SerialGraphValidator(dagValidator, sumValidator);

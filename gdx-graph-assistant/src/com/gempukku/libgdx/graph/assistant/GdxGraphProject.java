@@ -4,7 +4,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.*;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.gempukku.gdx.assistant.plugin.*;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.GraphTypeRegistry;
@@ -12,7 +11,6 @@ import com.gempukku.libgdx.graph.assistant.data.GdxGraphData;
 import com.gempukku.libgdx.graph.assistant.data.GdxGraphProjectData;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.graph.loader.GraphLoader;
-import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.shader.GraphShader;
 import com.gempukku.libgdx.graph.shader.GraphShaderBuilder;
 import com.gempukku.libgdx.graph.shader.ShaderGraphType;
@@ -63,12 +61,6 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
             gdxGraphProjectData = new Json().readValue(GdxGraphProjectData.class, data);
         }
         GraphResolverHolder.graphResolver = gdxGraphProjectData;
-
-        try {
-            RuntimePluginRegistry.initializePlugins();
-        } catch (ReflectionException exp) {
-            throw new GdxRuntimeException(exp);
-        }
 
         graphNameValidator = new InputValidator() {
             @Override

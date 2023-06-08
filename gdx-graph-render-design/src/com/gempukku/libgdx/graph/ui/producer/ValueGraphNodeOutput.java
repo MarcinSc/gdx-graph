@@ -6,8 +6,8 @@ import com.gempukku.libgdx.ui.graph.data.GraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.data.GraphNodeOutputSide;
 
 public class ValueGraphNodeOutput implements GraphNodeOutput {
-    private String fieldName;
-    private String fieldType;
+    private final String fieldName;
+    private final String fieldType;
 
     public ValueGraphNodeOutput(String fieldName, String fieldType) {
         this.fieldName = fieldName;
@@ -44,5 +44,10 @@ public class ValueGraphNodeOutput implements GraphNodeOutput {
     @Override
     public String determineFieldType(ObjectMap<String, Array<String>> inputs) {
         return fieldType;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return false;
     }
 }

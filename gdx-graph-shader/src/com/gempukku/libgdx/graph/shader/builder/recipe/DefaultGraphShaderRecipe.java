@@ -116,15 +116,15 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
         @Override
         public GraphShaderNodeBuilder.FieldOutput getSingleOutput(String nodeId, String property) {
             ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> nodeOutputs = buildNode(designTime, fragmentShader, graph, graphShader, configuration,
-                    nodeId, this.nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
+                    nodeId, property, this.nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
             return nodeOutputs.get(property);
         }
 
         @Override
         public GraphShaderNodeBuilder.FieldOutput getSingleOutputForInput(String inputNodeId, String inputProperty) {
             Array<GraphConnection> inputConnections = findInputConnectionsTo(graph, inputNodeId, inputProperty);
-            if (inputConnections.size>1)
-                throw new IllegalArgumentException("More than one inputs found: "+inputConnections.size);
+            if (inputConnections.size > 1)
+                throw new IllegalArgumentException("More than one inputs found: " + inputConnections.size);
             if (inputConnections.size == 0)
                 return null;
             GraphConnection inputConnection = inputConnections.get(0);
@@ -136,7 +136,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
             boolean designTime, boolean fragmentShader,
             GraphWithProperties graph,
             GraphShader graphShader, PipelineRendererConfiguration configuration,
-            String nodeId, ObjectMap<String, ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>> nodeOutputs,
+            String nodeId, String outputProperty, ObjectMap<String, ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>> nodeOutputs,
             VertexShaderBuilder vertexShaderBuilder, FragmentShaderBuilder fragmentShaderBuilder,
             GraphConfiguration... graphConfigurations) {
         ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> nodeOutput = nodeOutputs.get(nodeId);
@@ -155,7 +155,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
                 Array<String> fieldTypes = new Array<>();
                 Array<GraphShaderNodeBuilder.FieldOutput> fieldOutputs = new Array<>();
                 for (GraphConnection vertexInfo : vertexInfos) {
-                    ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> output = buildNode(designTime, fragmentShader, graph, graphShader, configuration,vertexInfo.getNodeFrom(), nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
+                    ObjectMap<String, GraphShaderNodeBuilder.FieldOutput> output = buildNode(designTime, fragmentShader, graph, graphShader, configuration, vertexInfo.getNodeFrom(), vertexInfo.getFieldFrom(), nodeOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphConfigurations);
                     GraphShaderNodeBuilder.FieldOutput fieldOutput = output.get(vertexInfo.getFieldFrom());
                     ShaderFieldType fieldType = fieldOutput.getFieldType();
                     fieldTypes.add(fieldType.getName());
@@ -164,6 +164,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
                 inputFields.put(fieldId, fieldOutputs);
             }
             ObjectSet<String> requiredOutputs = findRequiredOutputs(graph, nodeId);
+            requiredOutputs.add(outputProperty);
             if (fragmentShader) {
                 nodeOutput = (ObjectMap<String, GraphShaderNodeBuilder.FieldOutput>) nodeBuilder.buildFragmentNode(designTime, nodeId, nodeInfo.getData(), inputFields, requiredOutputs, vertexShaderBuilder, fragmentShaderBuilder, graphShader, configuration);
             } else {
@@ -196,7 +197,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     }
 
     private static Array<GraphConnection> findInputConnectionsTo(GraphWithProperties graph,
-                                                            String nodeId, String nodeField) {
+                                                                 String nodeId, String nodeField) {
         Array<GraphConnection> result = new Array<>();
         for (GraphConnection vertex : graph.getConnections()) {
             if (vertex.getNodeTo().equals(nodeId) && vertex.getFieldTo().equals(nodeField))

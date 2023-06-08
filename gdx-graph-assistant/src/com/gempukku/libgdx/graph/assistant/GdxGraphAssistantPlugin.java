@@ -11,6 +11,7 @@ import com.gempukku.gdx.assistant.plugin.*;
 import com.gempukku.gdx.plugins.PluginEnvironment;
 import com.gempukku.gdx.plugins.PluginVersion;
 import com.gempukku.libgdx.graph.pipeline.util.WhitePixel;
+import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
 import com.gempukku.libgdx.graph.plugin.boneanimation.design.UIBoneAnimationPlugin;
 import com.gempukku.libgdx.graph.plugin.callback.design.UIRenderCallbackPlugin;
 import com.gempukku.libgdx.graph.plugin.callback.design.UIScreenshotPlugin;
@@ -39,7 +40,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
 
     @Override
     public PluginVersion getVersion() {
-        return new PluginVersion(0, 0, 1);
+        return new PluginVersion(1, 2, 0);
     }
 
     @Override
@@ -67,6 +68,7 @@ public class GdxGraphAssistantPlugin implements AssistantPlugin {
         PatternTextures.initializeShared(assistantApplication.getAssetResolver());
         try {
             UIGdxGraphPluginRegistry.initializePlugins(assistantApplication.getAssetResolver());
+            RuntimePluginRegistry.initializePlugins();
         } catch (ReflectionException exp) {
             throw new GdxRuntimeException("Unable to initialize plugins", exp);
         }
