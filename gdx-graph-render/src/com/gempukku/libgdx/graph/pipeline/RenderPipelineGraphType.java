@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
+import com.gempukku.libgdx.ui.graph.data.Graph;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
@@ -40,12 +41,7 @@ public class RenderPipelineGraphType implements GraphType {
     }
 
     @Override
-    public String getStartNodeIdForValidation() {
-        return "end";
-    }
-
-    @Override
-    public GraphValidator getGraphValidator() {
-        return graphValidator;
+    public GraphValidationResult validateGraph(Graph graph) {
+        return graphValidator.validateGraph(graph, "end");
     }
 }

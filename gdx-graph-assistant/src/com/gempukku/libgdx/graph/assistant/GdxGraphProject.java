@@ -21,7 +21,6 @@ import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
-import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
@@ -144,8 +143,7 @@ public class GdxGraphProject implements AssistantPluginProject, TabControl {
 
                         String type = graph.getType();
                         GraphType graphType = GraphTypeRegistry.findGraphType(type);
-                        GraphValidator graphValidator = graphType.getGraphValidator();
-                        GraphValidationResult graphValidationResult = graphValidator.validateGraph(graph, graphType.getStartNodeIdForValidation());
+                        GraphValidationResult graphValidationResult = graphType.validateGraph(graph);
                         if (graphValidationResult.hasErrors()) {
                             Dialogs.DetailsDialog errorDialog = new Dialogs.DetailsDialog("Graph has errors, can't generate source code", "Error", null);
                             errorDialog.setModal(true);

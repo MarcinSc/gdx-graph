@@ -14,7 +14,7 @@ public class ModelShaderLoader {
 
         GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), new JsonReader().parse(fileHandle));
 
-        if (graphType.getGraphValidator().validateGraph(graph, graphType.getStartNodeIdForValidation()).hasErrors())
+        if (graphType.validateGraph(graph).hasErrors())
             throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
         return graphType.buildGraphShader(tag, configuration, graph, false);

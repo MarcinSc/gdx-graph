@@ -8,6 +8,7 @@ import com.gempukku.libgdx.graph.shader.builder.ModelGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
+import com.gempukku.libgdx.ui.graph.data.Graph;
 import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.validator.*;
 
@@ -48,13 +49,13 @@ public class ModelShaderGraphType implements ShaderGraphType {
     }
 
     @Override
-    public String getStartNodeIdForValidation() {
-        return "end";
+    public GraphValidationResult validateGraph(Graph graph) {
+        return validateGraph(graph, "end");
     }
 
     @Override
-    public GraphValidator getGraphValidator() {
-        return graphValidator;
+    public GraphValidationResult validateGraph(Graph graph, String startingNode) {
+        return graphValidator.validateGraph(graph, startingNode);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package com.gempukku.libgdx.graph;
 
-import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
+import com.gempukku.libgdx.ui.graph.data.Graph;
+import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
 
 public interface GraphType {
     String getType();
 
-    String getStartNodeIdForValidation();
-
-    GraphValidator getGraphValidator();
+    GraphValidationResult validateGraph(Graph graph);
 }

@@ -27,7 +27,6 @@ import com.gempukku.libgdx.ui.graph.data.NodeGroup;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditorProducer;
 import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
-import com.gempukku.libgdx.ui.graph.validator.GraphValidator;
 import com.gempukku.libgdx.ui.preview.PreviewWidget;
 import com.gempukku.libgdx.undo.DefaultUndoableAction;
 import com.gempukku.libgdx.undo.UndoableAction;
@@ -340,8 +339,7 @@ public class GraphWithPropertiesEditor extends VisTable {
     private void processGraphChanged(GraphChangedEvent event) {
         GraphWithProperties graph = getGraph();
 
-        GraphValidator graphValidator = type.getGraphValidator();
-        GraphValidationResult validationResult = graphValidator.validateGraph(graph, type.getStartNodeIdForValidation());
+        GraphValidationResult validationResult = type.validateGraph(graph);
         graphEditor.setValidationResult(validationResult);
         if (validationResult.hasErrors()) {
             validationLabel.setColor(Color.RED);

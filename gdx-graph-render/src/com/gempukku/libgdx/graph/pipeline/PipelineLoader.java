@@ -32,7 +32,7 @@ public class PipelineLoader {
 
             GraphWithProperties graph = GraphLoader.loadGraph(graphType.getType(), pipelineInputStream);
 
-            GraphValidationResult validationResult = graphType.getGraphValidator().validateGraph(graph, graphType.getStartNodeIdForValidation());
+            GraphValidationResult validationResult = graphType.validateGraph(graph);
             if (validationResult.hasErrors())
                 throw new GdxRuntimeException("Unable to load graph - not valid, open it in graph designer and fix it");
 
