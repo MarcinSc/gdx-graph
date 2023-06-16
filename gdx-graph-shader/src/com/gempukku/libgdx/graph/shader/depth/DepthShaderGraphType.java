@@ -36,7 +36,7 @@ public class DepthShaderGraphType implements ShaderGraphType {
                     }
                 };
 
-        DAGValidatorWithEndNode dagValidator = new DAGValidatorWithEndNode();
+        DAGValidator dagValidator = new DAGValidator();
         SumGraphValidator sumValidator = new SumGraphValidator(
                 new RequiredValidator(nodeConfigurationResolver),
                 new MultipleConnectionsValidator(nodeConfigurationResolver),
@@ -52,12 +52,12 @@ public class DepthShaderGraphType implements ShaderGraphType {
 
     @Override
     public GraphValidationResult validateGraph(Graph graph) {
-        return validateGraph(graph, "end");
+        return validateSubGraph(graph, "end");
     }
 
     @Override
-    public GraphValidationResult validateGraph(Graph graph, String startingNode) {
-        return graphValidator.validateGraph(graph, startingNode);
+    public GraphValidationResult validateSubGraph(Graph graph, String startingNode) {
+        return graphValidator.validateSubGraph(graph, startingNode);
     }
 
     @Override

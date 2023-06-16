@@ -34,7 +34,7 @@ public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     public boolean isValid(GraphWithProperties graphWithProperties) {
         if (nodeStartForValidity != null) {
             ShaderGraphType shaderGraphType = GraphTypeRegistry.findGraphType(graphWithProperties.getType(), ShaderGraphType.class);
-            GraphValidationResult validationResult = shaderGraphType.validateGraph(graphWithProperties, nodeStartForValidity);
+            GraphValidationResult validationResult = shaderGraphType.validateSubGraph(graphWithProperties, nodeStartForValidity);
             return !validationResult.hasErrors();
         }
         return true;

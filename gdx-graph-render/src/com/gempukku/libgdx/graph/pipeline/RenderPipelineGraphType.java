@@ -26,7 +26,7 @@ public class RenderPipelineGraphType implements GraphType {
                     }
                 };
 
-        DAGValidatorWithEndNode dagValidator = new DAGValidatorWithEndNode();
+        DAGValidator dagValidator = new DAGValidator();
         SumGraphValidator sumValidator = new SumGraphValidator(
                 new RequiredValidator(nodeConfigurationResolver),
                 new MultipleConnectionsValidator(nodeConfigurationResolver),
@@ -42,6 +42,6 @@ public class RenderPipelineGraphType implements GraphType {
 
     @Override
     public GraphValidationResult validateGraph(Graph graph) {
-        return graphValidator.validateGraph(graph, "end");
+        return graphValidator.validateSubGraph(graph, "end");
     }
 }

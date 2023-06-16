@@ -12,5 +12,5 @@ public interface ShaderGraphType extends GraphType {
 
     GraphConfiguration[] getConfigurations();
 
-    GraphValidationResult validateGraph(Graph graph, String startingNode);
+    GraphValidationResult validateSubGraph(Graph graph, String startingNode);
 }
