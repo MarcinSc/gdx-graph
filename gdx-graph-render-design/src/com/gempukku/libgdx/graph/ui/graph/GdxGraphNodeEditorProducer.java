@@ -3,6 +3,9 @@ package com.gempukku.libgdx.graph.ui.graph;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.ui.graph.data.*;
+import com.gempukku.libgdx.ui.graph.data.impl.NamedGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.NamedGraphNodeOutput;
+import com.gempukku.libgdx.ui.graph.data.impl.NamedNodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 
 import java.util.Iterator;
@@ -88,25 +91,28 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer {
     }
 
     private void addLeftAndRightConnectors(GdxGraphNodeEditor nodeEditor) {
-        Iterator<GraphNodeInput> inputIterator = configuration.getNodeInputs().values().iterator();
-        Iterator<GraphNodeOutput> outputIterator = configuration.getNodeOutputs().values().iterator();
-        while (inputIterator.hasNext() || outputIterator.hasNext()) {
-            GraphNodeInput input = getNextLeftInput(inputIterator);
-            GraphNodeOutput output = getNextRightOutput(outputIterator);
+        if (configuration instanceof NamedNodeConfiguration) {
+            NamedNodeConfiguration namedNodeConfiguration = (NamedNodeConfiguration) configuration;
+            Iterator<? extends NamedGraphNodeInput> inputIterator = namedNodeConfiguration.getNodeInputs().values().iterator();
+            Iterator<? extends NamedGraphNodeOutput> outputIterator = namedNodeConfiguration.getNodeOutputs().values().iterator();
+            while (inputIterator.hasNext() || outputIterator.hasNext()) {
+                NamedGraphNodeInput input = getNextLeftInput(inputIterator);
+                NamedGraphNodeOutput output = getNextRightOutput(outputIterator);
 
-            if (input != null && output != null) {
-                nodeEditor.addTwoSideGraphPart(input, output);
-            } else if (input != null) {
-                nodeEditor.addInputGraphPart(input);
-            } else if (output != null) {
-                nodeEditor.addOutputGraphPart(output);
+                if (input != null && output != null) {
+                    nodeEditor.addTwoSideGraphPart(input, output);
+                } else if (input != null) {
+                    nodeEditor.addInputGraphPart(input);
+                } else if (output != null) {
+                    nodeEditor.addOutputGraphPart(output);
+                }
             }
         }
     }
 
-    private GraphNodeInput getNextLeftInput(Iterator<GraphNodeInput> inputIterator) {
+    private NamedGraphNodeInput getNextLeftInput(Iterator<? extends NamedGraphNodeInput> inputIterator) {
         while (inputIterator.hasNext()) {
-            GraphNodeInput input = inputIterator.next();
+            NamedGraphNodeInput input = inputIterator.next();
             if (input.getSide() == GraphNodeInputSide.Left && !skipFieldId(input.getFieldId())) {
                 return input;
             }
@@ -114,9 +120,9 @@ public class GdxGraphNodeEditorProducer implements MenuGraphNodeEditorProducer {
         return null;
     }
 
-    private GraphNodeOutput getNextRightOutput(Iterator<GraphNodeOutput> outputIterator) {
+    private NamedGraphNodeOutput getNextRightOutput(Iterator<? extends NamedGraphNodeOutput> outputIterator) {
         while (outputIterator.hasNext()) {
-            GraphNodeOutput output = outputIterator.next();
+            NamedGraphNodeOutput output = outputIterator.next();
             if (output.getSide() == GraphNodeOutputSide.Right && !skipFieldId(output.getFieldId())) {
                 return output;
             }

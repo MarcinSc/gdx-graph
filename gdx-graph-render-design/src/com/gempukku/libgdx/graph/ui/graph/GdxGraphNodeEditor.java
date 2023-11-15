@@ -8,6 +8,8 @@ import com.gempukku.libgdx.common.Supplier;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
 import com.gempukku.libgdx.ui.graph.GraphChangedEvent;
 import com.gempukku.libgdx.ui.graph.data.*;
+import com.gempukku.libgdx.ui.graph.data.impl.NamedGraphNodeInput;
+import com.gempukku.libgdx.ui.graph.data.impl.NamedGraphNodeOutput;
 import com.gempukku.libgdx.ui.graph.editor.*;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
@@ -78,8 +80,8 @@ public class GdxGraphNodeEditor extends VisTable implements GraphNodeEditor, Gra
                 }, graphNodeOutput.getFieldId(), getOutputDrawable(graphNodeOutput, true), getOutputDrawable(graphNodeOutput, false)));
     }
 
-    public void addTwoSideGraphPart(GraphNodeInput graphNodeInput,
-                                    GraphNodeOutput graphNodeOutput) {
+    public void addTwoSideGraphPart(NamedGraphNodeInput graphNodeInput,
+                                    NamedGraphNodeOutput graphNodeOutput) {
         VisTable table = new VisTable();
         table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow();
         VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName(), ioLabelStyle);
@@ -93,7 +95,7 @@ public class GdxGraphNodeEditor extends VisTable implements GraphNodeEditor, Gra
         addGraphEditorPart(graphEditorPart);
     }
 
-    public void addInputGraphPart(GraphNodeInput graphNodeInput) {
+    public void addInputGraphPart(NamedGraphNodeInput graphNodeInput) {
         VisTable table = new VisTable();
         table.add(new VisLabel(graphNodeInput.getFieldName(), ioLabelStyle)).grow().row();
 
@@ -102,8 +104,7 @@ public class GdxGraphNodeEditor extends VisTable implements GraphNodeEditor, Gra
         addGraphEditorPart(graphEditorPart);
     }
 
-    public void addOutputGraphPart(
-            GraphNodeOutput graphNodeOutput) {
+    public void addOutputGraphPart(NamedGraphNodeOutput graphNodeOutput) {
         VisTable table = new VisTable();
         VisLabel outputLabel = new VisLabel(graphNodeOutput.getFieldName(), ioLabelStyle);
         outputLabel.setAlignment(Align.right);
