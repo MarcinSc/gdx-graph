@@ -264,7 +264,7 @@ public class GraphPreparedRenderingPipeline implements PreparedRenderingPipeline
     }
 
     private Iterable<GraphConnection> getNonMainInputConnections(String nodeId) {
-        ObjectMap<String, GraphNodeInput> inputs = nodeConfigurationResolver.evaluate(graph.getNodeById(nodeId)).getNodeInputs();
+        ObjectMap<String, ? extends GraphNodeInput> inputs = nodeConfigurationResolver.evaluate(graph.getNodeById(nodeId)).getNodeInputs();
         Array<GraphConnection> result = new Array<>();
         for (GraphConnection vertex : graph.getConnections()) {
             if (vertex.getNodeTo().equals(nodeId) && inputs.get(vertex.getFieldTo()).getSide() == GraphNodeInputSide.Left)
