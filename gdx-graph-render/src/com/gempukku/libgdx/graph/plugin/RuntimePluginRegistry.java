@@ -1,12 +1,13 @@
 package com.gempukku.libgdx.graph.plugin;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public class RuntimePluginRegistry implements Disposable {
-    private static final ObjectSet<Class<? extends PluginRuntimeInitializer>> plugins = new ObjectSet<>();
+    private static final Array<Class<? extends PluginRuntimeInitializer>> plugins = new Array<>();
     private final ObjectSet<Disposable> resources = new ObjectSet<>();
 
     public static void register(Class<? extends PluginRuntimeInitializer> clazz) {
