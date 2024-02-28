@@ -5,7 +5,7 @@ import com.gempukku.libgdx.graph.shader.preview.SpherePreviewShaderEditorPart;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.part.GraphAwareCollapsibleSectionEditorPart;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.StringEditorPart;
 
 public class PhongLightingEditorProducer extends GdxGraphNodeEditorProducer {

@@ -13,10 +13,10 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.ui.graph.data.GraphConnection;
-import com.gempukku.libgdx.ui.graph.data.GraphNode;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeInput;
-import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
+import com.gempukku.libgdx.graph.data.GraphConnection;
+import com.gempukku.libgdx.graph.data.GraphNode;
+import com.gempukku.libgdx.graph.data.GraphNodeInput;
+import com.gempukku.libgdx.graph.validator.GraphValidationResult;
 
 public class DefaultGraphShaderRecipe implements GraphShaderRecipe {
     private final String nodeStartForValidity;

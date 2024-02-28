@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.plugin.lighting3d.design.producer;
 import com.gempukku.libgdx.graph.shader.lighting3d.producer.DirectionalLightShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.IndexEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.StringEditorPart;
 

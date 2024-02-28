@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.shader.config.common.math.value.RemapVectorShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.DefaultGraphNodeEditorPart;
 import com.gempukku.libgdx.ui.undo.UndoableSelectBox;
 import com.kotcrab.vis.ui.widget.VisLabel;

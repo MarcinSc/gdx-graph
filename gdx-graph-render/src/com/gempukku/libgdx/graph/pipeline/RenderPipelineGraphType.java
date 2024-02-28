@@ -5,9 +5,9 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.common.BiFunction;
 import com.gempukku.libgdx.graph.GraphType;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
-import com.gempukku.libgdx.ui.graph.data.Graph;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.validator.*;
+import com.gempukku.libgdx.graph.data.Graph;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.validator.*;
 
 public class RenderPipelineGraphType implements GraphType {
     public static final String TYPE = "Render_Pipeline";

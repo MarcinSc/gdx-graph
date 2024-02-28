@@ -11,7 +11,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.AbstractPipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 
 public class PropertyPipelineNodeProducer implements PipelineNodeProducer {
     @Override

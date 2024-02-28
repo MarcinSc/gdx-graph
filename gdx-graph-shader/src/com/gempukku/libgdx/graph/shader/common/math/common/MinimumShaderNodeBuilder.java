@@ -15,7 +15,7 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 
 public class MinimumShaderNodeBuilder implements GraphShaderNodeBuilder {
     private NodeConfiguration nodeConfiguration;

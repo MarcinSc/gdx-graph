@@ -2,10 +2,10 @@ package com.gempukku.libgdx.graph.ui.graph;
 
 import com.gempukku.libgdx.graph.data.GraphProperty;
 import com.gempukku.libgdx.graph.data.GraphWithProperties;
-import com.gempukku.libgdx.ui.graph.data.Graph;
-import com.gempukku.libgdx.ui.graph.data.GraphConnection;
-import com.gempukku.libgdx.ui.graph.data.GraphNode;
-import com.gempukku.libgdx.ui.graph.data.NodeGroup;
+import com.gempukku.libgdx.graph.data.Graph;
+import com.gempukku.libgdx.graph.data.GraphConnection;
+import com.gempukku.libgdx.graph.data.GraphNode;
+import com.gempukku.libgdx.graph.data.NodeGroup;
 
 public class CompositeGraphWithProperties implements GraphWithProperties {
     private Graph graph;

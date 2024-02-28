@@ -8,8 +8,8 @@ import com.gempukku.libgdx.graph.shader.field.ShaderFieldTypeRegistry;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.graph.ui.pipeline.property.TextureWrapDisplayText;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultNodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 
 public class TextureCustomization implements PropertyGraphEditorCustomization {

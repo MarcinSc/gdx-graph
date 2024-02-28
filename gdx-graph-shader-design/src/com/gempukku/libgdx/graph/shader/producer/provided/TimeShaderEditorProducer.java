@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.shader.producer.provided;
 import com.gempukku.libgdx.graph.shader.config.common.provided.TimeShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.FloatEditorPart;
 
 public class TimeShaderEditorProducer extends GdxGraphNodeEditorProducer {

@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.graph.pipeline.config.value;
 
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 import static com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType.Vector3;
 

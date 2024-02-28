@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.shader.builder.recipe.GraphShaderRecipeIngredie
 import com.gempukku.libgdx.graph.shader.setting.BlendingFactor;
 import com.gempukku.libgdx.graph.shader.setting.Culling;
 import com.gempukku.libgdx.graph.shader.setting.DepthTesting;
-import com.gempukku.libgdx.ui.graph.data.GraphNode;
+import com.gempukku.libgdx.graph.data.GraphNode;
 
 public class SetupOpenGLSettingsIngredient implements GraphShaderRecipeIngredient {
     private final String nodeId;

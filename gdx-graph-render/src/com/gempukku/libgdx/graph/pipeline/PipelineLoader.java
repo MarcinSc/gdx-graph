@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.loader.GraphLoader;
 import com.gempukku.libgdx.graph.pipeline.impl.DefaultPipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.impl.GraphPreparedRenderingPipeline;
 import com.gempukku.libgdx.graph.plugin.RuntimePluginRegistry;
-import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
+import com.gempukku.libgdx.graph.validator.GraphValidationResult;
 
 import java.io.IOException;
 import java.io.InputStream;

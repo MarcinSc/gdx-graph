@@ -3,8 +3,8 @@ package com.gempukku.libgdx.graph.pipeline.config.math.trigonometry;
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.config.SameTypeOutputTypeFunction;
 import com.gempukku.libgdx.graph.pipeline.field.PipelineFieldType;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 public class DegreesPipelineNodeConfiguration extends DefaultMenuNodeConfiguration {
     public DegreesPipelineNodeConfiguration() {

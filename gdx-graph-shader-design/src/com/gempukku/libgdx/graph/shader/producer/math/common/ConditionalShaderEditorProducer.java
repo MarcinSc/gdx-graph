@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.shader.producer.math.common;
 import com.gempukku.libgdx.graph.shader.config.common.math.common.ConditionalShaderNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.SelectEditorPart;
 
 public class ConditionalShaderEditorProducer extends GdxGraphNodeEditorProducer {

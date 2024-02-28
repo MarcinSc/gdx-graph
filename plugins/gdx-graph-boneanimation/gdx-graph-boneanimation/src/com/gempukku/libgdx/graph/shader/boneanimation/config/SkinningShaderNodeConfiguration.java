@@ -4,8 +4,8 @@ import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.boneanimation.property.BoneTransformFieldType;
 import com.gempukku.libgdx.graph.shader.boneanimation.property.BoneWeightFieldType;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 public class SkinningShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public SkinningShaderNodeConfiguration() {

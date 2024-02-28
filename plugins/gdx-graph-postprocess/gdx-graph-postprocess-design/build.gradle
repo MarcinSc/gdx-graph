@@ -7,7 +7,11 @@ dependencies {
     api project(":gdx-graph-render-design")
     api project(":gdx-graph-shader-design")
 
+    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-ui:$gdxGempLibVersion"
+
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
-    implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
+    implementation("com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion") {
+        exclude group: "com.github.MarcinSc.gdx-gemp-lib"
+    }
 }

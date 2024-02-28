@@ -5,7 +5,7 @@ import com.gempukku.libgdx.graph.config.PropertyNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyEditorDefinition;
 import com.gempukku.libgdx.graph.ui.graph.property.PropertyGraphEditorCustomization;
 import com.gempukku.libgdx.graph.ui.producer.ValueGraphNodeOutput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultNodeConfiguration;
+import com.gempukku.libgdx.graph.data.impl.DefaultNodeConfiguration;
 
 
 public class PropertyGraphNodeEditorProducer implements MenuGraphNodeEditorProducer {

@@ -4,7 +4,7 @@ import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.part.GraphAwareCollapsibleSectionEditorPart;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 
 public class ScreenPreviewShaderGraphNodeEditorProducer extends GdxGraphNodeEditorProducer {
     private final String output;

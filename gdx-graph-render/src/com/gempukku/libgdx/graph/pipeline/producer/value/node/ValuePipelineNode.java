@@ -5,7 +5,7 @@ import com.gempukku.libgdx.graph.pipeline.PipelineRendererConfiguration;
 import com.gempukku.libgdx.graph.pipeline.producer.PipelineRenderingContext;
 import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 
 public class ValuePipelineNode<T> extends SingleInputsPipelineNode {
     public ValuePipelineNode(NodeConfiguration configuration, String propertyName, final T value,

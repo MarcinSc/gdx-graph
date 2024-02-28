@@ -12,11 +12,15 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-    implementation "com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion"
+    implementation("com.github.MarcinSc.gdx-assistant:gdx-assistant-plugin:$gdxAssistantVersion") {
+        exclude group: "com.github.MarcinSc.gdx-gemp-lib"
+    }
     implementation("com.github.MarcinSc.gdx-assistant:gdx-assistant-desktop:$gdxAssistantVersion") {
         exclude group: "com.github.MarcinSc.gdx-gemp-lib"
     }
-    implementation "com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion"
+    implementation("com.github.MarcinSc.gdx-assistant:gdx-plugins:$gdxAssistantVersion") {
+        exclude group: "com.github.MarcinSc.gdx-gemp-lib"
+    }
     implementation "com.kotcrab.vis:vis-ui:$visUiVersion"
 }
 

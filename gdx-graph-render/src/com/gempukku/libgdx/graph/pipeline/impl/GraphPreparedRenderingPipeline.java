@@ -13,7 +13,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.node.EndPipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNodeProducer;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineRequirements;
-import com.gempukku.libgdx.ui.graph.data.*;
+import com.gempukku.libgdx.graph.data.*;
 
 import java.util.LinkedList;
 

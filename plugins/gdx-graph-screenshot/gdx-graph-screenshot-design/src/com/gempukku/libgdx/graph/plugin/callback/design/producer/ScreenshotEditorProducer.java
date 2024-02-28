@@ -3,7 +3,7 @@ package com.gempukku.libgdx.graph.plugin.callback.design.producer;
 import com.gempukku.libgdx.graph.render.screenshot.producer.ScreenshotPipelineNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.StringEditorPart;
 
 public class ScreenshotEditorProducer extends GdxGraphNodeEditorProducer {

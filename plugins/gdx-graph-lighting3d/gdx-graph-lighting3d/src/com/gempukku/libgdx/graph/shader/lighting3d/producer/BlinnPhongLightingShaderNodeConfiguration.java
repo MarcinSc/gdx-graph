@@ -2,8 +2,8 @@ package com.gempukku.libgdx.graph.shader.lighting3d.producer;
 
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 public class BlinnPhongLightingShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public BlinnPhongLightingShaderNodeConfiguration() {

@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.common.Function;
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 public class ConditionalShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public ConditionalShaderNodeConfiguration() {

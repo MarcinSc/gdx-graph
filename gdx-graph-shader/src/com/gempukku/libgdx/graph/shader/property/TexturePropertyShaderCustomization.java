@@ -14,7 +14,7 @@ import com.gempukku.libgdx.graph.shader.builder.VertexShaderBuilder;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
 import com.gempukku.libgdx.graph.shader.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeOutput;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeOutput;
 
 public class TexturePropertyShaderCustomization implements PropertyShaderCustomization {
     @Override

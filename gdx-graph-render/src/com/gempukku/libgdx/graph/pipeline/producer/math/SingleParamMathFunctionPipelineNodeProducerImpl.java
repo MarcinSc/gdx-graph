@@ -12,7 +12,7 @@ import com.gempukku.libgdx.graph.pipeline.producer.node.DefaultFieldOutput;
 import com.gempukku.libgdx.graph.pipeline.producer.node.PipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNode;
 import com.gempukku.libgdx.graph.pipeline.producer.node.SingleInputsPipelineNodeProducer;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 
 public abstract class SingleParamMathFunctionPipelineNodeProducerImpl extends SingleInputsPipelineNodeProducer {
     private final String inputName;

@@ -20,7 +20,7 @@ import com.gempukku.libgdx.graph.ui.TabControl;
 import com.gempukku.libgdx.graph.ui.graph.GraphTemplate;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.util.DefaultTimeKeeper;
-import com.gempukku.libgdx.ui.graph.validator.GraphValidationResult;
+import com.gempukku.libgdx.graph.validator.GraphValidationResult;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;

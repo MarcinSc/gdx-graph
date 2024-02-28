@@ -2,8 +2,8 @@ package com.gempukku.libgdx.graph.shader.lighting3d.config;
 
 import com.gempukku.libgdx.graph.config.DefaultMenuNodeConfiguration;
 import com.gempukku.libgdx.graph.shader.field.ShaderFieldType;
-import com.gempukku.libgdx.ui.graph.data.GraphNodeInputSide;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraphNodeInput;
+import com.gempukku.libgdx.graph.data.GraphNodeInputSide;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraphNodeInput;
 
 public class EndShadowShaderNodeConfiguration extends DefaultMenuNodeConfiguration {
     public EndShadowShaderNodeConfiguration() {

@@ -6,7 +6,7 @@ import com.gempukku.libgdx.graph.shader.config.common.provided.SceneColorShaderN
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.pipeline.property.TextureWrapDisplayText;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 
 public class SceneColorShaderEditorProducer extends GdxGraphNodeEditorProducer {

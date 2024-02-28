@@ -11,9 +11,9 @@ import com.gempukku.libgdx.graph.shader.builder.DepthGraphShaderRecipe;
 import com.gempukku.libgdx.graph.shader.common.PropertyShaderConfiguration;
 import com.gempukku.libgdx.graph.shader.config.GraphConfiguration;
 import com.gempukku.libgdx.graph.shader.node.GraphShaderNodeBuilder;
-import com.gempukku.libgdx.ui.graph.data.Graph;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
-import com.gempukku.libgdx.ui.graph.validator.*;
+import com.gempukku.libgdx.graph.data.Graph;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.validator.*;
 
 public class DepthShaderGraphType implements ShaderGraphType {
     public static final String TYPE = "Shadow_Shader";

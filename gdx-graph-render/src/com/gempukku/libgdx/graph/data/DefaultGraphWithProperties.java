@@ -1,10 +1,10 @@
 package com.gempukku.libgdx.graph.data;
 
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.ui.graph.data.GraphConnection;
-import com.gempukku.libgdx.ui.graph.data.GraphNode;
-import com.gempukku.libgdx.ui.graph.data.NodeGroup;
-import com.gempukku.libgdx.ui.graph.data.impl.DefaultGraph;
+import com.gempukku.libgdx.graph.data.GraphConnection;
+import com.gempukku.libgdx.graph.data.GraphNode;
+import com.gempukku.libgdx.graph.data.NodeGroup;
+import com.gempukku.libgdx.graph.data.impl.DefaultGraph;
 
 public class DefaultGraphWithProperties implements GraphWithProperties {
     private DefaultGraph<GraphNode, GraphConnection, NodeGroup> graph;

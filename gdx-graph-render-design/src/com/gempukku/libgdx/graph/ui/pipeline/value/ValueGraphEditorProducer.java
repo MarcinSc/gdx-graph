@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.graph.config.MenuNodeConfiguration;
 import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditor;
 import com.gempukku.libgdx.graph.ui.graph.MenuGraphNodeEditorProducer;
-import com.gempukku.libgdx.ui.graph.data.*;
+import com.gempukku.libgdx.graph.data.*;
 import com.gempukku.libgdx.ui.graph.editor.GraphNodeEditor;
 import com.gempukku.libgdx.ui.graph.editor.part.GraphNodeEditorPart;
 import com.kotcrab.vis.ui.VisUI;

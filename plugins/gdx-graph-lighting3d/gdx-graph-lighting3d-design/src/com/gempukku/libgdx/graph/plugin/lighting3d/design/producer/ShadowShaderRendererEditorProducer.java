@@ -10,7 +10,7 @@ import com.gempukku.libgdx.graph.ui.graph.GdxGraphNodeEditorProducer;
 import com.gempukku.libgdx.graph.ui.graph.ShaderGraphEditorPart;
 import com.gempukku.libgdx.graph.ui.graph.UIGraphType;
 import com.gempukku.libgdx.graph.ui.part.ToStringEnum;
-import com.gempukku.libgdx.ui.graph.data.NodeConfiguration;
+import com.gempukku.libgdx.graph.data.NodeConfiguration;
 import com.gempukku.libgdx.ui.graph.editor.part.EnumSelectEditorPart;
 import com.gempukku.libgdx.ui.graph.editor.part.StringEditorPart;
 
