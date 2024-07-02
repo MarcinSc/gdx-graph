@@ -4,7 +4,7 @@ A library for [libGDX](https://libgdx.badlogicgames.com/ "libGDX") cross-platfor
 
 ## Status
 
-GDX-graph is undery heavy development at the moment. The devlogs are available
+GDX-graph is under heavy development at the moment. The devlogs are available
 on [YouTube](https://www.youtube.com/playlist?list=PLqpawGIg6Qj5CvjOaCbB536z862XhjPQi)
 
 
