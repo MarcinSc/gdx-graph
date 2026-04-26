@@ -34,6 +34,7 @@ public class MaterialModelInstanceModelAdapter {
     private ObjectMap<Material, MapWritablePropertyContainer> materialProperties;
     private CullingTest cullingTest;
     private ObjectMap<IntMapping<String>, int[]> locationMappingCache = new ObjectMap<>();
+    private int[] emptyArray = new int[0];
 
     public MaterialModelInstanceModelAdapter(ModelInstance modelInstance, ModelContainer<RenderableModel> modelContainer) {
         this.modelInstance = modelInstance;
@@ -190,9 +191,9 @@ public class MaterialModelInstanceModelAdapter {
         @Override
         public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
             int[] attributeLocations = getAttributeLocations(nodePart.meshPart.mesh, propertyToLocationMapping);
-            nodePart.meshPart.mesh.bind(shaderProgram, attributeLocations);
+            nodePart.meshPart.mesh.bind(shaderProgram, attributeLocations, emptyArray);
             nodePart.meshPart.render(shaderProgram);
-            nodePart.meshPart.mesh.unbind(shaderProgram, attributeLocations);
+            nodePart.meshPart.mesh.unbind(shaderProgram, attributeLocations, emptyArray);
         }
 
         private int[] getAttributeLocations(Mesh mesh, IntMapping<String> propertyLocationMapping) {

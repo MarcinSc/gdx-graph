@@ -33,6 +33,7 @@ public class CommonPropertiesModelInstanceModelAdapter {
     private WritablePropertyContainer propertyContainer;
     private CullingTest cullingTest;
     private ObjectMap<IntMapping<String>, int[]> locationMappingCache = new ObjectMap<>();
+    private int[] emptyArray = new int[0];
 
     public CommonPropertiesModelInstanceModelAdapter(ModelInstance modelInstance, ModelContainer<RenderableModel> graphModels) {
         this(modelInstance, graphModels, new MapWritablePropertyContainer());
@@ -136,9 +137,9 @@ public class CommonPropertiesModelInstanceModelAdapter {
         @Override
         public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
             int[] attributeLocations = getAttributeLocations(nodePart.meshPart.mesh, propertyToLocationMapping);
-            nodePart.meshPart.mesh.bind(shaderProgram, attributeLocations);
+            nodePart.meshPart.mesh.bind(shaderProgram, attributeLocations, emptyArray);
             nodePart.meshPart.render(shaderProgram);
-            nodePart.meshPart.mesh.unbind(shaderProgram, attributeLocations);
+            nodePart.meshPart.mesh.unbind(shaderProgram, attributeLocations, emptyArray);
         }
 
         private int[] getAttributeLocations(Mesh mesh, IntMapping<String> propertyLocationMapping) {

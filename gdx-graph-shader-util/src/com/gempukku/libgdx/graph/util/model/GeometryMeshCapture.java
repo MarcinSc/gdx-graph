@@ -193,7 +193,7 @@ public class GeometryMeshCapture implements MeshPartBuilder {
     }
 
     @Override
-    public short lastIndex() {
+    public int lastIndex() {
         return (short) (nextVertexIndex - 1);
     }
 

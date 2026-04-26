@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public class TrianglesMeshRenderer implements MeshRenderer {
+    private int[] emptyArray = new int[0];
+
     @Override
     public void renderMesh(ShaderProgram shader, Mesh mesh, int indexStart, int indexCount, int[] locations) {
-        mesh.bind(shader, locations);
+        mesh.bind(shader, locations, emptyArray);
         Gdx.gl20.glDrawElements(Gdx.gl20.GL_TRIANGLES, indexCount, GL20.GL_UNSIGNED_SHORT, indexStart);
-        mesh.unbind(shader, locations);
+        mesh.unbind(shader, locations, emptyArray);
     }
 }

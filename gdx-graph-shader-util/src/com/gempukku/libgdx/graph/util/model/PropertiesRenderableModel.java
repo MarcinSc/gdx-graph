@@ -25,6 +25,7 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     private final Mesh mesh;
     private final float[] vertexData;
     private int[] attributeLocations;
+    private int[] emptyArray = new int[0];
 
     public PropertiesRenderableModel(VertexAttributes vertexAttributes,
                                      ObjectMap<VertexAttribute, ShaderPropertySource> vertexPropertySources,
@@ -97,9 +98,9 @@ public class PropertiesRenderableModel implements RenderableModel, Disposable {
     public void render(Camera camera, ShaderProgram shaderProgram, IntMapping<String> propertyToLocationMapping) {
         if (attributeLocations == null)
             attributeLocations = GraphModelUtil.getAttributeLocations(shaderProgram, vertexAttributes);
-        mesh.bind(shaderProgram, attributeLocations);
+        mesh.bind(shaderProgram, attributeLocations, emptyArray);
         mesh.render(shaderProgram, GL20.GL_TRIANGLES);
-        mesh.unbind(shaderProgram, attributeLocations);
+        mesh.unbind(shaderProgram, attributeLocations, emptyArray);
     }
 
     @Override

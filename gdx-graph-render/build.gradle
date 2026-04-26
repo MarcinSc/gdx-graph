@@ -1,6 +1,6 @@
 eclipse.project.name = "gdx-graph-render"
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 dependencies {
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-graph:$gdxGempLibVersion"
